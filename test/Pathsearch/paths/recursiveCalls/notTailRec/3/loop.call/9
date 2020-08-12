@@ -1,0 +1,10 @@
+%notTailRec_23 = load  i32, i32* %notTailRec_2, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "notTailRec_23")
+%notTailRec_13 = bitcast i32 %notTailRec_23 to i32 
+store  i32 %notTailRec_13, i32* %notTailRec_4, align 4 
+%notTailRec_14 = load  i32, i32* %notTailRec_4, align 4 
+%notTailRec_15 = icmp sgt i32 %notTailRec_14, 0 
+path-eq %notTailRec_15 = bitcast i1 0 to i1 
+%notTailRec_20 = load  i32, i32* %notTailRec_4, align 4 
+%notTailRec_21 = add  nsw i32 %notTailRec_20, 5 
+store  i32 %notTailRec_21, i32* %notTailRec_2, align 4 

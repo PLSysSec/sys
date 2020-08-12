@@ -1,0 +1,2 @@
+%threeWayMutRecursiveA_10 = load  i32, i32* %threeWayMutRecursiveA_3, align 4 
+%threeWayMutRecursiveA_11 = add  nsw i32 %threeWayMutRecursiveA_10, 1 

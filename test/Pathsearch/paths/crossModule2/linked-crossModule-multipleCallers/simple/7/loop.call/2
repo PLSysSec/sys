@@ -1,0 +1,52 @@
+%simple_3 = alloca i32, align 4 
+%simple_4 = alloca i32, align 4 
+store  i32 %simple_0, i32* %simple_3, align 4 
+store  i32 %simple_1, i32* %simple_4, align 4 
+%simple_5 = load  i32, i32* %simple_3, align 4 
+%simple_6 = add  nsw i32 %simple_5, 3 
+%simple_7 = load  i32, i32* %simple_4, align 4 
+%simple_8 = mul  nsw i32 %simple_7, 2 
+enter-call simpleCrossModuleCaller
+%simpleCrossModuleCaller_0 = bitcast i32 %simple_6 to i32 
+%simpleCrossModuleCaller_1 = bitcast i32 %simple_8 to i32 
+%simpleCrossModuleCaller_3 = alloca i32, align 4 
+%simpleCrossModuleCaller_4 = alloca i32, align 4 
+%simpleCrossModuleCaller_5 = alloca i32, align 4 
+store  i32 %simpleCrossModuleCaller_0, i32* %simpleCrossModuleCaller_3, align 4 
+store  i32 %simpleCrossModuleCaller_1, i32* %simpleCrossModuleCaller_4, align 4 
+%simpleCrossModuleCaller_6 = load  i32, i32* %simpleCrossModuleCaller_3, align 4 
+%simpleCrossModuleCaller_7 = load  i32, i32* %simpleCrossModuleCaller_4, align 4 
+%simpleCrossModuleCaller_8 = load  i32, i32* %simpleCrossModuleCaller_3, align 4 
+%simpleCrossModuleCaller_9 = load  i32, i32* %simpleCrossModuleCaller_4, align 4 
+%simpleCrossModuleCaller_10 = add  nsw i32 %simpleCrossModuleCaller_8, %simpleCrossModuleCaller_9 
+enter-call foo
+%foo_0 = bitcast i32 %simpleCrossModuleCaller_6 to i32 
+%foo_1 = bitcast i32 %simpleCrossModuleCaller_7 to i32 
+%foo_2 = bitcast i32 %simpleCrossModuleCaller_10 to i32 
+%foo_4 = alloca i32, align 4 
+%foo_5 = alloca i32, align 4 
+%foo_6 = alloca i32, align 4 
+%foo_7 = alloca i32, align 4 
+store  i32 %foo_0, i32* %foo_5, align 4 
+store  i32 %foo_1, i32* %foo_6, align 4 
+store  i32 %foo_2, i32* %foo_7, align 4 
+%foo_8 = load  i32, i32* %foo_5, align 4 
+%foo_9 = load  i32, i32* %foo_6, align 4 
+%foo_10 = icmp slt i32 %foo_8, %foo_9 
+path-eq %foo_10 = bitcast i1 0 to i1 
+%foo_16 = load  i32, i32* %foo_5, align 4 
+%foo_17 = load  i32, i32* %foo_7, align 4 
+%foo_18 = sub  nsw i32 %foo_16, %foo_17 
+store  i32 %foo_18, i32* %foo_4, align 4 
+%foo_20 = load  i32, i32* %foo_4, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "foo_20")
+%simpleCrossModuleCaller_11 = bitcast i32 %foo_20 to i32 
+exit-call simpleCrossModuleCaller_11
+store  i32 %simpleCrossModuleCaller_11, i32* %simpleCrossModuleCaller_5, align 4 
+%simpleCrossModuleCaller_12 = load  i32, i32* %simpleCrossModuleCaller_5, align 4 
+%simpleCrossModuleCaller_13 = add  nsw i32 %simpleCrossModuleCaller_12, 3 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "simpleCrossModuleCaller_13")
+%simple_9 = bitcast i32 %simpleCrossModuleCaller_13 to i32 
+exit-call simple_9
+%simple_10 = sub  nsw i32 %simple_9, 150 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "simple_10")

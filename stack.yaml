@@ -1,0 +1,12 @@
+# resolver: lts-12.21
+resolver: lts-14.7
+packages:
+- .
+extra-deps:
+ - set-extra-1.4.1
+ - boolector-0.0.0.11
+ - llvm-hs-9.0.1
+ - llvm-hs-pure-9.0.0
+ - llvm-hs-pretty-0.9.0.0
+# Extra directories used by stack for building
+extra-include-dirs: [/usr/include/boolector]

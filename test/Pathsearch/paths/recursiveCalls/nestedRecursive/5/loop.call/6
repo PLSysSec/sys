@@ -1,0 +1,10 @@
+%nestedRecursive_15 = load  i32, i32* %nestedRecursive_2, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "nestedRecursive_15")
+%nestedRecursive_13 = bitcast i32 %nestedRecursive_15 to i32 
+store  i32 %nestedRecursive_13, i32* %nestedRecursive_2, align 4 
+%nestedRecursive_15_1 = load  i32, i32* %nestedRecursive_2, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "nestedRecursive_15_1")
+%nestedRecursive_13_1 = bitcast i32 %nestedRecursive_15_1 to i32 
+store  i32 %nestedRecursive_13_1, i32* %nestedRecursive_2, align 4 
+%nestedRecursive_15_2 = load  i32, i32* %nestedRecursive_2, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "nestedRecursive_15_2")

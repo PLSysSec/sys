@@ -1,0 +1,22 @@
+%threeWayMutRecursiveA_2 = alloca i32, align 4 
+%threeWayMutRecursiveA_3 = alloca i32, align 4 
+store  i32 %threeWayMutRecursiveA_0, i32* %threeWayMutRecursiveA_3, align 4 
+%threeWayMutRecursiveA_4 = load  i32, i32* %threeWayMutRecursiveA_3, align 4 
+%threeWayMutRecursiveA_5 = srem i32 %threeWayMutRecursiveA_4, 5 
+%threeWayMutRecursiveA_6 = icmp eq i32 %threeWayMutRecursiveA_5, 0 
+path-eq %threeWayMutRecursiveA_6 = bitcast i1 0 to i1 
+%threeWayMutRecursiveA_10 = load  i32, i32* %threeWayMutRecursiveA_3, align 4 
+%threeWayMutRecursiveA_11 = add  nsw i32 %threeWayMutRecursiveA_10, 1 
+enter-call threeWayMutRecursiveB
+%threeWayMutRecursiveB_0 = bitcast i32 %threeWayMutRecursiveA_11 to i32 
+%threeWayMutRecursiveB_2 = alloca i32, align 4 
+%threeWayMutRecursiveB_3 = alloca i32, align 4 
+store  i32 %threeWayMutRecursiveB_0, i32* %threeWayMutRecursiveB_3, align 4 
+%threeWayMutRecursiveB_4 = load  i32, i32* %threeWayMutRecursiveB_3, align 4 
+%threeWayMutRecursiveB_5 = icmp sgt i32 %threeWayMutRecursiveB_4, 124 
+path-eq %threeWayMutRecursiveB_5 = bitcast i1 1 to i1 
+%threeWayMutRecursiveB_7 = load  i32, i32* %threeWayMutRecursiveB_3, align 4 
+%threeWayMutRecursiveB_8 = sub  nsw i32 %threeWayMutRecursiveB_7, 2 
+store  i32 %threeWayMutRecursiveB_8, i32* %threeWayMutRecursiveB_2, align 4 
+%threeWayMutRecursiveB_14 = load  i32, i32* %threeWayMutRecursiveB_2, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "threeWayMutRecursiveB_14")

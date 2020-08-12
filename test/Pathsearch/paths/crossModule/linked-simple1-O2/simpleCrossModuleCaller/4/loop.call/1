@@ -1,0 +1,19 @@
+%simpleCrossModuleCaller_3 = alloca i32, align 4 
+%simpleCrossModuleCaller_4 = alloca i32, align 4 
+%simpleCrossModuleCaller_5 = alloca i32, align 4 
+store  i32 %simpleCrossModuleCaller_0, i32* %simpleCrossModuleCaller_3, align 4 
+store  i32 %simpleCrossModuleCaller_1, i32* %simpleCrossModuleCaller_4, align 4 
+%simpleCrossModuleCaller_6 = load  i32, i32* %simpleCrossModuleCaller_3, align 4 
+%simpleCrossModuleCaller_7 = load  i32, i32* %simpleCrossModuleCaller_4, align 4 
+%simpleCrossModuleCaller_8 = load  i32, i32* %simpleCrossModuleCaller_3, align 4 
+%simpleCrossModuleCaller_9 = load  i32, i32* %simpleCrossModuleCaller_4, align 4 
+%simpleCrossModuleCaller_10 = add  nsw i32 %simpleCrossModuleCaller_8, %simpleCrossModuleCaller_9 
+enter-call foo
+%foo_0 = bitcast i32 %simpleCrossModuleCaller_6 to i32 
+%foo_1 = bitcast i32 %simpleCrossModuleCaller_7 to i32 
+%foo_2 = bitcast i32 %simpleCrossModuleCaller_10 to i32 
+%foo_4 = icmp sgt i32 %foo_0, %foo_1 
+path-eq %foo_4 = bitcast i1 0 to i1 
+%foo_6 = icmp sgt i32 %foo_0, 55 
+path-eq %foo_6 = bitcast i1 1 to i1 
+%foo_8 = mul  nsw i32 %foo_1, 3 

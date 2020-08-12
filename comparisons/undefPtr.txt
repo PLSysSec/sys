@@ -1,0 +1,129 @@
+Dereference of undefined pointer value
+
+
+inter_pred_scaled_16bpp
+
+UNCLEAR report
+
+------------------------------------------
+
+main
+
+DIFF TOOL
+
+------------------------------------------
+
+NSS_CMSDigestContext_FinishSingle
+
+SECItem **dp
+rv = NSS_CMSDigestContext_FinishMultiple(cmsdigcx, arena, &dp)
+--> updates in a loop, report does not follow loop
+--> this is a value reasoning problem, but maybe something deeper 
+if (rv == SECSuccess) // NSS_CMSDigestContext would have returned failure
+  rv = SECITEM_CopyItem(poolp, digest, dp[0])
+
+FALSE: value reasoning
+https://searchfox.org/mozilla-central/source/security/nss/lib/smime/cmsdigest.c#174
+
+------------------------------------------
+
+DecodeString
+char16_t* out;
+...
+*out = (char16_t)c;
+claim: out undefined 
+
+FALSE
+
+------------------------------------------
+
+DecodeString
+
+
+SAME, just lower down
+------------------------------------------
+
+DecodeString
+
+SAME, just lower down 
+
+------------------------------------------
+
+cairo_type1_font_subset_use_glyph
+
+
+status = _cairo_type1_font_subset_init (&font, unscaled_font, hex_encode);
+if (status) return status;
+for (i = 0; i < scaled_font_subset->num_glyphs; i++)
+  cairo_type1_font_subset_use_glyph (&font, parent_glyph); <-- calls the bad fn
+
+cairo_type1_font_subset_use_glyph called with font as argument 0
+if (font->glyphs[glyph].subset_index >= 0)
+claim: claims font undefined 
+
+FALSE: value reasoning 
+
+------------------------------------------
+
+_cairo_type2_charstrings_init
+
+status = cairo_type1_font_create (scaled_font_subset, &font, FALSE);
+if (status) return status
+type2_subset->widths = calloc (sizeof (int), font->scaled_font_subset->num_glyphs);
+
+claim: font uninit
+
+FALSE: value reasoning, if font doesn't get initialized status is true
+
+------------------------------------------
+
+dav1d_prepare_intra_edges_16bpc
+
+const pixel *dst_top;
+if (have_top && a bunch of other) dst_top = assigned
+*topleft_out = have_top ? dst_top[-1] : dst[-1];
+
+FALSE: supposedly uninit when have_top and
+av1_intra_prediction_edges[mode].needs_top are true. But on lines 124, code
+inits when (at least) these conditions are true.
+https://searchfox.org/mozilla-central/source/__GENERATED__/media/libdav1d/16bd_ipred_prepare_tmpl.c#77
+
+------------------------------------------
+
+consume_data
+
+same look as compress output final one, but different function so FALSE
+
+------------------------------------------
+
+compress_output
+
+JBLOCKROW MCU_buffer[C_MAX_BLOCKS_IN_MCU];
+
+init MCU_BUFFER in an if statement. Invariants?
+for (; xindex < compptr->MCU_width; xindex++)
+  MCU_buffer[blkn][0][0] = MCU_buffer[blkn - 1][0][0];
+claim: MCU_BUFFER uninit
+
+MCU_BUFFER is now a global array:
+https://searchfox.org/mozilla-central/source/media/libjpeg/jccoefct.c#51
+FALSE: buffer is initialized in loop (which has same bounds): https://searchfox.org/mozilla-central/source/media/libjpeg/jccoefct.c#355-361
+
+------------------------------------------
+
+compress_output
+
+SAME as below
+
+------------------------------------------
+
+compress_output
+
+JBLOCKARRAY buffer[MAX_COMPS_IN_SCAN4];
+for (ci = 0; ci < cinfo->comps_in_scan; ci++) // assume false
+  // initialize buffer
+loop
+  buffer_ptr = buffer[ci][yindex + yoffset] + start_col;
+claim: buffer uninit
+
+FALSE: loop init

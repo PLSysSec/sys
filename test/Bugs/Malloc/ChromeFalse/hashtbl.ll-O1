@@ -1,0 +1,429 @@
+; ModuleID = '../../third_party/nasm/nasmlib/hashtbl.c'
+source_filename = "../../third_party/nasm/nasmlib/hashtbl.c"
+target datalayout = "e-m:e-i64:64-f80:128-n8:16:32:64-S128"
+target triple = "x86_64-pc-linux-gnu"
+
+%struct.hash_table = type { %struct.hash_tbl_node*, i64, i64, i64 }
+%struct.hash_tbl_node = type { i64, i8*, i8* }
+%struct.hash_insert = type { i64, %struct.hash_table*, %struct.hash_tbl_node* }
+
+@.str = private unnamed_addr constant [41 x i8] c"../../third_party/nasm/nasmlib/hashtbl.c\00", align 1
+@.str.1 = private unnamed_addr constant [16 x i8] c"is_power2(size)\00", align 1
+
+; Function Attrs: nounwind ssp uwtable
+define hidden void @hash_init(%struct.hash_table* nocapture, i64) local_unnamed_addr #0 {
+  %3 = icmp eq i64 %1, 0
+  br i1 %3, label %8, label %4, !prof !2
+
+; <label>:4:                                      ; preds = %2
+  %5 = add i64 %1, -1
+  %6 = and i64 %5, %1
+  %7 = icmp eq i64 %6, 0
+  br i1 %7, label %9, label %8, !prof !3
+
+; <label>:8:                                      ; preds = %4, %2
+  tail call void @nasm_assert_failed(i8* getelementptr inbounds ([41 x i8], [41 x i8]* @.str, i64 0, i64 0), i32 65, i8* getelementptr inbounds ([16 x i8], [16 x i8]* @.str.1, i64 0, i64 0)) #7
+  unreachable
+
+; <label>:9:                                      ; preds = %4
+  %10 = tail call fastcc %struct.hash_tbl_node* @alloc_table(i64 %1)
+  %11 = getelementptr inbounds %struct.hash_table, %struct.hash_table* %0, i64 0, i32 0
+  store %struct.hash_tbl_node* %10, %struct.hash_tbl_node** %11, align 8
+  %12 = getelementptr inbounds %struct.hash_table, %struct.hash_table* %0, i64 0, i32 1
+  store i64 0, i64* %12, align 8
+  %13 = getelementptr inbounds %struct.hash_table, %struct.hash_table* %0, i64 0, i32 2
+  store i64 %1, i64* %13, align 8
+  %14 = lshr i64 %1, 1
+  %15 = getelementptr inbounds %struct.hash_table, %struct.hash_table* %0, i64 0, i32 3
+  store i64 %14, i64* %15, align 8
+  ret void
+}
+
+; Function Attrs: cold noreturn
+declare void @nasm_assert_failed(i8*, i32, i8*) local_unnamed_addr #1
+
+; Function Attrs: nounwind ssp uwtable
+define internal fastcc noalias nonnull %struct.hash_tbl_node* @alloc_table(i64) unnamed_addr #0 {
+  %2 = mul i64 %0, 24
+  %3 = tail call noalias nonnull i8* @nasm_zalloc(i64 %2) #8
+  %4 = bitcast i8* %3 to %struct.hash_tbl_node*
+  ret %struct.hash_tbl_node* %4
+}
+
+; Function Attrs: nounwind ssp uwtable
+define hidden i8** @hash_find(%struct.hash_table*, i8*, %struct.hash_insert*) local_unnamed_addr #0 {
+  %4 = getelementptr inbounds %struct.hash_table, %struct.hash_table* %0, i64 0, i32 0
+  %5 = load %struct.hash_tbl_node*, %struct.hash_tbl_node** %4, align 8
+  %6 = tail call i64 @crc64(i64 -1, i8* %1) #9
+  %7 = getelementptr inbounds %struct.hash_table, %struct.hash_table* %0, i64 0, i32 2
+  %8 = load i64, i64* %7, align 8
+  %9 = add i64 %8, -1
+  %10 = lshr i64 %6, 32
+  %11 = and i64 %9, %10
+  %12 = or i64 %11, 1
+  %13 = and i64 %6, %9
+  %14 = getelementptr inbounds %struct.hash_tbl_node, %struct.hash_tbl_node* %5, i64 %13, i32 1
+  %15 = load i8*, i8** %14, align 8
+  %16 = icmp eq i8* %15, null
+  br i1 %16, label %34, label %17
+
+; <label>:17:                                     ; preds = %3, %28
+  %18 = phi i8* [ %32, %28 ], [ %15, %3 ]
+  %19 = phi i64 [ %30, %28 ], [ %13, %3 ]
+  %20 = getelementptr inbounds %struct.hash_tbl_node, %struct.hash_tbl_node* %5, i64 %19, i32 0
+  %21 = load i64, i64* %20, align 8
+  %22 = icmp eq i64 %6, %21
+  br i1 %22, label %23, label %28
+
+; <label>:23:                                     ; preds = %17
+  %24 = tail call i32 @strcmp(i8* %1, i8* nonnull %18) #10
+  %25 = icmp eq i32 %24, 0
+  br i1 %25, label %26, label %28
+
+; <label>:26:                                     ; preds = %23
+  %27 = getelementptr inbounds %struct.hash_tbl_node, %struct.hash_tbl_node* %5, i64 %19, i32 2
+  br label %42
+
+; <label>:28:                                     ; preds = %23, %17
+  %29 = add i64 %19, %12
+  %30 = and i64 %29, %9
+  %31 = getelementptr inbounds %struct.hash_tbl_node, %struct.hash_tbl_node* %5, i64 %30, i32 1
+  %32 = load i8*, i8** %31, align 8
+  %33 = icmp eq i8* %32, null
+  br i1 %33, label %34, label %17
+
+; <label>:34:                                     ; preds = %28, %3
+  %35 = phi i64 [ %13, %3 ], [ %30, %28 ]
+  %36 = icmp eq %struct.hash_insert* %2, null
+  br i1 %36, label %42, label %37
+
+; <label>:37:                                     ; preds = %34
+  %38 = getelementptr inbounds %struct.hash_tbl_node, %struct.hash_tbl_node* %5, i64 %35
+  %39 = getelementptr inbounds %struct.hash_insert, %struct.hash_insert* %2, i64 0, i32 1
+  store %struct.hash_table* %0, %struct.hash_table** %39, align 8
+  %40 = getelementptr inbounds %struct.hash_insert, %struct.hash_insert* %2, i64 0, i32 0
+  store i64 %6, i64* %40, align 8
+  %41 = getelementptr inbounds %struct.hash_insert, %struct.hash_insert* %2, i64 0, i32 2
+  store %struct.hash_tbl_node* %38, %struct.hash_tbl_node** %41, align 8
+  br label %42
+
+; <label>:42:                                     ; preds = %37, %34, %26
+  %43 = phi i8** [ %27, %26 ], [ null, %34 ], [ null, %37 ]
+  ret i8** %43
+}
+
+; Function Attrs: argmemonly nounwind
+declare void @llvm.lifetime.start.p0i8(i64, i8* nocapture) #2
+
+declare i64 @crc64(i64, i8*) local_unnamed_addr #3
+
+; Function Attrs: nounwind readonly
+declare i32 @strcmp(i8* nocapture, i8* nocapture) local_unnamed_addr #4
+
+; Function Attrs: argmemonly nounwind
+declare void @llvm.lifetime.end.p0i8(i64, i8* nocapture) #2
+
+; Function Attrs: nounwind ssp uwtable
+define hidden i8** @hash_findi(%struct.hash_table*, i8*, %struct.hash_insert*) local_unnamed_addr #0 {
+  %4 = getelementptr inbounds %struct.hash_table, %struct.hash_table* %0, i64 0, i32 0
+  %5 = load %struct.hash_tbl_node*, %struct.hash_tbl_node** %4, align 8
+  %6 = tail call i64 @crc64i(i64 -1, i8* %1) #9
+  %7 = getelementptr inbounds %struct.hash_table, %struct.hash_table* %0, i64 0, i32 2
+  %8 = load i64, i64* %7, align 8
+  %9 = add i64 %8, -1
+  %10 = lshr i64 %6, 32
+  %11 = and i64 %9, %10
+  %12 = or i64 %11, 1
+  %13 = and i64 %6, %9
+  %14 = getelementptr inbounds %struct.hash_tbl_node, %struct.hash_tbl_node* %5, i64 %13, i32 1
+  %15 = load i8*, i8** %14, align 8
+  %16 = icmp eq i8* %15, null
+  br i1 %16, label %34, label %17
+
+; <label>:17:                                     ; preds = %3, %28
+  %18 = phi i8* [ %32, %28 ], [ %15, %3 ]
+  %19 = phi i64 [ %30, %28 ], [ %13, %3 ]
+  %20 = getelementptr inbounds %struct.hash_tbl_node, %struct.hash_tbl_node* %5, i64 %19, i32 0
+  %21 = load i64, i64* %20, align 8
+  %22 = icmp eq i64 %6, %21
+  br i1 %22, label %23, label %28
+
+; <label>:23:                                     ; preds = %17
+  %24 = tail call i32 @strcasecmp(i8* %1, i8* nonnull %18) #10
+  %25 = icmp eq i32 %24, 0
+  br i1 %25, label %26, label %28
+
+; <label>:26:                                     ; preds = %23
+  %27 = getelementptr inbounds %struct.hash_tbl_node, %struct.hash_tbl_node* %5, i64 %19, i32 2
+  br label %42
+
+; <label>:28:                                     ; preds = %23, %17
+  %29 = add i64 %19, %12
+  %30 = and i64 %29, %9
+  %31 = getelementptr inbounds %struct.hash_tbl_node, %struct.hash_tbl_node* %5, i64 %30, i32 1
+  %32 = load i8*, i8** %31, align 8
+  %33 = icmp eq i8* %32, null
+  br i1 %33, label %34, label %17
+
+; <label>:34:                                     ; preds = %28, %3
+  %35 = phi i64 [ %13, %3 ], [ %30, %28 ]
+  %36 = icmp eq %struct.hash_insert* %2, null
+  br i1 %36, label %42, label %37
+
+; <label>:37:                                     ; preds = %34
+  %38 = getelementptr inbounds %struct.hash_tbl_node, %struct.hash_tbl_node* %5, i64 %35
+  %39 = getelementptr inbounds %struct.hash_insert, %struct.hash_insert* %2, i64 0, i32 1
+  store %struct.hash_table* %0, %struct.hash_table** %39, align 8
+  %40 = getelementptr inbounds %struct.hash_insert, %struct.hash_insert* %2, i64 0, i32 0
+  store i64 %6, i64* %40, align 8
+  %41 = getelementptr inbounds %struct.hash_insert, %struct.hash_insert* %2, i64 0, i32 2
+  store %struct.hash_tbl_node* %38, %struct.hash_tbl_node** %41, align 8
+  br label %42
+
+; <label>:42:                                     ; preds = %37, %34, %26
+  %43 = phi i8** [ %27, %26 ], [ null, %34 ], [ null, %37 ]
+  ret i8** %43
+}
+
+declare i64 @crc64i(i64, i8*) local_unnamed_addr #3
+
+; Function Attrs: nounwind readonly
+declare i32 @strcasecmp(i8* nocapture, i8* nocapture) local_unnamed_addr #4
+
+; Function Attrs: nounwind ssp uwtable
+define hidden nonnull i8** @hash_add(%struct.hash_insert* nocapture readonly, i8*, i8*) local_unnamed_addr #0 {
+  %4 = getelementptr inbounds %struct.hash_insert, %struct.hash_insert* %0, i64 0, i32 1
+  %5 = load %struct.hash_table*, %struct.hash_table** %4, align 8
+  %6 = getelementptr inbounds %struct.hash_insert, %struct.hash_insert* %0, i64 0, i32 2
+  %7 = load %struct.hash_tbl_node*, %struct.hash_tbl_node** %6, align 8
+  %8 = getelementptr inbounds %struct.hash_insert, %struct.hash_insert* %0, i64 0, i32 0
+  %9 = load i64, i64* %8, align 8
+  %10 = getelementptr inbounds %struct.hash_tbl_node, %struct.hash_tbl_node* %7, i64 0, i32 0
+  store i64 %9, i64* %10, align 8
+  %11 = getelementptr inbounds %struct.hash_tbl_node, %struct.hash_tbl_node* %7, i64 0, i32 1
+  store i8* %1, i8** %11, align 8
+  %12 = getelementptr inbounds %struct.hash_tbl_node, %struct.hash_tbl_node* %7, i64 0, i32 2
+  store i8* %2, i8** %12, align 8
+  %13 = getelementptr inbounds %struct.hash_table, %struct.hash_table* %5, i64 0, i32 1
+  %14 = load i64, i64* %13, align 8
+  %15 = add i64 %14, 1
+  store i64 %15, i64* %13, align 8
+  %16 = getelementptr inbounds %struct.hash_table, %struct.hash_table* %5, i64 0, i32 3
+  %17 = load i64, i64* %16, align 8
+  %18 = icmp ugt i64 %15, %17
+  br i1 %18, label %19, label %70
+
+; <label>:19:                                     ; preds = %3
+  %20 = getelementptr inbounds %struct.hash_table, %struct.hash_table* %5, i64 0, i32 2
+  %21 = load i64, i64* %20, align 8
+  %22 = shl i64 %21, 1
+  %23 = tail call fastcc %struct.hash_tbl_node* @alloc_table(i64 %22)
+  %24 = add i64 %22, -1
+  %25 = getelementptr inbounds %struct.hash_table, %struct.hash_table* %5, i64 0, i32 0
+  %26 = load %struct.hash_tbl_node*, %struct.hash_tbl_node** %25, align 8
+  %27 = icmp eq %struct.hash_tbl_node* %26, null
+  br i1 %27, label %67, label %28
+
+; <label>:28:                                     ; preds = %19
+  %29 = load i64, i64* %20, align 8
+  %30 = icmp eq i64 %29, 0
+  br i1 %30, label %63, label %31
+
+; <label>:31:                                     ; preds = %28, %57
+  %32 = phi %struct.hash_tbl_node* [ %58, %57 ], [ %7, %28 ]
+  %33 = phi i64 [ %59, %57 ], [ 0, %28 ]
+  %34 = phi %struct.hash_tbl_node* [ %60, %57 ], [ %26, %28 ]
+  %35 = getelementptr inbounds %struct.hash_tbl_node, %struct.hash_tbl_node* %34, i64 0, i32 1
+  %36 = load i8*, i8** %35, align 8
+  %37 = icmp eq i8* %36, null
+  br i1 %37, label %57, label %38
+
+; <label>:38:                                     ; preds = %31
+  %39 = getelementptr inbounds %struct.hash_tbl_node, %struct.hash_tbl_node* %34, i64 0, i32 0
+  %40 = load i64, i64* %39, align 8
+  %41 = lshr i64 %40, 32
+  %42 = and i64 %41, %24
+  %43 = or i64 %42, 1
+  br label %44
+
+; <label>:44:                                     ; preds = %44, %38
+  %45 = phi i64 [ %40, %38 ], [ %50, %44 ]
+  %46 = and i64 %45, %24
+  %47 = getelementptr inbounds %struct.hash_tbl_node, %struct.hash_tbl_node* %23, i64 %46, i32 1
+  %48 = load i8*, i8** %47, align 8
+  %49 = icmp eq i8* %48, null
+  %50 = add i64 %46, %43
+  br i1 %49, label %51, label %44
+
+; <label>:51:                                     ; preds = %44
+  %52 = getelementptr inbounds %struct.hash_tbl_node, %struct.hash_tbl_node* %23, i64 %46
+  %53 = bitcast %struct.hash_tbl_node* %52 to i8*
+  %54 = bitcast %struct.hash_tbl_node* %34 to i8*
+  tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* nonnull align 8 %53, i8* align 8 %54, i64 24, i1 false)
+  %55 = icmp eq %struct.hash_tbl_node* %34, %32
+  %56 = select i1 %55, %struct.hash_tbl_node* %52, %struct.hash_tbl_node* %32
+  br label %57
+
+; <label>:57:                                     ; preds = %31, %51
+  %58 = phi %struct.hash_tbl_node* [ %56, %51 ], [ %32, %31 ]
+  %59 = add nuw i64 %33, 1
+  %60 = getelementptr inbounds %struct.hash_tbl_node, %struct.hash_tbl_node* %34, i64 1
+  %61 = load i64, i64* %20, align 8
+  %62 = icmp ult i64 %59, %61
+  br i1 %62, label %31, label %63
+
+; <label>:63:                                     ; preds = %57, %28
+  %64 = phi %struct.hash_tbl_node* [ %7, %28 ], [ %58, %57 ]
+  %65 = bitcast %struct.hash_table* %5 to i8**
+  %66 = load i8*, i8** %65, align 8
+  tail call void @nasm_free(i8* %66) #9
+  br label %67
+
+; <label>:67:                                     ; preds = %19, %63
+  %68 = phi %struct.hash_tbl_node* [ %64, %63 ], [ %7, %19 ]
+  store %struct.hash_tbl_node* %23, %struct.hash_tbl_node** %25, align 8
+  store i64 %22, i64* %20, align 8
+  %69 = and i64 %21, 9223372036854775807
+  store i64 %69, i64* %16, align 8
+  br label %70
+
+; <label>:70:                                     ; preds = %67, %3
+  %71 = phi %struct.hash_tbl_node* [ %68, %67 ], [ %7, %3 ]
+  %72 = getelementptr inbounds %struct.hash_tbl_node, %struct.hash_tbl_node* %71, i64 0, i32 2
+  ret i8** %72
+}
+
+; Function Attrs: argmemonly nounwind
+declare void @llvm.memcpy.p0i8.p0i8.i64(i8* nocapture writeonly, i8* nocapture readonly, i64, i1) #2
+
+declare void @nasm_free(i8*) local_unnamed_addr #3
+
+; Function Attrs: norecurse nounwind ssp uwtable
+define hidden i8* @hash_iterate(%struct.hash_table* nocapture readonly, %struct.hash_tbl_node** nocapture, i8**) local_unnamed_addr #5 {
+  %4 = load %struct.hash_tbl_node*, %struct.hash_tbl_node** %1, align 8
+  %5 = getelementptr inbounds %struct.hash_table, %struct.hash_table* %0, i64 0, i32 0
+  %6 = load %struct.hash_tbl_node*, %struct.hash_tbl_node** %5, align 8
+  %7 = getelementptr inbounds %struct.hash_table, %struct.hash_table* %0, i64 0, i32 2
+  %8 = load i64, i64* %7, align 8
+  %9 = getelementptr inbounds %struct.hash_tbl_node, %struct.hash_tbl_node* %6, i64 %8
+  %10 = icmp eq %struct.hash_tbl_node* %4, null
+  br i1 %10, label %11, label %13
+
+; <label>:11:                                     ; preds = %3
+  %12 = icmp eq %struct.hash_tbl_node* %6, null
+  br i1 %12, label %36, label %13
+
+; <label>:13:                                     ; preds = %11, %3
+  %14 = phi %struct.hash_tbl_node* [ %6, %11 ], [ %4, %3 ]
+  br label %15
+
+; <label>:15:                                     ; preds = %13, %18
+  %16 = phi %struct.hash_tbl_node* [ %22, %18 ], [ %14, %13 ]
+  %17 = icmp ult %struct.hash_tbl_node* %16, %9
+  br i1 %17, label %18, label %33
+
+; <label>:18:                                     ; preds = %15
+  %19 = getelementptr inbounds %struct.hash_tbl_node, %struct.hash_tbl_node* %16, i64 0, i32 1
+  %20 = load i8*, i8** %19, align 8
+  %21 = icmp eq i8* %20, null
+  %22 = getelementptr inbounds %struct.hash_tbl_node, %struct.hash_tbl_node* %16, i64 1
+  br i1 %21, label %15, label %23
+
+; <label>:23:                                     ; preds = %18
+  store %struct.hash_tbl_node* %22, %struct.hash_tbl_node** %1, align 8
+  %24 = icmp eq i8** %2, null
+  br i1 %24, label %30, label %25
+
+; <label>:25:                                     ; preds = %23
+  %26 = getelementptr inbounds %struct.hash_tbl_node, %struct.hash_tbl_node* %16, i64 0, i32 1
+  %27 = bitcast i8** %26 to i64*
+  %28 = load i64, i64* %27, align 8
+  %29 = bitcast i8** %2 to i64*
+  store i64 %28, i64* %29, align 8
+  br label %30
+
+; <label>:30:                                     ; preds = %23, %25
+  %31 = getelementptr inbounds %struct.hash_tbl_node, %struct.hash_tbl_node* %16, i64 0, i32 2
+  %32 = load i8*, i8** %31, align 8
+  br label %36
+
+; <label>:33:                                     ; preds = %15
+  store %struct.hash_tbl_node* null, %struct.hash_tbl_node** %1, align 8
+  %34 = icmp eq i8** %2, null
+  br i1 %34, label %36, label %35
+
+; <label>:35:                                     ; preds = %33
+  store i8* null, i8** %2, align 8
+  br label %36
+
+; <label>:36:                                     ; preds = %35, %33, %11, %30
+  %37 = phi i8* [ %32, %30 ], [ null, %11 ], [ null, %33 ], [ null, %35 ]
+  ret i8* %37
+}
+
+; Function Attrs: nounwind ssp uwtable
+define hidden void @hash_free(%struct.hash_table* nocapture) local_unnamed_addr #0 {
+  %2 = getelementptr inbounds %struct.hash_table, %struct.hash_table* %0, i64 0, i32 0
+  %3 = bitcast %struct.hash_table* %0 to i8**
+  %4 = load i8*, i8** %3, align 8
+  store %struct.hash_tbl_node* null, %struct.hash_tbl_node** %2, align 8
+  tail call void @nasm_free(i8* %4) #9
+  ret void
+}
+
+; Function Attrs: nounwind ssp uwtable
+define hidden void @hash_free_all(%struct.hash_table* nocapture, i1 zeroext) local_unnamed_addr #0 {
+  %3 = alloca %struct.hash_tbl_node*, align 8
+  %4 = alloca i8*, align 8
+  %5 = bitcast %struct.hash_tbl_node** %3 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 8, i8* nonnull %5) #9
+  store %struct.hash_tbl_node* null, %struct.hash_tbl_node** %3, align 8
+  %6 = bitcast i8** %4 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 8, i8* nonnull %6) #9
+  %7 = call i8* @hash_iterate(%struct.hash_table* %0, %struct.hash_tbl_node** nonnull %3, i8** nonnull %4)
+  %8 = icmp eq i8* %7, null
+  br i1 %8, label %16, label %9
+
+; <label>:9:                                      ; preds = %2, %13
+  %10 = phi i8* [ %14, %13 ], [ %7, %2 ]
+  call void @nasm_free(i8* nonnull %10) #9
+  br i1 %1, label %11, label %13
+
+; <label>:11:                                     ; preds = %9
+  %12 = load i8*, i8** %4, align 8
+  call void @nasm_free(i8* %12) #9
+  br label %13
+
+; <label>:13:                                     ; preds = %11, %9
+  %14 = call i8* @hash_iterate(%struct.hash_table* %0, %struct.hash_tbl_node** nonnull %3, i8** nonnull %4)
+  %15 = icmp eq i8* %14, null
+  br i1 %15, label %16, label %9
+
+; <label>:16:                                     ; preds = %13, %2
+  call void @hash_free(%struct.hash_table* %0)
+  call void @llvm.lifetime.end.p0i8(i64 8, i8* nonnull %6) #9
+  call void @llvm.lifetime.end.p0i8(i64 8, i8* nonnull %5) #9
+  ret void
+}
+
+; Function Attrs: allocsize(0)
+declare noalias nonnull i8* @nasm_zalloc(i64) local_unnamed_addr #6
+
+attributes #0 = { nounwind ssp uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="4" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { cold noreturn "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="4" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { argmemonly nounwind }
+attributes #3 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="4" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { nounwind readonly "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="4" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #5 = { norecurse nounwind ssp uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="4" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #6 = { allocsize(0) "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="4" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #7 = { cold noreturn nounwind }
+attributes #8 = { nounwind allocsize(0) }
+attributes #9 = { nounwind }
+attributes #10 = { nounwind readonly }
+
+!llvm.module.flags = !{!0, !1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{i32 7, !"PIC Level", i32 2}
+!2 = !{!"branch_weights", i32 1, i32 2000}
+!3 = !{!"branch_weights", i32 2000, i32 1}

@@ -1,0 +1,37 @@
+%threeWayMutRecursiveA_10 = load  i32, i32* %threeWayMutRecursiveA_3, align 4 
+%threeWayMutRecursiveA_11 = add  nsw i32 %threeWayMutRecursiveA_10, 1 
+enter-call threeWayMutRecursiveB
+%threeWayMutRecursiveB_0 = bitcast i32 %threeWayMutRecursiveA_11 to i32 
+%threeWayMutRecursiveB_2 = alloca i32, align 4 
+%threeWayMutRecursiveB_3 = alloca i32, align 4 
+store  i32 %threeWayMutRecursiveB_0, i32* %threeWayMutRecursiveB_3, align 4 
+%threeWayMutRecursiveB_4 = load  i32, i32* %threeWayMutRecursiveB_3, align 4 
+%threeWayMutRecursiveB_5 = icmp sgt i32 %threeWayMutRecursiveB_4, 124 
+path-eq %threeWayMutRecursiveB_5 = bitcast i1 0 to i1 
+%threeWayMutRecursiveB_10 = load  i32, i32* %threeWayMutRecursiveB_3, align 4 
+%threeWayMutRecursiveB_11 = add  nsw i32 %threeWayMutRecursiveB_10, 4 
+enter-call threeWayMutRecursiveC
+%threeWayMutRecursiveC_0 = bitcast i32 %threeWayMutRecursiveB_11 to i32 
+%threeWayMutRecursiveC_2 = alloca i32, align 4 
+store  i32 %threeWayMutRecursiveC_0, i32* %threeWayMutRecursiveC_2, align 4 
+%threeWayMutRecursiveC_3 = load  i32, i32* %threeWayMutRecursiveC_2, align 4 
+%threeWayMutRecursiveC_4 = add  nsw i32 %threeWayMutRecursiveC_3, 2 
+enter-call threeWayMutRecursiveA
+%threeWayMutRecursiveA_0 = bitcast i32 %threeWayMutRecursiveC_4 to i32 
+%threeWayMutRecursiveA_2 = alloca i32, align 4 
+%threeWayMutRecursiveA_3_1 = alloca i32, align 4 
+store  i32 %threeWayMutRecursiveA_0, i32* %threeWayMutRecursiveA_3_1, align 4 
+%threeWayMutRecursiveA_4 = load  i32, i32* %threeWayMutRecursiveA_3_1, align 4 
+%threeWayMutRecursiveA_5 = srem i32 %threeWayMutRecursiveA_4, 5 
+%threeWayMutRecursiveA_6 = icmp eq i32 %threeWayMutRecursiveA_5, 0 
+path-eq %threeWayMutRecursiveA_6 = bitcast i1 0 to i1 
+%threeWayMutRecursiveA_10_1 = load  i32, i32* %threeWayMutRecursiveA_3_1, align 4 
+%threeWayMutRecursiveA_11_1 = add  nsw i32 %threeWayMutRecursiveA_10_1, 1 
+enter-call threeWayMutRecursiveB
+%threeWayMutRecursiveB_0_1 = bitcast i32 %threeWayMutRecursiveA_11_1 to i32 
+%threeWayMutRecursiveB_2_1 = alloca i32, align 4 
+%threeWayMutRecursiveB_3_1 = alloca i32, align 4 
+store  i32 %threeWayMutRecursiveB_0_1, i32* %threeWayMutRecursiveB_3_1, align 4 
+%threeWayMutRecursiveB_4_1 = load  i32, i32* %threeWayMutRecursiveB_3_1, align 4 
+%threeWayMutRecursiveB_5_1 = icmp sgt i32 %threeWayMutRecursiveB_4_1, 124 
+track-ops LocalReference (IntegerType {typeBits = 1}) (Name "threeWayMutRecursiveB_5_1")

@@ -1,0 +1,2 @@
+%nestedRecursive_10 = load  i32, i32* %nestedRecursive_4, align 4 
+store  i32 %nestedRecursive_10, i32* %nestedRecursive_2, align 4 

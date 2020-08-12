@@ -1,0 +1,5 @@
+%notTailRec_17 = load  i32, i32* %notTailRec_4, align 4 
+%notTailRec_18 = mul  nsw i32 %notTailRec_17, 2 
+store  i32 %notTailRec_18, i32* %notTailRec_2, align 4 
+%notTailRec_23 = load  i32, i32* %notTailRec_2, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "notTailRec_23")

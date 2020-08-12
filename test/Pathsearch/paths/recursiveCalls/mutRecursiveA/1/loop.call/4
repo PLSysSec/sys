@@ -1,0 +1,2 @@
+%mutRecursiveA_13 = load  i32, i32* %mutRecursiveA_2, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "mutRecursiveA_13")

@@ -1,0 +1,11 @@
+%foo_4 = alloca i32, align 4 
+%foo_5 = alloca i32, align 4 
+%foo_6 = alloca i32, align 4 
+%foo_7 = alloca i32, align 4 
+store  i32 %foo_0, i32* %foo_4, align 4 
+store  i32 %foo_1, i32* %foo_5, align 4 
+store  i32 %foo_2, i32* %foo_6, align 4 
+store  i32 0, i32* %foo_7, align 4 
+%foo_9 = load  i32, i32* %foo_7, align 4 
+%foo_10 = load  i32, i32* %foo_4, align 4 
+%foo_11 = icmp slt i32 %foo_9, %foo_10 

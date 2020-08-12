@@ -1,0 +1,131 @@
+#!/usr/bin/env python
+#
+# wrap clang and force it to dump ll
+#
+# (C) 2018 Riad S. Wahby <rsw@cs.stanford.edu>
+#          and the Sys authors
+#
+# NOTE: this *should* be compatible with both Python2 and Python3.
+#       Please check any edits against both.
+
+from __future__ import print_function
+import argparse
+from os.path import basename
+import subprocess
+import sys
+
+class Consts(object):
+    # NOTE change the following to point to the clang/++ you want to use
+    CLANGPATH = "/usr/bin/"
+    CC = CLANGPATH + "clang"
+    CXX = CLANGPATH + "clang++"
+    force = False       # force in case that -c is not supplied on cmdline
+    opt_passes = { '0': False
+                 , '1': False
+                 , '2': False
+                 , '3': False
+                 , 'fast': False
+                 , 's': False
+                 , 'z': False
+                 , 'g': False
+                 , 'preserve': True
+                 }
+
+def main(myname):
+    # parse our argv
+    if myname[:6] != "dclang":
+        raise RuntimeError("argv[0] *must* begin with dclang!")
+    myname = myname[6:]
+
+    # are we running clang or clang++?
+    if myname[:2] == "++":
+        clang = Consts.CXX
+        myname = myname[2:]
+    else:
+        clang = Consts.CC
+
+    # what optimization passes have we been asked to run?
+    opt_args = myname.split(':')
+    for opt_arg in opt_args:
+        add_mode = True
+        if opt_arg == '':
+            continue
+        elif opt_arg[0] == '-':
+            add_mode = False
+            opt_arg = opt_arg[1:]
+
+        if opt_arg == "force":
+            Consts.force = True
+        elif opt_arg == "all":
+            for opt_pass in Consts.opt_passes:
+                Consts.opt_passes[opt_pass] = add_mode
+        elif opt_arg not in Consts.opt_passes:
+            raise RuntimeError("no such opt pass %s" % opt_arg)
+        else:
+            Consts.opt_passes[opt_arg] = add_mode
+
+    # make sure we're acting on some input file
+    fake_outfile = None
+    for arg in sys.argv[1:]:
+        tmp = None
+        if arg[-2:] == '.c':
+            tmp = arg[:-1] + 'll'
+        elif arg[-3:] == '.cc':
+            tmp = arg[:-2] + 'll'
+        elif arg[-4:] == '.cpp':
+            tmp = arg[:-3] + 'll'
+
+        if tmp is not None:
+            if fake_outfile is not None:
+                raise RuntimeError("already found ofile '%s', then also found '%s'" % (fake_outfile, tmp))
+            fake_outfile = tmp
+
+    # parse the arguments we care about (-c, -o, -O)
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-c', dest='comp', action='store_true')
+    parser.add_argument('-o', dest='out')
+    parser.add_argument('-O', dest='optlvl')
+    parser.set_defaults(comp=False)
+    parser.set_defaults(out=None)
+    parser.set_defaults(optlvl='0')
+    (parsed, remaining) = parser.parse_known_args()
+
+    # run the real clang
+    if subprocess.call([clang] + sys.argv[1:]) != 0:
+        raise RuntimeError("(dclang-real) clang returned non-zero status")
+
+    # now make sure we have the required opts, else give up
+    if not Consts.force and (not parsed.comp or fake_outfile is None):
+        return
+
+    # figure out the base filename of the emitted .ll file
+    if parsed.out is None:
+        outfile = fake_outfile
+    else:
+        dotidx = parsed.out.rfind('.')
+        if dotidx == -1:
+            outfile = parsed.out + ".ll"
+        else:
+            outfile = parsed.out[:dotidx] + ".ll"
+
+    # make sure that we enable the specified optimization if 'preserve' mode is on
+    if Consts.opt_passes['preserve']:
+        Consts.opt_passes[parsed.optlvl] = True
+
+    # compute the arguments we're going to need for the .ll generating calls
+    remaining = [clang, '-emit-llvm', '-S', '-c', '-o', None, None] + remaining
+
+    # now run the stuff we care about
+    for opt_pass in Consts.opt_passes:
+        if not Consts.opt_passes[opt_pass] or opt_pass == 'preserve':
+            continue
+        out_tmp = outfile + "-O%s" % opt_pass
+        if opt_pass == parsed.optlvl and Consts.opt_passes['preserve']:
+            out_tmp += "_p"
+        remaining[5] = out_tmp
+        remaining[6] = "-O" + opt_pass
+        if subprocess.call(remaining) != 0:
+            raise RuntimeError("(dclang-ll-%s) clang returned non-zero status" % opt_pass)
+
+if __name__ == "__main__":
+    main(basename(sys.argv[0]))

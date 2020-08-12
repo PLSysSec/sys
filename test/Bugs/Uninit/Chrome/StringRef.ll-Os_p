@@ -1,0 +1,2859 @@
+; ModuleID = '../../third_party/swiftshader/third_party/llvm-subzero/lib/Support/StringRef.cpp'
+source_filename = "../../third_party/swiftshader/third_party/llvm-subzero/lib/Support/StringRef.cpp"
+target datalayout = "e-m:e-i64:64-f80:128-n8:16:32:64-S128"
+target triple = "x86_64-pc-linux-gnu"
+
+module asm ".symver exp2f, exp2f@GLIBC_2.2.5"
+module asm ".symver expf, expf@GLIBC_2.2.5"
+module asm ".symver lgamma, lgamma@GLIBC_2.2.5"
+module asm ".symver lgammaf, lgammaf@GLIBC_2.2.5"
+module asm ".symver lgammal, lgammal@GLIBC_2.2.5"
+module asm ".symver log2f, log2f@GLIBC_2.2.5"
+module asm ".symver logf, logf@GLIBC_2.2.5"
+module asm ".symver powf, powf@GLIBC_2.2.5"
+
+%"class.llvm::StringRef" = type { i8*, i64 }
+%"class.std::__1::basic_string" = type { %"class.std::__1::__compressed_pair" }
+%"class.std::__1::__compressed_pair" = type { %"struct.std::__1::__compressed_pair_elem" }
+%"struct.std::__1::__compressed_pair_elem" = type { %"struct.std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::__rep" }
+%"struct.std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::__rep" = type { %union.anon }
+%union.anon = type { %"struct.std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::__long" }
+%"struct.std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::__long" = type { i8*, i64, i64 }
+%"class.std::__1::__basic_string_common" = type { i8 }
+%"struct.std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::__short" = type { [23 x i8], %struct.anon }
+%struct.anon = type { i8 }
+%"class.std::__1::bitset" = type { %"class.std::__1::__bitset" }
+%"class.std::__1::__bitset" = type { [4 x i64] }
+%"class.llvm::SmallVectorImpl" = type { %"class.llvm::SmallVectorTemplateBase" }
+%"class.llvm::SmallVectorTemplateBase" = type { %"class.llvm::SmallVectorTemplateCommon" }
+%"class.llvm::SmallVectorTemplateCommon" = type { %"class.llvm::SmallVectorBase", %"struct.llvm::AlignedCharArrayUnion" }
+%"class.llvm::SmallVectorBase" = type { i8*, i8*, i8* }
+%"struct.llvm::AlignedCharArrayUnion" = type { %"struct.llvm::AlignedCharArray" }
+%"struct.llvm::AlignedCharArray" = type { [16 x i8] }
+%"class.llvm::APInt" = type { i32, %union.anon.1 }
+%union.anon.1 = type { i64 }
+%"struct.llvm::hashing::detail::hash_state" = type { i64, i64, i64, i64, i64, i64, i64 }
+
+$_ZN4llvm19ComputeEditDistanceIcEEjNS_8ArrayRefIT_EES3_bj = comdat any
+
+$_ZN4llvm23SmallVectorTemplateBaseINS_9StringRefELb1EE9push_backERKS1_ = comdat any
+
+$_ZN4llvm5APIntC2Ejmb = comdat any
+
+$_ZN4llvm5APIntlSEj = comdat any
+
+$_ZN4llvm5APInt15clearUnusedBitsEv = comdat any
+
+$_ZNK4llvm5APInt3shlEj = comdat any
+
+$_ZN4llvm7hashing6detail23hash_combine_range_implIKcEENSt3__19enable_ifIXsr16is_hashable_dataIT_EE5valueENS_9hash_codeEE4typeEPS6_SA_ = comdat any
+
+$_ZN4llvm7hashing6detail10hash_shortEPKcmm = comdat any
+
+$_ZN4llvm7hashing6detail10hash_state6createEPKcm = comdat any
+
+$_ZN4llvm7hashing6detail10hash_state3mixEPKc = comdat any
+
+$_ZN4llvm7hashing6detail10hash_state8finalizeEm = comdat any
+
+$_ZN4llvm7hashing6detail10hash_state12mix_32_bytesEPKcRmS5_ = comdat any
+
+$_ZZN4llvm7hashing6detail18get_execution_seedEvE4seed = comdat any
+
+$_ZGVZN4llvm7hashing6detail18get_execution_seedEvE4seed = comdat any
+
+@_ZN4llvm9StringRef4nposE = hidden local_unnamed_addr constant i64 -1, align 8
+@.str = private unnamed_addr constant [3 x i8] c"0x\00", align 1
+@.str.1 = private unnamed_addr constant [3 x i8] c"0X\00", align 1
+@.str.2 = private unnamed_addr constant [3 x i8] c"0b\00", align 1
+@.str.3 = private unnamed_addr constant [3 x i8] c"0B\00", align 1
+@.str.4 = private unnamed_addr constant [3 x i8] c"0o\00", align 1
+@_ZZN4llvm7hashing6detail18get_execution_seedEvE4seed = linkonce_odr hidden local_unnamed_addr global i64 0, comdat, align 8
+@_ZGVZN4llvm7hashing6detail18get_execution_seedEvE4seed = linkonce_odr hidden global i64 0, comdat, align 8
+@_ZN4llvm7hashing6detail19fixed_seed_overrideE = external local_unnamed_addr global i64, align 8
+
+; Function Attrs: norecurse nounwind optsize readonly ssp uwtable
+define hidden i32 @_ZNK4llvm9StringRef13compare_lowerES0_(%"class.llvm::StringRef"* nocapture readonly, i8*, i64) local_unnamed_addr #0 align 2 {
+  %4 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 0
+  %5 = load i8*, i8** %4, align 8
+  %6 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 1
+  %7 = load i64, i64* %6, align 8
+  %8 = icmp ugt i64 %7, %2
+  %9 = select i1 %8, i64 %2, i64 %7
+  %10 = tail call fastcc i32 @_ZL17ascii_strncasecmpPKcS0_m(i8* %5, i8* %1, i64 %9) #13
+  %11 = icmp eq i32 %10, 0
+  br i1 %11, label %12, label %17
+
+; <label>:12:                                     ; preds = %3
+  %13 = icmp eq i64 %7, %2
+  br i1 %13, label %17, label %14
+
+; <label>:14:                                     ; preds = %12
+  %15 = icmp ult i64 %7, %2
+  %16 = select i1 %15, i32 -1, i32 1
+  br label %17
+
+; <label>:17:                                     ; preds = %12, %3, %14
+  %18 = phi i32 [ %16, %14 ], [ %10, %3 ], [ 0, %12 ]
+  ret i32 %18
+}
+
+; Function Attrs: argmemonly nounwind
+declare void @llvm.lifetime.start.p0i8(i64, i8* nocapture) #1
+
+; Function Attrs: norecurse nounwind optsize readonly ssp uwtable
+define internal fastcc i32 @_ZL17ascii_strncasecmpPKcS0_m(i8* nocapture readonly, i8* nocapture readonly, i64) unnamed_addr #0 {
+  %4 = icmp eq i64 %2, 0
+  br i1 %4, label %26, label %7
+
+; <label>:5:                                      ; preds = %7
+  %6 = icmp ult i64 %22, %2
+  br i1 %6, label %7, label %26
+
+; <label>:7:                                      ; preds = %3, %5
+  %8 = phi i64 [ %22, %5 ], [ 0, %3 ]
+  %9 = getelementptr inbounds i8, i8* %0, i64 %8
+  %10 = load i8, i8* %9, align 1
+  %11 = add i8 %10, -65
+  %12 = icmp ult i8 %11, 26
+  %13 = add i8 %10, 32
+  %14 = select i1 %12, i8 %13, i8 %10
+  %15 = getelementptr inbounds i8, i8* %1, i64 %8
+  %16 = load i8, i8* %15, align 1
+  %17 = add i8 %16, -65
+  %18 = icmp ult i8 %17, 26
+  %19 = add i8 %16, 32
+  %20 = select i1 %18, i8 %19, i8 %16
+  %21 = icmp eq i8 %14, %20
+  %22 = add nuw i64 %8, 1
+  br i1 %21, label %5, label %23
+
+; <label>:23:                                     ; preds = %7
+  %24 = icmp ult i8 %14, %20
+  %25 = select i1 %24, i32 -1, i32 1
+  br label %26
+
+; <label>:26:                                     ; preds = %5, %3, %23
+  %27 = phi i32 [ %25, %23 ], [ 0, %3 ], [ 0, %5 ]
+  ret i32 %27
+}
+
+; Function Attrs: argmemonly nounwind
+declare void @llvm.lifetime.end.p0i8(i64, i8* nocapture) #1
+
+; Function Attrs: norecurse nounwind optsize readonly ssp uwtable
+define hidden zeroext i1 @_ZNK4llvm9StringRef16startswith_lowerES0_(%"class.llvm::StringRef"* nocapture readonly, i8* nocapture readonly, i64) local_unnamed_addr #0 align 2 {
+  %4 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 1
+  %5 = load i64, i64* %4, align 8
+  %6 = icmp ult i64 %5, %2
+  br i1 %6, label %12, label %7
+
+; <label>:7:                                      ; preds = %3
+  %8 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 0
+  %9 = load i8*, i8** %8, align 8
+  %10 = tail call fastcc i32 @_ZL17ascii_strncasecmpPKcS0_m(i8* %9, i8* %1, i64 %2) #13
+  %11 = icmp eq i32 %10, 0
+  br label %12
+
+; <label>:12:                                     ; preds = %3, %7
+  %13 = phi i1 [ false, %3 ], [ %11, %7 ]
+  ret i1 %13
+}
+
+; Function Attrs: norecurse nounwind optsize readonly ssp uwtable
+define hidden zeroext i1 @_ZNK4llvm9StringRef14endswith_lowerES0_(%"class.llvm::StringRef"* nocapture readonly, i8* nocapture readonly, i64) local_unnamed_addr #0 align 2 {
+  %4 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 1
+  %5 = load i64, i64* %4, align 8
+  %6 = icmp ult i64 %5, %2
+  br i1 %6, label %15, label %7
+
+; <label>:7:                                      ; preds = %3
+  %8 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 0
+  %9 = load i8*, i8** %8, align 8
+  %10 = getelementptr inbounds i8, i8* %9, i64 %5
+  %11 = sub i64 0, %2
+  %12 = getelementptr inbounds i8, i8* %10, i64 %11
+  %13 = tail call fastcc i32 @_ZL17ascii_strncasecmpPKcS0_m(i8* %12, i8* %1, i64 %2) #13
+  %14 = icmp eq i32 %13, 0
+  br label %15
+
+; <label>:15:                                     ; preds = %3, %7
+  %16 = phi i1 [ false, %3 ], [ %14, %7 ]
+  ret i1 %16
+}
+
+; Function Attrs: nounwind optsize readonly ssp uwtable
+define hidden i64 @_ZNK4llvm9StringRef10find_lowerEcm(%"class.llvm::StringRef"* nocapture readonly, i8 signext, i64) local_unnamed_addr #2 align 2 {
+  %4 = add i8 %1, -65
+  %5 = icmp ult i8 %4, 26
+  %6 = add i8 %1, 32
+  %7 = select i1 %5, i8 %6, i8 %1
+  %8 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 1
+  %9 = load i64, i64* %8, align 8
+  %10 = icmp ult i64 %9, %2
+  %11 = select i1 %10, i64 %9, i64 %2
+  %12 = sub i64 %9, %11
+  %13 = icmp eq i64 %12, 0
+  br i1 %13, label %33, label %14
+
+; <label>:14:                                     ; preds = %3
+  %15 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 0
+  %16 = load i8*, i8** %15, align 8
+  %17 = getelementptr inbounds i8, i8* %16, i64 %11
+  br label %18
+
+; <label>:18:                                     ; preds = %29, %14
+  %19 = phi i8* [ %30, %29 ], [ %17, %14 ]
+  %20 = phi i64 [ %31, %29 ], [ %12, %14 ]
+  %21 = load i8, i8* %19, align 1
+  %22 = add i8 %21, -65
+  %23 = icmp ult i8 %22, 26
+  %24 = add i8 %21, 32
+  %25 = select i1 %23, i8 %24, i8 %21
+  %26 = icmp eq i8 %25, %7
+  br i1 %26, label %27, label %29
+
+; <label>:27:                                     ; preds = %18
+  %28 = sub i64 %9, %20
+  br label %33
+
+; <label>:29:                                     ; preds = %18
+  %30 = getelementptr inbounds i8, i8* %19, i64 1
+  %31 = add i64 %20, -1
+  %32 = icmp eq i64 %31, 0
+  br i1 %32, label %33, label %18
+
+; <label>:33:                                     ; preds = %29, %3, %27
+  %34 = phi i64 [ %28, %27 ], [ -1, %3 ], [ -1, %29 ]
+  ret i64 %34
+}
+
+; Function Attrs: nounwind optsize readonly ssp uwtable
+define hidden i32 @_ZNK4llvm9StringRef15compare_numericES0_(%"class.llvm::StringRef"* nocapture readonly, i8*, i64) local_unnamed_addr #2 align 2 {
+  %4 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 1
+  %5 = load i64, i64* %4, align 8
+  %6 = icmp ugt i64 %5, %2
+  %7 = select i1 %6, i64 %2, i64 %5
+  %8 = icmp eq i64 %7, 0
+  br i1 %8, label %71, label %9
+
+; <label>:9:                                      ; preds = %3
+  %10 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 0
+  %11 = load i8*, i8** %10, align 8
+  br label %12
+
+; <label>:12:                                     ; preds = %9, %66
+  %13 = phi i32 [ undef, %9 ], [ %68, %66 ]
+  %14 = phi i64 [ 0, %9 ], [ %69, %66 ]
+  %15 = getelementptr inbounds i8, i8* %11, i64 %14
+  %16 = load i8, i8* %15, align 1
+  %17 = add i8 %16, -48
+  %18 = icmp ult i8 %17, 10
+  %19 = getelementptr inbounds i8, i8* %1, i64 %14
+  %20 = load i8, i8* %19, align 1
+  %21 = add i8 %20, -48
+  %22 = icmp ult i8 %21, 10
+  %23 = and i1 %18, %22
+  br i1 %23, label %24, label %61
+
+; <label>:24:                                     ; preds = %12, %47
+  %25 = phi i64 [ %27, %47 ], [ %14, %12 ]
+  %26 = phi i32 [ %51, %47 ], [ %13, %12 ]
+  %27 = add i64 %25, 1
+  %28 = icmp eq i64 %25, %7
+  br i1 %28, label %53, label %29
+
+; <label>:29:                                     ; preds = %24
+  %30 = icmp ult i64 %27, %5
+  br i1 %30, label %31, label %36
+
+; <label>:31:                                     ; preds = %29
+  %32 = getelementptr inbounds i8, i8* %11, i64 %27
+  %33 = load i8, i8* %32, align 1
+  %34 = add i8 %33, -48
+  %35 = icmp ult i8 %34, 10
+  br label %36
+
+; <label>:36:                                     ; preds = %31, %29
+  %37 = phi i1 [ false, %29 ], [ %35, %31 ]
+  %38 = icmp ult i64 %27, %2
+  br i1 %38, label %39, label %45
+
+; <label>:39:                                     ; preds = %36
+  %40 = getelementptr inbounds i8, i8* %1, i64 %27
+  %41 = load i8, i8* %40, align 1
+  %42 = add i8 %41, -48
+  %43 = icmp ult i8 %42, 10
+  %44 = xor i1 %37, %43
+  br i1 %43, label %47, label %45
+
+; <label>:45:                                     ; preds = %39, %36
+  %46 = phi i1 [ %44, %39 ], [ %37, %36 ]
+  br label %47
+
+; <label>:47:                                     ; preds = %39, %45
+  %48 = phi i32 [ 1, %45 ], [ -1, %39 ]
+  %49 = phi i1 [ %46, %45 ], [ %44, %39 ]
+  %50 = phi i3 [ -3, %45 ], [ 0, %39 ]
+  %51 = select i1 %49, i32 %48, i32 %26
+  %52 = select i1 %49, i3 1, i3 %50
+  switch i3 %52, label %79 [
+    i3 0, label %24
+    i3 -3, label %53
+  ]
+
+; <label>:53:                                     ; preds = %24, %47
+  %54 = phi i64 [ %7, %24 ], [ %25, %47 ]
+  %55 = phi i32 [ %26, %24 ], [ %51, %47 ]
+  %56 = sub i64 %27, %14
+  %57 = icmp eq i64 %56, 0
+  br i1 %57, label %66, label %58
+
+; <label>:58:                                     ; preds = %53
+  %59 = tail call i32 @memcmp(i8* %15, i8* %19, i64 %56) #14
+  %60 = icmp eq i32 %59, 0
+  br i1 %60, label %66, label %76
+
+; <label>:61:                                     ; preds = %12
+  %62 = icmp eq i8 %16, %20
+  br i1 %62, label %66, label %63
+
+; <label>:63:                                     ; preds = %61
+  %64 = icmp ult i8 %16, %20
+  %65 = select i1 %64, i32 -1, i32 1
+  br label %79
+
+; <label>:66:                                     ; preds = %58, %53, %61
+  %67 = phi i64 [ %14, %61 ], [ %54, %53 ], [ %54, %58 ]
+  %68 = phi i32 [ %13, %61 ], [ %55, %53 ], [ %55, %58 ]
+  %69 = add i64 %67, 1
+  %70 = icmp eq i64 %69, %7
+  br i1 %70, label %71, label %12
+
+; <label>:71:                                     ; preds = %66, %3
+  %72 = icmp eq i64 %5, %2
+  br i1 %72, label %79, label %73
+
+; <label>:73:                                     ; preds = %71
+  %74 = icmp ult i64 %5, %2
+  %75 = select i1 %74, i32 -1, i32 1
+  br label %79
+
+; <label>:76:                                     ; preds = %58
+  %77 = icmp slt i32 %59, 0
+  %78 = select i1 %77, i32 -1, i32 1
+  br label %79
+
+; <label>:79:                                     ; preds = %47, %76, %63, %71, %73
+  %80 = phi i32 [ %75, %73 ], [ 0, %71 ], [ %65, %63 ], [ %78, %76 ], [ %51, %47 ]
+  ret i32 %80
+}
+
+; Function Attrs: nounwind optsize ssp uwtable
+define hidden i32 @_ZNK4llvm9StringRef13edit_distanceES0_bj(%"class.llvm::StringRef"* nocapture readonly, i8*, i64, i1 zeroext, i32) local_unnamed_addr #3 align 2 {
+  %6 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 0
+  %7 = load i8*, i8** %6, align 8
+  %8 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 1
+  %9 = load i64, i64* %8, align 8
+  %10 = tail call i32 @_ZN4llvm19ComputeEditDistanceIcEEjNS_8ArrayRefIT_EES3_bj(i8* %7, i64 %9, i8* %1, i64 %2, i1 zeroext %3, i32 %4) #13
+  ret i32 %10
+}
+
+; Function Attrs: nounwind optsize ssp uwtable
+define linkonce_odr hidden i32 @_ZN4llvm19ComputeEditDistanceIcEEjNS_8ArrayRefIT_EES3_bj(i8*, i64, i8*, i64, i1 zeroext, i32) local_unnamed_addr #3 comdat {
+  %7 = alloca [64 x i32], align 16
+  %8 = bitcast [64 x i32]* %7 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 256, i8* nonnull %8) #12
+  %9 = getelementptr inbounds [64 x i32], [64 x i32]* %7, i64 0, i64 0
+  %10 = add i64 %3, 1
+  %11 = icmp ugt i64 %10, 64
+  br i1 %11, label %12, label %19
+
+; <label>:12:                                     ; preds = %6
+  %13 = tail call { i64, i1 } @llvm.umul.with.overflow.i64(i64 %10, i64 4)
+  %14 = extractvalue { i64, i1 } %13, 1
+  %15 = extractvalue { i64, i1 } %13, 0
+  %16 = select i1 %14, i64 -1, i64 %15
+  %17 = tail call i8* @_Znam(i64 %16) #15
+  %18 = bitcast i8* %17 to i32*
+  br label %21
+
+; <label>:19:                                     ; preds = %6
+  %20 = icmp eq i64 %3, 0
+  br i1 %20, label %25, label %21
+
+; <label>:21:                                     ; preds = %12, %19
+  %22 = phi i32* [ %18, %12 ], [ %9, %19 ]
+  %23 = phi i32* [ %18, %12 ], [ null, %19 ]
+  %24 = phi i8* [ %17, %12 ], [ null, %19 ]
+  br label %34
+
+; <label>:25:                                     ; preds = %34, %19
+  %26 = phi i1 [ true, %19 ], [ false, %34 ]
+  %27 = phi i32* [ %9, %19 ], [ %22, %34 ]
+  %28 = phi i32* [ null, %19 ], [ %23, %34 ]
+  %29 = phi i8* [ null, %19 ], [ %24, %34 ]
+  %30 = icmp eq i64 %1, 0
+  br i1 %30, label %91, label %31
+
+; <label>:31:                                     ; preds = %25
+  %32 = icmp ne i32 %5, 0
+  %33 = add i32 %5, 1
+  br label %43
+
+; <label>:34:                                     ; preds = %21, %34
+  %35 = phi i64 [ %39, %34 ], [ 1, %21 ]
+  %36 = phi i32 [ %38, %34 ], [ 1, %21 ]
+  %37 = getelementptr inbounds i32, i32* %22, i64 %35
+  store i32 %36, i32* %37, align 4
+  %38 = add i32 %36, 1
+  %39 = zext i32 %38 to i64
+  %40 = icmp ugt i64 %39, %3
+  br i1 %40, label %25, label %34
+
+; <label>:41:                                     ; preds = %51
+  %42 = icmp ugt i64 %55, %1
+  br i1 %42, label %91, label %43
+
+; <label>:43:                                     ; preds = %31, %41
+  %44 = phi i64 [ 1, %31 ], [ %55, %41 ]
+  %45 = trunc i64 %44 to i32
+  store i32 %45, i32* %27, align 4
+  %46 = add i64 %44, -1
+  br i1 %26, label %51, label %47
+
+; <label>:47:                                     ; preds = %43
+  %48 = trunc i64 %46 to i32
+  %49 = getelementptr inbounds i8, i8* %0, i64 %46
+  %50 = load i8, i8* %49, align 1
+  br label %56
+
+; <label>:51:                                     ; preds = %85, %43
+  %52 = phi i32 [ %45, %43 ], [ %88, %85 ]
+  %53 = icmp ugt i32 %52, %5
+  %54 = and i1 %32, %53
+  %55 = add i64 %44, 1
+  br i1 %54, label %94, label %41
+
+; <label>:56:                                     ; preds = %47, %85
+  %57 = phi i32 [ %45, %47 ], [ %86, %85 ]
+  %58 = phi i64 [ 1, %47 ], [ %89, %85 ]
+  %59 = phi i32 [ %48, %47 ], [ %62, %85 ]
+  %60 = phi i32 [ %45, %47 ], [ %88, %85 ]
+  %61 = getelementptr inbounds i32, i32* %27, i64 %58
+  %62 = load i32, i32* %61, align 4
+  %63 = add i64 %58, -1
+  %64 = getelementptr inbounds i8, i8* %2, i64 %63
+  %65 = load i8, i8* %64, align 1
+  br i1 %4, label %66, label %77
+
+; <label>:66:                                     ; preds = %56
+  %67 = icmp ne i8 %50, %65
+  %68 = zext i1 %67 to i32
+  %69 = add i32 %59, %68
+  %70 = getelementptr inbounds i32, i32* %27, i64 %63
+  %71 = icmp ult i32 %62, %57
+  %72 = select i1 %71, i32* %61, i32* %70
+  %73 = load i32, i32* %72, align 4
+  %74 = add i32 %73, 1
+  %75 = icmp ult i32 %74, %69
+  %76 = select i1 %75, i32 %74, i32 %69
+  br label %85
+
+; <label>:77:                                     ; preds = %56
+  %78 = icmp eq i8 %50, %65
+  br i1 %78, label %85, label %79
+
+; <label>:79:                                     ; preds = %77
+  %80 = getelementptr inbounds i32, i32* %27, i64 %63
+  %81 = icmp ult i32 %62, %57
+  %82 = select i1 %81, i32* %61, i32* %80
+  %83 = load i32, i32* %82, align 4
+  %84 = add i32 %83, 1
+  br label %85
+
+; <label>:85:                                     ; preds = %77, %79, %66
+  %86 = phi i32 [ %84, %79 ], [ %76, %66 ], [ %59, %77 ]
+  store i32 %86, i32* %61, align 4
+  %87 = icmp ult i32 %86, %60
+  %88 = select i1 %87, i32 %86, i32 %60
+  %89 = add i64 %58, 1
+  %90 = icmp ugt i64 %89, %3
+  br i1 %90, label %51, label %56
+
+; <label>:91:                                     ; preds = %41, %25
+  %92 = getelementptr inbounds i32, i32* %27, i64 %3
+  %93 = load i32, i32* %92, align 4
+  br label %94
+
+; <label>:94:                                     ; preds = %51, %91
+  %95 = phi i32 [ %93, %91 ], [ %33, %51 ]
+  %96 = icmp eq i32* %28, null
+  br i1 %96, label %98, label %97
+
+; <label>:97:                                     ; preds = %94
+  tail call void @_ZdaPv(i8* %29) #15
+  br label %98
+
+; <label>:98:                                     ; preds = %94, %97
+  call void @llvm.lifetime.end.p0i8(i64 256, i8* nonnull %8) #12
+  ret i32 %95
+}
+
+; Function Attrs: nounwind optsize ssp uwtable
+define hidden void @_ZNK4llvm9StringRef5lowerEv(%"class.std::__1::basic_string"* noalias sret, %"class.llvm::StringRef"* nocapture readonly) local_unnamed_addr #3 align 2 {
+  %3 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %1, i64 0, i32 1
+  %4 = load i64, i64* %3, align 8
+  %5 = bitcast %"class.std::__1::basic_string"* %0 to i8*
+  tail call void @llvm.memset.p0i8.i64(i8* align 8 %5, i8 0, i64 24, i1 false) #12
+  %6 = icmp ugt i64 %4, -17
+  br i1 %6, label %7, label %9
+
+; <label>:7:                                      ; preds = %2
+  %8 = bitcast %"class.std::__1::basic_string"* %0 to %"class.std::__1::__basic_string_common"*
+  tail call void @_ZNKSt3__121__basic_string_commonILb1EE20__throw_length_errorEv(%"class.std::__1::__basic_string_common"* %8) #16
+  unreachable
+
+; <label>:9:                                      ; preds = %2
+  %10 = icmp ult i64 %4, 23
+  br i1 %10, label %19, label %11
+
+; <label>:11:                                     ; preds = %9
+  %12 = add i64 %4, 16
+  %13 = and i64 %12, -16
+  %14 = tail call i8* @_Znwm(i64 %13) #15
+  %15 = getelementptr inbounds %"class.std::__1::basic_string", %"class.std::__1::basic_string"* %0, i64 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0
+  store i8* %14, i8** %15, align 8
+  %16 = or i64 %13, -9223372036854775808
+  %17 = getelementptr inbounds %"class.std::__1::basic_string", %"class.std::__1::basic_string"* %0, i64 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 2
+  store i64 %16, i64* %17, align 8
+  %18 = getelementptr inbounds %"class.std::__1::basic_string", %"class.std::__1::basic_string"* %0, i64 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 1
+  store i64 %4, i64* %18, align 8
+  br label %26
+
+; <label>:19:                                     ; preds = %9
+  %20 = trunc i64 %4 to i8
+  %21 = bitcast %"class.std::__1::basic_string"* %0 to %"struct.std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::__short"*
+  %22 = getelementptr inbounds %"struct.std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::__short", %"struct.std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::__short"* %21, i64 0, i32 1, i32 0
+  store i8 %20, i8* %22, align 1
+  %23 = icmp eq i64 %4, 0
+  br i1 %23, label %24, label %26
+
+; <label>:24:                                     ; preds = %19
+  %25 = getelementptr inbounds i8, i8* %5, i64 %4
+  store i8 0, i8* %25, align 1
+  br label %49
+
+; <label>:26:                                     ; preds = %19, %11
+  %27 = phi i8* [ %14, %11 ], [ %5, %19 ]
+  tail call void @llvm.memset.p0i8.i64(i8* nonnull align 1 %27, i8 0, i64 %4, i1 false) #12
+  %28 = getelementptr inbounds i8, i8* %27, i64 %4
+  store i8 0, i8* %28, align 1
+  %29 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %1, i64 0, i32 0
+  %30 = bitcast %"class.std::__1::basic_string"* %0 to %"struct.std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::__short"*
+  %31 = getelementptr inbounds %"struct.std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::__short", %"struct.std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::__short"* %30, i64 0, i32 1, i32 0
+  %32 = getelementptr inbounds %"class.std::__1::basic_string", %"class.std::__1::basic_string"* %0, i64 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0
+  br label %33
+
+; <label>:33:                                     ; preds = %26, %33
+  %34 = phi i64 [ 0, %26 ], [ %47, %33 ]
+  %35 = load i8*, i8** %29, align 8
+  %36 = getelementptr inbounds i8, i8* %35, i64 %34
+  %37 = load i8, i8* %36, align 1
+  %38 = add i8 %37, -65
+  %39 = icmp ult i8 %38, 26
+  %40 = add i8 %37, 32
+  %41 = select i1 %39, i8 %40, i8 %37
+  %42 = load i8, i8* %31, align 1
+  %43 = icmp slt i8 %42, 0
+  %44 = load i8*, i8** %32, align 8
+  %45 = select i1 %43, i8* %44, i8* %5
+  %46 = getelementptr inbounds i8, i8* %45, i64 %34
+  store i8 %41, i8* %46, align 1
+  %47 = add nuw i64 %34, 1
+  %48 = icmp eq i64 %47, %4
+  br i1 %48, label %49, label %33
+
+; <label>:49:                                     ; preds = %33, %24
+  ret void
+}
+
+; Function Attrs: nounwind optsize ssp uwtable
+define hidden void @_ZNK4llvm9StringRef5upperEv(%"class.std::__1::basic_string"* noalias sret, %"class.llvm::StringRef"* nocapture readonly) local_unnamed_addr #3 align 2 {
+  %3 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %1, i64 0, i32 1
+  %4 = load i64, i64* %3, align 8
+  %5 = bitcast %"class.std::__1::basic_string"* %0 to i8*
+  tail call void @llvm.memset.p0i8.i64(i8* align 8 %5, i8 0, i64 24, i1 false) #12
+  %6 = icmp ugt i64 %4, -17
+  br i1 %6, label %7, label %9
+
+; <label>:7:                                      ; preds = %2
+  %8 = bitcast %"class.std::__1::basic_string"* %0 to %"class.std::__1::__basic_string_common"*
+  tail call void @_ZNKSt3__121__basic_string_commonILb1EE20__throw_length_errorEv(%"class.std::__1::__basic_string_common"* %8) #16
+  unreachable
+
+; <label>:9:                                      ; preds = %2
+  %10 = icmp ult i64 %4, 23
+  br i1 %10, label %19, label %11
+
+; <label>:11:                                     ; preds = %9
+  %12 = add i64 %4, 16
+  %13 = and i64 %12, -16
+  %14 = tail call i8* @_Znwm(i64 %13) #15
+  %15 = getelementptr inbounds %"class.std::__1::basic_string", %"class.std::__1::basic_string"* %0, i64 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0
+  store i8* %14, i8** %15, align 8
+  %16 = or i64 %13, -9223372036854775808
+  %17 = getelementptr inbounds %"class.std::__1::basic_string", %"class.std::__1::basic_string"* %0, i64 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 2
+  store i64 %16, i64* %17, align 8
+  %18 = getelementptr inbounds %"class.std::__1::basic_string", %"class.std::__1::basic_string"* %0, i64 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 1
+  store i64 %4, i64* %18, align 8
+  br label %26
+
+; <label>:19:                                     ; preds = %9
+  %20 = trunc i64 %4 to i8
+  %21 = bitcast %"class.std::__1::basic_string"* %0 to %"struct.std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::__short"*
+  %22 = getelementptr inbounds %"struct.std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::__short", %"struct.std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::__short"* %21, i64 0, i32 1, i32 0
+  store i8 %20, i8* %22, align 1
+  %23 = icmp eq i64 %4, 0
+  br i1 %23, label %24, label %26
+
+; <label>:24:                                     ; preds = %19
+  %25 = getelementptr inbounds i8, i8* %5, i64 %4
+  store i8 0, i8* %25, align 1
+  br label %49
+
+; <label>:26:                                     ; preds = %19, %11
+  %27 = phi i8* [ %14, %11 ], [ %5, %19 ]
+  tail call void @llvm.memset.p0i8.i64(i8* nonnull align 1 %27, i8 0, i64 %4, i1 false) #12
+  %28 = getelementptr inbounds i8, i8* %27, i64 %4
+  store i8 0, i8* %28, align 1
+  %29 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %1, i64 0, i32 0
+  %30 = bitcast %"class.std::__1::basic_string"* %0 to %"struct.std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::__short"*
+  %31 = getelementptr inbounds %"struct.std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::__short", %"struct.std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::__short"* %30, i64 0, i32 1, i32 0
+  %32 = getelementptr inbounds %"class.std::__1::basic_string", %"class.std::__1::basic_string"* %0, i64 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0
+  br label %33
+
+; <label>:33:                                     ; preds = %26, %33
+  %34 = phi i64 [ 0, %26 ], [ %47, %33 ]
+  %35 = load i8*, i8** %29, align 8
+  %36 = getelementptr inbounds i8, i8* %35, i64 %34
+  %37 = load i8, i8* %36, align 1
+  %38 = add i8 %37, -97
+  %39 = icmp ult i8 %38, 26
+  %40 = add i8 %37, -32
+  %41 = select i1 %39, i8 %40, i8 %37
+  %42 = load i8, i8* %31, align 1
+  %43 = icmp slt i8 %42, 0
+  %44 = load i8*, i8** %32, align 8
+  %45 = select i1 %43, i8* %44, i8* %5
+  %46 = getelementptr inbounds i8, i8* %45, i64 %34
+  store i8 %41, i8* %46, align 1
+  %47 = add nuw i64 %34, 1
+  %48 = icmp eq i64 %47, %4
+  br i1 %48, label %49, label %33
+
+; <label>:49:                                     ; preds = %33, %24
+  ret void
+}
+
+; Function Attrs: nounwind optsize readonly ssp uwtable
+define hidden i64 @_ZNK4llvm9StringRef4findES0_m(%"class.llvm::StringRef"* nocapture readonly, i8*, i64, i64) local_unnamed_addr #2 align 2 {
+  %5 = alloca [256 x i8], align 16
+  %6 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 1
+  %7 = load i64, i64* %6, align 8
+  %8 = icmp ult i64 %7, %3
+  br i1 %8, label %84, label %9
+
+; <label>:9:                                      ; preds = %4
+  %10 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 0
+  %11 = load i8*, i8** %10, align 8
+  %12 = getelementptr inbounds i8, i8* %11, i64 %3
+  %13 = sub i64 %7, %3
+  %14 = icmp eq i64 %2, 0
+  %15 = ptrtoint i8* %11 to i64
+  br i1 %14, label %84, label %16
+
+; <label>:16:                                     ; preds = %9
+  %17 = icmp ult i64 %13, %2
+  br i1 %17, label %84, label %18
+
+; <label>:18:                                     ; preds = %16
+  %19 = icmp eq i64 %2, 1
+  br i1 %19, label %20, label %28
+
+; <label>:20:                                     ; preds = %18
+  %21 = load i8, i8* %1, align 1
+  %22 = sext i8 %21 to i32
+  %23 = tail call i8* @memchr(i8* %12, i32 %22, i64 %13) #14
+  %24 = icmp eq i8* %23, null
+  br i1 %24, label %84, label %25
+
+; <label>:25:                                     ; preds = %20
+  %26 = ptrtoint i8* %23 to i64
+  %27 = sub i64 %26, %15
+  br label %84
+
+; <label>:28:                                     ; preds = %18
+  %29 = sub i64 1, %2
+  %30 = add i64 %29, %13
+  %31 = getelementptr inbounds i8, i8* %12, i64 %30
+  %32 = icmp ult i64 %13, 16
+  %33 = icmp ugt i64 %2, 255
+  %34 = or i1 %33, %32
+  br i1 %34, label %35, label %45
+
+; <label>:35:                                     ; preds = %28, %42
+  %36 = phi i8* [ %43, %42 ], [ %12, %28 ]
+  %37 = tail call i32 @memcmp(i8* %36, i8* %1, i64 %2) #14
+  %38 = icmp eq i32 %37, 0
+  br i1 %38, label %39, label %42
+
+; <label>:39:                                     ; preds = %35
+  %40 = ptrtoint i8* %36 to i64
+  %41 = sub i64 %40, %15
+  br label %84
+
+; <label>:42:                                     ; preds = %35
+  %43 = getelementptr inbounds i8, i8* %36, i64 1
+  %44 = icmp ult i8* %43, %31
+  br i1 %44, label %35, label %84
+
+; <label>:45:                                     ; preds = %28
+  %46 = getelementptr inbounds [256 x i8], [256 x i8]* %5, i64 0, i64 0
+  call void @llvm.lifetime.start.p0i8(i64 256, i8* nonnull %46) #12
+  %47 = trunc i64 %2 to i8
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 16 %46, i8 %47, i64 256, i1 false)
+  %48 = add i64 %2, -1
+  br label %52
+
+; <label>:49:                                     ; preds = %52
+  %50 = getelementptr inbounds i8, i8* %1, i64 %48
+  %51 = load i8, i8* %50, align 1
+  br label %64
+
+; <label>:52:                                     ; preds = %45, %52
+  %53 = phi i64 [ %62, %52 ], [ 0, %45 ]
+  %54 = phi i32 [ %61, %52 ], [ 0, %45 ]
+  %55 = sub i64 %48, %53
+  %56 = trunc i64 %55 to i8
+  %57 = getelementptr inbounds i8, i8* %1, i64 %53
+  %58 = load i8, i8* %57, align 1
+  %59 = zext i8 %58 to i64
+  %60 = getelementptr inbounds [256 x i8], [256 x i8]* %5, i64 0, i64 %59
+  store i8 %56, i8* %60, align 1
+  %61 = add i32 %54, 1
+  %62 = zext i32 %61 to i64
+  %63 = icmp eq i64 %48, %62
+  br i1 %63, label %49, label %52
+
+; <label>:64:                                     ; preds = %49, %75
+  %65 = phi i8* [ %80, %75 ], [ %12, %49 ]
+  %66 = getelementptr inbounds i8, i8* %65, i64 %48
+  %67 = load i8, i8* %66, align 1
+  %68 = icmp eq i8 %67, %51
+  br i1 %68, label %69, label %75, !prof !2
+
+; <label>:69:                                     ; preds = %64
+  %70 = tail call i32 @memcmp(i8* %65, i8* nonnull %1, i64 %48) #14
+  %71 = icmp eq i32 %70, 0
+  br i1 %71, label %72, label %75
+
+; <label>:72:                                     ; preds = %69
+  %73 = ptrtoint i8* %65 to i64
+  %74 = sub i64 %73, %15
+  br label %82
+
+; <label>:75:                                     ; preds = %64, %69
+  %76 = zext i8 %67 to i64
+  %77 = getelementptr inbounds [256 x i8], [256 x i8]* %5, i64 0, i64 %76
+  %78 = load i8, i8* %77, align 1
+  %79 = zext i8 %78 to i64
+  %80 = getelementptr inbounds i8, i8* %65, i64 %79
+  %81 = icmp ult i8* %80, %31
+  br i1 %81, label %64, label %82
+
+; <label>:82:                                     ; preds = %75, %72
+  %83 = phi i64 [ %74, %72 ], [ -1, %75 ]
+  call void @llvm.lifetime.end.p0i8(i64 256, i8* nonnull %46) #12
+  br label %84
+
+; <label>:84:                                     ; preds = %42, %9, %16, %20, %25, %82, %39, %4
+  %85 = phi i64 [ -1, %4 ], [ %3, %9 ], [ -1, %16 ], [ %27, %25 ], [ -1, %20 ], [ %41, %39 ], [ %83, %82 ], [ -1, %42 ]
+  ret i64 %85
+}
+
+; Function Attrs: nounwind optsize readonly
+declare i32 @memcmp(i8* nocapture, i8* nocapture, i64) local_unnamed_addr #4
+
+; Function Attrs: argmemonly nounwind
+declare void @llvm.memset.p0i8.i64(i8* nocapture writeonly, i8, i64, i1) #1
+
+; Function Attrs: nounwind optsize readonly ssp uwtable
+define hidden i64 @_ZNK4llvm9StringRef10find_lowerES0_m(%"class.llvm::StringRef"* nocapture readonly, i8*, i64, i64) local_unnamed_addr #2 align 2 {
+  %5 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 1
+  %6 = load i64, i64* %5, align 8
+  %7 = icmp ult i64 %6, %3
+  %8 = select i1 %7, i64 %6, i64 %3
+  %9 = sub i64 %6, %8
+  %10 = icmp ult i64 %9, %2
+  br i1 %10, label %28, label %11
+
+; <label>:11:                                     ; preds = %4
+  %12 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 0
+  %13 = load i8*, i8** %12, align 8
+  %14 = getelementptr inbounds i8, i8* %13, i64 %8
+  br label %15
+
+; <label>:15:                                     ; preds = %11, %21
+  %16 = phi i64 [ %26, %21 ], [ %3, %11 ]
+  %17 = phi i8* [ %24, %21 ], [ %14, %11 ]
+  %18 = phi i64 [ %25, %21 ], [ %9, %11 ]
+  %19 = tail call fastcc i32 @_ZL17ascii_strncasecmpPKcS0_m(i8* %17, i8* %1, i64 %2) #17
+  %20 = icmp eq i32 %19, 0
+  br i1 %20, label %28, label %21
+
+; <label>:21:                                     ; preds = %15
+  %22 = icmp ne i64 %18, 0
+  %23 = zext i1 %22 to i64
+  %24 = getelementptr inbounds i8, i8* %17, i64 %23
+  %25 = sub i64 %18, %23
+  %26 = add i64 %16, 1
+  %27 = icmp ult i64 %25, %2
+  br i1 %27, label %28, label %15
+
+; <label>:28:                                     ; preds = %15, %21, %4
+  %29 = phi i64 [ -1, %4 ], [ -1, %21 ], [ %16, %15 ]
+  ret i64 %29
+}
+
+; Function Attrs: argmemonly nounwind
+declare void @llvm.memcpy.p0i8.p0i8.i64(i8* nocapture writeonly, i8* nocapture readonly, i64, i1) #1
+
+; Function Attrs: norecurse nounwind optsize readonly ssp uwtable
+define hidden i64 @_ZNK4llvm9StringRef11rfind_lowerEcm(%"class.llvm::StringRef"* nocapture readonly, i8 signext, i64) local_unnamed_addr #0 align 2 {
+  %4 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 1
+  %5 = load i64, i64* %4, align 8
+  %6 = icmp ult i64 %5, %2
+  %7 = select i1 %6, i64 %5, i64 %2
+  %8 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 0
+  %9 = add i8 %1, -65
+  %10 = icmp ult i8 %9, 26
+  %11 = add i8 %1, 32
+  %12 = select i1 %10, i8 %11, i8 %1
+  br label %13
+
+; <label>:13:                                     ; preds = %16, %3
+  %14 = phi i64 [ %7, %3 ], [ %17, %16 ]
+  %15 = icmp eq i64 %14, 0
+  br i1 %15, label %26, label %16
+
+; <label>:16:                                     ; preds = %13
+  %17 = add i64 %14, -1
+  %18 = load i8*, i8** %8, align 8
+  %19 = getelementptr inbounds i8, i8* %18, i64 %17
+  %20 = load i8, i8* %19, align 1
+  %21 = add i8 %20, -65
+  %22 = icmp ult i8 %21, 26
+  %23 = add i8 %20, 32
+  %24 = select i1 %22, i8 %23, i8 %20
+  %25 = icmp eq i8 %24, %12
+  br i1 %25, label %26, label %13
+
+; <label>:26:                                     ; preds = %13, %16
+  %27 = phi i64 [ %17, %16 ], [ -1, %13 ]
+  ret i64 %27
+}
+
+; Function Attrs: nounwind optsize readonly ssp uwtable
+define hidden i64 @_ZNK4llvm9StringRef5rfindES0_(%"class.llvm::StringRef"* nocapture readonly, i8*, i64) local_unnamed_addr #2 align 2 {
+  %4 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 1
+  %5 = load i64, i64* %4, align 8
+  %6 = icmp ult i64 %5, %2
+  br i1 %6, label %29, label %7
+
+; <label>:7:                                      ; preds = %3
+  %8 = sub i64 1, %2
+  %9 = add i64 %8, %5
+  %10 = icmp eq i64 %9, 0
+  br i1 %10, label %29, label %11
+
+; <label>:11:                                     ; preds = %7
+  %12 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 0
+  %13 = load i8*, i8** %12, align 8
+  %14 = icmp eq i64 %2, 0
+  br label %15
+
+; <label>:15:                                     ; preds = %11, %27
+  %16 = phi i64 [ %9, %11 ], [ %17, %27 ]
+  %17 = add i64 %16, -1
+  %18 = icmp ult i64 %5, %17
+  %19 = select i1 %18, i64 %5, i64 %17
+  %20 = getelementptr inbounds i8, i8* %13, i64 %19
+  %21 = sub i64 %5, %19
+  %22 = icmp ult i64 %21, %2
+  br i1 %22, label %27, label %23
+
+; <label>:23:                                     ; preds = %15
+  br i1 %14, label %29, label %24
+
+; <label>:24:                                     ; preds = %23
+  %25 = tail call i32 @memcmp(i8* %20, i8* %1, i64 %2) #14
+  %26 = icmp eq i32 %25, 0
+  br i1 %26, label %29, label %27
+
+; <label>:27:                                     ; preds = %24, %15
+  %28 = icmp eq i64 %17, 0
+  br i1 %28, label %29, label %15
+
+; <label>:29:                                     ; preds = %27, %24, %23, %7, %3
+  %30 = phi i64 [ -1, %3 ], [ -1, %7 ], [ -1, %27 ], [ %17, %24 ], [ %17, %23 ]
+  ret i64 %30
+}
+
+; Function Attrs: nounwind optsize readonly ssp uwtable
+define hidden i64 @_ZNK4llvm9StringRef11rfind_lowerES0_(%"class.llvm::StringRef"* nocapture readonly, i8*, i64) local_unnamed_addr #2 align 2 {
+  %4 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 1
+  %5 = load i64, i64* %4, align 8
+  %6 = icmp ult i64 %5, %2
+  br i1 %6, label %26, label %7
+
+; <label>:7:                                      ; preds = %3
+  %8 = sub i64 1, %2
+  %9 = add i64 %8, %5
+  %10 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 0
+  %11 = icmp eq i64 %9, 0
+  br i1 %11, label %26, label %12
+
+; <label>:12:                                     ; preds = %7, %24
+  %13 = phi i64 [ %14, %24 ], [ %9, %7 ]
+  %14 = add i64 %13, -1
+  %15 = icmp ult i64 %5, %14
+  %16 = select i1 %15, i64 %5, i64 %14
+  %17 = sub i64 %5, %16
+  %18 = icmp ult i64 %17, %2
+  br i1 %18, label %24, label %19
+
+; <label>:19:                                     ; preds = %12
+  %20 = load i8*, i8** %10, align 8
+  %21 = getelementptr inbounds i8, i8* %20, i64 %16
+  %22 = tail call fastcc i32 @_ZL17ascii_strncasecmpPKcS0_m(i8* %21, i8* %1, i64 %2) #17
+  %23 = icmp eq i32 %22, 0
+  br i1 %23, label %26, label %24
+
+; <label>:24:                                     ; preds = %19, %12
+  %25 = icmp eq i64 %14, 0
+  br i1 %25, label %26, label %12
+
+; <label>:26:                                     ; preds = %24, %19, %7, %3
+  %27 = phi i64 [ -1, %3 ], [ -1, %7 ], [ -1, %24 ], [ %14, %19 ]
+  ret i64 %27
+}
+
+; Function Attrs: nounwind optsize readonly ssp uwtable
+define hidden i64 @_ZNK4llvm9StringRef13find_first_ofES0_m(%"class.llvm::StringRef"* nocapture readonly, i8*, i64, i64) local_unnamed_addr #2 align 2 {
+  %5 = alloca %"class.std::__1::bitset", align 8
+  %6 = bitcast %"class.std::__1::bitset"* %5 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 32, i8* nonnull %6) #12
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %6, i8 0, i64 32, i1 false) #12
+  %7 = icmp eq i64 %2, 0
+  br i1 %7, label %8, label %15
+
+; <label>:8:                                      ; preds = %15, %4
+  %9 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 1
+  %10 = load i64, i64* %9, align 8
+  %11 = icmp ugt i64 %10, %3
+  br i1 %11, label %12, label %43
+
+; <label>:12:                                     ; preds = %8
+  %13 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 0
+  %14 = load i8*, i8** %13, align 8
+  br label %28
+
+; <label>:15:                                     ; preds = %4, %15
+  %16 = phi i64 [ %26, %15 ], [ 0, %4 ]
+  %17 = getelementptr inbounds i8, i8* %1, i64 %16
+  %18 = load i8, i8* %17, align 1
+  %19 = zext i8 %18 to i64
+  %20 = lshr i64 %19, 6
+  %21 = getelementptr inbounds %"class.std::__1::bitset", %"class.std::__1::bitset"* %5, i64 0, i32 0, i32 0, i64 %20
+  %22 = and i64 %19, 63
+  %23 = shl i64 1, %22
+  %24 = load i64, i64* %21, align 8
+  %25 = or i64 %23, %24
+  store i64 %25, i64* %21, align 8
+  %26 = add nuw i64 %16, 1
+  %27 = icmp eq i64 %26, %2
+  br i1 %27, label %8, label %15
+
+; <label>:28:                                     ; preds = %12, %40
+  %29 = phi i64 [ %3, %12 ], [ %41, %40 ]
+  %30 = getelementptr inbounds i8, i8* %14, i64 %29
+  %31 = load i8, i8* %30, align 1
+  %32 = zext i8 %31 to i64
+  %33 = lshr i64 %32, 6
+  %34 = getelementptr inbounds %"class.std::__1::bitset", %"class.std::__1::bitset"* %5, i64 0, i32 0, i32 0, i64 %33
+  %35 = and i64 %32, 63
+  %36 = shl i64 1, %35
+  %37 = load i64, i64* %34, align 8
+  %38 = and i64 %36, %37
+  %39 = icmp eq i64 %38, 0
+  br i1 %39, label %40, label %43
+
+; <label>:40:                                     ; preds = %28
+  %41 = add i64 %29, 1
+  %42 = icmp eq i64 %41, %10
+  br i1 %42, label %43, label %28
+
+; <label>:43:                                     ; preds = %40, %28, %8
+  %44 = phi i64 [ -1, %8 ], [ %29, %28 ], [ -1, %40 ]
+  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %6) #12
+  ret i64 %44
+}
+
+; Function Attrs: norecurse nounwind optsize readonly ssp uwtable
+define hidden i64 @_ZNK4llvm9StringRef17find_first_not_ofEcm(%"class.llvm::StringRef"* nocapture readonly, i8 signext, i64) local_unnamed_addr #0 align 2 {
+  %4 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 1
+  %5 = load i64, i64* %4, align 8
+  %6 = icmp ugt i64 %5, %2
+  br i1 %6, label %7, label %18
+
+; <label>:7:                                      ; preds = %3
+  %8 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 0
+  %9 = load i8*, i8** %8, align 8
+  br label %10
+
+; <label>:10:                                     ; preds = %7, %15
+  %11 = phi i64 [ %2, %7 ], [ %16, %15 ]
+  %12 = getelementptr inbounds i8, i8* %9, i64 %11
+  %13 = load i8, i8* %12, align 1
+  %14 = icmp eq i8 %13, %1
+  br i1 %14, label %15, label %18
+
+; <label>:15:                                     ; preds = %10
+  %16 = add i64 %11, 1
+  %17 = icmp eq i64 %16, %5
+  br i1 %17, label %18, label %10
+
+; <label>:18:                                     ; preds = %10, %15, %3
+  %19 = phi i64 [ -1, %3 ], [ -1, %15 ], [ %11, %10 ]
+  ret i64 %19
+}
+
+; Function Attrs: nounwind optsize readonly ssp uwtable
+define hidden i64 @_ZNK4llvm9StringRef17find_first_not_ofES0_m(%"class.llvm::StringRef"* nocapture readonly, i8*, i64, i64) local_unnamed_addr #2 align 2 {
+  %5 = alloca %"class.std::__1::bitset", align 8
+  %6 = bitcast %"class.std::__1::bitset"* %5 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 32, i8* nonnull %6) #12
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %6, i8 0, i64 32, i1 false) #12
+  %7 = icmp eq i64 %2, 0
+  br i1 %7, label %8, label %15
+
+; <label>:8:                                      ; preds = %15, %4
+  %9 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 1
+  %10 = load i64, i64* %9, align 8
+  %11 = icmp ugt i64 %10, %3
+  br i1 %11, label %12, label %43
+
+; <label>:12:                                     ; preds = %8
+  %13 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 0
+  %14 = load i8*, i8** %13, align 8
+  br label %28
+
+; <label>:15:                                     ; preds = %4, %15
+  %16 = phi i64 [ %26, %15 ], [ 0, %4 ]
+  %17 = getelementptr inbounds i8, i8* %1, i64 %16
+  %18 = load i8, i8* %17, align 1
+  %19 = zext i8 %18 to i64
+  %20 = lshr i64 %19, 6
+  %21 = getelementptr inbounds %"class.std::__1::bitset", %"class.std::__1::bitset"* %5, i64 0, i32 0, i32 0, i64 %20
+  %22 = and i64 %19, 63
+  %23 = shl i64 1, %22
+  %24 = load i64, i64* %21, align 8
+  %25 = or i64 %23, %24
+  store i64 %25, i64* %21, align 8
+  %26 = add nuw i64 %16, 1
+  %27 = icmp eq i64 %26, %2
+  br i1 %27, label %8, label %15
+
+; <label>:28:                                     ; preds = %12, %40
+  %29 = phi i64 [ %3, %12 ], [ %41, %40 ]
+  %30 = getelementptr inbounds i8, i8* %14, i64 %29
+  %31 = load i8, i8* %30, align 1
+  %32 = zext i8 %31 to i64
+  %33 = lshr i64 %32, 6
+  %34 = getelementptr inbounds %"class.std::__1::bitset", %"class.std::__1::bitset"* %5, i64 0, i32 0, i32 0, i64 %33
+  %35 = and i64 %32, 63
+  %36 = shl i64 1, %35
+  %37 = load i64, i64* %34, align 8
+  %38 = and i64 %36, %37
+  %39 = icmp eq i64 %38, 0
+  br i1 %39, label %43, label %40
+
+; <label>:40:                                     ; preds = %28
+  %41 = add i64 %29, 1
+  %42 = icmp eq i64 %41, %10
+  br i1 %42, label %43, label %28
+
+; <label>:43:                                     ; preds = %40, %28, %8
+  %44 = phi i64 [ -1, %8 ], [ %29, %28 ], [ -1, %40 ]
+  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %6) #12
+  ret i64 %44
+}
+
+; Function Attrs: nounwind optsize readonly ssp uwtable
+define hidden i64 @_ZNK4llvm9StringRef12find_last_ofES0_m(%"class.llvm::StringRef"* nocapture readonly, i8*, i64, i64) local_unnamed_addr #2 align 2 {
+  %5 = alloca %"class.std::__1::bitset", align 8
+  %6 = bitcast %"class.std::__1::bitset"* %5 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 32, i8* nonnull %6) #12
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %6, i8 0, i64 32, i1 false) #12
+  %7 = icmp eq i64 %2, 0
+  br i1 %7, label %8, label %14
+
+; <label>:8:                                      ; preds = %14, %4
+  %9 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 1
+  %10 = load i64, i64* %9, align 8
+  %11 = icmp ult i64 %10, %3
+  %12 = select i1 %11, i64 %10, i64 %3
+  %13 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 0
+  br label %27
+
+; <label>:14:                                     ; preds = %4, %14
+  %15 = phi i64 [ %25, %14 ], [ 0, %4 ]
+  %16 = getelementptr inbounds i8, i8* %1, i64 %15
+  %17 = load i8, i8* %16, align 1
+  %18 = zext i8 %17 to i64
+  %19 = lshr i64 %18, 6
+  %20 = getelementptr inbounds %"class.std::__1::bitset", %"class.std::__1::bitset"* %5, i64 0, i32 0, i32 0, i64 %19
+  %21 = and i64 %18, 63
+  %22 = shl i64 1, %21
+  %23 = load i64, i64* %20, align 8
+  %24 = or i64 %22, %23
+  store i64 %24, i64* %20, align 8
+  %25 = add nuw i64 %15, 1
+  %26 = icmp eq i64 %25, %2
+  br i1 %26, label %8, label %14
+
+; <label>:27:                                     ; preds = %31, %8
+  %28 = phi i64 [ %12, %8 ], [ %29, %31 ]
+  %29 = add i64 %28, -1
+  %30 = icmp eq i64 %28, 0
+  br i1 %30, label %43, label %31
+
+; <label>:31:                                     ; preds = %27
+  %32 = load i8*, i8** %13, align 8
+  %33 = getelementptr inbounds i8, i8* %32, i64 %29
+  %34 = load i8, i8* %33, align 1
+  %35 = zext i8 %34 to i64
+  %36 = lshr i64 %35, 6
+  %37 = getelementptr inbounds %"class.std::__1::bitset", %"class.std::__1::bitset"* %5, i64 0, i32 0, i32 0, i64 %36
+  %38 = and i64 %35, 63
+  %39 = shl i64 1, %38
+  %40 = load i64, i64* %37, align 8
+  %41 = and i64 %39, %40
+  %42 = icmp eq i64 %41, 0
+  br i1 %42, label %27, label %43
+
+; <label>:43:                                     ; preds = %31, %27
+  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %6) #12
+  ret i64 %29
+}
+
+; Function Attrs: norecurse nounwind optsize readonly ssp uwtable
+define hidden i64 @_ZNK4llvm9StringRef16find_last_not_ofEcm(%"class.llvm::StringRef"* nocapture readonly, i8 signext, i64) local_unnamed_addr #0 align 2 {
+  %4 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 1
+  %5 = load i64, i64* %4, align 8
+  %6 = icmp ult i64 %5, %2
+  %7 = select i1 %6, i64 %5, i64 %2
+  %8 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 0
+  br label %9
+
+; <label>:9:                                      ; preds = %13, %3
+  %10 = phi i64 [ %7, %3 ], [ %11, %13 ]
+  %11 = add i64 %10, -1
+  %12 = icmp eq i64 %10, 0
+  br i1 %12, label %18, label %13
+
+; <label>:13:                                     ; preds = %9
+  %14 = load i8*, i8** %8, align 8
+  %15 = getelementptr inbounds i8, i8* %14, i64 %11
+  %16 = load i8, i8* %15, align 1
+  %17 = icmp eq i8 %16, %1
+  br i1 %17, label %9, label %18
+
+; <label>:18:                                     ; preds = %9, %13
+  ret i64 %11
+}
+
+; Function Attrs: nounwind optsize readonly ssp uwtable
+define hidden i64 @_ZNK4llvm9StringRef16find_last_not_ofES0_m(%"class.llvm::StringRef"* nocapture readonly, i8*, i64, i64) local_unnamed_addr #2 align 2 {
+  %5 = alloca %"class.std::__1::bitset", align 8
+  %6 = bitcast %"class.std::__1::bitset"* %5 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 32, i8* nonnull %6) #12
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %6, i8 0, i64 32, i1 false) #12
+  %7 = icmp eq i64 %2, 0
+  br i1 %7, label %8, label %14
+
+; <label>:8:                                      ; preds = %14, %4
+  %9 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 1
+  %10 = load i64, i64* %9, align 8
+  %11 = icmp ult i64 %10, %3
+  %12 = select i1 %11, i64 %10, i64 %3
+  %13 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 0
+  br label %27
+
+; <label>:14:                                     ; preds = %4, %14
+  %15 = phi i64 [ %25, %14 ], [ 0, %4 ]
+  %16 = getelementptr inbounds i8, i8* %1, i64 %15
+  %17 = load i8, i8* %16, align 1
+  %18 = zext i8 %17 to i64
+  %19 = lshr i64 %18, 6
+  %20 = getelementptr inbounds %"class.std::__1::bitset", %"class.std::__1::bitset"* %5, i64 0, i32 0, i32 0, i64 %19
+  %21 = and i64 %18, 63
+  %22 = shl i64 1, %21
+  %23 = load i64, i64* %20, align 8
+  %24 = or i64 %22, %23
+  store i64 %24, i64* %20, align 8
+  %25 = add nuw i64 %15, 1
+  %26 = icmp eq i64 %25, %2
+  br i1 %26, label %8, label %14
+
+; <label>:27:                                     ; preds = %31, %8
+  %28 = phi i64 [ %12, %8 ], [ %29, %31 ]
+  %29 = add i64 %28, -1
+  %30 = icmp eq i64 %28, 0
+  br i1 %30, label %43, label %31
+
+; <label>:31:                                     ; preds = %27
+  %32 = load i8*, i8** %13, align 8
+  %33 = getelementptr inbounds i8, i8* %32, i64 %29
+  %34 = load i8, i8* %33, align 1
+  %35 = zext i8 %34 to i64
+  %36 = lshr i64 %35, 6
+  %37 = getelementptr inbounds %"class.std::__1::bitset", %"class.std::__1::bitset"* %5, i64 0, i32 0, i32 0, i64 %36
+  %38 = and i64 %35, 63
+  %39 = shl i64 1, %38
+  %40 = load i64, i64* %37, align 8
+  %41 = and i64 %39, %40
+  %42 = icmp eq i64 %41, 0
+  br i1 %42, label %43, label %27
+
+; <label>:43:                                     ; preds = %31, %27
+  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %6) #12
+  ret i64 %29
+}
+
+; Function Attrs: nounwind optsize ssp uwtable
+define hidden void @_ZNK4llvm9StringRef5splitERNS_15SmallVectorImplIS0_EES0_ib(%"class.llvm::StringRef"* nocapture readonly, %"class.llvm::SmallVectorImpl"* dereferenceable(40), i8*, i64, i32, i1 zeroext) local_unnamed_addr #3 align 2 {
+  %7 = alloca %"class.llvm::StringRef", align 8
+  %8 = alloca %"class.llvm::StringRef", align 8
+  %9 = bitcast %"class.llvm::StringRef"* %7 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %9) #12
+  %10 = bitcast %"class.llvm::StringRef"* %0 to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i64(i8* nonnull align 8 %9, i8* align 8 %10, i64 16, i1 false)
+  %11 = icmp eq i32 %4, 0
+  br i1 %11, label %42, label %12
+
+; <label>:12:                                     ; preds = %6
+  %13 = getelementptr inbounds %"class.llvm::SmallVectorImpl", %"class.llvm::SmallVectorImpl"* %1, i64 0, i32 0
+  %14 = bitcast %"class.llvm::StringRef"* %8 to i8*
+  %15 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %7, i64 0, i32 1
+  %16 = bitcast %"class.llvm::StringRef"* %7 to i64*
+  %17 = bitcast %"class.llvm::StringRef"* %8 to i64*
+  %18 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %8, i64 0, i32 1
+  %19 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %7, i64 0, i32 0
+  br label %20
+
+; <label>:20:                                     ; preds = %12, %33
+  %21 = phi i32 [ %4, %12 ], [ %22, %33 ]
+  %22 = add nsw i32 %21, -1
+  %23 = call i64 @_ZNK4llvm9StringRef4findES0_m(%"class.llvm::StringRef"* nonnull %7, i8* %2, i64 %3, i64 0) #13
+  %24 = icmp eq i64 %23, -1
+  br i1 %24, label %42, label %25
+
+; <label>:25:                                     ; preds = %20
+  %26 = icmp ne i64 %23, 0
+  %27 = or i1 %26, %5
+  br i1 %27, label %28, label %33
+
+; <label>:28:                                     ; preds = %25
+  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %14) #12
+  %29 = load i64, i64* %15, align 8
+  %30 = icmp ult i64 %29, %23
+  %31 = select i1 %30, i64 %29, i64 %23
+  %32 = load i64, i64* %16, align 8
+  store i64 %32, i64* %17, align 8
+  store i64 %31, i64* %18, align 8
+  call void @_ZN4llvm23SmallVectorTemplateBaseINS_9StringRefELb1EE9push_backERKS1_(%"class.llvm::SmallVectorTemplateBase"* nonnull %13, %"class.llvm::StringRef"* nonnull dereferenceable(16) %8) #13
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %14) #12
+  br label %33
+
+; <label>:33:                                     ; preds = %25, %28
+  %34 = add i64 %23, %3
+  %35 = load i64, i64* %15, align 8
+  %36 = icmp ult i64 %35, %34
+  %37 = select i1 %36, i64 %35, i64 %34
+  %38 = load i8*, i8** %19, align 8
+  %39 = getelementptr inbounds i8, i8* %38, i64 %37
+  %40 = sub i64 %35, %37
+  store i8* %39, i8** %19, align 8
+  store i64 %40, i64* %15, align 8
+  %41 = icmp eq i32 %22, 0
+  br i1 %41, label %42, label %20
+
+; <label>:42:                                     ; preds = %33, %20, %6
+  br i1 %5, label %47, label %43
+
+; <label>:43:                                     ; preds = %42
+  %44 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %7, i64 0, i32 1
+  %45 = load i64, i64* %44, align 8
+  %46 = icmp eq i64 %45, 0
+  br i1 %46, label %49, label %47
+
+; <label>:47:                                     ; preds = %43, %42
+  %48 = getelementptr inbounds %"class.llvm::SmallVectorImpl", %"class.llvm::SmallVectorImpl"* %1, i64 0, i32 0
+  call void @_ZN4llvm23SmallVectorTemplateBaseINS_9StringRefELb1EE9push_backERKS1_(%"class.llvm::SmallVectorTemplateBase"* nonnull %48, %"class.llvm::StringRef"* nonnull dereferenceable(16) %7) #13
+  br label %49
+
+; <label>:49:                                     ; preds = %47, %43
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %9) #12
+  ret void
+}
+
+; Function Attrs: nounwind optsize ssp uwtable
+define linkonce_odr hidden void @_ZN4llvm23SmallVectorTemplateBaseINS_9StringRefELb1EE9push_backERKS1_(%"class.llvm::SmallVectorTemplateBase"*, %"class.llvm::StringRef"* dereferenceable(16)) local_unnamed_addr #3 comdat align 2 {
+  %3 = getelementptr inbounds %"class.llvm::SmallVectorTemplateBase", %"class.llvm::SmallVectorTemplateBase"* %0, i64 0, i32 0, i32 0, i32 1
+  %4 = load i8*, i8** %3, align 8
+  %5 = getelementptr inbounds %"class.llvm::SmallVectorTemplateBase", %"class.llvm::SmallVectorTemplateBase"* %0, i64 0, i32 0, i32 0, i32 2
+  %6 = load i8*, i8** %5, align 8
+  %7 = icmp ult i8* %4, %6
+  br i1 %7, label %12, label %8, !prof !3
+
+; <label>:8:                                      ; preds = %2
+  %9 = getelementptr inbounds %"class.llvm::SmallVectorTemplateBase", %"class.llvm::SmallVectorTemplateBase"* %0, i64 0, i32 0, i32 0
+  %10 = getelementptr inbounds %"class.llvm::SmallVectorTemplateBase", %"class.llvm::SmallVectorTemplateBase"* %0, i64 0, i32 0, i32 1, i32 0, i32 0, i64 0
+  tail call void @_ZN4llvm15SmallVectorBase8grow_podEPvmm(%"class.llvm::SmallVectorBase"* %9, i8* nonnull %10, i64 0, i64 16) #17
+  %11 = load i8*, i8** %3, align 8
+  br label %12
+
+; <label>:12:                                     ; preds = %2, %8
+  %13 = phi i8* [ %4, %2 ], [ %11, %8 ]
+  %14 = bitcast i8** %3 to %"class.llvm::StringRef"**
+  %15 = bitcast %"class.llvm::StringRef"* %1 to i8*
+  tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 8 %13, i8* nonnull align 8 %15, i64 16, i1 false)
+  %16 = load %"class.llvm::StringRef"*, %"class.llvm::StringRef"** %14, align 8
+  %17 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %16, i64 1
+  store %"class.llvm::StringRef"* %17, %"class.llvm::StringRef"** %14, align 8
+  ret void
+}
+
+; Function Attrs: nounwind optsize ssp uwtable
+define hidden void @_ZNK4llvm9StringRef5splitERNS_15SmallVectorImplIS0_EEcib(%"class.llvm::StringRef"* nocapture readonly, %"class.llvm::SmallVectorImpl"* dereferenceable(40), i8 signext, i32, i1 zeroext) local_unnamed_addr #3 align 2 {
+  %6 = alloca %"class.llvm::StringRef", align 8
+  %7 = alloca %"class.llvm::StringRef", align 8
+  %8 = bitcast %"class.llvm::StringRef"* %6 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %8) #12
+  %9 = bitcast %"class.llvm::StringRef"* %0 to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i64(i8* nonnull align 8 %8, i8* align 8 %9, i64 16, i1 false)
+  %10 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %6, i64 0, i32 1
+  %11 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %6, i64 0, i32 0
+  %12 = icmp eq i32 %3, 0
+  br i1 %12, label %51, label %13
+
+; <label>:13:                                     ; preds = %5
+  %14 = sext i8 %2 to i32
+  %15 = getelementptr inbounds %"class.llvm::SmallVectorImpl", %"class.llvm::SmallVectorImpl"* %1, i64 0, i32 0
+  %16 = bitcast %"class.llvm::StringRef"* %7 to i8*
+  %17 = bitcast %"class.llvm::StringRef"* %7 to i64*
+  %18 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %7, i64 0, i32 1
+  %19 = load i64, i64* %10, align 8
+  br label %20
+
+; <label>:20:                                     ; preds = %13, %42
+  %21 = phi i64 [ %19, %13 ], [ %49, %42 ]
+  %22 = phi i32 [ %3, %13 ], [ %23, %42 ]
+  %23 = add nsw i32 %22, -1
+  %24 = icmp eq i64 %21, 0
+  br i1 %24, label %51, label %25
+
+; <label>:25:                                     ; preds = %20
+  %26 = load i8*, i8** %11, align 8
+  %27 = call i8* @memchr(i8* %26, i32 %14, i64 %21) #14
+  %28 = icmp eq i8* %27, null
+  %29 = ptrtoint i8* %26 to i64
+  br i1 %28, label %51, label %30
+
+; <label>:30:                                     ; preds = %25
+  %31 = ptrtoint i8* %27 to i64
+  %32 = sub i64 %31, %29
+  %33 = icmp eq i64 %32, -1
+  br i1 %33, label %51, label %34
+
+; <label>:34:                                     ; preds = %30
+  %35 = icmp ne i64 %32, 0
+  %36 = or i1 %35, %4
+  br i1 %36, label %37, label %42
+
+; <label>:37:                                     ; preds = %34
+  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %16) #12
+  %38 = icmp ult i64 %21, %32
+  %39 = select i1 %38, i64 %21, i64 %32
+  store i64 %29, i64* %17, align 8
+  store i64 %39, i64* %18, align 8
+  call void @_ZN4llvm23SmallVectorTemplateBaseINS_9StringRefELb1EE9push_backERKS1_(%"class.llvm::SmallVectorTemplateBase"* nonnull %15, %"class.llvm::StringRef"* nonnull dereferenceable(16) %7) #13
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %16) #12
+  %40 = load i64, i64* %10, align 8
+  %41 = load i8*, i8** %11, align 8
+  br label %42
+
+; <label>:42:                                     ; preds = %34, %37
+  %43 = phi i8* [ %26, %34 ], [ %41, %37 ]
+  %44 = phi i64 [ %21, %34 ], [ %40, %37 ]
+  %45 = add i64 %32, 1
+  %46 = icmp ult i64 %44, %45
+  %47 = select i1 %46, i64 %44, i64 %45
+  %48 = getelementptr inbounds i8, i8* %43, i64 %47
+  %49 = sub i64 %44, %47
+  store i8* %48, i8** %11, align 8
+  store i64 %49, i64* %10, align 8
+  %50 = icmp eq i32 %23, 0
+  br i1 %50, label %51, label %20
+
+; <label>:51:                                     ; preds = %42, %30, %25, %20, %5
+  %52 = xor i1 %4, true
+  %53 = load i64, i64* %10, align 8
+  %54 = icmp eq i64 %53, 0
+  %55 = and i1 %54, %52
+  br i1 %55, label %58, label %56
+
+; <label>:56:                                     ; preds = %51
+  %57 = getelementptr inbounds %"class.llvm::SmallVectorImpl", %"class.llvm::SmallVectorImpl"* %1, i64 0, i32 0
+  call void @_ZN4llvm23SmallVectorTemplateBaseINS_9StringRefELb1EE9push_backERKS1_(%"class.llvm::SmallVectorTemplateBase"* nonnull %57, %"class.llvm::StringRef"* nonnull dereferenceable(16) %6) #13
+  br label %58
+
+; <label>:58:                                     ; preds = %51, %56
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %8) #12
+  ret void
+}
+
+; Function Attrs: nounwind optsize readonly ssp uwtable
+define hidden i64 @_ZNK4llvm9StringRef5countES0_(%"class.llvm::StringRef"* nocapture readonly, i8*, i64) local_unnamed_addr #2 align 2 {
+  %4 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 1
+  %5 = load i64, i64* %4, align 8
+  %6 = icmp ult i64 %5, %2
+  br i1 %6, label %33, label %7
+
+; <label>:7:                                      ; preds = %3
+  %8 = sub i64 1, %2
+  %9 = add i64 %8, %5
+  %10 = icmp eq i64 %9, 0
+  br i1 %10, label %33, label %11
+
+; <label>:11:                                     ; preds = %7
+  %12 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 0
+  %13 = load i8*, i8** %12, align 8
+  %14 = icmp eq i64 %2, 0
+  br label %15
+
+; <label>:15:                                     ; preds = %11, %29
+  %16 = phi i64 [ 0, %11 ], [ %30, %29 ]
+  %17 = phi i64 [ 0, %11 ], [ %31, %29 ]
+  %18 = icmp ult i64 %5, %17
+  %19 = select i1 %18, i64 %5, i64 %17
+  %20 = getelementptr inbounds i8, i8* %13, i64 %19
+  %21 = sub i64 %5, %19
+  %22 = icmp ult i64 %21, %2
+  br i1 %22, label %29, label %23
+
+; <label>:23:                                     ; preds = %15
+  br i1 %14, label %27, label %24
+
+; <label>:24:                                     ; preds = %23
+  %25 = tail call i32 @memcmp(i8* %20, i8* %1, i64 %2) #14
+  %26 = icmp eq i32 %25, 0
+  br i1 %26, label %27, label %29
+
+; <label>:27:                                     ; preds = %23, %24
+  %28 = add i64 %16, 1
+  br label %29
+
+; <label>:29:                                     ; preds = %15, %24, %27
+  %30 = phi i64 [ %28, %27 ], [ %16, %24 ], [ %16, %15 ]
+  %31 = add nuw i64 %17, 1
+  %32 = icmp eq i64 %31, %9
+  br i1 %32, label %33, label %15
+
+; <label>:33:                                     ; preds = %29, %7, %3
+  %34 = phi i64 [ 0, %3 ], [ 0, %7 ], [ %30, %29 ]
+  ret i64 %34
+}
+
+; Function Attrs: nounwind optsize ssp uwtable
+define hidden zeroext i1 @_ZN4llvm22consumeUnsignedIntegerERNS_9StringRefEjRy(%"class.llvm::StringRef"* dereferenceable(16), i32, i64* nocapture dereferenceable(8)) local_unnamed_addr #3 {
+  %4 = icmp eq i32 %1, 0
+  br i1 %4, label %5, label %7
+
+; <label>:5:                                      ; preds = %3
+  %6 = tail call fastcc i32 @_ZL17GetAutoSenseRadixRN4llvm9StringRefE(%"class.llvm::StringRef"* nonnull dereferenceable(16) %0) #13
+  br label %7
+
+; <label>:7:                                      ; preds = %5, %3
+  %8 = phi i32 [ %6, %5 ], [ %1, %3 ]
+  %9 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 1
+  %10 = load i64, i64* %9, align 8
+  %11 = icmp eq i64 %10, 0
+  br i1 %11, label %52, label %12
+
+; <label>:12:                                     ; preds = %7
+  %13 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 0
+  %14 = load i8*, i8** %13, align 8
+  store i64 0, i64* %2, align 8
+  %15 = zext i32 %8 to i64
+  br label %16
+
+; <label>:16:                                     ; preds = %12, %42
+  %17 = phi i64 [ 0, %12 ], [ %39, %42 ]
+  %18 = phi i8* [ %14, %12 ], [ %43, %42 ]
+  %19 = phi i64 [ %10, %12 ], [ %44, %42 ]
+  %20 = load i8, i8* %18, align 1
+  %21 = icmp sgt i8 %20, 47
+  br i1 %21, label %22, label %46
+
+; <label>:22:                                     ; preds = %16
+  %23 = icmp slt i8 %20, 58
+  br i1 %23, label %31, label %24
+
+; <label>:24:                                     ; preds = %22
+  %25 = icmp sgt i8 %20, 96
+  br i1 %25, label %26, label %28
+
+; <label>:26:                                     ; preds = %24
+  %27 = icmp slt i8 %20, 123
+  br i1 %27, label %31, label %46
+
+; <label>:28:                                     ; preds = %24
+  %29 = add i8 %20, -65
+  %30 = icmp ult i8 %29, 26
+  br i1 %30, label %31, label %46
+
+; <label>:31:                                     ; preds = %28, %26, %22
+  %32 = phi i32 [ -48, %22 ], [ -87, %26 ], [ -55, %28 ]
+  %33 = sext i8 %20 to i32
+  %34 = add nsw i32 %32, %33
+  %35 = icmp ult i32 %34, %8
+  br i1 %35, label %36, label %46
+
+; <label>:36:                                     ; preds = %31
+  %37 = mul i64 %17, %15
+  %38 = zext i32 %34 to i64
+  %39 = add i64 %37, %38
+  store i64 %39, i64* %2, align 8
+  %40 = udiv i64 %39, %15
+  %41 = icmp ult i64 %40, %17
+  br i1 %41, label %52, label %42
+
+; <label>:42:                                     ; preds = %36
+  %43 = getelementptr inbounds i8, i8* %18, i64 1
+  %44 = add i64 %19, -1
+  %45 = icmp eq i64 %44, 0
+  br i1 %45, label %46, label %16
+
+; <label>:46:                                     ; preds = %42, %28, %31, %16, %26
+  %47 = phi i64 [ %19, %26 ], [ %19, %16 ], [ %19, %31 ], [ %19, %28 ], [ 0, %42 ]
+  %48 = phi i8* [ %18, %26 ], [ %18, %16 ], [ %18, %31 ], [ %18, %28 ], [ %43, %42 ]
+  %49 = load i64, i64* %9, align 8
+  %50 = icmp eq i64 %49, %47
+  br i1 %50, label %52, label %51
+
+; <label>:51:                                     ; preds = %46
+  store i8* %48, i8** %13, align 8
+  store i64 %47, i64* %9, align 8
+  br label %52
+
+; <label>:52:                                     ; preds = %36, %51, %46, %7
+  %53 = phi i1 [ true, %7 ], [ false, %51 ], [ true, %46 ], [ true, %36 ]
+  ret i1 %53
+}
+
+; Function Attrs: nounwind optsize ssp uwtable
+define internal fastcc i32 @_ZL17GetAutoSenseRadixRN4llvm9StringRefE(%"class.llvm::StringRef"* dereferenceable(16)) unnamed_addr #3 {
+  %2 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 1
+  %3 = load i64, i64* %2, align 8
+  %4 = icmp ult i64 %3, 2
+  br i1 %4, label %53, label %5
+
+; <label>:5:                                      ; preds = %1
+  %6 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 0
+  %7 = load i8*, i8** %6, align 8
+  %8 = tail call i32 @memcmp(i8* %7, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str, i64 0, i64 0), i64 2) #14
+  %9 = icmp eq i32 %8, 0
+  br i1 %9, label %15, label %10
+
+; <label>:10:                                     ; preds = %5
+  %11 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 0
+  %12 = load i8*, i8** %11, align 8
+  %13 = tail call i32 @memcmp(i8* %12, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.1, i64 0, i64 0), i64 2) #14
+  %14 = icmp eq i32 %13, 0
+  br i1 %14, label %15, label %20
+
+; <label>:15:                                     ; preds = %5, %10
+  %16 = phi i8** [ %6, %5 ], [ %11, %10 ]
+  %17 = phi i8* [ %7, %5 ], [ %12, %10 ]
+  %18 = getelementptr inbounds i8, i8* %17, i64 2
+  %19 = add i64 %3, -2
+  store i8* %18, i8** %16, align 8
+  store i64 %19, i64* %2, align 8
+  br label %53
+
+; <label>:20:                                     ; preds = %10
+  %21 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 0
+  %22 = load i8*, i8** %21, align 8
+  %23 = tail call i32 @memcmp(i8* %22, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.2, i64 0, i64 0), i64 2) #14
+  %24 = icmp eq i32 %23, 0
+  br i1 %24, label %30, label %25
+
+; <label>:25:                                     ; preds = %20
+  %26 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 0
+  %27 = load i8*, i8** %26, align 8
+  %28 = tail call i32 @memcmp(i8* %27, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.3, i64 0, i64 0), i64 2) #14
+  %29 = icmp eq i32 %28, 0
+  br i1 %29, label %30, label %35
+
+; <label>:30:                                     ; preds = %25, %20
+  %31 = phi i8** [ %21, %20 ], [ %26, %25 ]
+  %32 = phi i8* [ %22, %20 ], [ %27, %25 ]
+  %33 = getelementptr inbounds i8, i8* %32, i64 2
+  %34 = add i64 %3, -2
+  store i8* %33, i8** %31, align 8
+  store i64 %34, i64* %2, align 8
+  br label %53
+
+; <label>:35:                                     ; preds = %25
+  %36 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 0
+  %37 = load i8*, i8** %36, align 8
+  %38 = tail call i32 @memcmp(i8* %37, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.4, i64 0, i64 0), i64 2) #14
+  %39 = icmp eq i32 %38, 0
+  br i1 %39, label %40, label %43
+
+; <label>:40:                                     ; preds = %35
+  %41 = getelementptr inbounds i8, i8* %37, i64 2
+  %42 = add i64 %3, -2
+  store i8* %41, i8** %36, align 8
+  store i64 %42, i64* %2, align 8
+  br label %53
+
+; <label>:43:                                     ; preds = %35
+  %44 = load i8, i8* %37, align 1
+  %45 = icmp eq i8 %44, 48
+  br i1 %45, label %46, label %53
+
+; <label>:46:                                     ; preds = %43
+  %47 = getelementptr inbounds i8, i8* %37, i64 1
+  %48 = load i8, i8* %47, align 1
+  %49 = add i8 %48, -48
+  %50 = icmp ult i8 %49, 10
+  br i1 %50, label %51, label %53
+
+; <label>:51:                                     ; preds = %46
+  %52 = add i64 %3, -1
+  store i8* %47, i8** %36, align 8
+  store i64 %52, i64* %2, align 8
+  br label %53
+
+; <label>:53:                                     ; preds = %1, %43, %46, %51, %40, %30, %15
+  %54 = phi i32 [ 16, %15 ], [ 2, %30 ], [ 8, %40 ], [ 8, %51 ], [ 10, %46 ], [ 10, %43 ], [ 10, %1 ]
+  ret i32 %54
+}
+
+; Function Attrs: nounwind optsize ssp uwtable
+define hidden zeroext i1 @_ZN4llvm20consumeSignedIntegerERNS_9StringRefEjRx(%"class.llvm::StringRef"* dereferenceable(16), i32, i64* nocapture dereferenceable(8)) local_unnamed_addr #3 {
+  %4 = alloca i64, align 8
+  %5 = alloca %"class.llvm::StringRef", align 8
+  %6 = bitcast i64* %4 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 8, i8* nonnull %6) #12
+  %7 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 1
+  %8 = load i64, i64* %7, align 8
+  %9 = icmp eq i64 %8, 0
+  br i1 %9, label %15, label %10
+
+; <label>:10:                                     ; preds = %3
+  %11 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %0, i64 0, i32 0
+  %12 = load i8*, i8** %11, align 8
+  %13 = load i8, i8* %12, align 1
+  %14 = icmp eq i8 %13, 45
+  br i1 %14, label %21, label %15
+
+; <label>:15:                                     ; preds = %10, %3
+  %16 = call zeroext i1 @_ZN4llvm22consumeUnsignedIntegerERNS_9StringRefEjRy(%"class.llvm::StringRef"* nonnull dereferenceable(16) %0, i32 %1, i64* nonnull dereferenceable(8) %4) #13
+  %17 = load i64, i64* %4, align 8
+  %18 = icmp slt i64 %17, 0
+  %19 = or i1 %16, %18
+  br i1 %19, label %36, label %20
+
+; <label>:20:                                     ; preds = %15
+  store i64 %17, i64* %2, align 8
+  br label %36
+
+; <label>:21:                                     ; preds = %10
+  %22 = bitcast %"class.llvm::StringRef"* %5 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %22) #12
+  %23 = getelementptr inbounds i8, i8* %12, i64 1
+  %24 = add i64 %8, -1
+  %25 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %5, i64 0, i32 0
+  store i8* %23, i8** %25, align 8
+  %26 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %5, i64 0, i32 1
+  store i64 %24, i64* %26, align 8
+  %27 = call zeroext i1 @_ZN4llvm22consumeUnsignedIntegerERNS_9StringRefEjRy(%"class.llvm::StringRef"* nonnull dereferenceable(16) %5, i32 %1, i64* nonnull dereferenceable(8) %4) #13
+  br i1 %27, label %34, label %28
+
+; <label>:28:                                     ; preds = %21
+  %29 = load i64, i64* %4, align 8
+  %30 = sub i64 0, %29
+  %31 = icmp sgt i64 %30, 0
+  br i1 %31, label %34, label %32
+
+; <label>:32:                                     ; preds = %28
+  %33 = bitcast %"class.llvm::StringRef"* %0 to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i64(i8* nonnull align 8 %33, i8* nonnull align 8 %22, i64 16, i1 false)
+  store i64 %30, i64* %2, align 8
+  br label %34
+
+; <label>:34:                                     ; preds = %21, %28, %32
+  %35 = phi i1 [ false, %32 ], [ true, %28 ], [ true, %21 ]
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %22) #12
+  br label %36
+
+; <label>:36:                                     ; preds = %15, %34, %20
+  %37 = phi i1 [ false, %20 ], [ %35, %34 ], [ true, %15 ]
+  call void @llvm.lifetime.end.p0i8(i64 8, i8* nonnull %6) #12
+  ret i1 %37
+}
+
+; Function Attrs: nounwind optsize ssp uwtable
+define hidden zeroext i1 @_ZN4llvm20getAsUnsignedIntegerENS_9StringRefEjRy(i8*, i64, i32, i64* nocapture dereferenceable(8)) local_unnamed_addr #3 {
+  %5 = alloca %"class.llvm::StringRef", align 8
+  %6 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %5, i64 0, i32 0
+  store i8* %0, i8** %6, align 8
+  %7 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %5, i64 0, i32 1
+  store i64 %1, i64* %7, align 8
+  %8 = call zeroext i1 @_ZN4llvm22consumeUnsignedIntegerERNS_9StringRefEjRy(%"class.llvm::StringRef"* nonnull dereferenceable(16) %5, i32 %2, i64* nonnull dereferenceable(8) %3) #13
+  %9 = load i64, i64* %7, align 8
+  %10 = icmp ne i64 %9, 0
+  %11 = or i1 %8, %10
+  ret i1 %11
+}
+
+; Function Attrs: nounwind optsize ssp uwtable
+define hidden zeroext i1 @_ZN4llvm18getAsSignedIntegerENS_9StringRefEjRx(i8*, i64, i32, i64* nocapture dereferenceable(8)) local_unnamed_addr #3 {
+  %5 = alloca %"class.llvm::StringRef", align 8
+  %6 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %5, i64 0, i32 0
+  store i8* %0, i8** %6, align 8
+  %7 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %5, i64 0, i32 1
+  store i64 %1, i64* %7, align 8
+  %8 = call zeroext i1 @_ZN4llvm20consumeSignedIntegerERNS_9StringRefEjRx(%"class.llvm::StringRef"* nonnull dereferenceable(16) %5, i32 %2, i64* nonnull dereferenceable(8) %3) #13
+  %9 = load i64, i64* %7, align 8
+  %10 = icmp ne i64 %9, 0
+  %11 = or i1 %8, %10
+  ret i1 %11
+}
+
+; Function Attrs: nounwind optsize ssp uwtable
+define hidden zeroext i1 @_ZNK4llvm9StringRef12getAsIntegerEjRNS_5APIntE(%"class.llvm::StringRef"* nocapture readonly, i32, %"class.llvm::APInt"* dereferenceable(16)) local_unnamed_addr #3 align 2 {
+  %4 = alloca %"class.llvm::StringRef", align 8
+  %5 = alloca %"class.llvm::APInt", align 8
+  %6 = alloca %"class.llvm::APInt", align 8
+  %7 = alloca %"class.llvm::APInt", align 8
+  %8 = alloca %"class.llvm::APInt", align 8
+  %9 = alloca %"class.llvm::APInt", align 8
+  %10 = bitcast %"class.llvm::StringRef"* %4 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %10) #12
+  %11 = bitcast %"class.llvm::StringRef"* %0 to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i64(i8* nonnull align 8 %10, i8* align 8 %11, i64 16, i1 false)
+  %12 = icmp eq i32 %1, 0
+  br i1 %12, label %13, label %15
+
+; <label>:13:                                     ; preds = %3
+  %14 = call fastcc i32 @_ZL17GetAutoSenseRadixRN4llvm9StringRefE(%"class.llvm::StringRef"* nonnull dereferenceable(16) %4) #13
+  br label %15
+
+; <label>:15:                                     ; preds = %13, %3
+  %16 = phi i32 [ %14, %13 ], [ %1, %3 ]
+  %17 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %4, i64 0, i32 1
+  %18 = load i64, i64* %17, align 8
+  %19 = icmp eq i64 %18, 0
+  br i1 %19, label %206, label %20
+
+; <label>:20:                                     ; preds = %15
+  %21 = getelementptr inbounds %"class.llvm::StringRef", %"class.llvm::StringRef"* %4, i64 0, i32 0
+  %22 = load i8*, i8** %21, align 8
+  br label %23
+
+; <label>:23:                                     ; preds = %20, %28
+  %24 = phi i8* [ %22, %20 ], [ %29, %28 ]
+  %25 = phi i64 [ %18, %20 ], [ %30, %28 ]
+  %26 = load i8, i8* %24, align 1
+  %27 = icmp eq i8 %26, 48
+  br i1 %27, label %28, label %45
+
+; <label>:28:                                     ; preds = %23
+  %29 = getelementptr inbounds i8, i8* %24, i64 1
+  %30 = add i64 %25, -1
+  store i8* %29, i8** %21, align 8
+  store i64 %30, i64* %17, align 8
+  %31 = icmp eq i64 %30, 0
+  br i1 %31, label %32, label %23
+
+; <label>:32:                                     ; preds = %28
+  %33 = getelementptr inbounds %"class.llvm::APInt", %"class.llvm::APInt"* %2, i64 0, i32 0
+  %34 = load i32, i32* %33, align 8
+  %35 = icmp ult i32 %34, 65
+  br i1 %35, label %43, label %36
+
+; <label>:36:                                     ; preds = %32
+  %37 = getelementptr inbounds %"class.llvm::APInt", %"class.llvm::APInt"* %2, i64 0, i32 1
+  %38 = bitcast %union.anon.1* %37 to i64**
+  %39 = load i64*, i64** %38, align 8
+  %40 = icmp eq i64* %39, null
+  br i1 %40, label %43, label %41
+
+; <label>:41:                                     ; preds = %36
+  %42 = bitcast i64* %39 to i8*
+  call void @_ZdaPv(i8* %42) #15
+  br label %43
+
+; <label>:43:                                     ; preds = %32, %36, %41
+  %44 = getelementptr inbounds %"class.llvm::APInt", %"class.llvm::APInt"* %2, i64 0, i32 1, i32 0
+  store i64 0, i64* %44, align 8
+  store i32 64, i32* %33, align 8
+  br label %206
+
+; <label>:45:                                     ; preds = %23, %45
+  %46 = phi i32 [ %49, %45 ], [ 0, %23 ]
+  %47 = shl i32 1, %46
+  %48 = icmp ult i32 %47, %16
+  %49 = add i32 %46, 1
+  br i1 %48, label %45, label %50
+
+; <label>:50:                                     ; preds = %45
+  %51 = icmp eq i32 %47, %16
+  %52 = trunc i64 %25 to i32
+  %53 = mul i32 %46, %52
+  %54 = getelementptr inbounds %"class.llvm::APInt", %"class.llvm::APInt"* %2, i64 0, i32 0
+  %55 = load i32, i32* %54, align 8
+  %56 = icmp ult i32 %53, %55
+  br i1 %56, label %86, label %57
+
+; <label>:57:                                     ; preds = %50
+  %58 = icmp ugt i32 %53, %55
+  br i1 %58, label %59, label %86
+
+; <label>:59:                                     ; preds = %57
+  %60 = bitcast %"class.llvm::APInt"* %5 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %60) #12
+  call void @_ZNK4llvm5APInt4zextEj(%"class.llvm::APInt"* nonnull sret %5, %"class.llvm::APInt"* nonnull %2, i32 %53) #17
+  %61 = load i32, i32* %54, align 8
+  %62 = icmp ult i32 %61, 65
+  br i1 %62, label %72, label %63
+
+; <label>:63:                                     ; preds = %59
+  %64 = icmp eq %"class.llvm::APInt"* %5, %2
+  br i1 %64, label %78, label %65
+
+; <label>:65:                                     ; preds = %63
+  %66 = getelementptr inbounds %"class.llvm::APInt", %"class.llvm::APInt"* %2, i64 0, i32 1
+  %67 = bitcast %union.anon.1* %66 to i64**
+  %68 = load i64*, i64** %67, align 8
+  %69 = icmp eq i64* %68, null
+  br i1 %69, label %72, label %70
+
+; <label>:70:                                     ; preds = %65
+  %71 = bitcast i64* %68 to i8*
+  call void @_ZdaPv(i8* %71) #15
+  br label %72
+
+; <label>:72:                                     ; preds = %59, %65, %70
+  %73 = getelementptr inbounds %"class.llvm::APInt", %"class.llvm::APInt"* %2, i64 0, i32 1, i32 0
+  %74 = getelementptr inbounds %"class.llvm::APInt", %"class.llvm::APInt"* %5, i64 0, i32 1, i32 0
+  %75 = load i64, i64* %74, align 8
+  store i64 %75, i64* %73, align 8
+  %76 = getelementptr inbounds %"class.llvm::APInt", %"class.llvm::APInt"* %5, i64 0, i32 0
+  %77 = load i32, i32* %76, align 8
+  store i32 0, i32* %76, align 8
+  store i32 %77, i32* %54, align 8
+  br label %85
+
+; <label>:78:                                     ; preds = %63
+  %79 = getelementptr inbounds %"class.llvm::APInt", %"class.llvm::APInt"* %5, i64 0, i32 1
+  %80 = bitcast %union.anon.1* %79 to i64**
+  %81 = load i64*, i64** %80, align 8
+  %82 = icmp eq i64* %81, null
+  br i1 %82, label %85, label %83
+
+; <label>:83:                                     ; preds = %78
+  %84 = bitcast i64* %81 to i8*
+  call void @_ZdaPv(i8* %84) #15
+  br label %85
+
+; <label>:85:                                     ; preds = %72, %78, %83
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %60) #12
+  br label %86
+
+; <label>:86:                                     ; preds = %50, %57, %85
+  %87 = phi i32 [ %53, %85 ], [ %53, %57 ], [ %55, %50 ]
+  %88 = bitcast %"class.llvm::APInt"* %6 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %88) #12
+  %89 = getelementptr inbounds %"class.llvm::APInt", %"class.llvm::APInt"* %6, i64 0, i32 0
+  store i32 1, i32* %89, align 8
+  %90 = getelementptr inbounds %"class.llvm::APInt", %"class.llvm::APInt"* %6, i64 0, i32 1, i32 0
+  store i64 0, i64* %90, align 8
+  %91 = bitcast %"class.llvm::APInt"* %7 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %91) #12
+  %92 = getelementptr inbounds %"class.llvm::APInt", %"class.llvm::APInt"* %7, i64 0, i32 0
+  store i32 1, i32* %92, align 8
+  %93 = getelementptr inbounds %"class.llvm::APInt", %"class.llvm::APInt"* %7, i64 0, i32 1, i32 0
+  store i64 0, i64* %93, align 8
+  br i1 %51, label %126, label %94
+
+; <label>:94:                                     ; preds = %86
+  %95 = bitcast %"class.llvm::APInt"* %8 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %95) #12
+  %96 = zext i32 %16 to i64
+  call void @_ZN4llvm5APIntC2Ejmb(%"class.llvm::APInt"* nonnull %8, i32 %87, i64 %96, i1 zeroext false) #13
+  %97 = load i32, i32* %89, align 8
+  %98 = icmp ult i32 %97, 65
+  br i1 %98, label %106, label %99
+
+; <label>:99:                                     ; preds = %94
+  %100 = getelementptr inbounds %"class.llvm::APInt", %"class.llvm::APInt"* %6, i64 0, i32 1
+  %101 = bitcast %union.anon.1* %100 to i64**
+  %102 = load i64*, i64** %101, align 8
+  %103 = icmp eq i64* %102, null
+  br i1 %103, label %106, label %104
+
+; <label>:104:                                    ; preds = %99
+  %105 = bitcast i64* %102 to i8*
+  call void @_ZdaPv(i8* %105) #15
+  br label %106
+
+; <label>:106:                                    ; preds = %104, %99, %94
+  %107 = getelementptr inbounds %"class.llvm::APInt", %"class.llvm::APInt"* %8, i64 0, i32 1, i32 0
+  %108 = load i64, i64* %107, align 8
+  store i64 %108, i64* %90, align 8
+  %109 = getelementptr inbounds %"class.llvm::APInt", %"class.llvm::APInt"* %8, i64 0, i32 0
+  %110 = load i32, i32* %109, align 8
+  store i32 %110, i32* %89, align 8
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %95) #12
+  %111 = bitcast %"class.llvm::APInt"* %9 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %111) #12
+  call void @_ZN4llvm5APIntC2Ejmb(%"class.llvm::APInt"* nonnull %9, i32 %87, i64 0, i1 zeroext false) #13
+  %112 = load i32, i32* %92, align 8
+  %113 = icmp ult i32 %112, 65
+  br i1 %113, label %121, label %114
+
+; <label>:114:                                    ; preds = %106
+  %115 = getelementptr inbounds %"class.llvm::APInt", %"class.llvm::APInt"* %7, i64 0, i32 1
+  %116 = bitcast %union.anon.1* %115 to i64**
+  %117 = load i64*, i64** %116, align 8
+  %118 = icmp eq i64* %117, null
+  br i1 %118, label %121, label %119
+
+; <label>:119:                                    ; preds = %114
+  %120 = bitcast i64* %117 to i8*
+  call void @_ZdaPv(i8* %120) #15
+  br label %121
+
+; <label>:121:                                    ; preds = %119, %114, %106
+  %122 = getelementptr inbounds %"class.llvm::APInt", %"class.llvm::APInt"* %9, i64 0, i32 1, i32 0
+  %123 = load i64, i64* %122, align 8
+  store i64 %123, i64* %93, align 8
+  %124 = getelementptr inbounds %"class.llvm::APInt", %"class.llvm::APInt"* %9, i64 0, i32 0
+  %125 = load i32, i32* %124, align 8
+  store i32 %125, i32* %92, align 8
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %111) #12
+  br label %126
+
+; <label>:126:                                    ; preds = %121, %86
+  %127 = phi i32 [ %125, %121 ], [ 1, %86 ]
+  %128 = call dereferenceable(16) %"class.llvm::APInt"* @_ZN4llvm5APIntaSEm(%"class.llvm::APInt"* nonnull %2, i64 0) #17
+  %129 = load i64, i64* %17, align 8
+  %130 = icmp eq i64 %129, 0
+  br i1 %130, label %184, label %131
+
+; <label>:131:                                    ; preds = %126
+  %132 = getelementptr inbounds %"class.llvm::APInt", %"class.llvm::APInt"* %2, i64 0, i32 1
+  %133 = getelementptr inbounds %union.anon.1, %union.anon.1* %132, i64 0, i32 0
+  %134 = bitcast %union.anon.1* %132 to i64**
+  %135 = load i8*, i8** %21, align 8
+  br label %136
+
+; <label>:136:                                    ; preds = %131, %173
+  %137 = phi i8* [ %135, %131 ], [ %178, %173 ]
+  %138 = load i8, i8* %137, align 1
+  %139 = icmp sgt i8 %138, 47
+  br i1 %139, label %140, label %181
+
+; <label>:140:                                    ; preds = %136
+  %141 = icmp slt i8 %138, 58
+  br i1 %141, label %149, label %142
+
+; <label>:142:                                    ; preds = %140
+  %143 = icmp sgt i8 %138, 96
+  br i1 %143, label %144, label %146
+
+; <label>:144:                                    ; preds = %142
+  %145 = icmp slt i8 %138, 123
+  br i1 %145, label %149, label %181
+
+; <label>:146:                                    ; preds = %142
+  %147 = add i8 %138, -65
+  %148 = icmp ult i8 %147, 26
+  br i1 %148, label %149, label %181
+
+; <label>:149:                                    ; preds = %146, %144, %140
+  %150 = phi i32 [ -48, %140 ], [ -87, %144 ], [ -55, %146 ]
+  %151 = sext i8 %138 to i32
+  %152 = add nsw i32 %150, %151
+  %153 = icmp ult i32 %152, %16
+  br i1 %153, label %154, label %181
+
+; <label>:154:                                    ; preds = %149
+  br i1 %51, label %155, label %168
+
+; <label>:155:                                    ; preds = %154
+  %156 = call dereferenceable(16) %"class.llvm::APInt"* @_ZN4llvm5APIntlSEj(%"class.llvm::APInt"* nonnull %2, i32 %46) #13
+  %157 = zext i32 %152 to i64
+  %158 = load i32, i32* %54, align 8
+  %159 = icmp ult i32 %158, 65
+  br i1 %159, label %160, label %164
+
+; <label>:160:                                    ; preds = %155
+  %161 = load i64, i64* %133, align 8
+  %162 = or i64 %161, %157
+  store i64 %162, i64* %133, align 8
+  %163 = call dereferenceable(16) %"class.llvm::APInt"* @_ZN4llvm5APInt15clearUnusedBitsEv(%"class.llvm::APInt"* nonnull %2) #17
+  br label %173
+
+; <label>:164:                                    ; preds = %155
+  %165 = load i64*, i64** %134, align 8
+  %166 = load i64, i64* %165, align 8
+  %167 = or i64 %166, %157
+  store i64 %167, i64* %165, align 8
+  br label %173
+
+; <label>:168:                                    ; preds = %154
+  %169 = call dereferenceable(16) %"class.llvm::APInt"* @_ZN4llvm5APIntmLERKS0_(%"class.llvm::APInt"* nonnull %2, %"class.llvm::APInt"* nonnull dereferenceable(16) %6) #17
+  %170 = zext i32 %152 to i64
+  %171 = call dereferenceable(16) %"class.llvm::APInt"* @_ZN4llvm5APIntaSEm(%"class.llvm::APInt"* nonnull %7, i64 %170) #17
+  %172 = call dereferenceable(16) %"class.llvm::APInt"* @_ZN4llvm5APIntpLERKS0_(%"class.llvm::APInt"* nonnull %2, %"class.llvm::APInt"* nonnull dereferenceable(16) %7) #17
+  br label %173
+
+; <label>:173:                                    ; preds = %164, %160, %168
+  %174 = load i64, i64* %17, align 8
+  %175 = icmp ne i64 %174, 0
+  %176 = zext i1 %175 to i64
+  %177 = load i8*, i8** %21, align 8
+  %178 = getelementptr inbounds i8, i8* %177, i64 %176
+  %179 = sub i64 %174, %176
+  store i8* %178, i8** %21, align 8
+  store i64 %179, i64* %17, align 8
+  %180 = icmp eq i64 %179, 0
+  br i1 %180, label %181, label %136
+
+; <label>:181:                                    ; preds = %144, %136, %173, %146, %149
+  %182 = phi i1 [ true, %149 ], [ true, %146 ], [ false, %173 ], [ true, %136 ], [ true, %144 ]
+  %183 = load i32, i32* %92, align 8
+  br label %184
+
+; <label>:184:                                    ; preds = %181, %126
+  %185 = phi i32 [ %127, %126 ], [ %183, %181 ]
+  %186 = phi i1 [ false, %126 ], [ %182, %181 ]
+  %187 = icmp ugt i32 %185, 64
+  br i1 %187, label %188, label %195
+
+; <label>:188:                                    ; preds = %184
+  %189 = getelementptr inbounds %"class.llvm::APInt", %"class.llvm::APInt"* %7, i64 0, i32 1
+  %190 = bitcast %union.anon.1* %189 to i64**
+  %191 = load i64*, i64** %190, align 8
+  %192 = icmp eq i64* %191, null
+  br i1 %192, label %195, label %193
+
+; <label>:193:                                    ; preds = %188
+  %194 = bitcast i64* %191 to i8*
+  call void @_ZdaPv(i8* %194) #15
+  br label %195
+
+; <label>:195:                                    ; preds = %184, %188, %193
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %91) #12
+  %196 = load i32, i32* %89, align 8
+  %197 = icmp ugt i32 %196, 64
+  br i1 %197, label %198, label %205
+
+; <label>:198:                                    ; preds = %195
+  %199 = getelementptr inbounds %"class.llvm::APInt", %"class.llvm::APInt"* %6, i64 0, i32 1
+  %200 = bitcast %union.anon.1* %199 to i64**
+  %201 = load i64*, i64** %200, align 8
+  %202 = icmp eq i64* %201, null
+  br i1 %202, label %205, label %203
+
+; <label>:203:                                    ; preds = %198
+  %204 = bitcast i64* %201 to i8*
+  call void @_ZdaPv(i8* %204) #15
+  br label %205
+
+; <label>:205:                                    ; preds = %195, %198, %203
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %88) #12
+  br label %206
+
+; <label>:206:                                    ; preds = %15, %205, %43
+  %207 = phi i1 [ false, %43 ], [ %186, %205 ], [ true, %15 ]
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %10) #12
+  ret i1 %207
+}
+
+; Function Attrs: nounwind optsize ssp uwtable
+define linkonce_odr hidden void @_ZN4llvm5APIntC2Ejmb(%"class.llvm::APInt"*, i32, i64, i1 zeroext) unnamed_addr #3 comdat align 2 {
+  %5 = getelementptr inbounds %"class.llvm::APInt", %"class.llvm::APInt"* %0, i64 0, i32 0
+  store i32 %1, i32* %5, align 8
+  %6 = getelementptr inbounds %"class.llvm::APInt", %"class.llvm::APInt"* %0, i64 0, i32 1, i32 0
+  store i64 0, i64* %6, align 8
+  %7 = icmp ult i32 %1, 65
+  br i1 %7, label %8, label %9
+
+; <label>:8:                                      ; preds = %4
+  store i64 %2, i64* %6, align 8
+  br label %10
+
+; <label>:9:                                      ; preds = %4
+  tail call void @_ZN4llvm5APInt12initSlowCaseEmb(%"class.llvm::APInt"* nonnull %0, i64 %2, i1 zeroext %3) #17
+  br label %10
+
+; <label>:10:                                     ; preds = %9, %8
+  %11 = tail call dereferenceable(16) %"class.llvm::APInt"* @_ZN4llvm5APInt15clearUnusedBitsEv(%"class.llvm::APInt"* nonnull %0) #13
+  ret void
+}
+
+; Function Attrs: optsize
+declare void @_ZNK4llvm5APInt4zextEj(%"class.llvm::APInt"* sret, %"class.llvm::APInt"*, i32) local_unnamed_addr #5
+
+; Function Attrs: optsize
+declare dereferenceable(16) %"class.llvm::APInt"* @_ZN4llvm5APIntaSEm(%"class.llvm::APInt"*, i64) local_unnamed_addr #5
+
+; Function Attrs: nounwind optsize ssp uwtable
+define linkonce_odr hidden dereferenceable(16) %"class.llvm::APInt"* @_ZN4llvm5APIntlSEj(%"class.llvm::APInt"*, i32) local_unnamed_addr #3 comdat align 2 {
+  %3 = alloca %"class.llvm::APInt", align 8
+  %4 = bitcast %"class.llvm::APInt"* %3 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %4) #12
+  call void @_ZNK4llvm5APInt3shlEj(%"class.llvm::APInt"* nonnull sret %3, %"class.llvm::APInt"* %0, i32 %1) #13
+  %5 = getelementptr inbounds %"class.llvm::APInt", %"class.llvm::APInt"* %0, i64 0, i32 0
+  %6 = load i32, i32* %5, align 8
+  %7 = icmp ult i32 %6, 65
+  br i1 %7, label %17, label %8
+
+; <label>:8:                                      ; preds = %2
+  %9 = icmp eq %"class.llvm::APInt"* %3, %0
+  br i1 %9, label %23, label %10
+
+; <label>:10:                                     ; preds = %8
+  %11 = getelementptr inbounds %"class.llvm::APInt", %"class.llvm::APInt"* %0, i64 0, i32 1
+  %12 = bitcast %union.anon.1* %11 to i64**
+  %13 = load i64*, i64** %12, align 8
+  %14 = icmp eq i64* %13, null
+  br i1 %14, label %17, label %15
+
+; <label>:15:                                     ; preds = %10
+  %16 = bitcast i64* %13 to i8*
+  call void @_ZdaPv(i8* %16) #15
+  br label %17
+
+; <label>:17:                                     ; preds = %2, %10, %15
+  %18 = getelementptr inbounds %"class.llvm::APInt", %"class.llvm::APInt"* %0, i64 0, i32 1, i32 0
+  %19 = getelementptr inbounds %"class.llvm::APInt", %"class.llvm::APInt"* %3, i64 0, i32 1, i32 0
+  %20 = load i64, i64* %19, align 8
+  store i64 %20, i64* %18, align 8
+  %21 = getelementptr inbounds %"class.llvm::APInt", %"class.llvm::APInt"* %3, i64 0, i32 0
+  %22 = load i32, i32* %21, align 8
+  store i32 0, i32* %21, align 8
+  store i32 %22, i32* %5, align 8
+  br label %30
+
+; <label>:23:                                     ; preds = %8
+  %24 = getelementptr inbounds %"class.llvm::APInt", %"class.llvm::APInt"* %3, i64 0, i32 1
+  %25 = bitcast %union.anon.1* %24 to i64**
+  %26 = load i64*, i64** %25, align 8
+  %27 = icmp eq i64* %26, null
+  br i1 %27, label %30, label %28
+
+; <label>:28:                                     ; preds = %23
+  %29 = bitcast i64* %26 to i8*
+  call void @_ZdaPv(i8* %29) #15
+  br label %30
+
+; <label>:30:                                     ; preds = %17, %23, %28
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %4) #12
+  ret %"class.llvm::APInt"* %0
+}
+
+; Function Attrs: optsize
+declare dereferenceable(16) %"class.llvm::APInt"* @_ZN4llvm5APIntmLERKS0_(%"class.llvm::APInt"*, %"class.llvm::APInt"* dereferenceable(16)) local_unnamed_addr #5
+
+; Function Attrs: optsize
+declare dereferenceable(16) %"class.llvm::APInt"* @_ZN4llvm5APIntpLERKS0_(%"class.llvm::APInt"*, %"class.llvm::APInt"* dereferenceable(16)) local_unnamed_addr #5
+
+; Function Attrs: nounwind optsize ssp uwtable
+define hidden i64 @_ZN4llvm10hash_valueENS_9StringRefE(i8*, i64) local_unnamed_addr #3 {
+  %3 = getelementptr inbounds i8, i8* %0, i64 %1
+  %4 = tail call i64 @_ZN4llvm7hashing6detail23hash_combine_range_implIKcEENSt3__19enable_ifIXsr16is_hashable_dataIT_EE5valueENS_9hash_codeEE4typeEPS6_SA_(i8* %0, i8* %3) #17
+  ret i64 %4
+}
+
+; Function Attrs: nounwind optsize readonly
+declare i8* @memchr(i8*, i32, i64) local_unnamed_addr #4
+
+; Function Attrs: optsize
+declare void @_ZN4llvm5APInt12initSlowCaseEmb(%"class.llvm::APInt"*, i64, i1 zeroext) local_unnamed_addr #5
+
+; Function Attrs: norecurse nounwind optsize ssp uwtable
+define linkonce_odr hidden dereferenceable(16) %"class.llvm::APInt"* @_ZN4llvm5APInt15clearUnusedBitsEv(%"class.llvm::APInt"*) local_unnamed_addr #6 comdat align 2 {
+  %2 = getelementptr inbounds %"class.llvm::APInt", %"class.llvm::APInt"* %0, i64 0, i32 0
+  %3 = load i32, i32* %2, align 8
+  %4 = and i32 %3, 63
+  %5 = icmp eq i32 %4, 0
+  br i1 %5, label %27, label %6
+
+; <label>:6:                                      ; preds = %1
+  %7 = sub nsw i32 64, %4
+  %8 = zext i32 %7 to i64
+  %9 = lshr i64 -1, %8
+  %10 = icmp ult i32 %3, 65
+  %11 = getelementptr inbounds %"class.llvm::APInt", %"class.llvm::APInt"* %0, i64 0, i32 1
+  br i1 %10, label %12, label %14
+
+; <label>:12:                                     ; preds = %6
+  %13 = getelementptr inbounds %union.anon.1, %union.anon.1* %11, i64 0, i32 0
+  br label %23
+
+; <label>:14:                                     ; preds = %6
+  %15 = bitcast %union.anon.1* %11 to i64**
+  %16 = load i64*, i64** %15, align 8
+  %17 = zext i32 %3 to i64
+  %18 = add nuw nsw i64 %17, 63
+  %19 = lshr i64 %18, 6
+  %20 = add nuw nsw i64 %19, 4294967295
+  %21 = and i64 %20, 4294967295
+  %22 = getelementptr inbounds i64, i64* %16, i64 %21
+  br label %23
+
+; <label>:23:                                     ; preds = %14, %12
+  %24 = phi i64* [ %13, %12 ], [ %22, %14 ]
+  %25 = load i64, i64* %24, align 8
+  %26 = and i64 %25, %9
+  store i64 %26, i64* %24, align 8
+  br label %27
+
+; <label>:27:                                     ; preds = %23, %1
+  ret %"class.llvm::APInt"* %0
+}
+
+; Function Attrs: nobuiltin nounwind optsize
+declare void @_ZdaPv(i8*) local_unnamed_addr #7
+
+; Function Attrs: nounwind optsize ssp uwtable
+define linkonce_odr hidden void @_ZNK4llvm5APInt3shlEj(%"class.llvm::APInt"* noalias sret, %"class.llvm::APInt"*, i32) local_unnamed_addr #3 comdat align 2 {
+  %4 = getelementptr inbounds %"class.llvm::APInt", %"class.llvm::APInt"* %1, i64 0, i32 0
+  %5 = load i32, i32* %4, align 8
+  %6 = icmp ult i32 %5, 65
+  br i1 %6, label %7, label %15
+
+; <label>:7:                                      ; preds = %3
+  %8 = icmp ugt i32 %5, %2
+  br i1 %8, label %10, label %9
+
+; <label>:9:                                      ; preds = %7
+  tail call void @_ZN4llvm5APIntC2Ejmb(%"class.llvm::APInt"* %0, i32 %5, i64 0, i1 zeroext false) #13
+  br label %16
+
+; <label>:10:                                     ; preds = %7
+  %11 = getelementptr inbounds %"class.llvm::APInt", %"class.llvm::APInt"* %1, i64 0, i32 1, i32 0
+  %12 = load i64, i64* %11, align 8
+  %13 = zext i32 %2 to i64
+  %14 = shl i64 %12, %13
+  tail call void @_ZN4llvm5APIntC2Ejmb(%"class.llvm::APInt"* %0, i32 %5, i64 %14, i1 zeroext false) #13
+  br label %16
+
+; <label>:15:                                     ; preds = %3
+  tail call void @_ZNK4llvm5APInt11shlSlowCaseEj(%"class.llvm::APInt"* sret %0, %"class.llvm::APInt"* nonnull %1, i32 %2) #17
+  br label %16
+
+; <label>:16:                                     ; preds = %15, %10, %9
+  ret void
+}
+
+; Function Attrs: optsize
+declare void @_ZNK4llvm5APInt11shlSlowCaseEj(%"class.llvm::APInt"* sret, %"class.llvm::APInt"*, i32) local_unnamed_addr #5
+
+; Function Attrs: nounwind readnone speculatable
+declare { i64, i1 } @llvm.umul.with.overflow.i64(i64, i64) #8
+
+; Function Attrs: nobuiltin optsize
+declare noalias nonnull i8* @_Znam(i64) local_unnamed_addr #9
+
+; Function Attrs: noreturn optsize
+declare void @_ZNKSt3__121__basic_string_commonILb1EE20__throw_length_errorEv(%"class.std::__1::__basic_string_common"*) local_unnamed_addr #10
+
+; Function Attrs: nobuiltin optsize
+declare noalias nonnull i8* @_Znwm(i64) local_unnamed_addr #9
+
+; Function Attrs: optsize
+declare void @_ZN4llvm15SmallVectorBase8grow_podEPvmm(%"class.llvm::SmallVectorBase"*, i8*, i64, i64) local_unnamed_addr #5
+
+; Function Attrs: nounwind optsize ssp uwtable
+define linkonce_odr hidden i64 @_ZN4llvm7hashing6detail23hash_combine_range_implIKcEENSt3__19enable_ifIXsr16is_hashable_dataIT_EE5valueENS_9hash_codeEE4typeEPS6_SA_(i8*, i8*) local_unnamed_addr #3 comdat {
+  %3 = alloca %"struct.llvm::hashing::detail::hash_state", align 8
+  %4 = load atomic i8, i8* bitcast (i64* @_ZGVZN4llvm7hashing6detail18get_execution_seedEvE4seed to i8*) acquire, align 8
+  %5 = icmp eq i8 %4, 0
+  br i1 %5, label %6, label %13, !prof !4
+
+; <label>:6:                                      ; preds = %2
+  %7 = tail call i32 @__cxa_guard_acquire(i64* nonnull @_ZGVZN4llvm7hashing6detail18get_execution_seedEvE4seed) #12
+  %8 = icmp eq i32 %7, 0
+  br i1 %8, label %13, label %9
+
+; <label>:9:                                      ; preds = %6
+  %10 = load i64, i64* @_ZN4llvm7hashing6detail19fixed_seed_overrideE, align 8
+  %11 = icmp eq i64 %10, 0
+  %12 = select i1 %11, i64 -49064778989728563, i64 %10
+  store i64 %12, i64* @_ZZN4llvm7hashing6detail18get_execution_seedEvE4seed, align 8
+  tail call void @__cxa_guard_release(i64* nonnull @_ZGVZN4llvm7hashing6detail18get_execution_seedEvE4seed) #12
+  br label %13
+
+; <label>:13:                                     ; preds = %2, %6, %9
+  %14 = load i64, i64* @_ZZN4llvm7hashing6detail18get_execution_seedEvE4seed, align 8
+  %15 = ptrtoint i8* %1 to i64
+  %16 = ptrtoint i8* %0 to i64
+  %17 = sub i64 %15, %16
+  %18 = icmp ult i64 %17, 65
+  br i1 %18, label %19, label %21
+
+; <label>:19:                                     ; preds = %13
+  %20 = tail call i64 @_ZN4llvm7hashing6detail10hash_shortEPKcmm(i8* %0, i64 %17, i64 %14) #13
+  br label %39
+
+; <label>:21:                                     ; preds = %13
+  %22 = and i64 %17, -64
+  %23 = getelementptr inbounds i8, i8* %0, i64 %22
+  %24 = bitcast %"struct.llvm::hashing::detail::hash_state"* %3 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 56, i8* nonnull %24) #12
+  call void @_ZN4llvm7hashing6detail10hash_state6createEPKcm(%"struct.llvm::hashing::detail::hash_state"* nonnull sret %3, i8* %0, i64 %14) #13
+  %25 = icmp eq i64 %22, 64
+  br i1 %25, label %32, label %26
+
+; <label>:26:                                     ; preds = %21
+  %27 = getelementptr inbounds i8, i8* %0, i64 64
+  br label %28
+
+; <label>:28:                                     ; preds = %26, %28
+  %29 = phi i8* [ %30, %28 ], [ %27, %26 ]
+  call void @_ZN4llvm7hashing6detail10hash_state3mixEPKc(%"struct.llvm::hashing::detail::hash_state"* nonnull %3, i8* nonnull %29) #13
+  %30 = getelementptr inbounds i8, i8* %29, i64 64
+  %31 = icmp eq i8* %30, %23
+  br i1 %31, label %32, label %28
+
+; <label>:32:                                     ; preds = %28, %21
+  %33 = and i64 %17, 63
+  %34 = icmp eq i64 %33, 0
+  br i1 %34, label %37, label %35
+
+; <label>:35:                                     ; preds = %32
+  %36 = getelementptr inbounds i8, i8* %1, i64 -64
+  call void @_ZN4llvm7hashing6detail10hash_state3mixEPKc(%"struct.llvm::hashing::detail::hash_state"* nonnull %3, i8* nonnull %36) #13
+  br label %37
+
+; <label>:37:                                     ; preds = %32, %35
+  %38 = call i64 @_ZN4llvm7hashing6detail10hash_state8finalizeEm(%"struct.llvm::hashing::detail::hash_state"* nonnull %3, i64 %17) #13
+  call void @llvm.lifetime.end.p0i8(i64 56, i8* nonnull %24) #12
+  br label %39
+
+; <label>:39:                                     ; preds = %37, %19
+  %40 = phi i64 [ %20, %19 ], [ %38, %37 ]
+  ret i64 %40
+}
+
+; Function Attrs: inlinehint norecurse nounwind optsize ssp uwtable
+define linkonce_odr hidden i64 @_ZN4llvm7hashing6detail10hash_shortEPKcmm(i8*, i64, i64) local_unnamed_addr #11 comdat {
+  %4 = add i64 %1, -4
+  %5 = icmp ult i64 %4, 5
+  br i1 %5, label %6, label %27
+
+; <label>:6:                                      ; preds = %3
+  %7 = bitcast i8* %0 to i32*
+  %8 = load i32, i32* %7, align 1
+  %9 = zext i32 %8 to i64
+  %10 = shl nuw nsw i64 %9, 3
+  %11 = add i64 %10, %1
+  %12 = getelementptr inbounds i8, i8* %0, i64 %1
+  %13 = getelementptr inbounds i8, i8* %12, i64 -4
+  %14 = bitcast i8* %13 to i32*
+  %15 = load i32, i32* %14, align 1
+  %16 = zext i32 %15 to i64
+  %17 = xor i64 %16, %2
+  %18 = xor i64 %17, %11
+  %19 = mul i64 %18, -7070675565921424023
+  %20 = lshr i64 %19, 47
+  %21 = xor i64 %19, %17
+  %22 = xor i64 %21, %20
+  %23 = mul i64 %22, -7070675565921424023
+  %24 = lshr i64 %23, 47
+  %25 = xor i64 %24, %23
+  %26 = mul i64 %25, -7070675565921424023
+  br label %208
+
+; <label>:27:                                     ; preds = %3
+  %28 = add i64 %1, -9
+  %29 = icmp ult i64 %28, 8
+  br i1 %29, label %30, label %53
+
+; <label>:30:                                     ; preds = %27
+  %31 = bitcast i8* %0 to i64*
+  %32 = load i64, i64* %31, align 1
+  %33 = getelementptr inbounds i8, i8* %0, i64 %1
+  %34 = getelementptr inbounds i8, i8* %33, i64 -8
+  %35 = bitcast i8* %34 to i64*
+  %36 = load i64, i64* %35, align 1
+  %37 = xor i64 %32, %2
+  %38 = add i64 %36, %1
+  %39 = lshr i64 %38, %1
+  %40 = sub i64 64, %1
+  %41 = shl i64 %38, %40
+  %42 = or i64 %41, %39
+  %43 = xor i64 %37, %42
+  %44 = mul i64 %43, -7070675565921424023
+  %45 = lshr i64 %44, 47
+  %46 = xor i64 %44, %42
+  %47 = xor i64 %46, %45
+  %48 = mul i64 %47, -7070675565921424023
+  %49 = lshr i64 %48, 47
+  %50 = xor i64 %49, %48
+  %51 = mul i64 %50, -7070675565921424023
+  %52 = xor i64 %51, %36
+  br label %208
+
+; <label>:53:                                     ; preds = %27
+  %54 = add i64 %1, -17
+  %55 = icmp ult i64 %54, 16
+  br i1 %55, label %56, label %99
+
+; <label>:56:                                     ; preds = %53
+  %57 = bitcast i8* %0 to i64*
+  %58 = load i64, i64* %57, align 1
+  %59 = mul i64 %58, -5435081209227447693
+  %60 = getelementptr inbounds i8, i8* %0, i64 8
+  %61 = bitcast i8* %60 to i64*
+  %62 = load i64, i64* %61, align 1
+  %63 = getelementptr inbounds i8, i8* %0, i64 %1
+  %64 = getelementptr inbounds i8, i8* %63, i64 -8
+  %65 = bitcast i8* %64 to i64*
+  %66 = load i64, i64* %65, align 1
+  %67 = mul i64 %66, -7286425919675154353
+  %68 = getelementptr inbounds i8, i8* %63, i64 -16
+  %69 = bitcast i8* %68 to i64*
+  %70 = load i64, i64* %69, align 1
+  %71 = mul i64 %70, -4348849565147123417
+  %72 = sub i64 %59, %62
+  %73 = lshr i64 %72, 43
+  %74 = shl i64 %72, 21
+  %75 = or i64 %74, %73
+  %76 = xor i64 %67, %2
+  %77 = lshr i64 %76, 30
+  %78 = shl i64 %76, 34
+  %79 = or i64 %78, %77
+  %80 = add i64 %71, %75
+  %81 = add i64 %80, %79
+  %82 = xor i64 %62, -3942382747735136937
+  %83 = lshr i64 %82, 20
+  %84 = shl i64 %82, 44
+  %85 = or i64 %84, %83
+  %86 = add i64 %2, %1
+  %87 = add i64 %86, %59
+  %88 = sub i64 %87, %67
+  %89 = add i64 %88, %85
+  %90 = xor i64 %81, %89
+  %91 = mul i64 %90, -7070675565921424023
+  %92 = lshr i64 %91, 47
+  %93 = xor i64 %91, %89
+  %94 = xor i64 %93, %92
+  %95 = mul i64 %94, -7070675565921424023
+  %96 = lshr i64 %95, 47
+  %97 = xor i64 %96, %95
+  %98 = mul i64 %97, -7070675565921424023
+  br label %208
+
+; <label>:99:                                     ; preds = %53
+  %100 = icmp ugt i64 %1, 32
+  br i1 %100, label %101, label %181
+
+; <label>:101:                                    ; preds = %99
+  %102 = getelementptr inbounds i8, i8* %0, i64 24
+  %103 = bitcast i8* %102 to i64*
+  %104 = load i64, i64* %103, align 1
+  %105 = bitcast i8* %0 to i64*
+  %106 = load i64, i64* %105, align 1
+  %107 = getelementptr inbounds i8, i8* %0, i64 %1
+  %108 = getelementptr inbounds i8, i8* %107, i64 -16
+  %109 = bitcast i8* %108 to i64*
+  %110 = load i64, i64* %109, align 1
+  %111 = add i64 %110, %1
+  %112 = mul i64 %111, -4348849565147123417
+  %113 = add i64 %112, %106
+  %114 = add i64 %113, %104
+  %115 = lshr i64 %114, 52
+  %116 = shl i64 %114, 12
+  %117 = or i64 %116, %115
+  %118 = lshr i64 %113, 37
+  %119 = shl i64 %113, 27
+  %120 = or i64 %119, %118
+  %121 = getelementptr inbounds i8, i8* %0, i64 8
+  %122 = bitcast i8* %121 to i64*
+  %123 = load i64, i64* %122, align 1
+  %124 = add i64 %113, %123
+  %125 = lshr i64 %124, 7
+  %126 = shl i64 %124, 57
+  %127 = or i64 %126, %125
+  %128 = getelementptr inbounds i8, i8* %0, i64 16
+  %129 = bitcast i8* %128 to i64*
+  %130 = load i64, i64* %129, align 1
+  %131 = add i64 %124, %130
+  %132 = lshr i64 %131, 31
+  %133 = shl i64 %131, 33
+  %134 = or i64 %133, %132
+  %135 = add i64 %127, %120
+  %136 = add i64 %135, %117
+  %137 = add i64 %136, %134
+  %138 = getelementptr inbounds i8, i8* %107, i64 -32
+  %139 = bitcast i8* %138 to i64*
+  %140 = load i64, i64* %139, align 1
+  %141 = add i64 %140, %130
+  %142 = getelementptr inbounds i8, i8* %107, i64 -8
+  %143 = bitcast i8* %142 to i64*
+  %144 = load i64, i64* %143, align 1
+  %145 = add i64 %141, %144
+  %146 = lshr i64 %145, 52
+  %147 = shl i64 %145, 12
+  %148 = or i64 %147, %146
+  %149 = lshr i64 %141, 37
+  %150 = shl i64 %141, 27
+  %151 = or i64 %150, %149
+  %152 = getelementptr inbounds i8, i8* %107, i64 -24
+  %153 = bitcast i8* %152 to i64*
+  %154 = load i64, i64* %153, align 1
+  %155 = add i64 %154, %141
+  %156 = lshr i64 %155, 7
+  %157 = shl i64 %155, 57
+  %158 = or i64 %157, %156
+  %159 = add i64 %155, %110
+  %160 = add i64 %159, %144
+  %161 = lshr i64 %159, 31
+  %162 = shl i64 %159, 33
+  %163 = or i64 %162, %161
+  %164 = add i64 %131, %104
+  %165 = add i64 %164, %151
+  %166 = add i64 %165, %148
+  %167 = add i64 %166, %158
+  %168 = add i64 %167, %163
+  %169 = mul i64 %168, -7286425919675154353
+  %170 = add i64 %160, %137
+  %171 = mul i64 %170, -4348849565147123417
+  %172 = add i64 %169, %171
+  %173 = lshr i64 %172, 47
+  %174 = xor i64 %173, %172
+  %175 = mul i64 %174, -4348849565147123417
+  %176 = xor i64 %175, %2
+  %177 = add i64 %176, %137
+  %178 = lshr i64 %177, 47
+  %179 = xor i64 %178, %177
+  %180 = mul i64 %179, -7286425919675154353
+  br label %208
+
+; <label>:181:                                    ; preds = %99
+  %182 = icmp eq i64 %1, 0
+  br i1 %182, label %206, label %183
+
+; <label>:183:                                    ; preds = %181
+  %184 = load i8, i8* %0, align 1
+  %185 = lshr i64 %1, 1
+  %186 = getelementptr inbounds i8, i8* %0, i64 %185
+  %187 = load i8, i8* %186, align 1
+  %188 = add i64 %1, -1
+  %189 = getelementptr inbounds i8, i8* %0, i64 %188
+  %190 = load i8, i8* %189, align 1
+  %191 = zext i8 %184 to i64
+  %192 = zext i8 %187 to i64
+  %193 = shl nuw nsw i64 %192, 8
+  %194 = or i64 %193, %191
+  %195 = zext i8 %190 to i64
+  %196 = shl nuw nsw i64 %195, 2
+  %197 = add i64 %196, %1
+  %198 = mul i64 %194, -7286425919675154353
+  %199 = and i64 %197, 4294967295
+  %200 = mul i64 %199, -3942382747735136937
+  %201 = xor i64 %198, %2
+  %202 = xor i64 %201, %200
+  %203 = lshr i64 %202, 47
+  %204 = xor i64 %203, %202
+  %205 = mul i64 %204, -7286425919675154353
+  br label %208
+
+; <label>:206:                                    ; preds = %181
+  %207 = xor i64 %2, -7286425919675154353
+  br label %208
+
+; <label>:208:                                    ; preds = %206, %183, %101, %56, %30, %6
+  %209 = phi i64 [ %26, %6 ], [ %52, %30 ], [ %98, %56 ], [ %180, %101 ], [ %205, %183 ], [ %207, %206 ]
+  ret i64 %209
+}
+
+; Function Attrs: norecurse nounwind optsize ssp uwtable
+define linkonce_odr hidden void @_ZN4llvm7hashing6detail10hash_state6createEPKcm(%"struct.llvm::hashing::detail::hash_state"* noalias sret, i8*, i64) local_unnamed_addr #6 comdat align 2 {
+  %4 = getelementptr inbounds %"struct.llvm::hashing::detail::hash_state", %"struct.llvm::hashing::detail::hash_state"* %0, i64 0, i32 0
+  store i64 0, i64* %4, align 8
+  %5 = getelementptr inbounds %"struct.llvm::hashing::detail::hash_state", %"struct.llvm::hashing::detail::hash_state"* %0, i64 0, i32 1
+  store i64 %2, i64* %5, align 8
+  %6 = getelementptr inbounds %"struct.llvm::hashing::detail::hash_state", %"struct.llvm::hashing::detail::hash_state"* %0, i64 0, i32 2
+  %7 = xor i64 %2, -5435081209227447693
+  %8 = mul i64 %7, -7070675565921424023
+  %9 = lshr i64 %8, 47
+  %10 = xor i64 %8, -5435081209227447693
+  %11 = xor i64 %10, %9
+  %12 = mul i64 %11, -7070675565921424023
+  %13 = lshr i64 %12, 47
+  %14 = xor i64 %13, %12
+  %15 = mul i64 %14, -7070675565921424023
+  store i64 %15, i64* %6, align 8
+  %16 = getelementptr inbounds %"struct.llvm::hashing::detail::hash_state", %"struct.llvm::hashing::detail::hash_state"* %0, i64 0, i32 3
+  %17 = lshr i64 %7, 49
+  %18 = shl i64 %7, 15
+  %19 = or i64 %18, %17
+  store i64 %19, i64* %16, align 8
+  %20 = getelementptr inbounds %"struct.llvm::hashing::detail::hash_state", %"struct.llvm::hashing::detail::hash_state"* %0, i64 0, i32 4
+  %21 = mul i64 %2, -5435081209227447693
+  store i64 %21, i64* %20, align 8
+  %22 = getelementptr inbounds %"struct.llvm::hashing::detail::hash_state", %"struct.llvm::hashing::detail::hash_state"* %0, i64 0, i32 5
+  %23 = lshr i64 %2, 47
+  %24 = xor i64 %23, %2
+  store i64 %24, i64* %22, align 8
+  %25 = getelementptr inbounds %"struct.llvm::hashing::detail::hash_state", %"struct.llvm::hashing::detail::hash_state"* %0, i64 0, i32 6
+  %26 = xor i64 %24, %21
+  %27 = mul i64 %26, -7070675565921424023
+  %28 = lshr i64 %27, 47
+  %29 = xor i64 %27, %24
+  %30 = xor i64 %29, %28
+  %31 = mul i64 %30, -7070675565921424023
+  %32 = lshr i64 %31, 47
+  %33 = xor i64 %32, %31
+  %34 = mul i64 %33, -7070675565921424023
+  store i64 %34, i64* %25, align 8
+  tail call void @_ZN4llvm7hashing6detail10hash_state3mixEPKc(%"struct.llvm::hashing::detail::hash_state"* %0, i8* %1) #13
+  ret void
+}
+
+; Function Attrs: norecurse nounwind optsize ssp uwtable
+define linkonce_odr hidden void @_ZN4llvm7hashing6detail10hash_state3mixEPKc(%"struct.llvm::hashing::detail::hash_state"*, i8*) local_unnamed_addr #6 comdat align 2 {
+  %3 = getelementptr inbounds %"struct.llvm::hashing::detail::hash_state", %"struct.llvm::hashing::detail::hash_state"* %0, i64 0, i32 0
+  %4 = load i64, i64* %3, align 8
+  %5 = getelementptr inbounds %"struct.llvm::hashing::detail::hash_state", %"struct.llvm::hashing::detail::hash_state"* %0, i64 0, i32 1
+  %6 = load i64, i64* %5, align 8
+  %7 = add i64 %6, %4
+  %8 = getelementptr inbounds %"struct.llvm::hashing::detail::hash_state", %"struct.llvm::hashing::detail::hash_state"* %0, i64 0, i32 3
+  %9 = load i64, i64* %8, align 8
+  %10 = add i64 %7, %9
+  %11 = getelementptr inbounds i8, i8* %1, i64 8
+  %12 = bitcast i8* %11 to i64*
+  %13 = load i64, i64* %12, align 1
+  %14 = add i64 %10, %13
+  %15 = lshr i64 %14, 37
+  %16 = shl i64 %14, 27
+  %17 = or i64 %16, %15
+  %18 = mul i64 %17, -5435081209227447693
+  store i64 %18, i64* %3, align 8
+  %19 = getelementptr inbounds %"struct.llvm::hashing::detail::hash_state", %"struct.llvm::hashing::detail::hash_state"* %0, i64 0, i32 4
+  %20 = load i64, i64* %19, align 8
+  %21 = add i64 %20, %6
+  %22 = getelementptr inbounds i8, i8* %1, i64 48
+  %23 = bitcast i8* %22 to i64*
+  %24 = load i64, i64* %23, align 1
+  %25 = add i64 %21, %24
+  %26 = lshr i64 %25, 42
+  %27 = shl i64 %25, 22
+  %28 = or i64 %27, %26
+  %29 = mul i64 %28, -5435081209227447693
+  store i64 %29, i64* %5, align 8
+  %30 = getelementptr inbounds %"struct.llvm::hashing::detail::hash_state", %"struct.llvm::hashing::detail::hash_state"* %0, i64 0, i32 6
+  %31 = load i64, i64* %30, align 8
+  %32 = xor i64 %31, %18
+  store i64 %32, i64* %3, align 8
+  %33 = getelementptr inbounds i8, i8* %1, i64 40
+  %34 = bitcast i8* %33 to i64*
+  %35 = load i64, i64* %34, align 1
+  %36 = add i64 %35, %9
+  %37 = add i64 %36, %29
+  store i64 %37, i64* %5, align 8
+  %38 = getelementptr inbounds %"struct.llvm::hashing::detail::hash_state", %"struct.llvm::hashing::detail::hash_state"* %0, i64 0, i32 2
+  %39 = load i64, i64* %38, align 8
+  %40 = getelementptr inbounds %"struct.llvm::hashing::detail::hash_state", %"struct.llvm::hashing::detail::hash_state"* %0, i64 0, i32 5
+  %41 = load i64, i64* %40, align 8
+  %42 = add i64 %41, %39
+  %43 = lshr i64 %42, 33
+  %44 = shl i64 %42, 31
+  %45 = or i64 %44, %43
+  %46 = mul i64 %45, -5435081209227447693
+  store i64 %46, i64* %38, align 8
+  %47 = mul i64 %20, -5435081209227447693
+  store i64 %47, i64* %8, align 8
+  %48 = add i64 %41, %32
+  store i64 %48, i64* %19, align 8
+  tail call void @_ZN4llvm7hashing6detail10hash_state12mix_32_bytesEPKcRmS5_(i8* %1, i64* nonnull dereferenceable(8) %8, i64* nonnull dereferenceable(8) %19) #13
+  %49 = load i64, i64* %38, align 8
+  %50 = load i64, i64* %30, align 8
+  %51 = add i64 %50, %49
+  store i64 %51, i64* %40, align 8
+  %52 = load i64, i64* %5, align 8
+  %53 = getelementptr inbounds i8, i8* %1, i64 16
+  %54 = bitcast i8* %53 to i64*
+  %55 = load i64, i64* %54, align 1
+  %56 = add i64 %55, %52
+  store i64 %56, i64* %30, align 8
+  %57 = getelementptr inbounds i8, i8* %1, i64 32
+  tail call void @_ZN4llvm7hashing6detail10hash_state12mix_32_bytesEPKcRmS5_(i8* nonnull %57, i64* nonnull dereferenceable(8) %40, i64* nonnull dereferenceable(8) %30) #13
+  %58 = load i64, i64* %38, align 8
+  %59 = load i64, i64* %3, align 8
+  store i64 %59, i64* %38, align 8
+  store i64 %58, i64* %3, align 8
+  ret void
+}
+
+; Function Attrs: norecurse nounwind optsize ssp uwtable
+define linkonce_odr hidden i64 @_ZN4llvm7hashing6detail10hash_state8finalizeEm(%"struct.llvm::hashing::detail::hash_state"*, i64) local_unnamed_addr #6 comdat align 2 {
+  %3 = getelementptr inbounds %"struct.llvm::hashing::detail::hash_state", %"struct.llvm::hashing::detail::hash_state"* %0, i64 0, i32 3
+  %4 = load i64, i64* %3, align 8
+  %5 = getelementptr inbounds %"struct.llvm::hashing::detail::hash_state", %"struct.llvm::hashing::detail::hash_state"* %0, i64 0, i32 5
+  %6 = load i64, i64* %5, align 8
+  %7 = xor i64 %6, %4
+  %8 = mul i64 %7, -7070675565921424023
+  %9 = lshr i64 %8, 47
+  %10 = xor i64 %8, %6
+  %11 = xor i64 %10, %9
+  %12 = mul i64 %11, -7070675565921424023
+  %13 = lshr i64 %12, 47
+  %14 = xor i64 %13, %12
+  %15 = mul i64 %14, -7070675565921424023
+  %16 = getelementptr inbounds %"struct.llvm::hashing::detail::hash_state", %"struct.llvm::hashing::detail::hash_state"* %0, i64 0, i32 1
+  %17 = load i64, i64* %16, align 8
+  %18 = lshr i64 %17, 47
+  %19 = xor i64 %18, %17
+  %20 = mul i64 %19, -5435081209227447693
+  %21 = getelementptr inbounds %"struct.llvm::hashing::detail::hash_state", %"struct.llvm::hashing::detail::hash_state"* %0, i64 0, i32 2
+  %22 = load i64, i64* %21, align 8
+  %23 = add i64 %20, %22
+  %24 = add i64 %23, %15
+  %25 = getelementptr inbounds %"struct.llvm::hashing::detail::hash_state", %"struct.llvm::hashing::detail::hash_state"* %0, i64 0, i32 4
+  %26 = load i64, i64* %25, align 8
+  %27 = getelementptr inbounds %"struct.llvm::hashing::detail::hash_state", %"struct.llvm::hashing::detail::hash_state"* %0, i64 0, i32 6
+  %28 = load i64, i64* %27, align 8
+  %29 = xor i64 %28, %26
+  %30 = mul i64 %29, -7070675565921424023
+  %31 = lshr i64 %30, 47
+  %32 = xor i64 %30, %28
+  %33 = xor i64 %32, %31
+  %34 = mul i64 %33, -7070675565921424023
+  %35 = lshr i64 %34, 47
+  %36 = xor i64 %35, %34
+  %37 = mul i64 %36, -7070675565921424023
+  %38 = lshr i64 %1, 47
+  %39 = xor i64 %38, %1
+  %40 = mul i64 %39, -5435081209227447693
+  %41 = getelementptr inbounds %"struct.llvm::hashing::detail::hash_state", %"struct.llvm::hashing::detail::hash_state"* %0, i64 0, i32 0
+  %42 = load i64, i64* %41, align 8
+  %43 = add i64 %42, %40
+  %44 = add i64 %43, %37
+  %45 = xor i64 %44, %24
+  %46 = mul i64 %45, -7070675565921424023
+  %47 = lshr i64 %46, 47
+  %48 = xor i64 %46, %44
+  %49 = xor i64 %48, %47
+  %50 = mul i64 %49, -7070675565921424023
+  %51 = lshr i64 %50, 47
+  %52 = xor i64 %51, %50
+  %53 = mul i64 %52, -7070675565921424023
+  ret i64 %53
+}
+
+; Function Attrs: nounwind
+declare i32 @__cxa_guard_acquire(i64*) local_unnamed_addr #12
+
+; Function Attrs: nounwind
+declare void @__cxa_guard_release(i64*) local_unnamed_addr #12
+
+; Function Attrs: norecurse nounwind optsize ssp uwtable
+define linkonce_odr hidden void @_ZN4llvm7hashing6detail10hash_state12mix_32_bytesEPKcRmS5_(i8*, i64* dereferenceable(8), i64* dereferenceable(8)) local_unnamed_addr #6 comdat align 2 {
+  %4 = bitcast i8* %0 to i64*
+  %5 = load i64, i64* %4, align 1
+  %6 = load i64, i64* %1, align 8
+  %7 = add i64 %6, %5
+  store i64 %7, i64* %1, align 8
+  %8 = getelementptr inbounds i8, i8* %0, i64 24
+  %9 = bitcast i8* %8 to i64*
+  %10 = load i64, i64* %9, align 1
+  %11 = load i64, i64* %2, align 8
+  %12 = add i64 %10, %7
+  %13 = add i64 %12, %11
+  %14 = lshr i64 %13, 21
+  %15 = shl i64 %13, 43
+  %16 = or i64 %15, %14
+  store i64 %16, i64* %2, align 8
+  %17 = load i64, i64* %1, align 8
+  %18 = getelementptr inbounds i8, i8* %0, i64 8
+  %19 = bitcast i8* %18 to i64*
+  %20 = load i64, i64* %19, align 1
+  %21 = getelementptr inbounds i8, i8* %0, i64 16
+  %22 = bitcast i8* %21 to i64*
+  %23 = load i64, i64* %22, align 1
+  %24 = add i64 %20, %17
+  %25 = add i64 %24, %23
+  store i64 %25, i64* %1, align 8
+  %26 = lshr i64 %25, 44
+  %27 = shl i64 %25, 20
+  %28 = or i64 %27, %26
+  %29 = load i64, i64* %2, align 8
+  %30 = add i64 %29, %17
+  %31 = add i64 %30, %28
+  store i64 %31, i64* %2, align 8
+  %32 = load i64, i64* %1, align 8
+  %33 = add i64 %32, %10
+  store i64 %33, i64* %1, align 8
+  ret void
+}
+
+attributes #0 = { norecurse nounwind optsize readonly ssp uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="4" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { argmemonly nounwind }
+attributes #2 = { nounwind optsize readonly ssp uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="4" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { nounwind optsize ssp uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="4" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { nounwind optsize readonly "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="4" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #5 = { optsize "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="4" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #6 = { norecurse nounwind optsize ssp uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="4" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #7 = { nobuiltin nounwind optsize "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="4" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #8 = { nounwind readnone speculatable }
+attributes #9 = { nobuiltin optsize "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="4" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #10 = { noreturn optsize "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="4" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #11 = { inlinehint norecurse nounwind optsize ssp uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="4" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #12 = { nounwind }
+attributes #13 = { optsize }
+attributes #14 = { nounwind optsize readonly }
+attributes #15 = { builtin nounwind optsize }
+attributes #16 = { noreturn nounwind optsize }
+attributes #17 = { nounwind optsize }
+
+!llvm.module.flags = !{!0, !1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{i32 7, !"PIC Level", i32 2}
+!2 = !{!"branch_weights", i32 1, i32 2000}
+!3 = !{!"branch_weights", i32 2000, i32 1}
+!4 = !{!"branch_weights", i32 1, i32 1048575}

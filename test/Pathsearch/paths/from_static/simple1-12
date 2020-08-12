@@ -1,0 +1,1 @@
+store  i32 3, i32* %foo_4, align 4 

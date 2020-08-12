@@ -1,0 +1,9 @@
+%moreBlocks_22 = load  i32, i32* %moreBlocks_6, align 4 
+%moreBlocks_23 = icmp slt i32 %moreBlocks_22, 2 
+path-eq %moreBlocks_23 = bitcast i1 0 to i1 
+%moreBlocks_31 = load  i32, i32* %moreBlocks_4, align 4 
+%moreBlocks_32 = load  i32, i32* %moreBlocks_5, align 4 
+%moreBlocks_33 = mul  nsw i32 %moreBlocks_31, %moreBlocks_32 
+%moreBlocks_34 = icmp sgt i32 %moreBlocks_33, 242 
+path-eq %moreBlocks_34 = bitcast i1 0 to i1 
+%moreBlocks_40 = load  i32, i32* %moreBlocks_4, align 4 

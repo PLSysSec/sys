@@ -1,0 +1,124 @@
+name:                adverse
+version:             0.0.0.1
+github:              "plsyssec/adverse"
+license:             BSD3
+author:              "Adverse team"
+maintainer:          "team@adverse.systems"
+copyright:           "2018 Adverse team"
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Light-weight modular, symbolic execution for LLVM
+
+dependencies:
+- base >= 4.7 && < 5
+
+library:
+  source-dirs: src
+  ghc-options:
+  - -Wall
+  dependencies:
+  - llvm-hs >= 9.0.1
+  - llvm-hs-pure >= 9.0.0
+  - llvm-hs-pretty >= 0.9.0.0
+  - text
+  - bytestring
+  - utf8-string
+  - containers
+  - hashable
+  - boolector >= 0.0.0.11
+  - mtl
+  - stm
+  - threads
+  - set-extra
+  - split
+  - filepath
+  - directory
+  - filemanip
+
+executables:
+  sys:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    - -Wall
+    dependencies:
+    - adverse
+    - filepath
+    - directory
+    - filemanip
+    - containers
+    - threads
+    - llvm-hs >= 6.2.0	
+    - llvm-hs-pure >= 6.2.0
+
+tests:
+  adverse-test:
+    main:                Spec.hs
+    source-dirs:         test
+    when:
+      - condition: false      # this is an ugly hack to exclude the Bench module but include all other modules in the test/ directory (as is default). Couldn't figure out a better way to do this.
+        other-modules: Bench
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    - -Wall
+    dependencies:
+    - adverse
+    - directory
+    - tasty
+    - tasty-hunit
+    - tasty-golden
+    - criterion
+    - text
+    - bytestring
+    - containers
+    - unordered-containers
+    - llvm-hs
+    - llvm-hs-pure
+    - llvm-hs-pretty
+    - utf8-string
+    - stm
+    - threads
+    - mtl
+    - filemanip
+    - set-extra
+
+benchmarks:
+  adverse-bench-tests:  # run performance benchmarks on tests
+    main: Bench.hs
+    source-dirs: test
+    when:
+      - condition: false     # this is an ugly hack to exclude the Spec module but include all other modules in the test/ directory (as is default). Couldn't figure out a better way to do this.
+        other-modules: Spec
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    - -Wall
+    dependencies:
+    - adverse
+    - tasty
+    - tasty-hunit
+    - tasty-golden
+    - criterion
+    - text
+    - bytestring
+    - containers
+    - llvm-hs
+    - llvm-hs-pure
+    - llvm-hs-pretty
+    - utf8-string

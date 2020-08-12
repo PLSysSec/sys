@@ -1,0 +1,18 @@
+%doubleRecursive_17 = load  i32, i32* %doubleRecursive_4, align 4 
+%doubleRecursive_18 = load  i32, i32* %doubleRecursive_5, align 4 
+%doubleRecursive_19 = sub  nsw i32 %doubleRecursive_18, 1 
+enter-call doubleRecursive
+%doubleRecursive_0 = bitcast i32 %doubleRecursive_17 to i32 
+%doubleRecursive_1 = bitcast i32 %doubleRecursive_19 to i32 
+%doubleRecursive_3 = alloca i32, align 4 
+%doubleRecursive_4_1 = alloca i32, align 4 
+%doubleRecursive_5_1 = alloca i32, align 4 
+%doubleRecursive_6 = alloca i32, align 4 
+%doubleRecursive_7 = alloca i32, align 4 
+store  i32 %doubleRecursive_0, i32* %doubleRecursive_4_1, align 4 
+store  i32 %doubleRecursive_1, i32* %doubleRecursive_5_1, align 4 
+%doubleRecursive_8 = load  i32, i32* %doubleRecursive_4_1, align 4 
+%doubleRecursive_9 = load  i32, i32* %doubleRecursive_5_1, align 4 
+%doubleRecursive_10 = sub  nsw i32 %doubleRecursive_8, %doubleRecursive_9 
+%doubleRecursive_11 = icmp sgt i32 %doubleRecursive_10, 100 
+track-ops LocalReference (IntegerType {typeBits = 1}) (Name "doubleRecursive_11")

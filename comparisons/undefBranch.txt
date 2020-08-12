@@ -1,0 +1,130 @@
+Branch condition evaluates to a garbage value
+
+-------------------------------------------------------------
+
+vp8_mc_chroma
+
+mv passed in as argument 3 to inter_predict
+bmv = mv->bmv 
+vp8_mc_part called from XXX with &bmv[0] as mv
+mv passed as final argument to vp8_mc_part
+umv = *mv 
+vp8_mc_chroma called from vp8_mc_part with argument &uvmv
+mv passed as 5th argument to vp8_mc_chroma
+if (AV_RN32A(mv)) // mv must be uninit
+
+FALSE: confused about pointer arithmetic i believe
+
+-------------------------------------------------------------
+
+av_frame_apply_cropping
+
+size_t offsets[4];
+
+calc_cropping_offsets(offsets, frame, desc); <-- should initialize offsets
+---> inside function
+--->     for (i = 0; frame->data[i]; i++) <-- assume this is false so nothing init
+---> return without init
+
+BUT THEN
+
+for (i = 0; frame->data[i]; i++) { <-- assume this is true so accessed
+  int log2_align = offsets[i] ? ff_ctz(offsets[i]) : INT_MAX; <-- offsets are uninit
+
+FALSE - value reasoning 
+
+-------------------------------------------------------------
+
+PostURL
+
+char* dataToPost;
+ParsePostBufferToFixHeaders(postData, postDataLen, &dataToPost, &newDataToPostLen)
+if(!dataToPost)
+https://searchfox.org/mozilla-central/source/dom/plugins/base/nsPluginHost.cpp#548
+
+FALSE - bizarre: the address will always be fine and is not a garbage value... its redundant
+
+-------------------------------------------------------------
+
+init_resb_result
+
+char *pathBuf = stackPath, *myPath = pathBuf
+pathBuf = (char *)uprv_malloc((uprv_strlen(keyPath)+1)*sizeof(char));
+while(*myPath && U_SUCCESS(*status)) { <-- thinks *myPath is garbage
+
+HEAP: pathBuf is heap allocated
+
+-------------------------------------------------------------
+
+IsExecutable
+
+Same as below, different function
+
+  nsresult rv = IsSymlink(&symLink);
+  etc
+
+FALSE - value reasoning
+
+-------------------------------------------------------------
+
+Remove
+
+  nsresult rv = IsSymlink(&isSymLink);
+  if (NS_FAILED(rv)) return rv;
+  if (isSymLink)
+
+Assumes that IsSymlink can fail without NS_FAILED(rv) returning true
+(same as below)
+
+FALSE - value reasoning
+
+-------------------------------------------------------------
+
+CopyToNative
+
+if (NS_FAILED(rv = IsSpecial(&specialFile)))
+   PR_Close(newFD);
+   return rv;
+
+if (specialFile) <-- thinks special file not init
+
+Looks fine to me, checking
+https://searchfox.org/mozilla-central/source/xpcom/io/nsLocalFileUnix.cpp#771
+Unfixed, ok.
+
+FALSE - value reasoning
+
+-------------------------------------------------------------
+
+qualify_inter_mb
+
+
+const MODE_INFO *mode_info_context = cm->show_frame_mi;
+
+totmap = qualify_inter_mb(mode_info_context, map);
+qualify_inter_mb called with mode_info_context as argument 0 
+for (j = 0; j < 4 && map[j]; ++j)
+  mode_info_context->bmi[ndx[i][j]].mv.as_mv.row <= 2
+claim: mode_info_context->bmi.... is garbage
+
+file:///home/mlfbrown/compare/mozilla-central/scan-build-2020-01-20-124025-951-1/report-3e36b7.html#EndPath
+
+report doesn't specify why it thinks mode_info_context is garbage
+mode_info_context appears to be defined, and bug report doesn't even start
+until later in the function, so I think it might be some other reason...
+
+-------------------------------------------------------------
+
+validate_script
+file:///home/mlfbrown/compare/mozilla-central/scan-build-2020-01-20-124025-951-1/report-5b3ede.html#EndPath
+
+if (cinfo->num_scans <= 0) <-- assumes this is true 
+      ERREXIT1(cinfo, JERR_BAD_SCAN_SCRIPT, 0); <-- take true branch and exit, not feasible
+
+for (ci = 0; ci < cinfo->num_components; ci++) some initializations
+for (scanno = 1; scanno <= cinfo->num_scans; scanptr++, scanno++) more initializations
+
+if (!component_sent[ci])
+claim: component_send[ci] is uninit
+
+FALSE: not understanding error path 

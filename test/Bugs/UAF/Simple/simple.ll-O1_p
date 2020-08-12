@@ -1,0 +1,85 @@
+; ModuleID = 'simple.bc-O1_p'
+source_filename = "simple.c"
+target datalayout = "e-m:e-i64:64-f80:128-n8:16:32:64-S128"
+target triple = "x86_64-pc-linux-gnu"
+
+define dso_local i32 @bad0() local_unnamed_addr #0 {
+  %1 = tail call noalias i8* @malloc(i64 4) #5
+  %2 = bitcast i8* %1 to i32*
+  tail call void @free(i8* %1) #5
+  %3 = load i32, i32* %2, align 4, !tbaa !4
+  ret i32 %3
+}
+
+declare noalias i8* @malloc(i64) local_unnamed_addr #1
+
+declare void @free(i8* nocapture) local_unnamed_addr #2
+
+define dso_local i32 @bad1(i32) local_unnamed_addr #0 {
+  %2 = tail call noalias i8* @malloc(i64 4) #5
+  %3 = bitcast i8* %2 to i32*
+  %4 = icmp ugt i32 %0, 32
+  br i1 %4, label %14, label %5
+
+5:                                                ; preds = %1, %11
+  %6 = phi i32 [ %12, %11 ], [ 0, %1 ]
+  %7 = phi i32 [ %8, %11 ], [ %0, %1 ]
+  %8 = add nsw i32 %7, -1
+  %9 = icmp eq i32 %6, %7
+  br i1 %9, label %10, label %11
+
+10:                                               ; preds = %5
+  tail call void @free(i8* %2) #5
+  br label %11
+
+11:                                               ; preds = %5, %10
+  %12 = add nuw nsw i32 %6, 1
+  %13 = icmp slt i32 %6, %8
+  br i1 %13, label %5, label %14
+
+14:                                               ; preds = %11, %1
+  %15 = load i32, i32* %3, align 4, !tbaa !4
+  ret i32 %15
+}
+
+define dso_local i32 @ok0() local_unnamed_addr #3 {
+  %1 = tail call noalias i8* @malloc(i64 4) #5
+  %2 = bitcast i8* %1 to i32*
+  tail call void @free(i8* %1) #5
+  ret i32 42
+}
+
+define dso_local i32 @ok1(i32) local_unnamed_addr #0 {
+  %2 = alloca i32, align 4
+  store i32 %0, i32* %2, align 4, !tbaa !4
+  %3 = tail call noalias i8* @malloc(i64 4) #5
+  %4 = bitcast i8* %3 to i32*
+  %5 = icmp sgt i32 %0, 0
+  br i1 %5, label %6, label %10
+
+6:                                                ; preds = %1
+  %7 = load i32, i32* %2, align 4, !tbaa !4
+  %8 = icmp slt i32 %7, 1
+  br i1 %8, label %9, label %10
+
+9:                                                ; preds = %6
+  call void @free(i8* %3) #5
+  br label %10
+
+10:                                               ; preds = %6, %9, %1
+  %11 = load i32, i32* %4, align 4, !tbaa !4
+  ret i32 %11
+}
+
+
+!llvm.module.flags = !{!0, !1, !2}
+!llvm.ident = !{!3}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{i32 7, !"PIC Level", i32 2}
+!2 = !{i32 7, !"PIE Level", i32 2}
+!3 = !{!"clang version 9.0.1 "}
+!4 = !{!5, !5, i64 0}
+!5 = !{!"int", !6, i64 0}
+!6 = !{!"omnipotent char", !7, i64 0}
+!7 = !{!"Simple C/C++ TBAA"}

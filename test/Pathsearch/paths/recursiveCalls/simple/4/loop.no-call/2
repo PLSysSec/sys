@@ -1,0 +1,17 @@
+%simple_2 = alloca i32, align 4 
+%simple_3 = alloca i32, align 4 
+%simple_4 = alloca i32, align 4 
+store  i32 %simple_0, i32* %simple_3, align 4 
+%simple_5 = load  i32, i32* %simple_3, align 4 
+%simple_6 = add  nsw i32 %simple_5, 2 
+store  i32 %simple_6, i32* %simple_4, align 4 
+%simple_7 = load  i32, i32* %simple_4, align 4 
+%simple_8 = icmp sgt i32 %simple_7, 25 
+path-eq %simple_8 = bitcast i1 0 to i1 
+%simple_12 = load  i32, i32* %simple_4, align 4 
+%simple_13 =  call ccc  i32  @simple(i32  %simple_12)  
+store  i32 %simple_13, i32* %simple_2, align 4 
+%simple_15 = load  i32, i32* %simple_2, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "simple_15")
+%simple_13_1 = bitcast i32 %simple_15 to i32 
+store  i32 %simple_13_1, i32* %simple_2, align 4 

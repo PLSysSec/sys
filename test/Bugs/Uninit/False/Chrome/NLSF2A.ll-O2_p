@@ -1,0 +1,598 @@
+; ModuleID = '../../third_party/opus/src/silk/NLSF2A.c'
+source_filename = "../../third_party/opus/src/silk/NLSF2A.c"
+target datalayout = "e-m:e-i64:64-f80:128-n8:16:32:64-S128"
+target triple = "x86_64-pc-linux-gnu"
+
+module asm ".symver exp2f, exp2f@GLIBC_2.2.5"
+module asm ".symver expf, expf@GLIBC_2.2.5"
+module asm ".symver lgamma, lgamma@GLIBC_2.2.5"
+module asm ".symver lgammaf, lgammaf@GLIBC_2.2.5"
+module asm ".symver lgammal, lgammal@GLIBC_2.2.5"
+module asm ".symver log2f, log2f@GLIBC_2.2.5"
+module asm ".symver logf, logf@GLIBC_2.2.5"
+module asm ".symver powf, powf@GLIBC_2.2.5"
+module asm ".symver exp2f, exp2f@GLIBC_2.2.5"
+module asm ".symver expf, expf@GLIBC_2.2.5"
+module asm ".symver lgamma, lgamma@GLIBC_2.2.5"
+module asm ".symver lgammaf, lgammaf@GLIBC_2.2.5"
+module asm ".symver lgammal, lgammal@GLIBC_2.2.5"
+module asm ".symver log2f, log2f@GLIBC_2.2.5"
+module asm ".symver logf, logf@GLIBC_2.2.5"
+module asm ".symver powf, powf@GLIBC_2.2.5"
+
+@silk_NLSF2A.ordering16 = internal unnamed_addr constant [16 x i8] c"\00\0F\08\07\04\0B\0C\03\02\0D\0A\05\06\09\0E\01", align 16
+@silk_NLSF2A.ordering10 = internal unnamed_addr constant [10 x i8] c"\00\09\06\03\04\05\08\01\02\07", align 1
+@silk_LSFCosTab_FIX_Q12 = external local_unnamed_addr constant [129 x i16], align 16
+
+; Function Attrs: nounwind ssp uwtable
+define hidden void @silk_NLSF2A(i16*, i16* nocapture readonly, i32, i32) local_unnamed_addr #0 {
+  %5 = alloca [24 x i32], align 16
+  %6 = alloca [13 x i32], align 16
+  %7 = alloca [13 x i32], align 16
+  %8 = alloca [24 x i32], align 16
+  %9 = bitcast [24 x i32]* %5 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 96, i8* nonnull %9) #3
+  %10 = bitcast [13 x i32]* %6 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 52, i8* nonnull %10) #3
+  %11 = bitcast [13 x i32]* %7 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 52, i8* nonnull %11) #3
+  %12 = bitcast [24 x i32]* %8 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 96, i8* nonnull %12) #3
+  %13 = icmp eq i32 %2, 16
+  %14 = select i1 %13, i8* getelementptr inbounds ([16 x i8], [16 x i8]* @silk_NLSF2A.ordering16, i64 0, i64 0), i8* getelementptr inbounds ([10 x i8], [10 x i8]* @silk_NLSF2A.ordering10, i64 0, i64 0)
+  %15 = icmp sgt i32 %2, 0
+  br i1 %15, label %19, label %16
+
+; <label>:16:                                     ; preds = %4
+  %17 = ashr i32 %2, 1
+  %18 = getelementptr inbounds [13 x i32], [13 x i32]* %6, i64 0, i64 0
+  store i32 65536, i32* %18, align 16
+  br label %168
+
+; <label>:19:                                     ; preds = %4
+  %20 = zext i32 %2 to i64
+  br label %21
+
+; <label>:21:                                     ; preds = %21, %19
+  %22 = phi i64 [ 0, %19 ], [ %48, %21 ]
+  %23 = getelementptr inbounds i16, i16* %1, i64 %22
+  %24 = load i16, i16* %23, align 2
+  %25 = sext i16 %24 to i32
+  %26 = ashr i32 %25, 8
+  %27 = and i32 %25, 255
+  %28 = sext i32 %26 to i64
+  %29 = getelementptr inbounds [129 x i16], [129 x i16]* @silk_LSFCosTab_FIX_Q12, i64 0, i64 %28
+  %30 = load i16, i16* %29, align 2
+  %31 = sext i16 %30 to i32
+  %32 = add nsw i32 %26, 1
+  %33 = sext i32 %32 to i64
+  %34 = getelementptr inbounds [129 x i16], [129 x i16]* @silk_LSFCosTab_FIX_Q12, i64 0, i64 %33
+  %35 = load i16, i16* %34, align 2
+  %36 = sext i16 %35 to i32
+  %37 = sub nsw i32 %36, %31
+  %38 = shl nsw i32 %31, 8
+  %39 = mul nsw i32 %37, %27
+  %40 = add nsw i32 %39, %38
+  %41 = ashr i32 %40, 3
+  %42 = add nsw i32 %41, 1
+  %43 = ashr i32 %42, 1
+  %44 = getelementptr inbounds i8, i8* %14, i64 %22
+  %45 = load i8, i8* %44, align 1
+  %46 = zext i8 %45 to i64
+  %47 = getelementptr inbounds [24 x i32], [24 x i32]* %5, i64 0, i64 %46
+  store i32 %43, i32* %47, align 4
+  %48 = add nuw nsw i64 %22, 1
+  %49 = icmp eq i64 %48, %20
+  br i1 %49, label %50, label %21
+
+; <label>:50:                                     ; preds = %21
+  %51 = getelementptr inbounds [24 x i32], [24 x i32]* %5, i64 0, i64 0
+  %52 = load i32, i32* %51, align 16
+  %53 = sub i32 0, %52
+  %54 = ashr i32 %2, 1
+  %55 = getelementptr inbounds [13 x i32], [13 x i32]* %6, i64 0, i64 0
+  store i32 65536, i32* %55, align 16
+  %56 = getelementptr inbounds [13 x i32], [13 x i32]* %6, i64 0, i64 1
+  store i32 %53, i32* %56, align 4
+  %57 = icmp sgt i32 %2, 3
+  br i1 %57, label %58, label %168
+
+; <label>:58:                                     ; preds = %50
+  %59 = zext i32 %54 to i64
+  br label %60
+
+; <label>:60:                                     ; preds = %164, %58
+  %61 = phi i64 [ %167, %164 ], [ 0, %58 ]
+  %62 = phi i32 [ %166, %164 ], [ %53, %58 ]
+  %63 = phi i32 [ %165, %164 ], [ 65536, %58 ]
+  %64 = phi i64 [ %83, %164 ], [ 1, %58 ]
+  %65 = sub i64 -2, %61
+  %66 = icmp sgt i64 %65, -4
+  %67 = select i1 %66, i64 %65, i64 -4
+  %68 = add i64 %61, 3
+  %69 = add i64 %67, %68
+  %70 = shl nuw nsw i64 %64, 1
+  %71 = getelementptr inbounds [24 x i32], [24 x i32]* %5, i64 0, i64 %70
+  %72 = load i32, i32* %71, align 8
+  %73 = shl i32 %63, 1
+  %74 = sext i32 %72 to i64
+  %75 = getelementptr inbounds [13 x i32], [13 x i32]* %6, i64 0, i64 %64
+  %76 = sext i32 %62 to i64
+  %77 = mul nsw i64 %74, %76
+  %78 = lshr i64 %77, 15
+  %79 = add nuw nsw i64 %78, 1
+  %80 = lshr i64 %79, 1
+  %81 = trunc i64 %80 to i32
+  %82 = sub nsw i32 %73, %81
+  %83 = add nuw nsw i64 %64, 1
+  %84 = getelementptr inbounds [13 x i32], [13 x i32]* %6, i64 0, i64 %83
+  store i32 %82, i32* %84, align 4
+  %85 = icmp ugt i64 %64, 1
+  br i1 %85, label %86, label %160
+
+; <label>:86:                                     ; preds = %60
+  %87 = add nsw i64 %64, -2
+  %88 = getelementptr inbounds [13 x i32], [13 x i32]* %6, i64 0, i64 %87
+  %89 = load i32, i32* %88, align 4
+  %90 = sext i32 %63 to i64
+  %91 = mul nsw i64 %90, %74
+  %92 = lshr i64 %91, 15
+  %93 = add nuw nsw i64 %92, 1
+  %94 = lshr i64 %93, 1
+  %95 = trunc i64 %94 to i32
+  %96 = add i32 %89, %62
+  %97 = sub i32 %96, %95
+  store i32 %97, i32* %75, align 4
+  %98 = icmp eq i64 %64, 2
+  br i1 %98, label %160, label %99
+
+; <label>:99:                                     ; preds = %86
+  %100 = icmp ult i64 %69, 4
+  br i1 %100, label %139, label %101
+
+; <label>:101:                                    ; preds = %99
+  %102 = and i64 %69, -4
+  %103 = sub i64 %64, %102
+  %104 = insertelement <4 x i64> undef, i64 %74, i32 0
+  %105 = shufflevector <4 x i64> %104, <4 x i64> undef, <4 x i32> zeroinitializer
+  %106 = insertelement <4 x i32> undef, i32 %89, i32 3
+  br label %107
+
+; <label>:107:                                    ; preds = %107, %101
+  %108 = phi i64 [ 0, %101 ], [ %134, %107 ]
+  %109 = phi <4 x i32> [ %106, %101 ], [ %121, %107 ]
+  %110 = sub i64 %64, %108
+  %111 = add nsw i64 %110, -1
+  %112 = getelementptr inbounds [13 x i32], [13 x i32]* %6, i64 0, i64 %111
+  %113 = getelementptr inbounds i32, i32* %112, i64 -3
+  %114 = bitcast i32* %113 to <4 x i32>*
+  %115 = load <4 x i32>, <4 x i32>* %114, align 4
+  %116 = add nsw i64 %110, -3
+  %117 = getelementptr inbounds [13 x i32], [13 x i32]* %6, i64 0, i64 %116
+  %118 = getelementptr inbounds i32, i32* %117, i64 -3
+  %119 = bitcast i32* %118 to <4 x i32>*
+  %120 = load <4 x i32>, <4 x i32>* %119, align 4
+  %121 = shufflevector <4 x i32> %120, <4 x i32> undef, <4 x i32> <i32 3, i32 2, i32 1, i32 0>
+  %122 = shufflevector <4 x i32> %109, <4 x i32> %121, <4 x i32> <i32 3, i32 4, i32 5, i32 6>
+  %123 = sext <4 x i32> %122 to <4 x i64>
+  %124 = mul nsw <4 x i64> %105, %123
+  %125 = lshr <4 x i64> %124, <i64 15, i64 15, i64 15, i64 15>
+  %126 = add nuw nsw <4 x i64> %125, <i64 1, i64 1, i64 1, i64 1>
+  %127 = lshr <4 x i64> %126, <i64 1, i64 1, i64 1, i64 1>
+  %128 = trunc <4 x i64> %127 to <4 x i32>
+  %129 = add <4 x i32> %120, %115
+  %130 = shufflevector <4 x i32> %129, <4 x i32> undef, <4 x i32> <i32 3, i32 2, i32 1, i32 0>
+  %131 = sub <4 x i32> %130, %128
+  %132 = shufflevector <4 x i32> %131, <4 x i32> undef, <4 x i32> <i32 3, i32 2, i32 1, i32 0>
+  %133 = bitcast i32* %113 to <4 x i32>*
+  store <4 x i32> %132, <4 x i32>* %133, align 4
+  %134 = add i64 %108, 4
+  %135 = icmp eq i64 %134, %102
+  br i1 %135, label %136, label %107, !llvm.loop !2
+
+; <label>:136:                                    ; preds = %107
+  %137 = icmp eq i64 %69, %102
+  %138 = extractelement <4 x i32> %120, i32 0
+  br i1 %137, label %160, label %139
+
+; <label>:139:                                    ; preds = %136, %99
+  %140 = phi i64 [ %64, %99 ], [ %103, %136 ]
+  %141 = phi i32 [ %89, %99 ], [ %138, %136 ]
+  br label %142
+
+; <label>:142:                                    ; preds = %139, %142
+  %143 = phi i64 [ %145, %142 ], [ %140, %139 ]
+  %144 = phi i32 [ %150, %142 ], [ %141, %139 ]
+  %145 = add nsw i64 %143, -1
+  %146 = getelementptr inbounds [13 x i32], [13 x i32]* %6, i64 0, i64 %145
+  %147 = load i32, i32* %146, align 4
+  %148 = add nsw i64 %143, -3
+  %149 = getelementptr inbounds [13 x i32], [13 x i32]* %6, i64 0, i64 %148
+  %150 = load i32, i32* %149, align 4
+  %151 = sext i32 %144 to i64
+  %152 = mul nsw i64 %151, %74
+  %153 = lshr i64 %152, 15
+  %154 = add nuw nsw i64 %153, 1
+  %155 = lshr i64 %154, 1
+  %156 = trunc i64 %155 to i32
+  %157 = add i32 %150, %147
+  %158 = sub i32 %157, %156
+  store i32 %158, i32* %146, align 4
+  %159 = icmp sgt i64 %143, 3
+  br i1 %159, label %142, label %160, !llvm.loop !4
+
+; <label>:160:                                    ; preds = %142, %136, %86, %60
+  %161 = load i32, i32* %56, align 4
+  %162 = sub nsw i32 %161, %72
+  store i32 %162, i32* %56, align 4
+  %163 = icmp eq i64 %83, %59
+  br i1 %163, label %168, label %164
+
+; <label>:164:                                    ; preds = %160
+  %165 = load i32, i32* %75, align 4
+  %166 = load i32, i32* %84, align 4
+  %167 = add i64 %61, 1
+  br label %60
+
+; <label>:168:                                    ; preds = %160, %16, %50
+  %169 = phi i1 [ false, %16 ], [ false, %50 ], [ %57, %160 ]
+  %170 = phi i32* [ %18, %16 ], [ %55, %50 ], [ %55, %160 ]
+  %171 = phi i32 [ %17, %16 ], [ %54, %50 ], [ %54, %160 ]
+  %172 = getelementptr inbounds [13 x i32], [13 x i32]* %7, i64 0, i64 0
+  %173 = getelementptr inbounds [24 x i32], [24 x i32]* %5, i64 0, i64 1
+  store i32 65536, i32* %172, align 16
+  %174 = load i32, i32* %173, align 4
+  %175 = sub nsw i32 0, %174
+  %176 = getelementptr inbounds [13 x i32], [13 x i32]* %7, i64 0, i64 1
+  store i32 %175, i32* %176, align 4
+  br i1 %169, label %177, label %287
+
+; <label>:177:                                    ; preds = %168
+  %178 = zext i32 %171 to i64
+  br label %179
+
+; <label>:179:                                    ; preds = %283, %177
+  %180 = phi i64 [ %286, %283 ], [ 0, %177 ]
+  %181 = phi i32 [ %285, %283 ], [ %175, %177 ]
+  %182 = phi i32 [ %284, %283 ], [ 65536, %177 ]
+  %183 = phi i64 [ %202, %283 ], [ 1, %177 ]
+  %184 = sub i64 -2, %180
+  %185 = icmp sgt i64 %184, -4
+  %186 = select i1 %185, i64 %184, i64 -4
+  %187 = add i64 %180, 3
+  %188 = add i64 %186, %187
+  %189 = shl nuw nsw i64 %183, 1
+  %190 = getelementptr inbounds i32, i32* %173, i64 %189
+  %191 = load i32, i32* %190, align 4
+  %192 = shl i32 %182, 1
+  %193 = sext i32 %191 to i64
+  %194 = getelementptr inbounds [13 x i32], [13 x i32]* %7, i64 0, i64 %183
+  %195 = sext i32 %181 to i64
+  %196 = mul nsw i64 %193, %195
+  %197 = lshr i64 %196, 15
+  %198 = add nuw nsw i64 %197, 1
+  %199 = lshr i64 %198, 1
+  %200 = trunc i64 %199 to i32
+  %201 = sub nsw i32 %192, %200
+  %202 = add nuw nsw i64 %183, 1
+  %203 = getelementptr inbounds [13 x i32], [13 x i32]* %7, i64 0, i64 %202
+  store i32 %201, i32* %203, align 4
+  %204 = icmp ugt i64 %183, 1
+  br i1 %204, label %205, label %279
+
+; <label>:205:                                    ; preds = %179
+  %206 = add nsw i64 %183, -2
+  %207 = getelementptr inbounds [13 x i32], [13 x i32]* %7, i64 0, i64 %206
+  %208 = load i32, i32* %207, align 4
+  %209 = sext i32 %182 to i64
+  %210 = mul nsw i64 %209, %193
+  %211 = lshr i64 %210, 15
+  %212 = add nuw nsw i64 %211, 1
+  %213 = lshr i64 %212, 1
+  %214 = trunc i64 %213 to i32
+  %215 = add i32 %208, %181
+  %216 = sub i32 %215, %214
+  store i32 %216, i32* %194, align 4
+  %217 = icmp eq i64 %183, 2
+  br i1 %217, label %279, label %218
+
+; <label>:218:                                    ; preds = %205
+  %219 = icmp ult i64 %188, 4
+  br i1 %219, label %258, label %220
+
+; <label>:220:                                    ; preds = %218
+  %221 = and i64 %188, -4
+  %222 = sub i64 %183, %221
+  %223 = insertelement <4 x i64> undef, i64 %193, i32 0
+  %224 = shufflevector <4 x i64> %223, <4 x i64> undef, <4 x i32> zeroinitializer
+  %225 = insertelement <4 x i32> undef, i32 %208, i32 3
+  br label %226
+
+; <label>:226:                                    ; preds = %226, %220
+  %227 = phi i64 [ 0, %220 ], [ %253, %226 ]
+  %228 = phi <4 x i32> [ %225, %220 ], [ %240, %226 ]
+  %229 = sub i64 %183, %227
+  %230 = add nsw i64 %229, -1
+  %231 = getelementptr inbounds [13 x i32], [13 x i32]* %7, i64 0, i64 %230
+  %232 = getelementptr inbounds i32, i32* %231, i64 -3
+  %233 = bitcast i32* %232 to <4 x i32>*
+  %234 = load <4 x i32>, <4 x i32>* %233, align 4
+  %235 = add nsw i64 %229, -3
+  %236 = getelementptr inbounds [13 x i32], [13 x i32]* %7, i64 0, i64 %235
+  %237 = getelementptr inbounds i32, i32* %236, i64 -3
+  %238 = bitcast i32* %237 to <4 x i32>*
+  %239 = load <4 x i32>, <4 x i32>* %238, align 4
+  %240 = shufflevector <4 x i32> %239, <4 x i32> undef, <4 x i32> <i32 3, i32 2, i32 1, i32 0>
+  %241 = shufflevector <4 x i32> %228, <4 x i32> %240, <4 x i32> <i32 3, i32 4, i32 5, i32 6>
+  %242 = sext <4 x i32> %241 to <4 x i64>
+  %243 = mul nsw <4 x i64> %224, %242
+  %244 = lshr <4 x i64> %243, <i64 15, i64 15, i64 15, i64 15>
+  %245 = add nuw nsw <4 x i64> %244, <i64 1, i64 1, i64 1, i64 1>
+  %246 = lshr <4 x i64> %245, <i64 1, i64 1, i64 1, i64 1>
+  %247 = trunc <4 x i64> %246 to <4 x i32>
+  %248 = add <4 x i32> %239, %234
+  %249 = shufflevector <4 x i32> %248, <4 x i32> undef, <4 x i32> <i32 3, i32 2, i32 1, i32 0>
+  %250 = sub <4 x i32> %249, %247
+  %251 = shufflevector <4 x i32> %250, <4 x i32> undef, <4 x i32> <i32 3, i32 2, i32 1, i32 0>
+  %252 = bitcast i32* %232 to <4 x i32>*
+  store <4 x i32> %251, <4 x i32>* %252, align 4
+  %253 = add i64 %227, 4
+  %254 = icmp eq i64 %253, %221
+  br i1 %254, label %255, label %226, !llvm.loop !6
+
+; <label>:255:                                    ; preds = %226
+  %256 = icmp eq i64 %188, %221
+  %257 = extractelement <4 x i32> %239, i32 0
+  br i1 %256, label %279, label %258
+
+; <label>:258:                                    ; preds = %255, %218
+  %259 = phi i64 [ %183, %218 ], [ %222, %255 ]
+  %260 = phi i32 [ %208, %218 ], [ %257, %255 ]
+  br label %261
+
+; <label>:261:                                    ; preds = %258, %261
+  %262 = phi i64 [ %264, %261 ], [ %259, %258 ]
+  %263 = phi i32 [ %269, %261 ], [ %260, %258 ]
+  %264 = add nsw i64 %262, -1
+  %265 = getelementptr inbounds [13 x i32], [13 x i32]* %7, i64 0, i64 %264
+  %266 = load i32, i32* %265, align 4
+  %267 = add nsw i64 %262, -3
+  %268 = getelementptr inbounds [13 x i32], [13 x i32]* %7, i64 0, i64 %267
+  %269 = load i32, i32* %268, align 4
+  %270 = sext i32 %263 to i64
+  %271 = mul nsw i64 %270, %193
+  %272 = lshr i64 %271, 15
+  %273 = add nuw nsw i64 %272, 1
+  %274 = lshr i64 %273, 1
+  %275 = trunc i64 %274 to i32
+  %276 = add i32 %269, %266
+  %277 = sub i32 %276, %275
+  store i32 %277, i32* %265, align 4
+  %278 = icmp sgt i64 %262, 3
+  br i1 %278, label %261, label %279, !llvm.loop !7
+
+; <label>:279:                                    ; preds = %261, %255, %205, %179
+  %280 = load i32, i32* %176, align 4
+  %281 = sub nsw i32 %280, %191
+  store i32 %281, i32* %176, align 4
+  %282 = icmp eq i64 %202, %178
+  br i1 %282, label %287, label %283
+
+; <label>:283:                                    ; preds = %279
+  %284 = load i32, i32* %194, align 4
+  %285 = load i32, i32* %203, align 4
+  %286 = add i64 %180, 1
+  br label %179
+
+; <label>:287:                                    ; preds = %279, %168
+  %288 = icmp sgt i32 %2, 1
+  br i1 %288, label %289, label %314
+
+; <label>:289:                                    ; preds = %287
+  %290 = sext i32 %171 to i64
+  %291 = load i32, i32* %170, align 16
+  %292 = load i32, i32* %172, align 16
+  br label %293
+
+; <label>:293:                                    ; preds = %293, %289
+  %294 = phi i32 [ %292, %289 ], [ %302, %293 ]
+  %295 = phi i32 [ %291, %289 ], [ %299, %293 ]
+  %296 = phi i64 [ 0, %289 ], [ %297, %293 ]
+  %297 = add nuw nsw i64 %296, 1
+  %298 = getelementptr inbounds [13 x i32], [13 x i32]* %6, i64 0, i64 %297
+  %299 = load i32, i32* %298, align 4
+  %300 = add nsw i32 %295, %299
+  %301 = getelementptr inbounds [13 x i32], [13 x i32]* %7, i64 0, i64 %297
+  %302 = load i32, i32* %301, align 4
+  %303 = sub nsw i32 %302, %294
+  %304 = add i32 %303, %300
+  %305 = sub i32 0, %304
+  %306 = getelementptr inbounds [24 x i32], [24 x i32]* %8, i64 0, i64 %296
+  store i32 %305, i32* %306, align 4
+  %307 = sub nsw i32 %303, %300
+  %308 = trunc i64 %296 to i32
+  %309 = xor i32 %308, -1
+  %310 = add i32 %309, %2
+  %311 = sext i32 %310 to i64
+  %312 = getelementptr inbounds [24 x i32], [24 x i32]* %8, i64 0, i64 %311
+  store i32 %307, i32* %312, align 4
+  %313 = icmp slt i64 %297, %290
+  br i1 %313, label %293, label %314
+
+; <label>:314:                                    ; preds = %293, %287
+  %315 = getelementptr inbounds [24 x i32], [24 x i32]* %8, i64 0, i64 0
+  call void @silk_LPC_fit(i16* %0, i32* nonnull %315, i32 12, i32 17, i32 %2) #3
+  %316 = call i32 @silk_LPC_inverse_pred_gain_c(i16* %0, i32 %2) #3
+  %317 = icmp eq i32 %316, 0
+  br i1 %317, label %318, label %421
+
+; <label>:318:                                    ; preds = %314
+  %319 = zext i32 %2 to i64
+  %320 = and i64 %319, 4294967288
+  %321 = add nsw i64 %320, -8
+  %322 = lshr exact i64 %321, 3
+  %323 = add nuw nsw i64 %322, 1
+  %324 = icmp ult i32 %2, 8
+  %325 = and i64 %319, 4294967288
+  %326 = and i64 %323, 1
+  %327 = icmp eq i64 %321, 0
+  %328 = sub nsw i64 %323, %326
+  %329 = icmp eq i64 %326, 0
+  %330 = icmp eq i64 %325, %319
+  br label %331
+
+; <label>:331:                                    ; preds = %318, %415
+  %332 = phi i32 [ 0, %318 ], [ %416, %415 ]
+  %333 = shl i32 2, %332
+  %334 = sub nsw i32 65536, %333
+  call void @silk_bwexpander_32(i32* nonnull %315, i32 %2, i32 %334) #3
+  br i1 %15, label %335, label %415
+
+; <label>:335:                                    ; preds = %331
+  br i1 %324, label %402, label %336
+
+; <label>:336:                                    ; preds = %335
+  br i1 %327, label %380, label %337
+
+; <label>:337:                                    ; preds = %336, %337
+  %338 = phi i64 [ %377, %337 ], [ 0, %336 ]
+  %339 = phi i64 [ %378, %337 ], [ %328, %336 ]
+  %340 = getelementptr inbounds [24 x i32], [24 x i32]* %8, i64 0, i64 %338
+  %341 = bitcast i32* %340 to <4 x i32>*
+  %342 = load <4 x i32>, <4 x i32>* %341, align 16
+  %343 = getelementptr inbounds i32, i32* %340, i64 4
+  %344 = bitcast i32* %343 to <4 x i32>*
+  %345 = load <4 x i32>, <4 x i32>* %344, align 16
+  %346 = lshr <4 x i32> %342, <i32 4, i32 4, i32 4, i32 4>
+  %347 = lshr <4 x i32> %345, <i32 4, i32 4, i32 4, i32 4>
+  %348 = add nuw nsw <4 x i32> %346, <i32 1, i32 1, i32 1, i32 1>
+  %349 = add nuw nsw <4 x i32> %347, <i32 1, i32 1, i32 1, i32 1>
+  %350 = lshr <4 x i32> %348, <i32 1, i32 1, i32 1, i32 1>
+  %351 = lshr <4 x i32> %349, <i32 1, i32 1, i32 1, i32 1>
+  %352 = trunc <4 x i32> %350 to <4 x i16>
+  %353 = trunc <4 x i32> %351 to <4 x i16>
+  %354 = getelementptr inbounds i16, i16* %0, i64 %338
+  %355 = bitcast i16* %354 to <4 x i16>*
+  store <4 x i16> %352, <4 x i16>* %355, align 2
+  %356 = getelementptr inbounds i16, i16* %354, i64 4
+  %357 = bitcast i16* %356 to <4 x i16>*
+  store <4 x i16> %353, <4 x i16>* %357, align 2
+  %358 = or i64 %338, 8
+  %359 = getelementptr inbounds [24 x i32], [24 x i32]* %8, i64 0, i64 %358
+  %360 = bitcast i32* %359 to <4 x i32>*
+  %361 = load <4 x i32>, <4 x i32>* %360, align 16
+  %362 = getelementptr inbounds i32, i32* %359, i64 4
+  %363 = bitcast i32* %362 to <4 x i32>*
+  %364 = load <4 x i32>, <4 x i32>* %363, align 16
+  %365 = lshr <4 x i32> %361, <i32 4, i32 4, i32 4, i32 4>
+  %366 = lshr <4 x i32> %364, <i32 4, i32 4, i32 4, i32 4>
+  %367 = add nuw nsw <4 x i32> %365, <i32 1, i32 1, i32 1, i32 1>
+  %368 = add nuw nsw <4 x i32> %366, <i32 1, i32 1, i32 1, i32 1>
+  %369 = lshr <4 x i32> %367, <i32 1, i32 1, i32 1, i32 1>
+  %370 = lshr <4 x i32> %368, <i32 1, i32 1, i32 1, i32 1>
+  %371 = trunc <4 x i32> %369 to <4 x i16>
+  %372 = trunc <4 x i32> %370 to <4 x i16>
+  %373 = getelementptr inbounds i16, i16* %0, i64 %358
+  %374 = bitcast i16* %373 to <4 x i16>*
+  store <4 x i16> %371, <4 x i16>* %374, align 2
+  %375 = getelementptr inbounds i16, i16* %373, i64 4
+  %376 = bitcast i16* %375 to <4 x i16>*
+  store <4 x i16> %372, <4 x i16>* %376, align 2
+  %377 = add i64 %338, 16
+  %378 = add i64 %339, -2
+  %379 = icmp eq i64 %378, 0
+  br i1 %379, label %380, label %337, !llvm.loop !8
+
+; <label>:380:                                    ; preds = %337, %336
+  %381 = phi i64 [ 0, %336 ], [ %377, %337 ]
+  br i1 %329, label %401, label %382
+
+; <label>:382:                                    ; preds = %380
+  %383 = getelementptr inbounds [24 x i32], [24 x i32]* %8, i64 0, i64 %381
+  %384 = bitcast i32* %383 to <4 x i32>*
+  %385 = load <4 x i32>, <4 x i32>* %384, align 16
+  %386 = getelementptr inbounds i32, i32* %383, i64 4
+  %387 = bitcast i32* %386 to <4 x i32>*
+  %388 = load <4 x i32>, <4 x i32>* %387, align 16
+  %389 = lshr <4 x i32> %385, <i32 4, i32 4, i32 4, i32 4>
+  %390 = lshr <4 x i32> %388, <i32 4, i32 4, i32 4, i32 4>
+  %391 = add nuw nsw <4 x i32> %389, <i32 1, i32 1, i32 1, i32 1>
+  %392 = add nuw nsw <4 x i32> %390, <i32 1, i32 1, i32 1, i32 1>
+  %393 = lshr <4 x i32> %391, <i32 1, i32 1, i32 1, i32 1>
+  %394 = lshr <4 x i32> %392, <i32 1, i32 1, i32 1, i32 1>
+  %395 = trunc <4 x i32> %393 to <4 x i16>
+  %396 = trunc <4 x i32> %394 to <4 x i16>
+  %397 = getelementptr inbounds i16, i16* %0, i64 %381
+  %398 = bitcast i16* %397 to <4 x i16>*
+  store <4 x i16> %395, <4 x i16>* %398, align 2
+  %399 = getelementptr inbounds i16, i16* %397, i64 4
+  %400 = bitcast i16* %399 to <4 x i16>*
+  store <4 x i16> %396, <4 x i16>* %400, align 2
+  br label %401
+
+; <label>:401:                                    ; preds = %380, %382
+  br i1 %330, label %415, label %402
+
+; <label>:402:                                    ; preds = %401, %335
+  %403 = phi i64 [ 0, %335 ], [ %325, %401 ]
+  br label %404
+
+; <label>:404:                                    ; preds = %402, %404
+  %405 = phi i64 [ %413, %404 ], [ %403, %402 ]
+  %406 = getelementptr inbounds [24 x i32], [24 x i32]* %8, i64 0, i64 %405
+  %407 = load i32, i32* %406, align 4
+  %408 = lshr i32 %407, 4
+  %409 = add nuw nsw i32 %408, 1
+  %410 = lshr i32 %409, 1
+  %411 = trunc i32 %410 to i16
+  %412 = getelementptr inbounds i16, i16* %0, i64 %405
+  store i16 %411, i16* %412, align 2
+  %413 = add nuw nsw i64 %405, 1
+  %414 = icmp eq i64 %413, %319
+  br i1 %414, label %415, label %404, !llvm.loop !9
+
+; <label>:415:                                    ; preds = %404, %401, %331
+  %416 = add nuw nsw i32 %332, 1
+  %417 = call i32 @silk_LPC_inverse_pred_gain_c(i16* %0, i32 %2) #3
+  %418 = icmp eq i32 %417, 0
+  %419 = icmp ult i32 %416, 16
+  %420 = and i1 %419, %418
+  br i1 %420, label %331, label %421
+
+; <label>:421:                                    ; preds = %415, %314
+  call void @llvm.lifetime.end.p0i8(i64 96, i8* nonnull %12) #3
+  call void @llvm.lifetime.end.p0i8(i64 52, i8* nonnull %11) #3
+  call void @llvm.lifetime.end.p0i8(i64 52, i8* nonnull %10) #3
+  call void @llvm.lifetime.end.p0i8(i64 96, i8* nonnull %9) #3
+  ret void
+}
+
+; Function Attrs: argmemonly nounwind
+declare void @llvm.lifetime.start.p0i8(i64, i8* nocapture) #1
+
+declare void @silk_LPC_fit(i16*, i32*, i32, i32, i32) local_unnamed_addr #2
+
+declare i32 @silk_LPC_inverse_pred_gain_c(i16*, i32) local_unnamed_addr #2
+
+declare void @silk_bwexpander_32(i32*, i32, i32) local_unnamed_addr #2
+
+; Function Attrs: argmemonly nounwind
+declare void @llvm.lifetime.end.p0i8(i64, i8* nocapture) #1
+
+attributes #0 = { nounwind ssp uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="4" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { argmemonly nounwind }
+attributes #2 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="4" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { nounwind }
+
+!llvm.module.flags = !{!0, !1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{i32 7, !"PIC Level", i32 2}
+!2 = distinct !{!2, !3}
+!3 = !{!"llvm.loop.isvectorized", i32 1}
+!4 = distinct !{!4, !5, !3}
+!5 = !{!"llvm.loop.unroll.runtime.disable"}
+!6 = distinct !{!6, !3}
+!7 = distinct !{!7, !5, !3}
+!8 = distinct !{!8, !3}
+!9 = distinct !{!9, !5, !3}

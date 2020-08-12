@@ -1,0 +1,2 @@
+%foo_4 = icmp sgt i32 %foo_0, %foo_1 
+track-ops LocalReference (IntegerType {typeBits = 1}) (Name "foo_4")

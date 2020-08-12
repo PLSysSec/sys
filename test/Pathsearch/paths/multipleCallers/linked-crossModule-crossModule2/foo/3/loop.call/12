@@ -1,0 +1,8 @@
+%foo_12 = load  i32, i32* %foo_5, align 4 
+%foo_13 = load  i32, i32* %foo_7, align 4 
+%foo_14 = add  nsw i32 %foo_12, %foo_13 
+store  i32 %foo_14, i32* %foo_4, align 4 
+%foo_20 = load  i32, i32* %foo_4, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "foo_20")
+%multipleCrossModuleCaller_39 = bitcast i32 %foo_20 to i32 
+store  i32 %multipleCrossModuleCaller_39, i32* %multipleCrossModuleCaller_3, align 4 

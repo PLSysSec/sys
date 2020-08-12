@@ -1,0 +1,907 @@
+; ModuleID = '../../third_party/ffmpeg/libavcodec/imgconvert.c'
+source_filename = "../../third_party/ffmpeg/libavcodec/imgconvert.c"
+target datalayout = "e-m:e-i64:64-f80:128-n8:16:32:64-S128"
+target triple = "x86_64-pc-linux-gnu"
+
+module asm ".symver exp2f, exp2f@GLIBC_2.2.5"
+module asm ".symver expf, expf@GLIBC_2.2.5"
+module asm ".symver lgamma, lgamma@GLIBC_2.2.5"
+module asm ".symver lgammaf, lgammaf@GLIBC_2.2.5"
+module asm ".symver lgammal, lgammal@GLIBC_2.2.5"
+module asm ".symver log2f, log2f@GLIBC_2.2.5"
+module asm ".symver logf, logf@GLIBC_2.2.5"
+module asm ".symver powf, powf@GLIBC_2.2.5"
+module asm ".symver exp2f, exp2f@GLIBC_2.2.5"
+module asm ".symver expf, expf@GLIBC_2.2.5"
+module asm ".symver lgamma, lgamma@GLIBC_2.2.5"
+module asm ".symver lgammaf, lgammaf@GLIBC_2.2.5"
+module asm ".symver lgammal, lgammal@GLIBC_2.2.5"
+module asm ".symver log2f, log2f@GLIBC_2.2.5"
+module asm ".symver logf, logf@GLIBC_2.2.5"
+module asm ".symver powf, powf@GLIBC_2.2.5"
+module asm ".symver exp2f, exp2f@GLIBC_2.2.5"
+module asm ".symver expf, expf@GLIBC_2.2.5"
+module asm ".symver lgamma, lgamma@GLIBC_2.2.5"
+module asm ".symver lgammaf, lgammaf@GLIBC_2.2.5"
+module asm ".symver lgammal, lgammal@GLIBC_2.2.5"
+module asm ".symver log2f, log2f@GLIBC_2.2.5"
+module asm ".symver logf, logf@GLIBC_2.2.5"
+module asm ".symver powf, powf@GLIBC_2.2.5"
+
+%struct.AVPixFmtDescriptor = type { i8*, i8, i8, i8, i64, [4 x %struct.AVComponentDescriptor], i8* }
+%struct.AVComponentDescriptor = type { i32, i32, i32, i32, i32, i32, i32, i32 }
+%struct.AVPicture = type { [8 x i8*], [8 x i32] }
+
+@.str = private unnamed_addr constant [30 x i8] c"Assertion %s failed at %s:%d\0A\00", align 1
+@.str.1 = private unnamed_addr constant [5 x i8] c"desc\00", align 1
+@.str.2 = private unnamed_addr constant [49 x i8] c"../../third_party/ffmpeg/libavcodec/imgconvert.c\00", align 1
+
+; Function Attrs: nounwind ssp uwtable
+define hidden void @avcodec_get_chroma_sub_sample(i32, i32* nocapture, i32* nocapture) local_unnamed_addr #0 {
+  %4 = tail call %struct.AVPixFmtDescriptor* @av_pix_fmt_desc_get(i32 %0) #4
+  %5 = icmp eq %struct.AVPixFmtDescriptor* %4, null
+  br i1 %5, label %6, label %7
+
+; <label>:6:                                      ; preds = %3
+  tail call void (i8*, i32, i8*, ...) @av_log(i8* null, i32 0, i8* getelementptr inbounds ([30 x i8], [30 x i8]* @.str, i64 0, i64 0), i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.1, i64 0, i64 0), i8* getelementptr inbounds ([49 x i8], [49 x i8]* @.str.2, i64 0, i64 0), i32 41) #4
+  tail call void @abort() #5
+  unreachable
+
+; <label>:7:                                      ; preds = %3
+  %8 = getelementptr inbounds %struct.AVPixFmtDescriptor, %struct.AVPixFmtDescriptor* %4, i64 0, i32 2
+  %9 = load i8, i8* %8, align 1
+  %10 = zext i8 %9 to i32
+  store i32 %10, i32* %1, align 4
+  %11 = getelementptr inbounds %struct.AVPixFmtDescriptor, %struct.AVPixFmtDescriptor* %4, i64 0, i32 3
+  %12 = load i8, i8* %11, align 2
+  %13 = zext i8 %12 to i32
+  store i32 %13, i32* %2, align 4
+  ret void
+}
+
+; Function Attrs: argmemonly nounwind
+declare void @llvm.lifetime.start.p0i8(i64, i8* nocapture) #1
+
+declare %struct.AVPixFmtDescriptor* @av_pix_fmt_desc_get(i32) local_unnamed_addr #2
+
+declare void @av_log(i8*, i32, i8*, ...) local_unnamed_addr #2
+
+; Function Attrs: noreturn nounwind
+declare void @abort() local_unnamed_addr #3
+
+; Function Attrs: argmemonly nounwind
+declare void @llvm.lifetime.end.p0i8(i64, i8* nocapture) #1
+
+; Function Attrs: nounwind ssp uwtable
+define hidden i32 @avcodec_get_pix_fmt_loss(i32, i32, i32) local_unnamed_addr #0 {
+  %4 = tail call i32 @av_get_pix_fmt_loss(i32 %0, i32 %1, i32 %2) #4
+  ret i32 %4
+}
+
+declare i32 @av_get_pix_fmt_loss(i32, i32, i32) local_unnamed_addr #2
+
+; Function Attrs: nounwind ssp uwtable
+define hidden i32 @avcodec_find_best_pix_fmt_of_2(i32, i32, i32, i32, i32*) local_unnamed_addr #0 {
+  %6 = tail call i32 @av_find_best_pix_fmt_of_2(i32 %0, i32 %1, i32 %2, i32 %3, i32* %4) #4
+  ret i32 %6
+}
+
+declare i32 @av_find_best_pix_fmt_of_2(i32, i32, i32, i32, i32*) local_unnamed_addr #2
+
+; Function Attrs: nounwind ssp uwtable
+define hidden i32 @avcodec_find_best_pix_fmt2(i32, i32, i32, i32, i32*) local_unnamed_addr #0 {
+  %6 = tail call i32 @av_find_best_pix_fmt_of_2(i32 %0, i32 %1, i32 %2, i32 %3, i32* %4) #4
+  ret i32 %6
+}
+
+; Function Attrs: nounwind ssp uwtable
+define hidden i32 @avcodec_find_best_pix_fmt_of_list(i32* nocapture readonly, i32, i32, i32*) local_unnamed_addr #0 {
+  %5 = alloca i32, align 4
+  %6 = bitcast i32* %5 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 4, i8* nonnull %6) #4
+  %7 = load i32, i32* %0, align 4
+  %8 = icmp eq i32 %7, -1
+  %9 = icmp ne i32* %3, null
+  br i1 %8, label %23, label %10
+
+; <label>:10:                                     ; preds = %4, %16
+  %11 = phi i64 [ %19, %16 ], [ 0, %4 ]
+  %12 = phi i32 [ %21, %16 ], [ %7, %4 ]
+  %13 = phi i32 [ %18, %16 ], [ -1, %4 ]
+  br i1 %9, label %14, label %16
+
+; <label>:14:                                     ; preds = %10
+  %15 = load i32, i32* %3, align 4
+  br label %16
+
+; <label>:16:                                     ; preds = %10, %14
+  %17 = phi i32 [ %15, %14 ], [ 0, %10 ]
+  store i32 %17, i32* %5, align 4
+  %18 = call i32 @av_find_best_pix_fmt_of_2(i32 %13, i32 %12, i32 %1, i32 %2, i32* nonnull %5) #4
+  %19 = add nuw i64 %11, 1
+  %20 = getelementptr inbounds i32, i32* %0, i64 %19
+  %21 = load i32, i32* %20, align 4
+  %22 = icmp eq i32 %21, -1
+  br i1 %22, label %23, label %10
+
+; <label>:23:                                     ; preds = %16, %4
+  %24 = phi i32 [ -1, %4 ], [ %18, %16 ]
+  br i1 %9, label %25, label %27
+
+; <label>:25:                                     ; preds = %23
+  %26 = load i32, i32* %5, align 4
+  store i32 %26, i32* %3, align 4
+  br label %27
+
+; <label>:27:                                     ; preds = %25, %23
+  call void @llvm.lifetime.end.p0i8(i64 4, i8* nonnull %6) #4
+  ret i32 %24
+}
+
+; Function Attrs: nounwind ssp uwtable
+define hidden i32 @av_picture_crop(%struct.AVPicture* nocapture, %struct.AVPicture* nocapture readonly, i32, i32, i32) local_unnamed_addr #0 {
+  %6 = alloca [4 x i32], align 16
+  %7 = alloca [4 x i32], align 16
+  %8 = tail call %struct.AVPixFmtDescriptor* @av_pix_fmt_desc_get(i32 %2) #4
+  %9 = bitcast [4 x i32]* %7 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %9) #4
+  %10 = icmp ugt i32 %2, 190
+  br i1 %10, label %147, label %11
+
+; <label>:11:                                     ; preds = %5
+  %12 = getelementptr inbounds %struct.AVPixFmtDescriptor, %struct.AVPixFmtDescriptor* %8, i64 0, i32 3
+  %13 = load i8, i8* %12, align 2
+  %14 = zext i8 %13 to i32
+  %15 = getelementptr inbounds %struct.AVPixFmtDescriptor, %struct.AVPixFmtDescriptor* %8, i64 0, i32 2
+  %16 = load i8, i8* %15, align 1
+  %17 = zext i8 %16 to i32
+  %18 = getelementptr inbounds [4 x i32], [4 x i32]* %7, i64 0, i64 0
+  call void @av_image_fill_max_pixsteps(i32* nonnull %18, i32* null, %struct.AVPixFmtDescriptor* %8) #4
+  %19 = bitcast [4 x i32]* %6 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %19) #4
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 16 %19, i8 0, i64 16, i1 false) #4
+  %20 = getelementptr inbounds %struct.AVPixFmtDescriptor, %struct.AVPixFmtDescriptor* %8, i64 0, i32 4
+  %21 = load i64, i64* %20, align 8
+  %22 = and i64 %21, 48
+  %23 = icmp eq i64 %22, 16
+  br i1 %23, label %24, label %114
+
+; <label>:24:                                     ; preds = %11
+  %25 = getelementptr inbounds %struct.AVPixFmtDescriptor, %struct.AVPixFmtDescriptor* %8, i64 0, i32 1
+  %26 = load i8, i8* %25, align 8
+  %27 = icmp eq i8 %26, 0
+  br i1 %27, label %82, label %28
+
+; <label>:28:                                     ; preds = %24
+  %29 = zext i8 %26 to i64
+  %30 = add nsw i64 %29, -1
+  %31 = and i64 %29, 3
+  %32 = icmp ult i64 %30, 3
+  br i1 %32, label %60, label %33
+
+; <label>:33:                                     ; preds = %28
+  %34 = sub nsw i64 %29, %31
+  br label %35
+
+; <label>:35:                                     ; preds = %35, %33
+  %36 = phi i64 [ 0, %33 ], [ %57, %35 ]
+  %37 = phi i64 [ %34, %33 ], [ %58, %35 ]
+  %38 = getelementptr inbounds %struct.AVPixFmtDescriptor, %struct.AVPixFmtDescriptor* %8, i64 0, i32 5, i64 %36, i32 0
+  %39 = load i32, i32* %38, align 8
+  %40 = sext i32 %39 to i64
+  %41 = getelementptr inbounds [4 x i32], [4 x i32]* %6, i64 0, i64 %40
+  store i32 1, i32* %41, align 4
+  %42 = or i64 %36, 1
+  %43 = getelementptr inbounds %struct.AVPixFmtDescriptor, %struct.AVPixFmtDescriptor* %8, i64 0, i32 5, i64 %42, i32 0
+  %44 = load i32, i32* %43, align 8
+  %45 = sext i32 %44 to i64
+  %46 = getelementptr inbounds [4 x i32], [4 x i32]* %6, i64 0, i64 %45
+  store i32 1, i32* %46, align 4
+  %47 = or i64 %36, 2
+  %48 = getelementptr inbounds %struct.AVPixFmtDescriptor, %struct.AVPixFmtDescriptor* %8, i64 0, i32 5, i64 %47, i32 0
+  %49 = load i32, i32* %48, align 8
+  %50 = sext i32 %49 to i64
+  %51 = getelementptr inbounds [4 x i32], [4 x i32]* %6, i64 0, i64 %50
+  store i32 1, i32* %51, align 4
+  %52 = or i64 %36, 3
+  %53 = getelementptr inbounds %struct.AVPixFmtDescriptor, %struct.AVPixFmtDescriptor* %8, i64 0, i32 5, i64 %52, i32 0
+  %54 = load i32, i32* %53, align 8
+  %55 = sext i32 %54 to i64
+  %56 = getelementptr inbounds [4 x i32], [4 x i32]* %6, i64 0, i64 %55
+  store i32 1, i32* %56, align 4
+  %57 = add nuw nsw i64 %36, 4
+  %58 = add i64 %37, -4
+  %59 = icmp eq i64 %58, 0
+  br i1 %59, label %60, label %35
+
+; <label>:60:                                     ; preds = %35, %28
+  %61 = phi i64 [ 0, %28 ], [ %57, %35 ]
+  %62 = icmp eq i64 %31, 0
+  br i1 %62, label %73, label %63
+
+; <label>:63:                                     ; preds = %60, %63
+  %64 = phi i64 [ %70, %63 ], [ %61, %60 ]
+  %65 = phi i64 [ %71, %63 ], [ %31, %60 ]
+  %66 = getelementptr inbounds %struct.AVPixFmtDescriptor, %struct.AVPixFmtDescriptor* %8, i64 0, i32 5, i64 %64, i32 0
+  %67 = load i32, i32* %66, align 8
+  %68 = sext i32 %67 to i64
+  %69 = getelementptr inbounds [4 x i32], [4 x i32]* %6, i64 0, i64 %68
+  store i32 1, i32* %69, align 4
+  %70 = add nuw nsw i64 %64, 1
+  %71 = add i64 %65, -1
+  %72 = icmp eq i64 %71, 0
+  br i1 %72, label %73, label %63, !llvm.loop !2
+
+; <label>:73:                                     ; preds = %63, %60
+  br label %76
+
+; <label>:74:                                     ; preds = %76
+  %75 = icmp ult i64 %81, %29
+  br i1 %75, label %76, label %82
+
+; <label>:76:                                     ; preds = %73, %74
+  %77 = phi i64 [ %81, %74 ], [ 0, %73 ]
+  %78 = getelementptr inbounds [4 x i32], [4 x i32]* %6, i64 0, i64 %77
+  %79 = load i32, i32* %78, align 4
+  %80 = icmp eq i32 %79, 0
+  %81 = add nuw nsw i64 %77, 1
+  br i1 %80, label %114, label %74
+
+; <label>:82:                                     ; preds = %74, %24
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %19) #4
+  %83 = getelementptr inbounds %struct.AVPicture, %struct.AVPicture* %1, i64 0, i32 0, i64 0
+  %84 = load i8*, i8** %83, align 8
+  %85 = getelementptr inbounds %struct.AVPicture, %struct.AVPicture* %1, i64 0, i32 1, i64 0
+  %86 = load i32, i32* %85, align 8
+  %87 = mul nsw i32 %86, %3
+  %88 = sext i32 %87 to i64
+  %89 = getelementptr inbounds i8, i8* %84, i64 %88
+  %90 = sext i32 %4 to i64
+  %91 = getelementptr inbounds i8, i8* %89, i64 %90
+  %92 = getelementptr inbounds %struct.AVPicture, %struct.AVPicture* %0, i64 0, i32 0, i64 0
+  store i8* %91, i8** %92, align 8
+  %93 = getelementptr inbounds %struct.AVPicture, %struct.AVPicture* %1, i64 0, i32 0, i64 1
+  %94 = load i8*, i8** %93, align 8
+  %95 = ashr i32 %3, %14
+  %96 = getelementptr inbounds %struct.AVPicture, %struct.AVPicture* %1, i64 0, i32 1, i64 1
+  %97 = load i32, i32* %96, align 4
+  %98 = mul nsw i32 %97, %95
+  %99 = sext i32 %98 to i64
+  %100 = getelementptr inbounds i8, i8* %94, i64 %99
+  %101 = ashr i32 %4, %17
+  %102 = sext i32 %101 to i64
+  %103 = getelementptr inbounds i8, i8* %100, i64 %102
+  %104 = getelementptr inbounds %struct.AVPicture, %struct.AVPicture* %0, i64 0, i32 0, i64 1
+  store i8* %103, i8** %104, align 8
+  %105 = getelementptr inbounds %struct.AVPicture, %struct.AVPicture* %1, i64 0, i32 0, i64 2
+  %106 = load i8*, i8** %105, align 8
+  %107 = getelementptr inbounds %struct.AVPicture, %struct.AVPicture* %1, i64 0, i32 1, i64 2
+  %108 = load i32, i32* %107, align 8
+  %109 = mul nsw i32 %108, %95
+  %110 = sext i32 %109 to i64
+  %111 = getelementptr inbounds i8, i8* %106, i64 %110
+  %112 = getelementptr inbounds i8, i8* %111, i64 %102
+  %113 = getelementptr inbounds %struct.AVPicture, %struct.AVPicture* %0, i64 0, i32 0, i64 2
+  store i8* %112, i8** %113, align 8
+  br label %137
+
+; <label>:114:                                    ; preds = %76, %11
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %19) #4
+  %115 = shl nuw i32 1, %14
+  %116 = srem i32 %3, %115
+  %117 = icmp eq i32 %116, 0
+  br i1 %117, label %118, label %147
+
+; <label>:118:                                    ; preds = %114
+  %119 = shl nuw i32 1, %17
+  %120 = srem i32 %4, %119
+  %121 = icmp eq i32 %120, 0
+  br i1 %121, label %122, label %147
+
+; <label>:122:                                    ; preds = %118
+  %123 = getelementptr inbounds %struct.AVPicture, %struct.AVPicture* %1, i64 0, i32 0, i64 0
+  %124 = load i8*, i8** %123, align 8
+  %125 = getelementptr inbounds %struct.AVPicture, %struct.AVPicture* %1, i64 0, i32 1, i64 0
+  %126 = load i32, i32* %125, align 8
+  %127 = mul nsw i32 %126, %3
+  %128 = sext i32 %127 to i64
+  %129 = getelementptr inbounds i8, i8* %124, i64 %128
+  %130 = load i32, i32* %18, align 16
+  %131 = mul nsw i32 %130, %4
+  %132 = sext i32 %131 to i64
+  %133 = getelementptr inbounds i8, i8* %129, i64 %132
+  %134 = getelementptr inbounds %struct.AVPicture, %struct.AVPicture* %0, i64 0, i32 0, i64 0
+  store i8* %133, i8** %134, align 8
+  %135 = getelementptr inbounds %struct.AVPicture, %struct.AVPicture* %1, i64 0, i32 1, i64 1
+  %136 = getelementptr inbounds %struct.AVPicture, %struct.AVPicture* %1, i64 0, i32 1, i64 2
+  br label %137
+
+; <label>:137:                                    ; preds = %122, %82
+  %138 = phi i32* [ %136, %122 ], [ %107, %82 ]
+  %139 = phi i32* [ %135, %122 ], [ %96, %82 ]
+  %140 = phi i32* [ %125, %122 ], [ %85, %82 ]
+  %141 = load i32, i32* %140, align 8
+  %142 = getelementptr inbounds %struct.AVPicture, %struct.AVPicture* %0, i64 0, i32 1, i64 0
+  store i32 %141, i32* %142, align 8
+  %143 = load i32, i32* %139, align 4
+  %144 = getelementptr inbounds %struct.AVPicture, %struct.AVPicture* %0, i64 0, i32 1, i64 1
+  store i32 %143, i32* %144, align 4
+  %145 = load i32, i32* %138, align 8
+  %146 = getelementptr inbounds %struct.AVPicture, %struct.AVPicture* %0, i64 0, i32 1, i64 2
+  store i32 %145, i32* %146, align 8
+  br label %147
+
+; <label>:147:                                    ; preds = %114, %118, %5, %137
+  %148 = phi i32 [ 0, %137 ], [ -1, %5 ], [ -1, %118 ], [ -1, %114 ]
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %9) #4
+  ret i32 %148
+}
+
+declare void @av_image_fill_max_pixsteps(i32*, i32*, %struct.AVPixFmtDescriptor*) local_unnamed_addr #2
+
+; Function Attrs: nounwind ssp uwtable
+define hidden i32 @av_picture_pad(%struct.AVPicture* nocapture readonly, %struct.AVPicture* readonly, i32, i32, i32, i32, i32, i32, i32, i32* nocapture readonly) local_unnamed_addr #0 {
+  %11 = alloca [4 x i32], align 16
+  %12 = alloca [4 x i32], align 16
+  %13 = tail call %struct.AVPixFmtDescriptor* @av_pix_fmt_desc_get(i32 %4) #4
+  %14 = bitcast [4 x i32]* %12 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %14) #4
+  %15 = icmp ugt i32 %4, 190
+  br i1 %15, label %420, label %16
+
+; <label>:16:                                     ; preds = %10
+  %17 = bitcast [4 x i32]* %11 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %17) #4
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 16 %17, i8 0, i64 16, i1 false) #4
+  %18 = getelementptr inbounds %struct.AVPixFmtDescriptor, %struct.AVPixFmtDescriptor* %13, i64 0, i32 4
+  %19 = load i64, i64* %18, align 8
+  %20 = and i64 %19, 48
+  %21 = icmp eq i64 %20, 16
+  br i1 %21, label %22, label %97
+
+; <label>:22:                                     ; preds = %16
+  %23 = getelementptr inbounds %struct.AVPixFmtDescriptor, %struct.AVPixFmtDescriptor* %13, i64 0, i32 1
+  %24 = load i8, i8* %23, align 8
+  %25 = icmp eq i8 %24, 0
+  br i1 %25, label %80, label %26
+
+; <label>:26:                                     ; preds = %22
+  %27 = zext i8 %24 to i64
+  %28 = add nsw i64 %27, -1
+  %29 = and i64 %27, 3
+  %30 = icmp ult i64 %28, 3
+  br i1 %30, label %58, label %31
+
+; <label>:31:                                     ; preds = %26
+  %32 = sub nsw i64 %27, %29
+  br label %33
+
+; <label>:33:                                     ; preds = %33, %31
+  %34 = phi i64 [ 0, %31 ], [ %55, %33 ]
+  %35 = phi i64 [ %32, %31 ], [ %56, %33 ]
+  %36 = getelementptr inbounds %struct.AVPixFmtDescriptor, %struct.AVPixFmtDescriptor* %13, i64 0, i32 5, i64 %34, i32 0
+  %37 = load i32, i32* %36, align 8
+  %38 = sext i32 %37 to i64
+  %39 = getelementptr inbounds [4 x i32], [4 x i32]* %11, i64 0, i64 %38
+  store i32 1, i32* %39, align 4
+  %40 = or i64 %34, 1
+  %41 = getelementptr inbounds %struct.AVPixFmtDescriptor, %struct.AVPixFmtDescriptor* %13, i64 0, i32 5, i64 %40, i32 0
+  %42 = load i32, i32* %41, align 8
+  %43 = sext i32 %42 to i64
+  %44 = getelementptr inbounds [4 x i32], [4 x i32]* %11, i64 0, i64 %43
+  store i32 1, i32* %44, align 4
+  %45 = or i64 %34, 2
+  %46 = getelementptr inbounds %struct.AVPixFmtDescriptor, %struct.AVPixFmtDescriptor* %13, i64 0, i32 5, i64 %45, i32 0
+  %47 = load i32, i32* %46, align 8
+  %48 = sext i32 %47 to i64
+  %49 = getelementptr inbounds [4 x i32], [4 x i32]* %11, i64 0, i64 %48
+  store i32 1, i32* %49, align 4
+  %50 = or i64 %34, 3
+  %51 = getelementptr inbounds %struct.AVPixFmtDescriptor, %struct.AVPixFmtDescriptor* %13, i64 0, i32 5, i64 %50, i32 0
+  %52 = load i32, i32* %51, align 8
+  %53 = sext i32 %52 to i64
+  %54 = getelementptr inbounds [4 x i32], [4 x i32]* %11, i64 0, i64 %53
+  store i32 1, i32* %54, align 4
+  %55 = add nuw nsw i64 %34, 4
+  %56 = add i64 %35, -4
+  %57 = icmp eq i64 %56, 0
+  br i1 %57, label %58, label %33
+
+; <label>:58:                                     ; preds = %33, %26
+  %59 = phi i64 [ 0, %26 ], [ %55, %33 ]
+  %60 = icmp eq i64 %29, 0
+  br i1 %60, label %71, label %61
+
+; <label>:61:                                     ; preds = %58, %61
+  %62 = phi i64 [ %68, %61 ], [ %59, %58 ]
+  %63 = phi i64 [ %69, %61 ], [ %29, %58 ]
+  %64 = getelementptr inbounds %struct.AVPixFmtDescriptor, %struct.AVPixFmtDescriptor* %13, i64 0, i32 5, i64 %62, i32 0
+  %65 = load i32, i32* %64, align 8
+  %66 = sext i32 %65 to i64
+  %67 = getelementptr inbounds [4 x i32], [4 x i32]* %11, i64 0, i64 %66
+  store i32 1, i32* %67, align 4
+  %68 = add nuw nsw i64 %62, 1
+  %69 = add i64 %63, -1
+  %70 = icmp eq i64 %69, 0
+  br i1 %70, label %71, label %61, !llvm.loop !4
+
+; <label>:71:                                     ; preds = %61, %58
+  br label %74
+
+; <label>:72:                                     ; preds = %74
+  %73 = icmp ult i64 %79, %27
+  br i1 %73, label %74, label %80
+
+; <label>:74:                                     ; preds = %71, %72
+  %75 = phi i64 [ %79, %72 ], [ 0, %71 ]
+  %76 = getelementptr inbounds [4 x i32], [4 x i32]* %11, i64 0, i64 %75
+  %77 = load i32, i32* %76, align 4
+  %78 = icmp eq i32 %77, 0
+  %79 = add nuw nsw i64 %75, 1
+  br i1 %78, label %97, label %72
+
+; <label>:80:                                     ; preds = %72, %22
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %17) #4
+  %81 = or i32 %7, %5
+  %82 = icmp eq i32 %81, 0
+  %83 = getelementptr inbounds %struct.AVPixFmtDescriptor, %struct.AVPixFmtDescriptor* %13, i64 0, i32 2
+  %84 = getelementptr inbounds %struct.AVPixFmtDescriptor, %struct.AVPixFmtDescriptor* %13, i64 0, i32 3
+  %85 = or i32 %8, %7
+  %86 = icmp eq i32 %85, 0
+  %87 = icmp eq %struct.AVPicture* %1, null
+  %88 = add nsw i32 %6, %5
+  %89 = xor i32 %88, -1
+  %90 = add i32 %89, %2
+  %91 = or i32 %8, %6
+  %92 = icmp eq i32 %91, 0
+  %93 = sub i32 %3, %7
+  %94 = sub i32 %93, %8
+  %95 = add nsw i32 %8, %7
+  %96 = sub nsw i32 %2, %6
+  br label %207
+
+; <label>:97:                                     ; preds = %74, %16
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %17) #4
+  %98 = icmp eq %struct.AVPicture* %1, null
+  br i1 %98, label %99, label %420
+
+; <label>:99:                                     ; preds = %97
+  %100 = getelementptr inbounds [4 x i32], [4 x i32]* %12, i64 0, i64 0
+  call void @av_image_fill_max_pixsteps(i32* nonnull %100, i32* null, %struct.AVPixFmtDescriptor* %13) #4
+  %101 = or i32 %7, %5
+  %102 = icmp eq i32 %101, 0
+  br i1 %102, label %115, label %103
+
+; <label>:103:                                    ; preds = %99
+  %104 = getelementptr inbounds %struct.AVPicture, %struct.AVPicture* %0, i64 0, i32 0, i64 0
+  %105 = load i8*, i8** %104, align 8
+  %106 = load i32, i32* %9, align 4
+  %107 = trunc i32 %106 to i8
+  %108 = getelementptr inbounds %struct.AVPicture, %struct.AVPicture* %0, i64 0, i32 1, i64 0
+  %109 = load i32, i32* %108, align 8
+  %110 = mul nsw i32 %109, %5
+  %111 = load i32, i32* %100, align 16
+  %112 = mul nsw i32 %111, %7
+  %113 = add nsw i32 %112, %110
+  %114 = sext i32 %113 to i64
+  call void @llvm.memset.p0i8.i64(i8* align 1 %105, i8 %107, i64 %114, i1 false)
+  br label %115
+
+; <label>:115:                                    ; preds = %99, %103
+  %116 = or i32 %8, %7
+  %117 = icmp eq i32 %116, 0
+  br i1 %117, label %185, label %118
+
+; <label>:118:                                    ; preds = %115
+  %119 = getelementptr inbounds %struct.AVPicture, %struct.AVPicture* %0, i64 0, i32 1, i64 0
+  %120 = load i32, i32* %119, align 8
+  %121 = add nsw i32 %6, %5
+  %122 = xor i32 %121, -1
+  %123 = add i32 %122, %2
+  %124 = icmp sgt i32 %123, 0
+  br i1 %124, label %125, label %185
+
+; <label>:125:                                    ; preds = %118
+  %126 = getelementptr inbounds %struct.AVPicture, %struct.AVPicture* %0, i64 0, i32 0, i64 0
+  %127 = load i8*, i8** %126, align 8
+  %128 = mul nsw i32 %120, %5
+  %129 = sext i32 %128 to i64
+  %130 = getelementptr inbounds i8, i8* %127, i64 %129
+  %131 = load i32, i32* %100, align 16
+  %132 = mul nsw i32 %131, %8
+  %133 = sub nsw i32 %120, %132
+  %134 = sext i32 %133 to i64
+  %135 = getelementptr inbounds i8, i8* %130, i64 %134
+  %136 = add nsw i32 %8, %7
+  %137 = load i32, i32* %9, align 4
+  %138 = trunc i32 %137 to i8
+  %139 = mul nsw i32 %131, %136
+  %140 = sext i32 %139 to i64
+  call void @llvm.memset.p0i8.i64(i8* align 1 %135, i8 %138, i64 %140, i1 false)
+  %141 = icmp eq i32 %123, 1
+  br i1 %141, label %185, label %142
+
+; <label>:142:                                    ; preds = %125
+  %143 = add i32 %2, -2
+  %144 = sub i32 %143, %6
+  %145 = sub i32 %144, %5
+  %146 = add i32 %2, -3
+  %147 = sub i32 %146, %6
+  %148 = and i32 %145, 1
+  %149 = icmp eq i32 %147, %5
+  br i1 %149, label %173, label %150
+
+; <label>:150:                                    ; preds = %142
+  %151 = sub i32 %145, %148
+  br label %152
+
+; <label>:152:                                    ; preds = %152, %150
+  %153 = phi i8* [ %135, %150 ], [ %165, %152 ]
+  %154 = phi i32 [ %151, %150 ], [ %171, %152 ]
+  %155 = load i32, i32* %119, align 8
+  %156 = sext i32 %155 to i64
+  %157 = getelementptr inbounds i8, i8* %153, i64 %156
+  %158 = load i32, i32* %100, align 16
+  %159 = load i32, i32* %9, align 4
+  %160 = trunc i32 %159 to i8
+  %161 = mul nsw i32 %158, %136
+  %162 = sext i32 %161 to i64
+  call void @llvm.memset.p0i8.i64(i8* align 1 %157, i8 %160, i64 %162, i1 false)
+  %163 = load i32, i32* %119, align 8
+  %164 = sext i32 %163 to i64
+  %165 = getelementptr inbounds i8, i8* %157, i64 %164
+  %166 = load i32, i32* %100, align 16
+  %167 = load i32, i32* %9, align 4
+  %168 = trunc i32 %167 to i8
+  %169 = mul nsw i32 %166, %136
+  %170 = sext i32 %169 to i64
+  call void @llvm.memset.p0i8.i64(i8* align 1 %165, i8 %168, i64 %170, i1 false)
+  %171 = add i32 %154, -2
+  %172 = icmp eq i32 %171, 0
+  br i1 %172, label %173, label %152
+
+; <label>:173:                                    ; preds = %152, %142
+  %174 = phi i8* [ %135, %142 ], [ %165, %152 ]
+  %175 = icmp eq i32 %148, 0
+  br i1 %175, label %185, label %176
+
+; <label>:176:                                    ; preds = %173
+  %177 = load i32, i32* %119, align 8
+  %178 = sext i32 %177 to i64
+  %179 = getelementptr inbounds i8, i8* %174, i64 %178
+  %180 = load i32, i32* %100, align 16
+  %181 = load i32, i32* %9, align 4
+  %182 = trunc i32 %181 to i8
+  %183 = mul nsw i32 %180, %136
+  %184 = sext i32 %183 to i64
+  call void @llvm.memset.p0i8.i64(i8* align 1 %179, i8 %182, i64 %184, i1 false)
+  br label %185
+
+; <label>:185:                                    ; preds = %176, %173, %125, %118, %115
+  %186 = or i32 %8, %6
+  %187 = icmp eq i32 %186, 0
+  br i1 %187, label %420, label %188
+
+; <label>:188:                                    ; preds = %185
+  %189 = getelementptr inbounds %struct.AVPicture, %struct.AVPicture* %0, i64 0, i32 0, i64 0
+  %190 = load i8*, i8** %189, align 8
+  %191 = getelementptr inbounds %struct.AVPicture, %struct.AVPicture* %0, i64 0, i32 1, i64 0
+  %192 = load i32, i32* %191, align 8
+  %193 = sub nsw i32 %2, %6
+  %194 = mul nsw i32 %192, %193
+  %195 = sext i32 %194 to i64
+  %196 = getelementptr inbounds i8, i8* %190, i64 %195
+  %197 = load i32, i32* %100, align 16
+  %198 = mul nsw i32 %197, %8
+  %199 = sext i32 %198 to i64
+  %200 = sub nsw i64 0, %199
+  %201 = getelementptr inbounds i8, i8* %196, i64 %200
+  %202 = load i32, i32* %9, align 4
+  %203 = trunc i32 %202 to i8
+  %204 = mul nsw i32 %192, %6
+  %205 = add nsw i32 %198, %204
+  %206 = sext i32 %205 to i64
+  call void @llvm.memset.p0i8.i64(i8* align 1 %201, i8 %203, i64 %206, i1 false)
+  br label %420
+
+; <label>:207:                                    ; preds = %417, %80
+  %208 = phi i64 [ 0, %80 ], [ %418, %417 ]
+  %209 = icmp eq i64 %208, 0
+  br i1 %209, label %215, label %210
+
+; <label>:210:                                    ; preds = %207
+  %211 = load i8, i8* %83, align 1
+  %212 = zext i8 %211 to i32
+  %213 = load i8, i8* %84, align 2
+  %214 = zext i8 %213 to i32
+  br label %215
+
+; <label>:215:                                    ; preds = %207, %210
+  %216 = phi i32 [ %212, %210 ], [ 0, %207 ]
+  %217 = phi i32 [ %214, %210 ], [ 0, %207 ]
+  br i1 %82, label %231, label %218
+
+; <label>:218:                                    ; preds = %215
+  %219 = getelementptr inbounds %struct.AVPicture, %struct.AVPicture* %0, i64 0, i32 0, i64 %208
+  %220 = load i8*, i8** %219, align 8
+  %221 = getelementptr inbounds i32, i32* %9, i64 %208
+  %222 = load i32, i32* %221, align 4
+  %223 = trunc i32 %222 to i8
+  %224 = getelementptr inbounds %struct.AVPicture, %struct.AVPicture* %0, i64 0, i32 1, i64 %208
+  %225 = load i32, i32* %224, align 4
+  %226 = ashr i32 %5, %217
+  %227 = mul nsw i32 %225, %226
+  %228 = ashr i32 %7, %216
+  %229 = add nsw i32 %227, %228
+  %230 = sext i32 %229 to i64
+  tail call void @llvm.memset.p0i8.i64(i8* align 1 %220, i8 %223, i64 %230, i1 false)
+  br label %231
+
+; <label>:231:                                    ; preds = %215, %218
+  br i1 %86, label %294, label %232
+
+; <label>:232:                                    ; preds = %231
+  %233 = getelementptr inbounds %struct.AVPicture, %struct.AVPicture* %0, i64 0, i32 1, i64 %208
+  %234 = load i32, i32* %233, align 4
+  %235 = ashr i32 %90, %217
+  %236 = icmp sgt i32 %235, 0
+  br i1 %236, label %237, label %294
+
+; <label>:237:                                    ; preds = %232
+  %238 = getelementptr inbounds %struct.AVPicture, %struct.AVPicture* %0, i64 0, i32 0, i64 %208
+  %239 = load i8*, i8** %238, align 8
+  %240 = ashr i32 %5, %217
+  %241 = mul nsw i32 %234, %240
+  %242 = sext i32 %241 to i64
+  %243 = getelementptr inbounds i8, i8* %239, i64 %242
+  %244 = ashr i32 %8, %216
+  %245 = sub nsw i32 %234, %244
+  %246 = sext i32 %245 to i64
+  %247 = getelementptr inbounds i8, i8* %243, i64 %246
+  %248 = getelementptr inbounds i32, i32* %9, i64 %208
+  %249 = ashr i32 %95, %216
+  %250 = sext i32 %249 to i64
+  %251 = add i32 %235, -1
+  %252 = and i32 %235, 3
+  %253 = icmp ult i32 %251, 3
+  br i1 %253, label %281, label %254
+
+; <label>:254:                                    ; preds = %237
+  %255 = sub i32 %235, %252
+  br label %256
+
+; <label>:256:                                    ; preds = %256, %254
+  %257 = phi i8* [ %247, %254 ], [ %278, %256 ]
+  %258 = phi i32 [ %255, %254 ], [ %279, %256 ]
+  %259 = load i32, i32* %248, align 4
+  %260 = trunc i32 %259 to i8
+  tail call void @llvm.memset.p0i8.i64(i8* align 1 %257, i8 %260, i64 %250, i1 false)
+  %261 = load i32, i32* %233, align 4
+  %262 = sext i32 %261 to i64
+  %263 = getelementptr inbounds i8, i8* %257, i64 %262
+  %264 = load i32, i32* %248, align 4
+  %265 = trunc i32 %264 to i8
+  tail call void @llvm.memset.p0i8.i64(i8* align 1 %263, i8 %265, i64 %250, i1 false)
+  %266 = load i32, i32* %233, align 4
+  %267 = sext i32 %266 to i64
+  %268 = getelementptr inbounds i8, i8* %263, i64 %267
+  %269 = load i32, i32* %248, align 4
+  %270 = trunc i32 %269 to i8
+  tail call void @llvm.memset.p0i8.i64(i8* align 1 %268, i8 %270, i64 %250, i1 false)
+  %271 = load i32, i32* %233, align 4
+  %272 = sext i32 %271 to i64
+  %273 = getelementptr inbounds i8, i8* %268, i64 %272
+  %274 = load i32, i32* %248, align 4
+  %275 = trunc i32 %274 to i8
+  tail call void @llvm.memset.p0i8.i64(i8* align 1 %273, i8 %275, i64 %250, i1 false)
+  %276 = load i32, i32* %233, align 4
+  %277 = sext i32 %276 to i64
+  %278 = getelementptr inbounds i8, i8* %273, i64 %277
+  %279 = add i32 %258, -4
+  %280 = icmp eq i32 %279, 0
+  br i1 %280, label %281, label %256
+
+; <label>:281:                                    ; preds = %256, %237
+  %282 = phi i8* [ %247, %237 ], [ %278, %256 ]
+  %283 = icmp eq i32 %252, 0
+  br i1 %283, label %294, label %284
+
+; <label>:284:                                    ; preds = %281, %284
+  %285 = phi i8* [ %291, %284 ], [ %282, %281 ]
+  %286 = phi i32 [ %292, %284 ], [ %252, %281 ]
+  %287 = load i32, i32* %248, align 4
+  %288 = trunc i32 %287 to i8
+  tail call void @llvm.memset.p0i8.i64(i8* align 1 %285, i8 %288, i64 %250, i1 false)
+  %289 = load i32, i32* %233, align 4
+  %290 = sext i32 %289 to i64
+  %291 = getelementptr inbounds i8, i8* %285, i64 %290
+  %292 = add i32 %286, -1
+  %293 = icmp eq i32 %292, 0
+  br i1 %293, label %294, label %284, !llvm.loop !5
+
+; <label>:294:                                    ; preds = %281, %284, %232, %231
+  br i1 %87, label %396, label %295
+
+; <label>:295:                                    ; preds = %294
+  %296 = getelementptr inbounds %struct.AVPicture, %struct.AVPicture* %1, i64 0, i32 0, i64 %208
+  %297 = load i8*, i8** %296, align 8
+  %298 = getelementptr inbounds %struct.AVPicture, %struct.AVPicture* %0, i64 0, i32 0, i64 %208
+  %299 = load i8*, i8** %298, align 8
+  %300 = getelementptr inbounds %struct.AVPicture, %struct.AVPicture* %0, i64 0, i32 1, i64 %208
+  %301 = load i32, i32* %300, align 4
+  %302 = ashr i32 %5, %217
+  %303 = mul nsw i32 %301, %302
+  %304 = sext i32 %303 to i64
+  %305 = getelementptr inbounds i8, i8* %299, i64 %304
+  %306 = ashr i32 %7, %216
+  %307 = sext i32 %306 to i64
+  %308 = getelementptr inbounds i8, i8* %305, i64 %307
+  %309 = ashr i32 %94, %216
+  %310 = sext i32 %309 to i64
+  tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 1 %308, i8* align 1 %297, i64 %310, i1 false)
+  %311 = getelementptr inbounds %struct.AVPicture, %struct.AVPicture* %1, i64 0, i32 1, i64 %208
+  %312 = load i32, i32* %300, align 4
+  %313 = ashr i32 %90, %217
+  %314 = icmp sgt i32 %313, 0
+  br i1 %314, label %315, label %396
+
+; <label>:315:                                    ; preds = %295
+  %316 = load i8*, i8** %298, align 8
+  %317 = mul nsw i32 %312, %302
+  %318 = sext i32 %317 to i64
+  %319 = getelementptr inbounds i8, i8* %316, i64 %318
+  %320 = ashr i32 %8, %216
+  %321 = sub nsw i32 %312, %320
+  %322 = sext i32 %321 to i64
+  %323 = getelementptr inbounds i8, i8* %319, i64 %322
+  %324 = load i32, i32* %311, align 4
+  %325 = sext i32 %324 to i64
+  %326 = getelementptr inbounds i8, i8* %297, i64 %325
+  %327 = getelementptr inbounds i32, i32* %9, i64 %208
+  %328 = ashr i32 %95, %216
+  %329 = sext i32 %328 to i64
+  %330 = add i32 %313, -1
+  %331 = and i32 %313, 3
+  %332 = icmp ult i32 %330, 3
+  br i1 %332, label %377, label %333
+
+; <label>:333:                                    ; preds = %315
+  %334 = sub i32 %313, %331
+  br label %335
+
+; <label>:335:                                    ; preds = %335, %333
+  %336 = phi i8* [ %326, %333 ], [ %371, %335 ]
+  %337 = phi i8* [ %323, %333 ], [ %374, %335 ]
+  %338 = phi i32 [ %334, %333 ], [ %375, %335 ]
+  %339 = load i32, i32* %327, align 4
+  %340 = trunc i32 %339 to i8
+  tail call void @llvm.memset.p0i8.i64(i8* align 1 %337, i8 %340, i64 %329, i1 false)
+  %341 = getelementptr inbounds i8, i8* %337, i64 %329
+  tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 1 %341, i8* align 1 %336, i64 %310, i1 false)
+  %342 = load i32, i32* %311, align 4
+  %343 = sext i32 %342 to i64
+  %344 = getelementptr inbounds i8, i8* %336, i64 %343
+  %345 = load i32, i32* %300, align 4
+  %346 = sext i32 %345 to i64
+  %347 = getelementptr inbounds i8, i8* %337, i64 %346
+  %348 = load i32, i32* %327, align 4
+  %349 = trunc i32 %348 to i8
+  tail call void @llvm.memset.p0i8.i64(i8* align 1 %347, i8 %349, i64 %329, i1 false)
+  %350 = getelementptr inbounds i8, i8* %347, i64 %329
+  tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 1 %350, i8* align 1 %344, i64 %310, i1 false)
+  %351 = load i32, i32* %311, align 4
+  %352 = sext i32 %351 to i64
+  %353 = getelementptr inbounds i8, i8* %344, i64 %352
+  %354 = load i32, i32* %300, align 4
+  %355 = sext i32 %354 to i64
+  %356 = getelementptr inbounds i8, i8* %347, i64 %355
+  %357 = load i32, i32* %327, align 4
+  %358 = trunc i32 %357 to i8
+  tail call void @llvm.memset.p0i8.i64(i8* align 1 %356, i8 %358, i64 %329, i1 false)
+  %359 = getelementptr inbounds i8, i8* %356, i64 %329
+  tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 1 %359, i8* align 1 %353, i64 %310, i1 false)
+  %360 = load i32, i32* %311, align 4
+  %361 = sext i32 %360 to i64
+  %362 = getelementptr inbounds i8, i8* %353, i64 %361
+  %363 = load i32, i32* %300, align 4
+  %364 = sext i32 %363 to i64
+  %365 = getelementptr inbounds i8, i8* %356, i64 %364
+  %366 = load i32, i32* %327, align 4
+  %367 = trunc i32 %366 to i8
+  tail call void @llvm.memset.p0i8.i64(i8* align 1 %365, i8 %367, i64 %329, i1 false)
+  %368 = getelementptr inbounds i8, i8* %365, i64 %329
+  tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 1 %368, i8* align 1 %362, i64 %310, i1 false)
+  %369 = load i32, i32* %311, align 4
+  %370 = sext i32 %369 to i64
+  %371 = getelementptr inbounds i8, i8* %362, i64 %370
+  %372 = load i32, i32* %300, align 4
+  %373 = sext i32 %372 to i64
+  %374 = getelementptr inbounds i8, i8* %365, i64 %373
+  %375 = add i32 %338, -4
+  %376 = icmp eq i32 %375, 0
+  br i1 %376, label %377, label %335
+
+; <label>:377:                                    ; preds = %335, %315
+  %378 = phi i8* [ %326, %315 ], [ %371, %335 ]
+  %379 = phi i8* [ %323, %315 ], [ %374, %335 ]
+  %380 = icmp eq i32 %331, 0
+  br i1 %380, label %396, label %381
+
+; <label>:381:                                    ; preds = %377, %381
+  %382 = phi i8* [ %390, %381 ], [ %378, %377 ]
+  %383 = phi i8* [ %393, %381 ], [ %379, %377 ]
+  %384 = phi i32 [ %394, %381 ], [ %331, %377 ]
+  %385 = load i32, i32* %327, align 4
+  %386 = trunc i32 %385 to i8
+  tail call void @llvm.memset.p0i8.i64(i8* align 1 %383, i8 %386, i64 %329, i1 false)
+  %387 = getelementptr inbounds i8, i8* %383, i64 %329
+  tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 1 %387, i8* align 1 %382, i64 %310, i1 false)
+  %388 = load i32, i32* %311, align 4
+  %389 = sext i32 %388 to i64
+  %390 = getelementptr inbounds i8, i8* %382, i64 %389
+  %391 = load i32, i32* %300, align 4
+  %392 = sext i32 %391 to i64
+  %393 = getelementptr inbounds i8, i8* %383, i64 %392
+  %394 = add i32 %384, -1
+  %395 = icmp eq i32 %394, 0
+  br i1 %395, label %396, label %381, !llvm.loop !6
+
+; <label>:396:                                    ; preds = %377, %381, %295, %294
+  br i1 %92, label %417, label %397
+
+; <label>:397:                                    ; preds = %396
+  %398 = getelementptr inbounds %struct.AVPicture, %struct.AVPicture* %0, i64 0, i32 0, i64 %208
+  %399 = load i8*, i8** %398, align 8
+  %400 = getelementptr inbounds %struct.AVPicture, %struct.AVPicture* %0, i64 0, i32 1, i64 %208
+  %401 = load i32, i32* %400, align 4
+  %402 = ashr i32 %96, %217
+  %403 = mul nsw i32 %401, %402
+  %404 = sext i32 %403 to i64
+  %405 = getelementptr inbounds i8, i8* %399, i64 %404
+  %406 = ashr i32 %8, %216
+  %407 = sext i32 %406 to i64
+  %408 = sub nsw i64 0, %407
+  %409 = getelementptr inbounds i8, i8* %405, i64 %408
+  %410 = getelementptr inbounds i32, i32* %9, i64 %208
+  %411 = load i32, i32* %410, align 4
+  %412 = trunc i32 %411 to i8
+  %413 = ashr i32 %6, %217
+  %414 = mul nsw i32 %401, %413
+  %415 = add nsw i32 %414, %406
+  %416 = sext i32 %415 to i64
+  tail call void @llvm.memset.p0i8.i64(i8* align 1 %409, i8 %412, i64 %416, i1 false)
+  br label %417
+
+; <label>:417:                                    ; preds = %396, %397
+  %418 = add nuw nsw i64 %208, 1
+  %419 = icmp eq i64 %418, 3
+  br i1 %419, label %420, label %207
+
+; <label>:420:                                    ; preds = %417, %188, %185, %97, %10
+  %421 = phi i32 [ -1, %10 ], [ -1, %97 ], [ 0, %185 ], [ 0, %188 ], [ 0, %417 ]
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %14) #4
+  ret i32 %421
+}
+
+; Function Attrs: argmemonly nounwind
+declare void @llvm.memset.p0i8.i64(i8* nocapture writeonly, i8, i64, i1) #1
+
+; Function Attrs: argmemonly nounwind
+declare void @llvm.memcpy.p0i8.p0i8.i64(i8* nocapture writeonly, i8* nocapture readonly, i64, i1) #1
+
+attributes #0 = { nounwind ssp uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="true" "no-trapping-math"="false" "stack-protector-buffer-size"="4" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { argmemonly nounwind }
+attributes #2 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="true" "no-trapping-math"="false" "stack-protector-buffer-size"="4" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { noreturn nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="true" "no-trapping-math"="false" "stack-protector-buffer-size"="4" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { nounwind }
+attributes #5 = { noreturn nounwind }
+
+!llvm.module.flags = !{!0, !1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{i32 7, !"PIC Level", i32 2}
+!2 = distinct !{!2, !3}
+!3 = !{!"llvm.loop.unroll.disable"}
+!4 = distinct !{!4, !3}
+!5 = distinct !{!5, !3}
+!6 = distinct !{!6, !3}

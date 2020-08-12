@@ -1,0 +1,3 @@
+%simple_12 = load  i32, i32* %simple_4, align 4 
+%simple_13 =  call ccc  i32  @simple(i32  %simple_12)  
+store  i32 %simple_13, i32* %simple_2, align 4 

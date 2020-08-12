@@ -1,0 +1,10 @@
+%mutRecursiveA_2 = alloca i32, align 4 
+%mutRecursiveA_3 = alloca i32, align 4 
+store  i32 %mutRecursiveA_0, i32* %mutRecursiveA_3, align 4 
+%mutRecursiveA_4 = load  i32, i32* %mutRecursiveA_3, align 4 
+%mutRecursiveA_5 = icmp sgt i32 %mutRecursiveA_4, 100 
+path-eq %mutRecursiveA_5 = bitcast i1 1 to i1 
+%mutRecursiveA_7 = load  i32, i32* %mutRecursiveA_3, align 4 
+store  i32 %mutRecursiveA_7, i32* %mutRecursiveA_2, align 4 
+%mutRecursiveA_13 = load  i32, i32* %mutRecursiveA_2, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "mutRecursiveA_13")

@@ -1,0 +1,91 @@
+%callercaller_3 = alloca i32, align 4 
+%callercaller_4 = alloca i32, align 4 
+%callercaller_5 = alloca i32, align 4 
+store  i32 %callercaller_0, i32* %callercaller_4, align 4 
+store  i32 %callercaller_1, i32* %callercaller_5, align 4 
+%callercaller_6 = load  i32, i32* %callercaller_4, align 4 
+enter-call caller1
+%caller1_0 = bitcast i32 %callercaller_6 to i32 
+%caller1_2 = alloca i32, align 4 
+%caller1_3 = alloca i32, align 4 
+store  i32 %caller1_0, i32* %caller1_3, align 4 
+%caller1_4 = load  i32, i32* %caller1_3, align 4 
+%caller1_5 = icmp sgt i32 %caller1_4, 10 
+path-eq %caller1_5 = bitcast i1 1 to i1 
+%caller1_7 = load  i32, i32* %caller1_3, align 4 
+%caller1_8 = load  i32, i32* %caller1_3, align 4 
+%caller1_9 = srem i32 %caller1_8, 17 
+enter-call foo
+%foo_0 = bitcast i32 %caller1_7 to i32 
+%foo_1 = bitcast i32 %caller1_9 to i32 
+%foo_2 = bitcast i32 2 to i32 
+%foo_4 = alloca i32, align 4 
+%foo_5 = alloca i32, align 4 
+%foo_6 = alloca i32, align 4 
+%foo_7 = alloca i32, align 4 
+store  i32 %foo_0, i32* %foo_5, align 4 
+store  i32 %foo_1, i32* %foo_6, align 4 
+store  i32 %foo_2, i32* %foo_7, align 4 
+%foo_8 = load  i32, i32* %foo_5, align 4 
+%foo_9 = load  i32, i32* %foo_6, align 4 
+%foo_10 = icmp slt i32 %foo_8, %foo_9 
+path-eq %foo_10 = bitcast i1 1 to i1 
+%foo_12 = load  i32, i32* %foo_5, align 4 
+%foo_13 = load  i32, i32* %foo_7, align 4 
+%foo_14 = add  nsw i32 %foo_12, %foo_13 
+store  i32 %foo_14, i32* %foo_4, align 4 
+%foo_20 = load  i32, i32* %foo_4, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "foo_20")
+%caller1_10 = bitcast i32 %foo_20 to i32 
+exit-call caller1_10
+store  i32 %caller1_10, i32* %caller1_2, align 4 
+%caller1_17 = load  i32, i32* %caller1_2, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "caller1_17")
+%callercaller_7 = bitcast i32 %caller1_17 to i32 
+exit-call callercaller_7
+%callercaller_8 = icmp sgt i32 %callercaller_7, 5 
+path-eq %callercaller_8 = bitcast i1 1 to i1 
+%callercaller_10 = load  i32, i32* %callercaller_5, align 4 
+enter-call caller2
+%caller2_0 = bitcast i32 %callercaller_10 to i32 
+%caller2_2 = alloca i32, align 4 
+%caller2_3 = alloca i32, align 4 
+store  i32 %caller2_0, i32* %caller2_3, align 4 
+%caller2_4 = load  i32, i32* %caller2_3, align 4 
+%caller2_5 = icmp sgt i32 %caller2_4, 12 
+path-eq %caller2_5 = bitcast i1 0 to i1 
+%caller2_14 = load  i32, i32* %caller2_3, align 4 
+%caller2_15 = load  i32, i32* %caller2_3, align 4 
+%caller2_16 = sub  nsw i32 12, %caller2_15 
+%caller2_17 = load  i32, i32* %caller2_3, align 4 
+%caller2_18 = mul  nsw i32 %caller2_17, 3 
+enter-call foo
+%foo_0_1 = bitcast i32 %caller2_14 to i32 
+%foo_1_1 = bitcast i32 %caller2_16 to i32 
+%foo_2_1 = bitcast i32 %caller2_18 to i32 
+%foo_4_1 = alloca i32, align 4 
+%foo_5_1 = alloca i32, align 4 
+%foo_6_1 = alloca i32, align 4 
+%foo_7_1 = alloca i32, align 4 
+store  i32 %foo_0_1, i32* %foo_5_1, align 4 
+store  i32 %foo_1_1, i32* %foo_6_1, align 4 
+store  i32 %foo_2_1, i32* %foo_7_1, align 4 
+%foo_8_1 = load  i32, i32* %foo_5_1, align 4 
+%foo_9_1 = load  i32, i32* %foo_6_1, align 4 
+%foo_10_1 = icmp slt i32 %foo_8_1, %foo_9_1 
+path-eq %foo_10_1 = bitcast i1 1 to i1 
+%foo_12_1 = load  i32, i32* %foo_5_1, align 4 
+%foo_13_1 = load  i32, i32* %foo_7_1, align 4 
+%foo_14_1 = add  nsw i32 %foo_12_1, %foo_13_1 
+store  i32 %foo_14_1, i32* %foo_4_1, align 4 
+%foo_20_1 = load  i32, i32* %foo_4_1, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "foo_20_1")
+%caller2_19 = bitcast i32 %foo_20_1 to i32 
+exit-call caller2_19
+store  i32 %caller2_19, i32* %caller2_2, align 4 
+%caller2_21 = load  i32, i32* %caller2_2, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "caller2_21")
+%callercaller_11 = bitcast i32 %caller2_21 to i32 
+exit-call callercaller_11
+%callercaller_12 = add  nsw i32 %callercaller_11, 3 
+store  i32 %callercaller_12, i32* %callercaller_3, align 4 

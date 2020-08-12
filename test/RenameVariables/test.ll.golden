@@ -1,0 +1,59 @@
+; ModuleID = '<string>'
+
+
+ 
+
+
+define external ccc  i8 @add_O3(i32 , i32 )    {
+  %add_O3_3 = add  nsw i8 1, 1 
+  %add_O3_4 = add  nsw i8 255, 1 
+  %add_O3_5 = add  nsw i8 %add_O3_3, %add_O3_4 
+  ret i8 %add_O3_5 
+}
+
+
+define external ccc  i32* @alloca_O3(i32 , i32 )    {
+  %alloca_O3_ptr = alloca i32 
+  ret i32* %alloca_O3_ptr 
+}
+
+
+define external ccc  i32 @call_O3(i32 , i32 )    {
+  %call_O3_3 = or i32 %call_O3_0, %call_O3_1 
+  ret i32 %call_O3_3 
+}
+
+
+define external ccc  i64 @atomicrmw_O3(i32 , i32 )    {
+  %atomicrmw_O3_3 = alloca i64 
+  store  i64 0, i64* %atomicrmw_O3_3 
+  %atomicrmw_O3_4 = atomicrmw  xchg i64* %atomicrmw_O3_3, i64 100  acquire 
+  %atomicrmw_O3_5 = load  i64, i64* %atomicrmw_O3_3 
+  %atomicrmw_O3_6 = and i64 %atomicrmw_O3_4, %atomicrmw_O3_5 
+  ret i64 1 
+}
+
+
+define external ccc  i32 @vector_add_O3(i32 , i32 )    {
+  %vector_add_O3_3 = add  nsw <4 x i32> < i32 0, i32 1, i32 2, i32 3 >, < i32 0, i32 1, i32 2, i32 3 > 
+  %vector_add_O3_4 = extractelement <4 x i32> %vector_add_O3_3, i32 0 
+  %vector_add_O3_5 = extractelement <4 x i32> %vector_add_O3_3, i32 1 
+  %vector_add_O3_6 = extractelement <4 x i32> %vector_add_O3_3, i32 2 
+  %vector_add_O3_7 = extractelement <4 x i32> %vector_add_O3_3, i32 3 
+  %vector_add_O3_8 = add   i32 %vector_add_O3_7, %vector_add_O3_6 
+  %vector_add_O3_9 = add   i32 %vector_add_O3_5, %vector_add_O3_4 
+  ret i32 %vector_add_O3_4 
+}
+
+
+define external ccc  i32 @foo(i32 , i32 )    {
+  %foo_3 = add   i32 7, 1 
+  %foo_4 =  call ccc  i32  @bar(i32  %foo_1)  
+  ret i32 %foo_4 
+}
+
+
+define external ccc  i32 @bar(i32 )    {
+  %bar_2 = add   i32 %bar_0, 3 
+  ret i32 %bar_2 
+}

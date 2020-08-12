@@ -1,0 +1,5 @@
+%nestedRecursive_2 = alloca i32, align 4 
+%nestedRecursive_3 = alloca i32, align 4 
+%nestedRecursive_4 = alloca i32, align 4 
+store  i32 %nestedRecursive_0, i32* %nestedRecursive_3, align 4 
+%nestedRecursive_5 = load  i32, i32* %nestedRecursive_3, align 4 

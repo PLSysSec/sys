@@ -1,0 +1,4 @@
+%foo_6 = icmp sgt i32 %foo_0, 55 
+path-eq %foo_6 = bitcast i1 1 to i1 
+%foo_8 = mul  nsw i32 %foo_1, 3 
+%foo_13 = bitcast i32 %foo_8 to i32 

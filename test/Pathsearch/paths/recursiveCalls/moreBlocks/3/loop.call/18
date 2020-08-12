@@ -1,0 +1,11 @@
+%moreBlocks_31 = load  i32, i32* %moreBlocks_4, align 4 
+%moreBlocks_32 = load  i32, i32* %moreBlocks_5, align 4 
+%moreBlocks_33 = mul  nsw i32 %moreBlocks_31, %moreBlocks_32 
+%moreBlocks_34 = icmp sgt i32 %moreBlocks_33, 242 
+path-eq %moreBlocks_34 = bitcast i1 1 to i1 
+%moreBlocks_36 = load  i32, i32* %moreBlocks_4, align 4 
+%moreBlocks_37 = load  i32, i32* %moreBlocks_5, align 4 
+%moreBlocks_38 = sdiv  i32 %moreBlocks_36, %moreBlocks_37 
+store  i32 %moreBlocks_38, i32* %moreBlocks_2, align 4 
+%moreBlocks_43 = load  i32, i32* %moreBlocks_2, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "moreBlocks_43")

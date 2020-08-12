@@ -1,0 +1,2 @@
+%notTailRec_23 = load  i32, i32* %notTailRec_2, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "notTailRec_23")

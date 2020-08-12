@@ -1,0 +1,3 @@
+%doubleRecursive_17 = load  i32, i32* %doubleRecursive_4, align 4 
+%doubleRecursive_18 = load  i32, i32* %doubleRecursive_5, align 4 
+%doubleRecursive_19 = sub  nsw i32 %doubleRecursive_18, 1 

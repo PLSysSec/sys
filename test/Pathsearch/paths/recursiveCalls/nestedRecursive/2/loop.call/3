@@ -1,0 +1,8 @@
+%nestedRecursive_12 = load  i32, i32* %nestedRecursive_4, align 4 
+enter-call nestedRecursive
+%nestedRecursive_0 = bitcast i32 %nestedRecursive_12 to i32 
+%nestedRecursive_2 = alloca i32, align 4 
+%nestedRecursive_3 = alloca i32, align 4 
+%nestedRecursive_4_1 = alloca i32, align 4 
+store  i32 %nestedRecursive_0, i32* %nestedRecursive_3, align 4 
+%nestedRecursive_5 = load  i32, i32* %nestedRecursive_3, align 4 

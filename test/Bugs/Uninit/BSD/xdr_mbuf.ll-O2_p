@@ -1,0 +1,1248 @@
+; ModuleID = '/usr/src/sys/xdr/xdr_mbuf.c'
+source_filename = "/usr/src/sys/xdr/xdr_mbuf.c"
+target datalayout = "e-m:e-i64:64-f80:128-n8:16:32:64-S128"
+target triple = "x86_64-portbld-freebsd12.0"
+
+module asm ".ident\09\22$FreeBSD: head/sys/xdr/xdr_mbuf.c 326272 2017-11-27 15:23:17Z pfg $\22"
+module asm ".globl __start_set_pcpu"
+module asm ".globl __stop_set_pcpu"
+
+%struct.xdr_ops = type { i32 (%struct.XDR*, i64*)*, i32 (%struct.XDR*, i64*)*, i32 (%struct.XDR*, i8*, i32)*, i32 (%struct.XDR*, i8*, i32)*, i32 (%struct.XDR*)*, i32 (%struct.XDR*, i32)*, i32* (%struct.XDR*, i32)*, void (%struct.XDR*)*, i32 (%struct.XDR*, i32, i8*)* }
+%struct.XDR = type { i32, %struct.xdr_ops*, i8*, i8*, i8*, i32 }
+%struct.uma_zone = type opaque
+%struct.sdt_probe = type { i32, %struct.sdt_provider*, %struct.anon.15, %struct.anon.16, i8*, i8*, i8*, i64, i32, %struct.linker_file* }
+%struct.sdt_provider = type { i8*, %struct.anon.14, i64, i32 }
+%struct.anon.14 = type { %struct.sdt_provider*, %struct.sdt_provider** }
+%struct.anon.15 = type { %struct.sdt_probe*, %struct.sdt_probe** }
+%struct.anon.16 = type { %struct.sdt_argtype*, %struct.sdt_argtype** }
+%struct.sdt_argtype = type { i32, i8*, i8*, %struct.anon.17, %struct.sdt_probe* }
+%struct.anon.17 = type { %struct.sdt_argtype*, %struct.sdt_argtype** }
+%struct.linker_file = type opaque
+%struct.mbuf = type { %union.anon, %union.anon.1, i8*, i32, i32, %union.anon.4 }
+%union.anon = type { %struct.mbuf* }
+%union.anon.1 = type { %struct.mbuf* }
+%union.anon.4 = type { %struct.anon.5 }
+%struct.anon.5 = type { %struct.pkthdr, %union.anon.12 }
+%struct.pkthdr = type { %union.anon.6, %struct.packet_tags, i32, i32, i32, i16, i8, i8, %union.anon.8, %union.anon.10, %union.anon.11 }
+%union.anon.6 = type { %struct.m_snd_tag* }
+%struct.m_snd_tag = type { %struct.ifnet* }
+%struct.ifnet = type opaque
+%struct.packet_tags = type { %struct.m_tag* }
+%struct.m_tag = type { %struct.anon.7, i16, i16, i32, void (%struct.m_tag*)* }
+%struct.anon.7 = type { %struct.m_tag* }
+%union.anon.8 = type { i64 }
+%union.anon.10 = type { [1 x i64] }
+%union.anon.11 = type { [1 x i64] }
+%union.anon.12 = type { %struct.m_ext }
+%struct.m_ext = type { %union.anon.13, i8*, i32, i32, void (%struct.mbuf*)*, i8*, i8* }
+%union.anon.13 = type { i32* }
+%struct.mb_args = type { i32, i16 }
+
+@.str = private unnamed_addr constant [36 x i8] c"xdrmbuf_create with NULL mbuf chain\00", align 1
+@xdrmbuf_ops = internal constant %struct.xdr_ops { i32 (%struct.XDR*, i64*)* @xdrmbuf_getlong, i32 (%struct.XDR*, i64*)* @xdrmbuf_putlong, i32 (%struct.XDR*, i8*, i32)* @xdrmbuf_getbytes, i32 (%struct.XDR*, i8*, i32)* @xdrmbuf_putbytes, i32 (%struct.XDR*)* @xdrmbuf_getpos, i32 (%struct.XDR*, i32)* @xdrmbuf_setpos, i32* (%struct.XDR*, i32)* @xdrmbuf_inline, void (%struct.XDR*)* @xdrmbuf_destroy, i32 (%struct.XDR*, i32, i8*)* null }, align 8
+@.str.1 = private unnamed_addr constant [35 x i8] c"xdrmbuf_append: invalid XDR stream\00", align 1
+@zone_pack = external dso_local local_unnamed_addr global %struct.uma_zone*, align 8
+@sdt_probes_enabled = external dso_local global i8, align 1
+@sdt_sdt___m__getcl = external dso_local local_unnamed_addr global [1 x %struct.sdt_probe], align 16
+@sdt_probe_func = external dso_local local_unnamed_addr global void (i32, i64, i64, i64, i64, i64)*, align 8
+@.str.3 = private unnamed_addr constant [21 x i8] c"Corrupted mbuf chain\00", align 1
+@zone_mbuf = external dso_local local_unnamed_addr global %struct.uma_zone*, align 8
+@sdt_sdt___m__get = external dso_local local_unnamed_addr global [1 x %struct.sdt_probe], align 16
+
+; Function Attrs: noimplicitfloat noredzone nounwind ssp
+define dso_local void @xdrmbuf_create(%struct.XDR* nocapture %xdrs, %struct.mbuf* %m, i32 %op) local_unnamed_addr #0 {
+entry:
+  %cmp = icmp eq %struct.mbuf* %m, null
+  br i1 %cmp, label %if.then, label %do.end, !prof !2
+
+if.then:                                          ; preds = %entry
+  tail call void (i8*, ...) @kassert_panic(i8* getelementptr inbounds ([36 x i8], [36 x i8]* @.str, i64 0, i64 0)) #3
+  br label %do.end
+
+do.end:                                           ; preds = %entry, %if.then
+  %x_op = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 0
+  store i32 %op, i32* %x_op, align 8
+  %x_ops = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 1
+  store %struct.xdr_ops* @xdrmbuf_ops, %struct.xdr_ops** %x_ops, align 8
+  %x_base = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 4
+  %0 = bitcast i8** %x_base to %struct.mbuf**
+  store %struct.mbuf* %m, %struct.mbuf** %0, align 8
+  %cmp1 = icmp eq i32 %op, 0
+  br i1 %cmp1, label %while.cond.i, label %if.else
+
+while.cond.i:                                     ; preds = %do.end, %while.cond.i
+  %m.addr.0.i = phi %struct.mbuf* [ %1, %while.cond.i ], [ %m, %do.end ]
+  %m_next.i = getelementptr inbounds %struct.mbuf, %struct.mbuf* %m.addr.0.i, i64 0, i32 0, i32 0
+  %1 = load %struct.mbuf*, %struct.mbuf** %m_next.i, align 8
+  %tobool.i = icmp eq %struct.mbuf* %1, null
+  br i1 %tobool.i, label %m_last.exit, label %while.cond.i
+
+m_last.exit:                                      ; preds = %while.cond.i
+  %x_private = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 3
+  %2 = bitcast i8** %x_private to %struct.mbuf**
+  store %struct.mbuf* %m.addr.0.i, %struct.mbuf** %2, align 8
+  %m_len = getelementptr inbounds %struct.mbuf, %struct.mbuf* %m.addr.0.i, i64 0, i32 3
+  %3 = load i32, i32* %m_len, align 8
+  br label %if.end6
+
+if.else:                                          ; preds = %do.end
+  %x_private4 = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 3
+  %4 = bitcast i8** %x_private4 to %struct.mbuf**
+  store %struct.mbuf* %m, %struct.mbuf** %4, align 8
+  br label %if.end6
+
+if.end6:                                          ; preds = %if.else, %m_last.exit
+  %.sink = phi i32 [ 0, %if.else ], [ %3, %m_last.exit ]
+  %x_handy5 = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 5
+  store i32 %.sink, i32* %x_handy5, align 8
+  ret void
+}
+
+; Function Attrs: noimplicitfloat noredzone
+declare dso_local void @kassert_panic(i8*, ...) local_unnamed_addr #1
+
+; Function Attrs: noimplicitfloat noredzone nounwind ssp
+define dso_local void @xdrmbuf_append(%struct.XDR* nocapture %xdrs, %struct.mbuf* %madd) local_unnamed_addr #0 {
+entry:
+  %x_ops = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 1
+  %0 = load %struct.xdr_ops*, %struct.xdr_ops** %x_ops, align 8
+  %cmp = icmp eq %struct.xdr_ops* %0, @xdrmbuf_ops
+  br i1 %cmp, label %land.rhs, label %if.then, !prof !3
+
+land.rhs:                                         ; preds = %entry
+  %x_op = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 0
+  %1 = load i32, i32* %x_op, align 8
+  %cmp1 = icmp eq i32 %1, 0
+  br i1 %cmp1, label %do.end, label %if.then, !prof !3
+
+if.then:                                          ; preds = %land.rhs, %entry
+  tail call void (i8*, ...) @kassert_panic(i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.1, i64 0, i64 0)) #3
+  br label %do.end
+
+do.end:                                           ; preds = %land.rhs, %if.then
+  %call = tail call i32 @m_length(%struct.mbuf* %madd, %struct.mbuf** null) #3
+  %cmp2 = icmp eq i32 %call, 0
+  br i1 %cmp2, label %if.then4, label %if.end5
+
+if.then4:                                         ; preds = %do.end
+  tail call void @m_freem(%struct.mbuf* %madd) #3
+  br label %cleanup
+
+if.end5:                                          ; preds = %do.end
+  %x_private = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 3
+  %2 = bitcast i8** %x_private to %struct.mbuf**
+  %3 = load %struct.mbuf*, %struct.mbuf** %2, align 8
+  %m_next = getelementptr inbounds %struct.mbuf, %struct.mbuf* %3, i64 0, i32 0, i32 0
+  store %struct.mbuf* %madd, %struct.mbuf** %m_next, align 8
+  br label %while.cond.i
+
+while.cond.i:                                     ; preds = %while.cond.i, %if.end5
+  %m.addr.0.i = phi %struct.mbuf* [ %madd, %if.end5 ], [ %4, %while.cond.i ]
+  %m_next.i = getelementptr inbounds %struct.mbuf, %struct.mbuf* %m.addr.0.i, i64 0, i32 0, i32 0
+  %4 = load %struct.mbuf*, %struct.mbuf** %m_next.i, align 8
+  %tobool.i = icmp eq %struct.mbuf* %4, null
+  br i1 %tobool.i, label %m_last.exit, label %while.cond.i
+
+m_last.exit:                                      ; preds = %while.cond.i
+  store %struct.mbuf* %m.addr.0.i, %struct.mbuf** %2, align 8
+  %m_len = getelementptr inbounds %struct.mbuf, %struct.mbuf* %m.addr.0.i, i64 0, i32 3
+  %5 = load i32, i32* %m_len, align 8
+  %x_handy = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 5
+  store i32 %5, i32* %x_handy, align 8
+  br label %cleanup
+
+cleanup:                                          ; preds = %m_last.exit, %if.then4
+  ret void
+}
+
+; Function Attrs: argmemonly nounwind
+declare void @llvm.lifetime.start.p0i8(i64, i8* nocapture) #2
+
+; Function Attrs: noimplicitfloat noredzone
+declare dso_local i32 @m_length(%struct.mbuf*, %struct.mbuf**) local_unnamed_addr #1
+
+; Function Attrs: noimplicitfloat noredzone
+declare dso_local void @m_freem(%struct.mbuf*) local_unnamed_addr #1
+
+; Function Attrs: argmemonly nounwind
+declare void @llvm.lifetime.end.p0i8(i64, i8* nocapture) #2
+
+; Function Attrs: noimplicitfloat noredzone nounwind ssp
+define dso_local %struct.mbuf* @xdrmbuf_getall(%struct.XDR* nocapture %xdrs) local_unnamed_addr #0 {
+entry:
+  %args.i = alloca %struct.mb_args, align 4
+  %x_ops = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 1
+  %0 = load %struct.xdr_ops*, %struct.xdr_ops** %x_ops, align 8
+  %cmp = icmp eq %struct.xdr_ops* %0, @xdrmbuf_ops
+  br i1 %cmp, label %land.rhs, label %if.then, !prof !3
+
+land.rhs:                                         ; preds = %entry
+  %x_op = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 0
+  %1 = load i32, i32* %x_op, align 8
+  %cmp1 = icmp eq i32 %1, 1
+  br i1 %cmp1, label %do.end, label %if.then, !prof !3
+
+if.then:                                          ; preds = %land.rhs, %entry
+  tail call void (i8*, ...) @kassert_panic(i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.1, i64 0, i64 0)) #3
+  br label %do.end
+
+do.end:                                           ; preds = %land.rhs, %if.then
+  %x_base = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 4
+  %2 = bitcast i8** %x_base to %struct.mbuf**
+  %3 = load %struct.mbuf*, %struct.mbuf** %2, align 8
+  %x_private = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 3
+  %4 = bitcast i8** %x_private to %struct.mbuf**
+  %5 = load %struct.mbuf*, %struct.mbuf** %4, align 8
+  %cmp2 = icmp eq %struct.mbuf* %3, %5
+  br i1 %cmp2, label %if.else, label %while.cond
+
+while.cond:                                       ; preds = %do.end, %while.cond
+  %m0.0 = phi %struct.mbuf* [ %6, %while.cond ], [ %3, %do.end ]
+  %m_next = getelementptr inbounds %struct.mbuf, %struct.mbuf* %m0.0, i64 0, i32 0, i32 0
+  %6 = load %struct.mbuf*, %struct.mbuf** %m_next, align 8
+  %cmp5 = icmp eq %struct.mbuf* %6, %5
+  br i1 %cmp5, label %while.end, label %while.cond
+
+while.end:                                        ; preds = %while.cond
+  %m_next.le = getelementptr inbounds %struct.mbuf, %struct.mbuf* %m0.0, i64 0, i32 0, i32 0
+  store %struct.mbuf* null, %struct.mbuf** %m_next.le, align 8
+  br label %if.end12
+
+if.else:                                          ; preds = %do.end
+  store i8* null, i8** %x_base, align 8
+  br label %if.end12
+
+if.end12:                                         ; preds = %if.else, %while.end
+  store i8* null, i8** %x_private, align 8
+  %tobool13 = icmp eq %struct.mbuf* %5, null
+  br i1 %tobool13, label %if.else15, label %if.then14
+
+if.then14:                                        ; preds = %if.end12
+  %x_handy = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 5
+  %7 = load i32, i32* %x_handy, align 8
+  tail call void @m_adj(%struct.mbuf* nonnull %5, i32 %7) #3
+  br label %if.end16
+
+if.else15:                                        ; preds = %if.end12
+  %8 = bitcast %struct.mb_args* %args.i to i8*
+  call void @llvm.lifetime.start.p0i8(i64 8, i8* nonnull %8) #4
+  %flags.i = getelementptr inbounds %struct.mb_args, %struct.mb_args* %args.i, i64 0, i32 0
+  store i32 0, i32* %flags.i, align 4
+  %type1.i = getelementptr inbounds %struct.mb_args, %struct.mb_args* %args.i, i64 0, i32 1
+  store i16 1, i16* %type1.i, align 4
+  %9 = load %struct.uma_zone*, %struct.uma_zone** @zone_mbuf, align 8
+  %call.i = call i8* @uma_zalloc_arg(%struct.uma_zone* %9, i8* nonnull %8, i32 2) #3
+  %10 = bitcast i8* %call.i to %struct.mbuf*
+  %11 = load volatile i8, i8* @sdt_probes_enabled, align 1, !range !4
+  %tobool2.i = icmp eq i8 %11, 0
+  br i1 %tobool2.i, label %m_get.exit, label %if.then.i, !prof !3
+
+if.then.i:                                        ; preds = %if.else15
+  %12 = load i64, i64* getelementptr inbounds ([1 x %struct.sdt_probe], [1 x %struct.sdt_probe]* @sdt_sdt___m__get, i64 0, i64 0, i32 7), align 8
+  %tobool4.i = icmp eq i64 %12, 0
+  br i1 %tobool4.i, label %m_get.exit, label %if.then5.i, !prof !3
+
+if.then5.i:                                       ; preds = %if.then.i
+  %13 = load void (i32, i64, i64, i64, i64, i64)*, void (i32, i64, i64, i64, i64, i64)** @sdt_probe_func, align 8
+  %conv6.i = trunc i64 %12 to i32
+  %14 = ptrtoint i8* %call.i to i64
+  call void %13(i32 %conv6.i, i64 2, i64 1, i64 %14, i64 0, i64 0) #3
+  br label %m_get.exit
+
+m_get.exit:                                       ; preds = %if.else15, %if.then.i, %if.then5.i
+  call void @llvm.lifetime.end.p0i8(i64 8, i8* nonnull %8) #4
+  br label %if.end16
+
+if.end16:                                         ; preds = %m_get.exit, %if.then14
+  %m.0 = phi %struct.mbuf* [ %5, %if.then14 ], [ %10, %m_get.exit ]
+  ret %struct.mbuf* %m.0
+}
+
+; Function Attrs: noimplicitfloat noredzone
+declare dso_local void @m_adj(%struct.mbuf*, i32) local_unnamed_addr #1
+
+; Function Attrs: noimplicitfloat noredzone nounwind ssp
+define internal i32 @xdrmbuf_getlong(%struct.XDR* nocapture %xdrs, i64* nocapture %lp) #0 {
+entry:
+  %t = alloca i32, align 4
+  %0 = bitcast i32* %t to i8*
+  call void @llvm.lifetime.start.p0i8(i64 4, i8* nonnull %0) #4
+  %x_private.i = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 3
+  %1 = bitcast i8** %x_private.i to %struct.mbuf**
+  %2 = load %struct.mbuf*, %struct.mbuf** %1, align 8
+  %tobool.i = icmp eq %struct.mbuf* %2, null
+  br i1 %tobool.i, label %if.else, label %if.end.i
+
+if.end.i:                                         ; preds = %entry
+  %x_op.i = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 0
+  %3 = load i32, i32* %x_op.i, align 8
+  %cmp.i = icmp eq i32 %3, 0
+  br i1 %cmp.i, label %if.then1.i, label %if.else.i
+
+if.then1.i:                                       ; preds = %if.end.i
+  %m_flags.i = getelementptr inbounds %struct.mbuf, %struct.mbuf* %2, i64 0, i32 4
+  %bf.load.i = load i32, i32* %m_flags.i, align 4
+  %and.i = and i32 %bf.load.i, 2048
+  %tobool2.i = icmp eq i32 %and.i, 0
+  br i1 %tobool2.i, label %land.lhs.true.i, label %cond.end44.i
+
+land.lhs.true.i:                                  ; preds = %if.then1.i
+  %and6.i = and i32 %bf.load.i, 256
+  %tobool7.i = icmp eq i32 %and6.i, 0
+  br i1 %tobool7.i, label %cond.false32.i, label %do.end.i.i
+
+do.end.i.i:                                       ; preds = %land.lhs.true.i
+  %ext_flags.i.i = getelementptr inbounds %struct.mbuf, %struct.mbuf* %2, i64 0, i32 5, i32 0, i32 1, i32 0, i32 3
+  %bf.load2.i.i = load i32, i32* %ext_flags.i.i, align 4
+  %and4.i.i = and i32 %bf.load2.i.i, 256
+  %tobool5.i.i = icmp eq i32 %and4.i.i, 0
+  %4 = getelementptr inbounds %struct.mbuf, %struct.mbuf* %2, i64 0, i32 5, i32 0, i32 1, i32 0, i32 0
+  br i1 %tobool5.i.i, label %cond.false.i.i, label %cond.true.i.i
+
+cond.true.i.i:                                    ; preds = %do.end.i.i
+  %ext_count.i.i = bitcast %union.anon.13* %4 to i32*
+  br label %m_extrefcnt.exit.i
+
+cond.false.i.i:                                   ; preds = %do.end.i.i
+  %ext_cnt.i.i = getelementptr inbounds %union.anon.13, %union.anon.13* %4, i64 0, i32 0
+  %5 = load i32*, i32** %ext_cnt.i.i, align 8
+  br label %m_extrefcnt.exit.i
+
+m_extrefcnt.exit.i:                               ; preds = %cond.false.i.i, %cond.true.i.i
+  %cond.in.i.i = phi i32* [ %ext_count.i.i, %cond.true.i.i ], [ %5, %cond.false.i.i ]
+  %cond.i.i = load volatile i32, i32* %cond.in.i.i, align 4
+  %cmp8.i = icmp eq i32 %cond.i.i, 1
+  br i1 %cmp8.i, label %cond.true30.i, label %cond.end44.i
+
+cond.true30.i:                                    ; preds = %m_extrefcnt.exit.i
+  %ext_buf.i = getelementptr inbounds %struct.mbuf, %struct.mbuf* %2, i64 0, i32 5, i32 0, i32 1, i32 0, i32 1
+  %6 = load i8*, i8** %ext_buf.i, align 8
+  %ext_size.i = getelementptr inbounds %struct.mbuf, %struct.mbuf* %2, i64 0, i32 5, i32 0, i32 1, i32 0, i32 2
+  %7 = load i32, i32* %ext_size.i, align 8
+  br label %cond.end39.i
+
+cond.false32.i:                                   ; preds = %land.lhs.true.i
+  %and18.i = and i32 %bf.load.i, 512
+  %tobool19.i = icmp eq i32 %and18.i, 0
+  %8 = getelementptr inbounds %struct.mbuf, %struct.mbuf* %2, i64 0, i32 5
+  %9 = getelementptr inbounds %struct.mbuf, %struct.mbuf* %2, i64 0, i32 5, i32 0, i32 1
+  %arrayidx.i = bitcast %union.anon.12* %9 to i8*
+  %arrayidx22.i = bitcast %union.anon.4* %8 to i8*
+  %cond.i = select i1 %tobool19.i, i8* %arrayidx22.i, i8* %arrayidx.i
+  %cond38.i = select i1 %tobool19.i, i32 480, i32 424
+  br label %cond.end39.i
+
+cond.end39.i:                                     ; preds = %cond.false32.i, %cond.true30.i
+  %cond24103.i = phi i8* [ %6, %cond.true30.i ], [ %cond.i, %cond.false32.i ]
+  %cond40.i = phi i32 [ %7, %cond.true30.i ], [ %cond38.i, %cond.false32.i ]
+  %idx.ext.i = zext i32 %cond40.i to i64
+  %add.ptr.i = getelementptr i8, i8* %cond24103.i, i64 %idx.ext.i
+  %m_data.i = getelementptr inbounds %struct.mbuf, %struct.mbuf* %2, i64 0, i32 2
+  %10 = load i8*, i8** %m_data.i, align 8
+  %m_len.i = getelementptr inbounds %struct.mbuf, %struct.mbuf* %2, i64 0, i32 3
+  %11 = load i32, i32* %m_len.i, align 8
+  %idx.ext41.i = sext i32 %11 to i64
+  %add.ptr42.i = getelementptr i8, i8* %10, i64 %idx.ext41.i
+  %sub.ptr.lhs.cast.i = ptrtoint i8* %add.ptr.i to i64
+  %sub.ptr.rhs.cast.i = ptrtoint i8* %add.ptr42.i to i64
+  %sub.ptr.sub.i = sub i64 %sub.ptr.lhs.cast.i, %sub.ptr.rhs.cast.i
+  br label %cond.end44.i
+
+cond.end44.i:                                     ; preds = %cond.end39.i, %m_extrefcnt.exit.i, %if.then1.i
+  %cond45.i = phi i64 [ %sub.ptr.sub.i, %cond.end39.i ], [ 0, %m_extrefcnt.exit.i ], [ 0, %if.then1.i ]
+  %m_len46.i = getelementptr inbounds %struct.mbuf, %struct.mbuf* %2, i64 0, i32 3
+  %12 = load i32, i32* %m_len46.i, align 8
+  %x_handy.i = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 5
+  %13 = load i32, i32* %x_handy.i, align 8
+  %sub.i = sub i32 %12, %13
+  %conv.i = zext i32 %sub.i to i64
+  %add.i = add i64 %cond45.i, %conv.i
+  br label %if.end51.i
+
+if.else.i:                                        ; preds = %if.end.i
+  %m_len47.i = getelementptr inbounds %struct.mbuf, %struct.mbuf* %2, i64 0, i32 3
+  %14 = load i32, i32* %m_len47.i, align 8
+  %x_handy48.i = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 5
+  %15 = load i32, i32* %x_handy48.i, align 8
+  %sub49.i = sub i32 %14, %15
+  %conv50.i = zext i32 %sub49.i to i64
+  br label %if.end51.i
+
+if.end51.i:                                       ; preds = %if.else.i, %cond.end44.i
+  %16 = phi i32 [ %13, %cond.end44.i ], [ %15, %if.else.i ]
+  %available.0.i = phi i64 [ %add.i, %cond.end44.i ], [ %conv50.i, %if.else.i ]
+  %cmp53.i = icmp ult i64 %available.0.i, 4
+  br i1 %cmp53.i, label %if.else, label %if.then55.i
+
+if.then55.i:                                      ; preds = %if.end51.i
+  %m_data56.i = getelementptr inbounds %struct.mbuf, %struct.mbuf* %2, i64 0, i32 2
+  %17 = load i8*, i8** %m_data56.i, align 8
+  %idx.ext58.i = zext i32 %16 to i64
+  %add.ptr59.i = getelementptr i8, i8* %17, i64 %idx.ext58.i
+  %18 = ptrtoint i8* %add.ptr59.i to i64
+  %and60.i = and i64 %18, 3
+  %tobool61.i = icmp eq i64 %and60.i, 0
+  br i1 %tobool61.i, label %if.end63.i, label %if.else
+
+if.end63.i:                                       ; preds = %if.then55.i
+  %x_handy57.i = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 5
+  %add65.i = add i32 %16, 4
+  store i32 %add65.i, i32* %x_handy57.i, align 8
+  %m_len67.i = getelementptr inbounds %struct.mbuf, %struct.mbuf* %2, i64 0, i32 3
+  %19 = load i32, i32* %m_len67.i, align 8
+  %cmp68.i = icmp ugt i32 %add65.i, %19
+  br i1 %cmp68.i, label %if.then70.i, label %xdrmbuf_inline.exit
+
+if.then70.i:                                      ; preds = %if.end63.i
+  store i32 %add65.i, i32* %m_len67.i, align 8
+  br label %xdrmbuf_inline.exit
+
+xdrmbuf_inline.exit:                              ; preds = %if.end63.i, %if.then70.i
+  %tobool = icmp eq i8* %add.ptr59.i, null
+  br i1 %tobool, label %xdrmbuf_inline.exit.if.else_crit_edge, label %if.then
+
+xdrmbuf_inline.exit.if.else_crit_edge:            ; preds = %xdrmbuf_inline.exit
+  %.pre = load %struct.mbuf*, %struct.mbuf** %1, align 8
+  br label %if.else
+
+if.then:                                          ; preds = %xdrmbuf_inline.exit
+  %20 = bitcast i8* %add.ptr59.i to i32*
+  %21 = load i32, i32* %20, align 4
+  store i32 %21, i32* %t, align 4
+  br label %if.end
+
+if.else:                                          ; preds = %xdrmbuf_inline.exit.if.else_crit_edge, %if.end51.i, %if.then55.i, %entry
+  %22 = phi %struct.mbuf* [ %.pre, %xdrmbuf_inline.exit.if.else_crit_edge ], [ %2, %if.end51.i ], [ %2, %if.then55.i ], [ null, %entry ]
+  %x_handy.i7 = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 5
+  br label %while.body.i
+
+while.body.i:                                     ; preds = %if.end22.i, %if.else
+  %m.048.i = phi %struct.mbuf* [ %22, %if.else ], [ %m.1.i, %if.end22.i ]
+  %len.addr.047.i = phi i32 [ 4, %if.else ], [ %conv14.i, %if.end22.i ]
+  %addr.addr.046.i = phi i8* [ %0, %if.else ], [ %add.ptr8.i, %if.end22.i ]
+  %tobool.i8 = icmp eq %struct.mbuf* %m.048.i, null
+  br i1 %tobool.i8, label %if.end.loopexit, label %if.end.i14
+
+if.end.i14:                                       ; preds = %while.body.i
+  %m_len.i9 = getelementptr inbounds %struct.mbuf, %struct.mbuf* %m.048.i, i64 0, i32 3
+  %23 = load i32, i32* %m_len.i9, align 8
+  %24 = load i32, i32* %x_handy.i7, align 8
+  %sub.i10 = sub i32 %23, %24
+  %cmp2.i = icmp ugt i32 %sub.i10, %len.addr.047.i
+  %spec.select.i = select i1 %cmp2.i, i32 %len.addr.047.i, i32 %sub.i10
+  %sz.0.i = zext i32 %spec.select.i to i64
+  %m_data.i11 = getelementptr inbounds %struct.mbuf, %struct.mbuf* %m.048.i, i64 0, i32 2
+  %25 = load i8*, i8** %m_data.i11, align 8
+  %idx.ext.i12 = zext i32 %24 to i64
+  %add.ptr.i13 = getelementptr i8, i8* %25, i64 %idx.ext.i12
+  call void @llvm.memmove.p0i8.p0i8.i64(i8* align 1 %addr.addr.046.i, i8* align 1 %add.ptr.i13, i64 %sz.0.i, i1 false) #4
+  %add.ptr8.i = getelementptr i8, i8* %addr.addr.046.i, i64 %sz.0.i
+  %26 = load i32, i32* %x_handy.i7, align 8
+  %conv11.i = add i32 %26, %spec.select.i
+  store i32 %conv11.i, i32* %x_handy.i7, align 8
+  %conv14.i = sub i32 %len.addr.047.i, %spec.select.i
+  %27 = load i32, i32* %m_len.i9, align 8
+  %cmp17.i = icmp eq i32 %conv11.i, %27
+  br i1 %cmp17.i, label %if.then19.i, label %if.end22.i
+
+if.then19.i:                                      ; preds = %if.end.i14
+  %m_next.i = getelementptr inbounds %struct.mbuf, %struct.mbuf* %m.048.i, i64 0, i32 0, i32 0
+  %28 = load %struct.mbuf*, %struct.mbuf** %m_next.i, align 8
+  store %struct.mbuf* %28, %struct.mbuf** %1, align 8
+  store i32 0, i32* %x_handy.i7, align 8
+  br label %if.end22.i
+
+if.end22.i:                                       ; preds = %if.then19.i, %if.end.i14
+  %m.1.i = phi %struct.mbuf* [ %28, %if.then19.i ], [ %m.048.i, %if.end.i14 ]
+  %cmp.i15 = icmp eq i32 %conv14.i, 0
+  br i1 %cmp.i15, label %if.end.loopexit, label %while.body.i
+
+if.end.loopexit:                                  ; preds = %while.body.i, %if.end22.i
+  %.pre18 = load i32, i32* %t, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.end.loopexit, %if.then
+  %29 = phi i32 [ %.pre18, %if.end.loopexit ], [ %21, %if.then ]
+  %30 = tail call i32 asm "bswap $0", "=r,0,~{dirflag},~{fpsr},~{flags}"(i32 %29) #5, !srcloc !5
+  %conv = zext i32 %30 to i64
+  store i64 %conv, i64* %lp, align 8
+  call void @llvm.lifetime.end.p0i8(i64 4, i8* nonnull %0) #4
+  ret i32 1
+}
+
+; Function Attrs: noimplicitfloat noredzone nounwind ssp
+define internal i32 @xdrmbuf_putlong(%struct.XDR* nocapture %xdrs, i64* nocapture readonly %lp) #0 {
+entry:
+  %t = alloca i32, align 4
+  %0 = bitcast i32* %t to i8*
+  call void @llvm.lifetime.start.p0i8(i64 4, i8* nonnull %0) #4
+  %1 = load i64, i64* %lp, align 8
+  %conv = trunc i64 %1 to i32
+  %2 = tail call i32 asm "bswap $0", "=r,0,~{dirflag},~{fpsr},~{flags}"(i32 %conv) #5, !srcloc !5
+  store i32 %2, i32* %t, align 4
+  %x_private.i = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 3
+  %3 = bitcast i8** %x_private.i to %struct.mbuf**
+  %4 = load %struct.mbuf*, %struct.mbuf** %3, align 8
+  %tobool.i = icmp eq %struct.mbuf* %4, null
+  br i1 %tobool.i, label %if.else, label %if.end.i
+
+if.end.i:                                         ; preds = %entry
+  %x_op.i = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 0
+  %5 = load i32, i32* %x_op.i, align 8
+  %cmp.i = icmp eq i32 %5, 0
+  br i1 %cmp.i, label %if.then1.i, label %if.else.i
+
+if.then1.i:                                       ; preds = %if.end.i
+  %m_flags.i = getelementptr inbounds %struct.mbuf, %struct.mbuf* %4, i64 0, i32 4
+  %bf.load.i = load i32, i32* %m_flags.i, align 4
+  %and.i = and i32 %bf.load.i, 2048
+  %tobool2.i = icmp eq i32 %and.i, 0
+  br i1 %tobool2.i, label %land.lhs.true.i, label %cond.end44.i
+
+land.lhs.true.i:                                  ; preds = %if.then1.i
+  %and6.i = and i32 %bf.load.i, 256
+  %tobool7.i = icmp eq i32 %and6.i, 0
+  br i1 %tobool7.i, label %cond.false32.i, label %do.end.i.i
+
+do.end.i.i:                                       ; preds = %land.lhs.true.i
+  %ext_flags.i.i = getelementptr inbounds %struct.mbuf, %struct.mbuf* %4, i64 0, i32 5, i32 0, i32 1, i32 0, i32 3
+  %bf.load2.i.i = load i32, i32* %ext_flags.i.i, align 4
+  %and4.i.i = and i32 %bf.load2.i.i, 256
+  %tobool5.i.i = icmp eq i32 %and4.i.i, 0
+  %6 = getelementptr inbounds %struct.mbuf, %struct.mbuf* %4, i64 0, i32 5, i32 0, i32 1, i32 0, i32 0
+  br i1 %tobool5.i.i, label %cond.false.i.i, label %cond.true.i.i
+
+cond.true.i.i:                                    ; preds = %do.end.i.i
+  %ext_count.i.i = bitcast %union.anon.13* %6 to i32*
+  br label %m_extrefcnt.exit.i
+
+cond.false.i.i:                                   ; preds = %do.end.i.i
+  %ext_cnt.i.i = getelementptr inbounds %union.anon.13, %union.anon.13* %6, i64 0, i32 0
+  %7 = load i32*, i32** %ext_cnt.i.i, align 8
+  br label %m_extrefcnt.exit.i
+
+m_extrefcnt.exit.i:                               ; preds = %cond.false.i.i, %cond.true.i.i
+  %cond.in.i.i = phi i32* [ %ext_count.i.i, %cond.true.i.i ], [ %7, %cond.false.i.i ]
+  %cond.i.i = load volatile i32, i32* %cond.in.i.i, align 4
+  %cmp8.i = icmp eq i32 %cond.i.i, 1
+  br i1 %cmp8.i, label %cond.true30.i, label %cond.end44.i
+
+cond.true30.i:                                    ; preds = %m_extrefcnt.exit.i
+  %ext_buf.i = getelementptr inbounds %struct.mbuf, %struct.mbuf* %4, i64 0, i32 5, i32 0, i32 1, i32 0, i32 1
+  %8 = load i8*, i8** %ext_buf.i, align 8
+  %ext_size.i = getelementptr inbounds %struct.mbuf, %struct.mbuf* %4, i64 0, i32 5, i32 0, i32 1, i32 0, i32 2
+  %9 = load i32, i32* %ext_size.i, align 8
+  br label %cond.end39.i
+
+cond.false32.i:                                   ; preds = %land.lhs.true.i
+  %and18.i = and i32 %bf.load.i, 512
+  %tobool19.i = icmp eq i32 %and18.i, 0
+  %10 = getelementptr inbounds %struct.mbuf, %struct.mbuf* %4, i64 0, i32 5
+  %11 = getelementptr inbounds %struct.mbuf, %struct.mbuf* %4, i64 0, i32 5, i32 0, i32 1
+  %arrayidx.i = bitcast %union.anon.12* %11 to i8*
+  %arrayidx22.i = bitcast %union.anon.4* %10 to i8*
+  %cond.i = select i1 %tobool19.i, i8* %arrayidx22.i, i8* %arrayidx.i
+  %cond38.i = select i1 %tobool19.i, i32 480, i32 424
+  br label %cond.end39.i
+
+cond.end39.i:                                     ; preds = %cond.false32.i, %cond.true30.i
+  %cond24103.i = phi i8* [ %8, %cond.true30.i ], [ %cond.i, %cond.false32.i ]
+  %cond40.i = phi i32 [ %9, %cond.true30.i ], [ %cond38.i, %cond.false32.i ]
+  %idx.ext.i = zext i32 %cond40.i to i64
+  %add.ptr.i = getelementptr i8, i8* %cond24103.i, i64 %idx.ext.i
+  %m_data.i = getelementptr inbounds %struct.mbuf, %struct.mbuf* %4, i64 0, i32 2
+  %12 = load i8*, i8** %m_data.i, align 8
+  %m_len.i = getelementptr inbounds %struct.mbuf, %struct.mbuf* %4, i64 0, i32 3
+  %13 = load i32, i32* %m_len.i, align 8
+  %idx.ext41.i = sext i32 %13 to i64
+  %add.ptr42.i = getelementptr i8, i8* %12, i64 %idx.ext41.i
+  %sub.ptr.lhs.cast.i = ptrtoint i8* %add.ptr.i to i64
+  %sub.ptr.rhs.cast.i = ptrtoint i8* %add.ptr42.i to i64
+  %sub.ptr.sub.i = sub i64 %sub.ptr.lhs.cast.i, %sub.ptr.rhs.cast.i
+  br label %cond.end44.i
+
+cond.end44.i:                                     ; preds = %cond.end39.i, %m_extrefcnt.exit.i, %if.then1.i
+  %cond45.i = phi i64 [ %sub.ptr.sub.i, %cond.end39.i ], [ 0, %m_extrefcnt.exit.i ], [ 0, %if.then1.i ]
+  %m_len46.i = getelementptr inbounds %struct.mbuf, %struct.mbuf* %4, i64 0, i32 3
+  %14 = load i32, i32* %m_len46.i, align 8
+  %x_handy.i = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 5
+  %15 = load i32, i32* %x_handy.i, align 8
+  %sub.i = sub i32 %14, %15
+  %conv.i = zext i32 %sub.i to i64
+  %add.i = add i64 %cond45.i, %conv.i
+  br label %if.end51.i
+
+if.else.i:                                        ; preds = %if.end.i
+  %m_len47.i = getelementptr inbounds %struct.mbuf, %struct.mbuf* %4, i64 0, i32 3
+  %16 = load i32, i32* %m_len47.i, align 8
+  %x_handy48.i = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 5
+  %17 = load i32, i32* %x_handy48.i, align 8
+  %sub49.i = sub i32 %16, %17
+  %conv50.i = zext i32 %sub49.i to i64
+  br label %if.end51.i
+
+if.end51.i:                                       ; preds = %if.else.i, %cond.end44.i
+  %18 = phi i32 [ %15, %cond.end44.i ], [ %17, %if.else.i ]
+  %available.0.i = phi i64 [ %add.i, %cond.end44.i ], [ %conv50.i, %if.else.i ]
+  %cmp53.i = icmp ult i64 %available.0.i, 4
+  br i1 %cmp53.i, label %if.else, label %if.then55.i
+
+if.then55.i:                                      ; preds = %if.end51.i
+  %m_data56.i = getelementptr inbounds %struct.mbuf, %struct.mbuf* %4, i64 0, i32 2
+  %19 = load i8*, i8** %m_data56.i, align 8
+  %idx.ext58.i = zext i32 %18 to i64
+  %add.ptr59.i = getelementptr i8, i8* %19, i64 %idx.ext58.i
+  %20 = ptrtoint i8* %add.ptr59.i to i64
+  %and60.i = and i64 %20, 3
+  %tobool61.i = icmp eq i64 %and60.i, 0
+  br i1 %tobool61.i, label %if.end63.i, label %if.else
+
+if.end63.i:                                       ; preds = %if.then55.i
+  %x_handy57.i = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 5
+  %add65.i = add i32 %18, 4
+  store i32 %add65.i, i32* %x_handy57.i, align 8
+  %m_len67.i = getelementptr inbounds %struct.mbuf, %struct.mbuf* %4, i64 0, i32 3
+  %21 = load i32, i32* %m_len67.i, align 8
+  %cmp68.i = icmp ugt i32 %add65.i, %21
+  br i1 %cmp68.i, label %if.then70.i, label %xdrmbuf_inline.exit
+
+if.then70.i:                                      ; preds = %if.end63.i
+  store i32 %add65.i, i32* %m_len67.i, align 8
+  br label %xdrmbuf_inline.exit
+
+xdrmbuf_inline.exit:                              ; preds = %if.end63.i, %if.then70.i
+  %tobool = icmp eq i8* %add.ptr59.i, null
+  br i1 %tobool, label %if.else, label %if.then
+
+if.then:                                          ; preds = %xdrmbuf_inline.exit
+  %22 = bitcast i8* %add.ptr59.i to i32*
+  store i32 %2, i32* %22, align 4
+  br label %cleanup
+
+if.else:                                          ; preds = %if.end51.i, %if.then55.i, %entry, %xdrmbuf_inline.exit
+  %call2 = call i32 @xdrmbuf_putbytes(%struct.XDR* nonnull %xdrs, i8* nonnull %0, i32 4) #6
+  br label %cleanup
+
+cleanup:                                          ; preds = %if.else, %if.then
+  call void @llvm.lifetime.end.p0i8(i64 4, i8* nonnull %0) #4
+  ret i32 1
+}
+
+; Function Attrs: noimplicitfloat noredzone nounwind ssp
+define internal i32 @xdrmbuf_getbytes(%struct.XDR* nocapture %xdrs, i8* nocapture %addr, i32 %len) #0 {
+entry:
+  %x_private = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 3
+  %0 = bitcast i8** %x_private to %struct.mbuf**
+  %cmp45 = icmp eq i32 %len, 0
+  br i1 %cmp45, label %cleanup, label %while.body.lr.ph
+
+while.body.lr.ph:                                 ; preds = %entry
+  %1 = load %struct.mbuf*, %struct.mbuf** %0, align 8
+  %x_handy = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 5
+  br label %while.body
+
+while.body:                                       ; preds = %while.body.lr.ph, %if.end22
+  %m.048 = phi %struct.mbuf* [ %1, %while.body.lr.ph ], [ %m.1, %if.end22 ]
+  %len.addr.047 = phi i32 [ %len, %while.body.lr.ph ], [ %conv14, %if.end22 ]
+  %addr.addr.046 = phi i8* [ %addr, %while.body.lr.ph ], [ %add.ptr8, %if.end22 ]
+  %tobool = icmp eq %struct.mbuf* %m.048, null
+  br i1 %tobool, label %cleanup, label %if.end
+
+if.end:                                           ; preds = %while.body
+  %m_len = getelementptr inbounds %struct.mbuf, %struct.mbuf* %m.048, i64 0, i32 3
+  %2 = load i32, i32* %m_len, align 8
+  %3 = load i32, i32* %x_handy, align 8
+  %sub = sub i32 %2, %3
+  %cmp2 = icmp ugt i32 %sub, %len.addr.047
+  %spec.select = select i1 %cmp2, i32 %len.addr.047, i32 %sub
+  %sz.0 = zext i32 %spec.select to i64
+  %m_data = getelementptr inbounds %struct.mbuf, %struct.mbuf* %m.048, i64 0, i32 2
+  %4 = load i8*, i8** %m_data, align 8
+  %idx.ext = zext i32 %3 to i64
+  %add.ptr = getelementptr i8, i8* %4, i64 %idx.ext
+  tail call void @llvm.memmove.p0i8.p0i8.i64(i8* align 1 %addr.addr.046, i8* align 1 %add.ptr, i64 %sz.0, i1 false)
+  %add.ptr8 = getelementptr i8, i8* %addr.addr.046, i64 %sz.0
+  %5 = load i32, i32* %x_handy, align 8
+  %conv11 = add i32 %5, %spec.select
+  store i32 %conv11, i32* %x_handy, align 8
+  %conv14 = sub i32 %len.addr.047, %spec.select
+  %6 = load i32, i32* %m_len, align 8
+  %cmp17 = icmp eq i32 %conv11, %6
+  br i1 %cmp17, label %if.then19, label %if.end22
+
+if.then19:                                        ; preds = %if.end
+  %m_next = getelementptr inbounds %struct.mbuf, %struct.mbuf* %m.048, i64 0, i32 0, i32 0
+  %7 = load %struct.mbuf*, %struct.mbuf** %m_next, align 8
+  store %struct.mbuf* %7, %struct.mbuf** %0, align 8
+  store i32 0, i32* %x_handy, align 8
+  br label %if.end22
+
+if.end22:                                         ; preds = %if.then19, %if.end
+  %m.1 = phi %struct.mbuf* [ %7, %if.then19 ], [ %m.048, %if.end ]
+  %cmp = icmp eq i32 %conv14, 0
+  br i1 %cmp, label %cleanup, label %while.body
+
+cleanup:                                          ; preds = %while.body, %if.end22, %entry
+  %retval.0 = phi i32 [ 1, %entry ], [ 1, %if.end22 ], [ 0, %while.body ]
+  ret i32 %retval.0
+}
+
+; Function Attrs: noimplicitfloat noredzone nounwind ssp
+define internal i32 @xdrmbuf_putbytes(%struct.XDR* nocapture %xdrs, i8* nocapture readonly %addr, i32 %len) #0 {
+entry:
+  %args.i238 = alloca %struct.mb_args, align 4
+  %args.i = alloca %struct.mb_args, align 4
+  %x_private = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 3
+  %0 = bitcast i8** %x_private to %struct.mbuf**
+  %cmp247 = icmp eq i32 %len, 0
+  br i1 %cmp247, label %while.end, label %while.body.lr.ph
+
+while.body.lr.ph:                                 ; preds = %entry
+  %1 = load %struct.mbuf*, %struct.mbuf** %0, align 8
+  %x_handy = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 5
+  %2 = bitcast %struct.mb_args* %args.i238 to i8*
+  %flags.i = getelementptr inbounds %struct.mb_args, %struct.mb_args* %args.i238, i64 0, i32 0
+  %type1.i = getelementptr inbounds %struct.mb_args, %struct.mb_args* %args.i238, i64 0, i32 1
+  %3 = bitcast %struct.mb_args* %args.i to i8*
+  %flags1.i = getelementptr inbounds %struct.mb_args, %struct.mb_args* %args.i, i64 0, i32 0
+  %type2.i = getelementptr inbounds %struct.mb_args, %struct.mb_args* %args.i, i64 0, i32 1
+  br label %while.body
+
+while.body:                                       ; preds = %while.body.lr.ph, %if.end168
+  %m.0250 = phi %struct.mbuf* [ %1, %while.body.lr.ph ], [ %m.1, %if.end168 ]
+  %len.addr.0249 = phi i32 [ %len, %while.body.lr.ph ], [ %conv68, %if.end168 ]
+  %addr.addr.0248 = phi i8* [ %addr, %while.body.lr.ph ], [ %add.ptr53, %if.end168 ]
+  %m_flags = getelementptr inbounds %struct.mbuf, %struct.mbuf* %m.0250, i64 0, i32 4
+  %bf.load = load i32, i32* %m_flags, align 4
+  %and = and i32 %bf.load, 2048
+  %tobool = icmp eq i32 %and, 0
+  br i1 %tobool, label %land.lhs.true, label %cond.end42
+
+land.lhs.true:                                    ; preds = %while.body
+  %and4 = and i32 %bf.load, 256
+  %tobool5 = icmp eq i32 %and4, 0
+  br i1 %tobool5, label %cond.false30, label %do.end.i
+
+do.end.i:                                         ; preds = %land.lhs.true
+  %ext_flags.i = getelementptr inbounds %struct.mbuf, %struct.mbuf* %m.0250, i64 0, i32 5, i32 0, i32 1, i32 0, i32 3
+  %bf.load2.i = load i32, i32* %ext_flags.i, align 4
+  %and4.i = and i32 %bf.load2.i, 256
+  %tobool5.i = icmp eq i32 %and4.i, 0
+  %4 = getelementptr inbounds %struct.mbuf, %struct.mbuf* %m.0250, i64 0, i32 5, i32 0, i32 1, i32 0, i32 0
+  br i1 %tobool5.i, label %cond.false.i, label %cond.true.i
+
+cond.true.i:                                      ; preds = %do.end.i
+  %ext_count.i = bitcast %union.anon.13* %4 to i32*
+  br label %m_extrefcnt.exit
+
+cond.false.i:                                     ; preds = %do.end.i
+  %ext_cnt.i = getelementptr inbounds %union.anon.13, %union.anon.13* %4, i64 0, i32 0
+  %5 = load i32*, i32** %ext_cnt.i, align 8
+  br label %m_extrefcnt.exit
+
+m_extrefcnt.exit:                                 ; preds = %cond.true.i, %cond.false.i
+  %cond.in.i = phi i32* [ %ext_count.i, %cond.true.i ], [ %5, %cond.false.i ]
+  %cond.i = load volatile i32, i32* %cond.in.i, align 4
+  %cmp6 = icmp eq i32 %cond.i, 1
+  br i1 %cmp6, label %cond.true28, label %cond.end42
+
+cond.true28:                                      ; preds = %m_extrefcnt.exit
+  %ext_buf = getelementptr inbounds %struct.mbuf, %struct.mbuf* %m.0250, i64 0, i32 5, i32 0, i32 1, i32 0, i32 1
+  %6 = load i8*, i8** %ext_buf, align 8
+  %ext_size = getelementptr inbounds %struct.mbuf, %struct.mbuf* %m.0250, i64 0, i32 5, i32 0, i32 1, i32 0, i32 2
+  %7 = load i32, i32* %ext_size, align 8
+  br label %cond.end37
+
+cond.false30:                                     ; preds = %land.lhs.true
+  %and16 = and i32 %bf.load, 512
+  %tobool17 = icmp eq i32 %and16, 0
+  %8 = getelementptr inbounds %struct.mbuf, %struct.mbuf* %m.0250, i64 0, i32 5
+  %9 = getelementptr inbounds %struct.mbuf, %struct.mbuf* %m.0250, i64 0, i32 5, i32 0, i32 1
+  %arrayidx = bitcast %union.anon.12* %9 to i8*
+  %arrayidx20 = bitcast %union.anon.4* %8 to i8*
+  %cond = select i1 %tobool17, i8* %arrayidx20, i8* %arrayidx
+  %cond36 = select i1 %tobool17, i32 480, i32 424
+  br label %cond.end37
+
+cond.end37:                                       ; preds = %cond.false30, %cond.true28
+  %cond22242 = phi i8* [ %6, %cond.true28 ], [ %cond, %cond.false30 ]
+  %cond38 = phi i32 [ %7, %cond.true28 ], [ %cond36, %cond.false30 ]
+  %idx.ext = zext i32 %cond38 to i64
+  %add.ptr = getelementptr i8, i8* %cond22242, i64 %idx.ext
+  %m_data = getelementptr inbounds %struct.mbuf, %struct.mbuf* %m.0250, i64 0, i32 2
+  %10 = load i8*, i8** %m_data, align 8
+  %m_len = getelementptr inbounds %struct.mbuf, %struct.mbuf* %m.0250, i64 0, i32 3
+  %11 = load i32, i32* %m_len, align 8
+  %idx.ext39 = sext i32 %11 to i64
+  %add.ptr40 = getelementptr i8, i8* %10, i64 %idx.ext39
+  %sub.ptr.lhs.cast = ptrtoint i8* %add.ptr to i64
+  %sub.ptr.rhs.cast = ptrtoint i8* %add.ptr40 to i64
+  %sub.ptr.sub = sub i64 %sub.ptr.lhs.cast, %sub.ptr.rhs.cast
+  br label %cond.end42
+
+cond.end42:                                       ; preds = %while.body, %m_extrefcnt.exit, %cond.end37
+  %cond43 = phi i64 [ %sub.ptr.sub, %cond.end37 ], [ 0, %m_extrefcnt.exit ], [ 0, %while.body ]
+  %m_len44 = getelementptr inbounds %struct.mbuf, %struct.mbuf* %m.0250, i64 0, i32 3
+  %12 = load i32, i32* %m_len44, align 8
+  %13 = load i32, i32* %x_handy, align 8
+  %sub = sub i32 %12, %13
+  %conv = zext i32 %sub to i64
+  %add = add i64 %cond43, %conv
+  %conv45 = zext i32 %len.addr.0249 to i64
+  %cmp46 = icmp ugt i64 %add, %conv45
+  %spec.select = select i1 %cmp46, i64 %conv45, i64 %add
+  %m_data49 = getelementptr inbounds %struct.mbuf, %struct.mbuf* %m.0250, i64 0, i32 2
+  %14 = load i8*, i8** %m_data49, align 8
+  %idx.ext51 = zext i32 %13 to i64
+  %add.ptr52 = getelementptr i8, i8* %14, i64 %idx.ext51
+  call void @llvm.memmove.p0i8.p0i8.i64(i8* align 1 %add.ptr52, i8* align 1 %addr.addr.0248, i64 %spec.select, i1 false)
+  %add.ptr53 = getelementptr i8, i8* %addr.addr.0248, i64 %spec.select
+  %15 = load i32, i32* %x_handy, align 8
+  %16 = trunc i64 %spec.select to i32
+  %conv57 = add i32 %15, %16
+  store i32 %conv57, i32* %x_handy, align 8
+  %17 = load i32, i32* %m_len44, align 8
+  %cmp60 = icmp ugt i32 %conv57, %17
+  br i1 %cmp60, label %if.then62, label %if.end65
+
+if.then62:                                        ; preds = %cond.end42
+  store i32 %conv57, i32* %m_len44, align 8
+  %.pre = load i32, i32* %x_handy, align 8
+  br label %if.end65
+
+if.end65:                                         ; preds = %if.then62, %cond.end42
+  %18 = phi i32 [ %conv57, %if.then62 ], [ %17, %cond.end42 ]
+  %19 = phi i32 [ %.pre, %if.then62 ], [ %conv57, %cond.end42 ]
+  %conv68 = sub i32 %len.addr.0249, %16
+  %cmp71 = icmp eq i32 %19, %18
+  br i1 %cmp71, label %land.lhs.true73, label %if.end168
+
+land.lhs.true73:                                  ; preds = %if.end65
+  %bf.load75 = load i32, i32* %m_flags, align 4
+  %and77 = and i32 %bf.load75, 2048
+  %tobool78 = icmp eq i32 %and77, 0
+  br i1 %tobool78, label %land.lhs.true79, label %if.then145
+
+land.lhs.true79:                                  ; preds = %land.lhs.true73
+  %and83 = and i32 %bf.load75, 256
+  %tobool84 = icmp eq i32 %and83, 0
+  br i1 %tobool84, label %cond.false122, label %do.end.i227
+
+do.end.i227:                                      ; preds = %land.lhs.true79
+  %ext_flags.i223 = getelementptr inbounds %struct.mbuf, %struct.mbuf* %m.0250, i64 0, i32 5, i32 0, i32 1, i32 0, i32 3
+  %bf.load2.i224 = load i32, i32* %ext_flags.i223, align 4
+  %and4.i225 = and i32 %bf.load2.i224, 256
+  %tobool5.i226 = icmp eq i32 %and4.i225, 0
+  %20 = getelementptr inbounds %struct.mbuf, %struct.mbuf* %m.0250, i64 0, i32 5, i32 0, i32 1, i32 0, i32 0
+  br i1 %tobool5.i226, label %cond.false.i231, label %cond.true.i229
+
+cond.true.i229:                                   ; preds = %do.end.i227
+  %ext_count.i228 = bitcast %union.anon.13* %20 to i32*
+  br label %m_extrefcnt.exit234
+
+cond.false.i231:                                  ; preds = %do.end.i227
+  %ext_cnt.i230 = getelementptr inbounds %union.anon.13, %union.anon.13* %20, i64 0, i32 0
+  %21 = load i32*, i32** %ext_cnt.i230, align 8
+  br label %m_extrefcnt.exit234
+
+m_extrefcnt.exit234:                              ; preds = %cond.true.i229, %cond.false.i231
+  %cond.in.i232 = phi i32* [ %ext_count.i228, %cond.true.i229 ], [ %21, %cond.false.i231 ]
+  %cond.i233 = load volatile i32, i32* %cond.in.i232, align 4
+  %cmp87 = icmp eq i32 %cond.i233, 1
+  br i1 %cmp87, label %cond.true119, label %if.then145
+
+cond.true119:                                     ; preds = %m_extrefcnt.exit234
+  %ext_buf97 = getelementptr inbounds %struct.mbuf, %struct.mbuf* %m.0250, i64 0, i32 5, i32 0, i32 1, i32 0, i32 1
+  %22 = load i8*, i8** %ext_buf97, align 8
+  %ext_size121 = getelementptr inbounds %struct.mbuf, %struct.mbuf* %m.0250, i64 0, i32 5, i32 0, i32 1, i32 0, i32 2
+  %23 = load i32, i32* %ext_size121, align 8
+  br label %cond.end141
+
+cond.false122:                                    ; preds = %land.lhs.true79
+  %and102 = and i32 %bf.load75, 512
+  %tobool103 = icmp eq i32 %and102, 0
+  %24 = getelementptr inbounds %struct.mbuf, %struct.mbuf* %m.0250, i64 0, i32 5
+  %25 = getelementptr inbounds %struct.mbuf, %struct.mbuf* %m.0250, i64 0, i32 5, i32 0, i32 1
+  %arrayidx106 = bitcast %union.anon.12* %25 to i8*
+  %arrayidx109 = bitcast %union.anon.4* %24 to i8*
+  %cond111 = select i1 %tobool103, i8* %arrayidx109, i8* %arrayidx106
+  %cond128 = select i1 %tobool103, i32 480, i32 424
+  br label %cond.end141
+
+cond.end141:                                      ; preds = %cond.true119, %cond.false122
+  %cond113244 = phi i8* [ %22, %cond.true119 ], [ %cond111, %cond.false122 ]
+  %cond130 = phi i32 [ %23, %cond.true119 ], [ %cond128, %cond.false122 ]
+  %idx.ext131 = zext i32 %cond130 to i64
+  %add.ptr132 = getelementptr i8, i8* %cond113244, i64 %idx.ext131
+  %26 = load i8*, i8** %m_data49, align 8
+  %idx.ext135 = sext i32 %18 to i64
+  %add.ptr136 = getelementptr i8, i8* %26, i64 %idx.ext135
+  %cmp143 = icmp eq i8* %add.ptr132, %add.ptr136
+  br i1 %cmp143, label %if.then145, label %if.end168
+
+if.then145:                                       ; preds = %land.lhs.true73, %m_extrefcnt.exit234, %cond.end141
+  %m_next = getelementptr inbounds %struct.mbuf, %struct.mbuf* %m.0250, i64 0, i32 0, i32 0
+  %27 = load %struct.mbuf*, %struct.mbuf** %m_next, align 8
+  %tobool146 = icmp eq %struct.mbuf* %27, null
+  br i1 %tobool146, label %if.then147, label %if.end164
+
+if.then147:                                       ; preds = %if.then145
+  %and151 = and i32 %bf.load75, 256
+  %tobool152 = icmp eq i32 %and151, 0
+  %28 = trunc i32 %bf.load75 to i16
+  %conv155 = and i16 %28, 255
+  br i1 %tobool152, label %if.else, label %if.then153
+
+if.then153:                                       ; preds = %if.then147
+  call void @llvm.lifetime.start.p0i8(i64 8, i8* nonnull %3) #4
+  store i32 0, i32* %flags1.i, align 4
+  store i16 %conv155, i16* %type2.i, align 4
+  %29 = load %struct.uma_zone*, %struct.uma_zone** @zone_pack, align 8
+  %call.i = call i8* @uma_zalloc_arg(%struct.uma_zone* %29, i8* nonnull %3, i32 2) #3
+  %30 = load volatile i8, i8* @sdt_probes_enabled, align 1, !range !4
+  %tobool3.i = icmp eq i8 %30, 0
+  br i1 %tobool3.i, label %m_getcl.exit, label %if.then.i236, !prof !3
+
+if.then.i236:                                     ; preds = %if.then153
+  %31 = load i64, i64* getelementptr inbounds ([1 x %struct.sdt_probe], [1 x %struct.sdt_probe]* @sdt_sdt___m__getcl, i64 0, i64 0, i32 7), align 8
+  %tobool5.i235 = icmp eq i64 %31, 0
+  br i1 %tobool5.i235, label %m_getcl.exit, label %if.then6.i, !prof !3
+
+if.then6.i:                                       ; preds = %if.then.i236
+  %32 = load void (i32, i64, i64, i64, i64, i64)*, void (i32, i64, i64, i64, i64, i64)** @sdt_probe_func, align 8
+  %conv7.i = trunc i64 %31 to i32
+  %33 = zext i16 %conv155 to i64
+  %34 = ptrtoint i8* %call.i to i64
+  call void %32(i32 %conv7.i, i64 2, i64 %33, i64 0, i64 %34, i64 0) #3
+  br label %m_getcl.exit
+
+m_getcl.exit:                                     ; preds = %if.then153, %if.then.i236, %if.then6.i
+  call void @llvm.lifetime.end.p0i8(i64 8, i8* nonnull %3) #4
+  br label %if.end162
+
+if.else:                                          ; preds = %if.then147
+  call void @llvm.lifetime.start.p0i8(i64 8, i8* nonnull %2) #4
+  store i32 0, i32* %flags.i, align 4
+  store i16 %conv155, i16* %type1.i, align 4
+  %35 = load %struct.uma_zone*, %struct.uma_zone** @zone_mbuf, align 8
+  %call.i239 = call i8* @uma_zalloc_arg(%struct.uma_zone* %35, i8* nonnull %2, i32 2) #3
+  %36 = load volatile i8, i8* @sdt_probes_enabled, align 1, !range !4
+  %tobool2.i = icmp eq i8 %36, 0
+  br i1 %tobool2.i, label %m_get.exit, label %if.then.i240, !prof !3
+
+if.then.i240:                                     ; preds = %if.else
+  %37 = load i64, i64* getelementptr inbounds ([1 x %struct.sdt_probe], [1 x %struct.sdt_probe]* @sdt_sdt___m__get, i64 0, i64 0, i32 7), align 8
+  %tobool4.i = icmp eq i64 %37, 0
+  br i1 %tobool4.i, label %m_get.exit, label %if.then5.i, !prof !3
+
+if.then5.i:                                       ; preds = %if.then.i240
+  %38 = load void (i32, i64, i64, i64, i64, i64)*, void (i32, i64, i64, i64, i64, i64)** @sdt_probe_func, align 8
+  %conv6.i = trunc i64 %37 to i32
+  %39 = zext i16 %conv155 to i64
+  %40 = ptrtoint i8* %call.i239 to i64
+  call void %38(i32 %conv6.i, i64 2, i64 %39, i64 %40, i64 0, i64 0) #3
+  br label %m_get.exit
+
+m_get.exit:                                       ; preds = %if.else, %if.then.i240, %if.then5.i
+  call void @llvm.lifetime.end.p0i8(i64 8, i8* nonnull %2) #4
+  br label %if.end162
+
+if.end162:                                        ; preds = %m_get.exit, %m_getcl.exit
+  %n.0.in = phi i8* [ %call.i, %m_getcl.exit ], [ %call.i239, %m_get.exit ]
+  %41 = bitcast %struct.mbuf* %m.0250 to i8**
+  store i8* %n.0.in, i8** %41, align 8
+  %42 = bitcast i8* %n.0.in to %struct.mbuf*
+  br label %if.end164
+
+if.end164:                                        ; preds = %if.then145, %if.end162
+  %43 = phi %struct.mbuf* [ %27, %if.then145 ], [ %42, %if.end162 ]
+  store %struct.mbuf* %43, %struct.mbuf** %0, align 8
+  store i32 0, i32* %x_handy, align 8
+  br label %if.end168
+
+if.end168:                                        ; preds = %if.end164, %cond.end141, %if.end65
+  %m.1 = phi %struct.mbuf* [ %43, %if.end164 ], [ %m.0250, %cond.end141 ], [ %m.0250, %if.end65 ]
+  %cmp = icmp eq i32 %conv68, 0
+  br i1 %cmp, label %while.end, label %while.body
+
+while.end:                                        ; preds = %if.end168, %entry
+  ret i32 1
+}
+
+; Function Attrs: noimplicitfloat noredzone nounwind ssp
+define internal i32 @xdrmbuf_getpos(%struct.XDR* nocapture readonly %xdrs) #0 {
+entry:
+  %x_base = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 4
+  %0 = bitcast i8** %x_base to %struct.mbuf**
+  %x_private = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 3
+  %1 = bitcast i8** %x_private to %struct.mbuf**
+  %2 = load %struct.mbuf*, %struct.mbuf** %1, align 8
+  %m0.014 = load %struct.mbuf*, %struct.mbuf** %0, align 8
+  %tobool15 = icmp ne %struct.mbuf* %m0.014, null
+  %tobool.not16 = xor i1 %tobool15, true
+  %cmp17 = icmp eq %struct.mbuf* %m0.014, %2
+  %or.cond18 = or i1 %cmp17, %tobool.not16
+  br i1 %or.cond18, label %do.body, label %while.body
+
+while.body:                                       ; preds = %entry, %while.body
+  %m0.020 = phi %struct.mbuf* [ %m0.0, %while.body ], [ %m0.014, %entry ]
+  %pos.019 = phi i32 [ %add, %while.body ], [ 0, %entry ]
+  %m_len = getelementptr inbounds %struct.mbuf, %struct.mbuf* %m0.020, i64 0, i32 3
+  %3 = load i32, i32* %m_len, align 8
+  %add = add i32 %3, %pos.019
+  %m_next = getelementptr inbounds %struct.mbuf, %struct.mbuf* %m0.020, i64 0, i32 0, i32 0
+  %m0.0 = load %struct.mbuf*, %struct.mbuf** %m_next, align 8
+  %tobool = icmp ne %struct.mbuf* %m0.0, null
+  %tobool.not = xor i1 %tobool, true
+  %cmp = icmp eq %struct.mbuf* %m0.0, %2
+  %or.cond = or i1 %cmp, %tobool.not
+  br i1 %or.cond, label %do.body, label %while.body
+
+do.body:                                          ; preds = %while.body, %entry
+  %pos.0.lcssa = phi i32 [ 0, %entry ], [ %add, %while.body ]
+  %tobool.lcssa = phi i1 [ %tobool15, %entry ], [ %tobool, %while.body ]
+  br i1 %tobool.lcssa, label %do.end, label %if.then, !prof !3
+
+if.then:                                          ; preds = %do.body
+  tail call void (i8*, ...) @kassert_panic(i8* getelementptr inbounds ([21 x i8], [21 x i8]* @.str.3, i64 0, i64 0)) #3
+  br label %do.end
+
+do.end:                                           ; preds = %do.body, %if.then
+  %x_handy = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 5
+  %4 = load i32, i32* %x_handy, align 8
+  %add3 = add i32 %4, %pos.0.lcssa
+  ret i32 %add3
+}
+
+; Function Attrs: noimplicitfloat noredzone nounwind ssp
+define internal i32 @xdrmbuf_setpos(%struct.XDR* nocapture %xdrs, i32 %pos) #0 {
+entry:
+  %x_base = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 4
+  %0 = bitcast i8** %x_base to %struct.mbuf**
+  %m.018 = load %struct.mbuf*, %struct.mbuf** %0, align 8
+  %tobool19 = icmp eq %struct.mbuf* %m.018, null
+  br i1 %tobool19, label %if.then, label %land.rhs
+
+land.rhs:                                         ; preds = %entry, %while.body
+  %m.021 = phi %struct.mbuf* [ %m.0, %while.body ], [ %m.018, %entry ]
+  %pos.addr.020 = phi i32 [ %sub, %while.body ], [ %pos, %entry ]
+  %m_len = getelementptr inbounds %struct.mbuf, %struct.mbuf* %m.021, i64 0, i32 3
+  %1 = load i32, i32* %m_len, align 8
+  %cmp = icmp ugt i32 %pos.addr.020, %1
+  br i1 %cmp, label %while.body, label %do.end
+
+while.body:                                       ; preds = %land.rhs
+  %sub = sub i32 %pos.addr.020, %1
+  %m_next = getelementptr inbounds %struct.mbuf, %struct.mbuf* %m.021, i64 0, i32 0, i32 0
+  %m.0 = load %struct.mbuf*, %struct.mbuf** %m_next, align 8
+  %tobool = icmp eq %struct.mbuf* %m.0, null
+  br i1 %tobool, label %if.then, label %land.rhs
+
+if.then:                                          ; preds = %while.body, %entry
+  %pos.addr.0.lcssa = phi i32 [ %pos, %entry ], [ %sub, %while.body ]
+  tail call void (i8*, ...) @kassert_panic(i8* getelementptr inbounds ([21 x i8], [21 x i8]* @.str.3, i64 0, i64 0)) #3
+  br label %do.end
+
+do.end:                                           ; preds = %land.rhs, %if.then
+  %pos.addr.017 = phi i32 [ %pos.addr.0.lcssa, %if.then ], [ %pos.addr.020, %land.rhs ]
+  %m.015 = phi %struct.mbuf* [ null, %if.then ], [ %m.021, %land.rhs ]
+  %x_private = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 3
+  %2 = bitcast i8** %x_private to %struct.mbuf**
+  store %struct.mbuf* %m.015, %struct.mbuf** %2, align 8
+  %x_handy = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 5
+  store i32 %pos.addr.017, i32* %x_handy, align 8
+  ret i32 1
+}
+
+; Function Attrs: noimplicitfloat noredzone nounwind ssp
+define internal i32* @xdrmbuf_inline(%struct.XDR* nocapture %xdrs, i32 %len) #0 {
+entry:
+  %x_private = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 3
+  %0 = bitcast i8** %x_private to %struct.mbuf**
+  %1 = load %struct.mbuf*, %struct.mbuf** %0, align 8
+  %tobool = icmp eq %struct.mbuf* %1, null
+  br i1 %tobool, label %cleanup, label %if.end
+
+if.end:                                           ; preds = %entry
+  %x_op = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 0
+  %2 = load i32, i32* %x_op, align 8
+  %cmp = icmp eq i32 %2, 0
+  br i1 %cmp, label %if.then1, label %if.else
+
+if.then1:                                         ; preds = %if.end
+  %m_flags = getelementptr inbounds %struct.mbuf, %struct.mbuf* %1, i64 0, i32 4
+  %bf.load = load i32, i32* %m_flags, align 4
+  %and = and i32 %bf.load, 2048
+  %tobool2 = icmp eq i32 %and, 0
+  br i1 %tobool2, label %land.lhs.true, label %cond.end44
+
+land.lhs.true:                                    ; preds = %if.then1
+  %and6 = and i32 %bf.load, 256
+  %tobool7 = icmp eq i32 %and6, 0
+  br i1 %tobool7, label %cond.false32, label %do.end.i
+
+do.end.i:                                         ; preds = %land.lhs.true
+  %ext_flags.i = getelementptr inbounds %struct.mbuf, %struct.mbuf* %1, i64 0, i32 5, i32 0, i32 1, i32 0, i32 3
+  %bf.load2.i = load i32, i32* %ext_flags.i, align 4
+  %and4.i = and i32 %bf.load2.i, 256
+  %tobool5.i = icmp eq i32 %and4.i, 0
+  %3 = getelementptr inbounds %struct.mbuf, %struct.mbuf* %1, i64 0, i32 5, i32 0, i32 1, i32 0, i32 0
+  br i1 %tobool5.i, label %cond.false.i, label %cond.true.i
+
+cond.true.i:                                      ; preds = %do.end.i
+  %ext_count.i = bitcast %union.anon.13* %3 to i32*
+  br label %m_extrefcnt.exit
+
+cond.false.i:                                     ; preds = %do.end.i
+  %ext_cnt.i = getelementptr inbounds %union.anon.13, %union.anon.13* %3, i64 0, i32 0
+  %4 = load i32*, i32** %ext_cnt.i, align 8
+  br label %m_extrefcnt.exit
+
+m_extrefcnt.exit:                                 ; preds = %cond.true.i, %cond.false.i
+  %cond.in.i = phi i32* [ %ext_count.i, %cond.true.i ], [ %4, %cond.false.i ]
+  %cond.i = load volatile i32, i32* %cond.in.i, align 4
+  %cmp8 = icmp eq i32 %cond.i, 1
+  br i1 %cmp8, label %cond.true30, label %cond.end44
+
+cond.true30:                                      ; preds = %m_extrefcnt.exit
+  %ext_buf = getelementptr inbounds %struct.mbuf, %struct.mbuf* %1, i64 0, i32 5, i32 0, i32 1, i32 0, i32 1
+  %5 = load i8*, i8** %ext_buf, align 8
+  %ext_size = getelementptr inbounds %struct.mbuf, %struct.mbuf* %1, i64 0, i32 5, i32 0, i32 1, i32 0, i32 2
+  %6 = load i32, i32* %ext_size, align 8
+  br label %cond.end39
+
+cond.false32:                                     ; preds = %land.lhs.true
+  %and18 = and i32 %bf.load, 512
+  %tobool19 = icmp eq i32 %and18, 0
+  %7 = getelementptr inbounds %struct.mbuf, %struct.mbuf* %1, i64 0, i32 5
+  %8 = getelementptr inbounds %struct.mbuf, %struct.mbuf* %1, i64 0, i32 5, i32 0, i32 1
+  %arrayidx = bitcast %union.anon.12* %8 to i8*
+  %arrayidx22 = bitcast %union.anon.4* %7 to i8*
+  %cond = select i1 %tobool19, i8* %arrayidx22, i8* %arrayidx
+  %cond38 = select i1 %tobool19, i32 480, i32 424
+  br label %cond.end39
+
+cond.end39:                                       ; preds = %cond.false32, %cond.true30
+  %cond24103 = phi i8* [ %5, %cond.true30 ], [ %cond, %cond.false32 ]
+  %cond40 = phi i32 [ %6, %cond.true30 ], [ %cond38, %cond.false32 ]
+  %idx.ext = zext i32 %cond40 to i64
+  %add.ptr = getelementptr i8, i8* %cond24103, i64 %idx.ext
+  %m_data = getelementptr inbounds %struct.mbuf, %struct.mbuf* %1, i64 0, i32 2
+  %9 = load i8*, i8** %m_data, align 8
+  %m_len = getelementptr inbounds %struct.mbuf, %struct.mbuf* %1, i64 0, i32 3
+  %10 = load i32, i32* %m_len, align 8
+  %idx.ext41 = sext i32 %10 to i64
+  %add.ptr42 = getelementptr i8, i8* %9, i64 %idx.ext41
+  %sub.ptr.lhs.cast = ptrtoint i8* %add.ptr to i64
+  %sub.ptr.rhs.cast = ptrtoint i8* %add.ptr42 to i64
+  %sub.ptr.sub = sub i64 %sub.ptr.lhs.cast, %sub.ptr.rhs.cast
+  br label %cond.end44
+
+cond.end44:                                       ; preds = %if.then1, %m_extrefcnt.exit, %cond.end39
+  %cond45 = phi i64 [ %sub.ptr.sub, %cond.end39 ], [ 0, %m_extrefcnt.exit ], [ 0, %if.then1 ]
+  %m_len46 = getelementptr inbounds %struct.mbuf, %struct.mbuf* %1, i64 0, i32 3
+  %11 = load i32, i32* %m_len46, align 8
+  %x_handy = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 5
+  %12 = load i32, i32* %x_handy, align 8
+  %sub = sub i32 %11, %12
+  %conv = zext i32 %sub to i64
+  %add = add i64 %cond45, %conv
+  br label %if.end51
+
+if.else:                                          ; preds = %if.end
+  %m_len47 = getelementptr inbounds %struct.mbuf, %struct.mbuf* %1, i64 0, i32 3
+  %13 = load i32, i32* %m_len47, align 8
+  %x_handy48 = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 5
+  %14 = load i32, i32* %x_handy48, align 8
+  %sub49 = sub i32 %13, %14
+  %conv50 = zext i32 %sub49 to i64
+  br label %if.end51
+
+if.end51:                                         ; preds = %if.else, %cond.end44
+  %15 = phi i32 [ %12, %cond.end44 ], [ %14, %if.else ]
+  %available.0 = phi i64 [ %add, %cond.end44 ], [ %conv50, %if.else ]
+  %conv52 = zext i32 %len to i64
+  %cmp53 = icmp ult i64 %available.0, %conv52
+  br i1 %cmp53, label %cleanup, label %if.then55
+
+if.then55:                                        ; preds = %if.end51
+  %m_data56 = getelementptr inbounds %struct.mbuf, %struct.mbuf* %1, i64 0, i32 2
+  %16 = load i8*, i8** %m_data56, align 8
+  %idx.ext58 = zext i32 %15 to i64
+  %add.ptr59 = getelementptr i8, i8* %16, i64 %idx.ext58
+  %17 = ptrtoint i8* %add.ptr59 to i64
+  %and60 = and i64 %17, 3
+  %tobool61 = icmp eq i64 %and60, 0
+  br i1 %tobool61, label %if.end63, label %cleanup
+
+if.end63:                                         ; preds = %if.then55
+  %x_handy57 = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 5
+  %add65 = add i32 %15, %len
+  store i32 %add65, i32* %x_handy57, align 8
+  %m_len67 = getelementptr inbounds %struct.mbuf, %struct.mbuf* %1, i64 0, i32 3
+  %18 = load i32, i32* %m_len67, align 8
+  %cmp68 = icmp ugt i32 %add65, %18
+  br i1 %cmp68, label %if.then70, label %if.end73
+
+if.then70:                                        ; preds = %if.end63
+  store i32 %add65, i32* %m_len67, align 8
+  br label %if.end73
+
+if.end73:                                         ; preds = %if.then70, %if.end63
+  %19 = bitcast i8* %add.ptr59 to i32*
+  br label %cleanup
+
+cleanup:                                          ; preds = %if.end51, %if.then55, %entry, %if.end73
+  %retval.0 = phi i32* [ %19, %if.end73 ], [ null, %entry ], [ null, %if.then55 ], [ null, %if.end51 ]
+  ret i32* %retval.0
+}
+
+; Function Attrs: noimplicitfloat noredzone nounwind ssp
+define internal void @xdrmbuf_destroy(%struct.XDR* nocapture %xdrs) #0 {
+entry:
+  %x_op = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 0
+  %0 = load i32, i32* %x_op, align 8
+  %cmp = icmp eq i32 %0, 1
+  br i1 %cmp, label %land.lhs.true, label %if.end
+
+land.lhs.true:                                    ; preds = %entry
+  %x_base = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 4
+  %1 = load i8*, i8** %x_base, align 8
+  %tobool = icmp eq i8* %1, null
+  br i1 %tobool, label %if.end, label %if.then
+
+if.then:                                          ; preds = %land.lhs.true
+  %2 = bitcast i8* %1 to %struct.mbuf*
+  tail call void @m_freem(%struct.mbuf* %2) #3
+  store i8* null, i8** %x_base, align 8
+  %x_private = getelementptr inbounds %struct.XDR, %struct.XDR* %xdrs, i64 0, i32 3
+  store i8* null, i8** %x_private, align 8
+  br label %if.end
+
+if.end:                                           ; preds = %land.lhs.true, %if.then, %entry
+  ret void
+}
+
+; Function Attrs: argmemonly nounwind
+declare void @llvm.memmove.p0i8.p0i8.i64(i8* nocapture, i8* nocapture readonly, i64, i1) #2
+
+; Function Attrs: noimplicitfloat noredzone
+declare dso_local i8* @uma_zalloc_arg(%struct.uma_zone*, i8*, i32) local_unnamed_addr #1
+
+attributes #0 = { noimplicitfloat noredzone nounwind ssp "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "instrument-function-entry-inlined"=".mcount" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+x87,-3dnow,-3dnowa,-aes,-avx,-avx2,-avx512bitalg,-avx512bw,-avx512cd,-avx512dq,-avx512er,-avx512f,-avx512ifma,-avx512pf,-avx512vbmi,-avx512vbmi2,-avx512vl,-avx512vnni,-avx512vpopcntdq,-f16c,-fma,-fma4,-gfni,-mmx,-pclmul,-sha,-sse,-sse2,-sse3,-sse4.1,-sse4.2,-sse4a,-ssse3,-vaes,-vpclmulqdq,-xop,-xsave,-xsaveopt" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { noimplicitfloat noredzone "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+x87,-3dnow,-3dnowa,-aes,-avx,-avx2,-avx512bitalg,-avx512bw,-avx512cd,-avx512dq,-avx512er,-avx512f,-avx512ifma,-avx512pf,-avx512vbmi,-avx512vbmi2,-avx512vl,-avx512vnni,-avx512vpopcntdq,-f16c,-fma,-fma4,-gfni,-mmx,-pclmul,-sha,-sse,-sse2,-sse3,-sse4.1,-sse4.2,-sse4a,-ssse3,-vaes,-vpclmulqdq,-xop,-xsave,-xsaveopt" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { argmemonly nounwind }
+attributes #3 = { nobuiltin noimplicitfloat noredzone nounwind }
+attributes #4 = { nounwind }
+attributes #5 = { nounwind readnone }
+attributes #6 = { nobuiltin noimplicitfloat noredzone }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 7.0.1 (tags/RELEASE_701/final)"}
+!2 = !{!"branch_weights", i32 1, i32 2000}
+!3 = !{!"branch_weights", i32 2000, i32 1}
+!4 = !{i8 0, i8 2}
+!5 = !{i32 84510}

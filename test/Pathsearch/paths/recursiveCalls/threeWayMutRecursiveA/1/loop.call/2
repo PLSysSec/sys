@@ -1,0 +1,2 @@
+%threeWayMutRecursiveA_8 = load  i32, i32* %threeWayMutRecursiveA_3, align 4 
+store  i32 %threeWayMutRecursiveA_8, i32* %threeWayMutRecursiveA_2, align 4 

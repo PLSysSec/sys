@@ -1,0 +1,2 @@
+%simple_15 = load  i32, i32* %simple_2, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "simple_15")

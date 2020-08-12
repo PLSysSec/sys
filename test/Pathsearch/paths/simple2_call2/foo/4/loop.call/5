@@ -1,0 +1,8 @@
+%foo_13 = load  i32, i32* %foo_6, align 4 
+%bar_0 = bitcast i32 %foo_13 to i32 
+%bar_1 = bitcast i32 3 to i32 
+%bar_3 = icmp slt i32 %bar_0, %bar_1 
+path-eq %bar_3 = bitcast i1 0 to i1 
+%baz_0 = bitcast i32 %bar_0 to i32 
+%baz_1 = bitcast i32 %bar_1 to i32 
+%baz_3 = add  nsw i32 %baz_0, %baz_1 

@@ -1,0 +1,30 @@
+%diffCalls_3 = alloca i32, align 4 
+%diffCalls_4 = alloca i32, align 4 
+%diffCalls_5 = alloca i32, align 4 
+store  i32 %diffCalls_0, i32* %diffCalls_4, align 4 
+store  i32 %diffCalls_1, i32* %diffCalls_5, align 4 
+%diffCalls_6 = load  i32, i32* %diffCalls_4, align 4 
+%diffCalls_7 = load  i32, i32* %diffCalls_5, align 4 
+%diffCalls_8 = icmp slt i32 %diffCalls_6, %diffCalls_7 
+path-eq %diffCalls_8 = bitcast i1 1 to i1 
+%diffCalls_10 = load  i32, i32* %diffCalls_4, align 4 
+%diffCalls_11 =  call ccc  i32  @callee1(i32  %diffCalls_10)  
+%diffCalls_12 = load  i32, i32* %diffCalls_5, align 4 
+enter-call callee2
+%callee2_0 = bitcast i32 %diffCalls_12 to i32 
+%callee2_2 = alloca i32, align 4 
+store  i32 %callee2_0, i32* %callee2_2, align 4 
+%callee2_3 = load  i32, i32* %callee2_2, align 4 
+%callee2_4 = srem i32 %callee2_3, 2 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "callee2_4")
+%diffCalls_13 = bitcast i32 %callee2_4 to i32 
+exit-call diffCalls_13
+%diffCalls_14 = add  nsw i32 %diffCalls_11, %diffCalls_13 
+%diffCalls_15 = load  i32, i32* %diffCalls_4, align 4 
+%diffCalls_16 = load  i32, i32* %diffCalls_5, align 4 
+%diffCalls_17 = sub  nsw i32 %diffCalls_15, %diffCalls_16 
+%diffCalls_18 =  call ccc  i32  @callee3(i32  %diffCalls_17)  
+%diffCalls_19 = sub  nsw i32 %diffCalls_14, %diffCalls_18 
+store  i32 %diffCalls_19, i32* %diffCalls_3, align 4 
+%diffCalls_24 = load  i32, i32* %diffCalls_3, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "diffCalls_24")

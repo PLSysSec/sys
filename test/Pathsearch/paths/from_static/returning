@@ -1,0 +1,6 @@
+%bar_3 = mul  nsw i32 %bar_0, %bar_1 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "bar_3")
+%foo_14 = bitcast i32 %bar_3 to i32 
+%foo_15 = load  i32, i32* %foo_5, align 4 
+%foo_16 = add  nsw i32 %foo_15, %foo_14 
+store  i32 %foo_16, i32* %foo_5, align 4 

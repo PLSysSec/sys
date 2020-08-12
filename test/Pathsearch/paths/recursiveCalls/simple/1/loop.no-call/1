@@ -1,0 +1,10 @@
+%simple_2 = alloca i32, align 4 
+%simple_3 = alloca i32, align 4 
+%simple_4 = alloca i32, align 4 
+store  i32 %simple_0, i32* %simple_3, align 4 
+%simple_5 = load  i32, i32* %simple_3, align 4 
+%simple_6 = add  nsw i32 %simple_5, 2 
+store  i32 %simple_6, i32* %simple_4, align 4 
+%simple_7 = load  i32, i32* %simple_4, align 4 
+%simple_8 = icmp sgt i32 %simple_7, 25 
+track-ops LocalReference (IntegerType {typeBits = 1}) (Name "simple_8")

@@ -1,0 +1,4 @@
+%threeWayMutRecursiveA_14 = load  i32, i32* %threeWayMutRecursiveA_2, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "threeWayMutRecursiveA_14")
+%threeWayMutRecursiveC_5 = bitcast i32 %threeWayMutRecursiveA_14 to i32 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "threeWayMutRecursiveC_5")

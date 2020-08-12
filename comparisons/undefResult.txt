@@ -1,0 +1,1192 @@
+Result of operation is garbage or undefined
+
+--------------------------------------------------------------------------
+
+CmpHelperEQ
+
+TEST
+
+--------------------------------------------------------------------------
+
+CmpHelperEQ
+
+TEST
+
+--------------------------------------------------------------------------
+
+AddNscpCertType
+
+int value;
+if (parseNextCmdInput(nsCertTypeKeyWordArray, &value, &nextPos, &isCriticalExt) == SECFailure)
+  return SECFailure
+--> if (!strncmp("critical", thisPos, keyLen)
+-->    if (*nextPos == NULL) return SECSuccess
+--> return SECSuccess without setting value 
+keyUsage |= (0x80 >> value);
+claim: value is undefined 
+
+https://searchfox.org/mozilla-central/source/security/nss/cmd/certutil/certext.c#702
+
+TRUE: appears to still be there, so REPORT WRITTEN
+
+--------------------------------------------------------------------------
+
+AddKeyUsage
+
+SAME as above 
+
+--------------------------------------------------------------------------
+
+vp78_decode_mv_mb_modes
+
+SHIFT by a negative 
+
+--------------------------------------------------------------------------
+
+put_vp8_bilinear4_hv_c
+
+for (y = 0; y < h + 1; y++) init tmp
+for (y = 0; y < h; y++) use tmp
+
+FALSE: value reasoning (loops)
+
+--------------------------------------------------------------------------
+
+put_vp8_bilinear8_hv_c
+
+SAME as above 
+
+--------------------------------------------------------------------------
+
+put_vp8_bilinear16_hv_c
+
+SAME as above
+
+--------------------------------------------------------------------------
+
+put_vp8_epel4_h6v6_c
+
+Different macro, but same issue so FALSE: value reasoning, loop
+
+--------------------------------------------------------------------------
+
+put_vp8_epel8_h6v6_c
+
+SAME as above
+
+--------------------------------------------------------------------------
+
+put_vp8_epel16_h6v6_c
+
+SAME as above
+
+--------------------------------------------------------------------------
+
+put_vp8_epel4_h6v4_c
+
+SAME as above
+
+--------------------------------------------------------------------------
+
+put_vp8_epel8_h6v4_c
+
+SAME as above
+
+--------------------------------------------------------------------------
+
+put_vp8_epel16_h6v4_c
+
+SAME as above
+
+--------------------------------------------------------------------------
+
+put_vp8_epel4_h4v6_c
+
+SAME as above
+
+--------------------------------------------------------------------------
+
+put_vp8_epel8_h4v6_c
+
+SAME as above
+
+--------------------------------------------------------------------------
+
+put_vp8_epel16_h4v6_c
+
+SAME as above
+
+--------------------------------------------------------------------------
+
+put_vp8_epel4_h4v4_c
+
+SAME as above
+
+--------------------------------------------------------------------------
+
+put_vp8_epel8_h4v4_c
+
+SAME as above
+
+--------------------------------------------------------------------------
+
+put_vp8_epel16_h4v4_c
+
+SAME as above
+
+--------------------------------------------------------------------------
+
+parseVectorFields
+
+
+fieldSet[4];
+for (unsigned int i = 0u; i < fieldOffsets->size(); ++i) // assume false
+  initialize;
+for (unsigned int i = 0u; i < fieldOffsets->size(); ++i) // assume true   
+  if (fieldSet[i] != fieldSet[i - 1])
+  claim: fieldSet[i] is undefined
+
+FALSE: value reasoning
+
+--------------------------------------------------------------------------
+
+ExpectInvalidCodePointHelper
+
+char32_t badCodePoint;
+Thinks badCodePoint is uninit, but its just confused about C++ semantics
+
+FALSE: and unchanged
+https://searchfox.org/mozilla-central/source/mfbt/tests/TestUtf8.cpp#111
+
+--------------------------------------------------------------------------
+
+ExpectInvalidCodePointHelper
+
+SAME as above
+
+--------------------------------------------------------------------------
+
+ExpectInvalidCodePointHelper
+
+same pattern with different variable unitsObserved, so FALSE
+
+--------------------------------------------------------------------------
+
+ExpectInvalidCodePointHelper
+
+same pattern with different variable unitsAvailable, so FALSE
+
+--------------------------------------------------------------------------
+
+CheckListValues
+
+OOB
+
+--------------------------------------------------------------------------
+
+UpdateNodes
+
+BrotliZopfliComputeShortestPath
+StartPosQueue queue;
+InitStartPosQueue(&queue);
+--> queue->idx = 0
+&queue is passed into UpdateNodes in BrotliZopfliComputeShortestPath
+queue is the second to last argument to UpdateNodes
+...
+EvaluateNode(...queue) as second to last argument
+--> no changes to queue in the false branch of the node_cost thing
+float min_cost = (posdata->cost + ZopfliCostModelGetMinCostCmd(model)...)
+claim: posdata->cost uninit
+
+TRUE? CONTACT, looks real but not changed
+https://searchfox.org/mozilla-central/source/modules/brotli/enc/backward_references_hq.c#686
+
+--------------------------------------------------------------------------
+
+StartPosQueuePush
+
+&queue passed to UpdateNodes from BrotliZopfliComputeShortestPath
+queue passed as second to last argument to UpdateNodes
+EvaluateNode called from UpdateNodes with queue as argument
+EvaluateNode takes queue as the second to last argument
+queue passed as 0th argument of StartPosQueuePush from EvaluateNode
+StartPosQueuePush(queue, &posdata);
+
+self passed to StartPosQueuePush as first argument
+PosData* q = self->q_;
+claim: 1[..] uninit
+
+SAME as above, just deeper in callstack
+
+--------------------------------------------------------------------------
+
+CombineLengthCodes
+
+SHIFT 
+
+--------------------------------------------------------------------------
+
+main
+
+DIFF TOOLS
+
+--------------------------------------------------------------------------
+
+crc32
+
+BACK IN THE DIFF TOOL! TOOLS
+
+--------------------------------------------------------------------------
+
+CheckListValues
+
+OOB
+
+--------------------------------------------------------------------------
+
+ScaleAddCols2_16_C
+
+OOB
+
+--------------------------------------------------------------------------
+
+ScaleAddCols2_C
+
+OOB
+
+--------------------------------------------------------------------------
+
+Map
+
+if (sys_fstat(fd, &st) == -1 || st.st_size < 0)
+claim: st.st_size is uninitialized
+
+FALSE: short circuiting, value reasoning
+
+--------------------------------------------------------------------------
+
+skcms_ApproximateCurve
+
+skcms_TransferFunction tf;
+const float dx = 1.0f / (N - 1);
+N must be > 1, so let's call N 2 at minimum, leaving dx at .5 at maximum
+int L = fit_linear(curve, N, kTolerances[t], &tf.c, &tf.d);
+--> looks possible to have c not initialized in this function, but there
+--> are a number of hard-to-reason about invariants
+tf.e =    tf.c*tf.d + tf.f
+claim: tf.c is uninit
+
+FALSE: Not fixed, hard to reason about. They have sanity checks on tf after all
+of this so doesn't really matter.
+https://searchfox.org/mozilla-central/source/gfx/skia/skia/third_party/skcms/skcms.cc#1860
+
+--------------------------------------------------------------------------
+
+tf_is_valid
+
+called from skcms_ApproximateCurve with argument tf
+src passed into skcms_TransferFunction_invert as argument 0
+called from skcms_TransferFunction_invert with src as argument
+in tf_is_valid as only argument 
+if (!isfinitef_(tf->a + tf->b + tf->c + tf->d + tf->e + tf->f + tf->g))
+claim: tf->c uninit
+
+SAME AS ABOVE (just in a call and lower down)
+
+--------------------------------------------------------------------------
+
+_emit_glyphs_chunk
+
+
+XGlyphElt8 *elts;
+for (i = 0; i < num_glyphs; i++) // assume init loop doesn't happen
+  // initialize elts
+claim: elts[0].xOff is uninit
+
+FALSE: implicit invariant
+https://searchfox.org/mozilla-central/source/gfx/cairo/cairo/src/cairo-xlib-surface.c#4456
+Code unchanged
+
+--------------------------------------------------------------------------
+
+_cairo_xlib_surface_composite_trapezoids
+
+for (i = 0; i < num_traps; i++) // assume does not execute
+  // initialize 
+if (xtraps[0].left.p1.y < xtraps[0].left.p2.y)
+claim: xtraps[0].left.p1.y is undefined
+
+FALSE: implicit invariant
+https://searchfox.org/mozilla-central/source/gfx/cairo/cairo/src/cairo-xlib-surface.c#2973
+Code unchanged
+
+--------------------------------------------------------------------------
+
+_cairo_fixed_from_int
+
+SHIFT
+
+--------------------------------------------------------------------------
+
+_cairo_ps_surface_emit_pattern_stops
+
+for (i = 0; i < n_stops; i++) // assume it doesn't execute
+  // initialize 
+if (stops[0].offset > COLOR_STOP_EPSILON) {
+claim: stops[0].offset 
+
+FALSE: implicit invariant
+
+--------------------------------------------------------------------------
+
+TranslateRecording
+
+uint16_t minorRevision;
+ReadElement(reader, minorRevision);
+if (minorRevision > kMinorRevision)
+claim: minorRevision uninit
+
+FALSE: C++ semantics: pass by reference 
+
+--------------------------------------------------------------------------
+
+TranslateRecording
+
+uint16_t majorRevision;
+ReadElement(reader, majorRevision);
+if (majorRevision != kMajorRevision)
+claim: majorRevision uninit
+
+FALSE: C++ semantics: pass by reference
+
+--------------------------------------------------------------------------
+
+TranslateRecording
+
+uint32_t magicInt;
+ReadElement(reader, magicInt);
+if (magicInt != mozilla::gfx::kMagicInt)
+claim: magicInt uninit
+
+FALSE: C++ semantics: pass by reference
+
+--------------------------------------------------------------------------
+
+_cairo_pdf_surface_emit_pattern_stops
+
+SAME as prior
+
+--------------------------------------------------------------------------
+
+_moz_cairo_ft_font_face_create_for_pattern
+
+_cairo_ft_unscaled_font_create_for_pattern(...&unscaled)
+--> return CAIRO_STATUS_NO_MEMORY
+if (unlikely (status)) return null // assumes this is false, but actually
+                                   // the function failed, so will exit
+if (unlikely (unscaled == NULL))
+claim: unscaled uninit
+
+FALSE: value reasoning
+
+--------------------------------------------------------------------------
+
+_cairo_ft_resolve_pattern
+
+FALSE: same pattern as above, but unfortunately different function
+
+--------------------------------------------------------------------------
+
+bits_image_fetch_bilinear_no_repeat_8888
+
+SHIFT
+
+--------------------------------------------------------------------------
+
+ssse3_fetch_bilinear_cover
+
+pixman_iter_t iter;
+ssse3_bilinear_cover_iter_init(&iter);
+--> thing it thinks is uninit allocated using malloc
+ssse3_fetch_bilinear_cover(&iter, NULL) called from ssse3_scale_data
+iter passed as first argument to ssse3_fetch_bilinear_cover
+bilinear_info_t* info = iter->data
+line0 = &info->lines[y0 & 0x01]
+if (line0->y != y0)
+claim: line0->y uninit
+
+HEAP
+
+--------------------------------------------------------------------------
+
+WebRtcAecm_UpdateChannel
+
+SHIFT
+
+--------------------------------------------------------------------------
+
+WebRtcAecm_UpdateChannel
+
+SHIFT
+
+--------------------------------------------------------------------------
+
+WebRtcSpl_LevinsonW32_JSK
+
+SHIFT
+
+--------------------------------------------------------------------------
+
+WebRtcSpl_LevinsonW32_JSK
+
+order passed into function
+
+for (i=order;i>=0;i--)
+  init
+
+temp2W32 = (R_hi[1] << 16) + (R_low[1] << 1);  /* R[1] in Q31      */
+claim: R_hi[i] uninit
+
+FALSE: code has changed, but error remains.
+it seems like its another implicit invariant that means the loop will
+always execute
+temp1W32 = WebRtcSpl_DivW32HiLow(temp3W32, R_hi[0], R_low[0]); <-- it would be here
+https://searchfox.org/mozilla-central/source/media/webrtc/trunk/webrtc/common_audio/signal_processing/levinson_durbin.c#60
+
+--------------------------------------------------------------------------
+
+WebRtcSpl_AToK_JSK
+
+SHIFT
+
+--------------------------------------------------------------------------
+
+WebRtc_g722_decode
+
+SHIFT
+
+--------------------------------------------------------------------------
+
+WebRtc_g722_decode
+
+SHIFT
+
+--------------------------------------------------------------------------
+
+WebRtc_g722_decode
+
+SHIFT
+
+--------------------------------------------------------------------------
+
+m_prepend
+
+HEAP (see other, undefArg)
+
+--------------------------------------------------------------------------
+
+m_copyback
+
+HEAP
+
+--------------------------------------------------------------------------
+
+m_dup_pkthdr
+
+HEAP
+
+--------------------------------------------------------------------------
+
+m_pullup
+
+HEAP
+
+--------------------------------------------------------------------------
+
+m_move_pkthdr
+
+HEAP
+
+--------------------------------------------------------------------------
+
+sctp_load_addresses_from_init
+
+struct sctp_nets *net, *nnet, *net_tmp;
+stcb_tmp = sctp_findassociation_ep_addr(&inp, sa, &net_tmp, dst, stcb);
+--> return NULL without setting net_tmp
+if ((stcb_tmp == NULL && inp == stcb->sctp_ep) || inp == NULL) // take this branch
+else if (net_tmp != NULL && stcb_tmp == stcb) 
+claim: net_tmp uninit
+
+FALSE: value reasoning 
+
+--------------------------------------------------------------------------
+
+hnj_hyphen_load_line
+
+char word[MAX_CHARS100];
+for (i = 0; (unsigned char)buf[i] > (unsigned char)' '; i++)  // init loop
+word[j] = '\0'
+for (; pc < (strlen(word) + 1); pc++) 
+  if ((((unsigned char) word[pc]) >> 6) != 2) pu++;
+claim: word[pc] is uninit
+
+FALSE: misses initialization loop, but gone. word[pc] is not uninit for pc < strlen(word) + 1.
+
+--------------------------------------------------------------------------
+
+setShortLength
+
+SHIFT
+
+--------------------------------------------------------------------------
+
+findAlgName
+
+othername passed in
+char * t;
+t=otherName;
+while((c=*s++)!=0)
+  if(c!=*t++)
+
+FALSE confused about pointer math 
+
+--------------------------------------------------------------------------
+
+enumAlgNames
+
+OOB
+
+--------------------------------------------------------------------------
+
+makeHashCode
+
+SAME as findAlgName
+
+--------------------------------------------------------------------------
+
+dynalloc_analysis
+
+stack alloc follower;
+no init
+for (i=1;i<end;i++) // assume false
+  // init f
+opus_val16 *f;
+f = &follower[c*nbEBands];
+
+f[1] = MAX16(f[1], tmp);
+claim: f[1] uninit
+
+FALSE: init loop
+code unchanged
+https://searchfox.org/mozilla-central/source/media/libopus/celt/celt_encoder.c#1047
+
+--------------------------------------------------------------------------
+
+tf_analysis
+
+ALLOC(metric, len, int)metric = ((int*)__builtin_alloca (sizeof(int)*(len)));
+for (i=0;i<len;i++) metric[i] initialized // assume false
+
+for (sel=0;sel<2;sel++)
+  cost0 = importance[0]*abs(metric[0]-2*tf_select_table[LM][4*isTransient+2*sel+0]);
+  
+claim:metric[0] uninit
+
+FALSE: loop
+unchanged: https://searchfox.org/mozilla-central/source/media/libopus/celt/celt_encoder.c#584
+
+--------------------------------------------------------------------------
+
+deemphasis
+
+UNCLEAR report
+
+--------------------------------------------------------------------------
+
+decodeBocu1LeadByte
+
+SHIFT
+
+--------------------------------------------------------------------------
+
+formatOffsetWithAsciiDigits
+
+OOB
+
+--------------------------------------------------------------------------
+
+interpolate
+
+
+uint8_t *arrbuf = (uint8_t *)malloc(sizeof(uint8_t) * height);
+...
+arrbuf passed into resize_multistep from vp9_resize_plane
+input passed in from resize_multistep
+input passed to interpolate as the 0th argument 
+input[(int_pel - INTERP_TAPS / 2 + 1 + k < 0 ? 0 : int_pel - INTERP_TAPS / 2 + 1 + k)]
+claim: input uninit i think 
+
+HEAP 
+
+--------------------------------------------------------------------------
+
+wherePathSatisfiesOrderBy
+
+SHIFT
+
+--------------------------------------------------------------------------
+
+sqlite3ExprIsInteger
+
+int v;
+--> sqlite3ExprIsInteger(p->pLeft, &v)
+--> write to pValue in many cases 
+*pValue = -v;
+
+claim: v is garbage, and v is written to pValue
+FALSE: sqlite is super good at fixing real things when reported 
+https://searchfox.org/mozilla-central/source/third_party/sqlite3/src/sqlite3.c#100885
+
+--------------------------------------------------------------------------
+
+inDaylightTime
+
+int32_t raw, dst;
+getOffset(date, FALSE, raw, dst, ec);
+--> if its already failed, return early 
+return dst != 0;
+claim: dst is uninit
+
+Still in source, gone from bug reports 
+https://searchfox.org/mozilla-central/source/intl/icu/source/i18n/olsontz.cpp#600
+
+FALSE: Caller invaraint: error is always set to U_ZERO_ERROR before calling
+https://searchfox.org/mozilla-central/source/intl/icu/source/i18n/tzfmt.cpp#1365
+
+REPORTING ANYWAY, see what they say
+
+--------------------------------------------------------------------------
+
+pageInsertArray
+
+rc = editPage(apNew[iPg], iOld, iNew, nNewCell, &b);
+call editPage with pcArray as final argument
+pcArray passed in as final argument of pageInsertArray
+for(k=0; pCArray->ixNx[k]<=i && ALWAYS(k<NB*2); k++)
+
+claim: believe pCArray->ixNx[k] is garbage 
+FALSE: not fixed, see logic from prior
+
+--------------------------------------------------------------------------
+
+sqlite3BitvecBuiltinTest
+
+TEST
+
+--------------------------------------------------------------------------
+
+decode_coefs
+
+SAME as other decode_coefs
+
+--------------------------------------------------------------------------
+
+prep_bilin_scaled_c
+
+FALSE: all the args to FILTER_BILIN_RND are init and this macrod just does arithemetic.
+https://searchfox.org/mozilla-central/source/third_party/dav1d/src/mc_tmpl.c#543
+
+
+--------------------------------------------------------------------------
+
+prep_bilin_c
+
+--------------------------------------------------------------------------
+
+put_bilin_scaled_c
+
+--------------------------------------------------------------------------
+
+put_bilin_c
+
+--------------------------------------------------------------------------
+
+prep_8tap_scaled_c
+
+--------------------------------------------------------------------------
+
+prep_8tap_scaled_c
+
+--------------------------------------------------------------------------
+
+prep_8tap_scaled_c
+
+--------------------------------------------------------------------------
+
+prep_8tap_c
+
+--------------------------------------------------------------------------
+
+prep_8tap_c
+
+--------------------------------------------------------------------------
+
+put_8tap_scaled_c
+
+--------------------------------------------------------------------------
+
+put_8tap_scaled_c
+
+--------------------------------------------------------------------------
+
+put_8tap_scaled_c
+
+--------------------------------------------------------------------------
+
+put_8tap_c
+
+--------------------------------------------------------------------------
+
+put_8tap_c
+
+--------------------------------------------------------------------------
+
+read_mv
+
+MACROBLOCKD *const xd = &twd->xd;
+// report starts here
+read_inter_frame_mode_info(pbi, xd, mi_row, mi_col, r, x_mis, y_mis);
+xd passed as first argument to read_inter_frame_mode_info
+MODE_INFO *const mi = xd->mi[0];
+mi passed as argument 2 to read_inter_block_mode_info
+assign_mv(cm, xd, mi->mode, mi->mv...)
+mv passed to assign_mv as argument 3
+read_mv(r, &mv[i].as_mv...) <- &mv[i].as_mv
+ref passed to read_mv as argument 1
+mv->row = ref->row + diff.row;
+claim: ref->row uninit
+
+FALSE 
+
+--------------------------------------------------------------------------
+
+selfguided_filter
+
+FALSE same principle as below but with B instead of A
+
+--------------------------------------------------------------------------
+
+selfguided_filter
+
+int32_t A_[70 /*(64 + 3 + 3)*/ * REST_UNIT_STRIDE];
+int32_t *A = A_ + 3 * REST_UNIT_STRIDE + 3;
+boxsum5sqr(A_, src, w + 6, h + 6);
+--> initilization loop for A_
+const int b = SIX_NEIGHBORS(A, i);
+claim: A uninit
+
+FALSE: loop 
+
+--------------------------------------------------------------------------
+
+wiener_c
+
+SAME as other hor
+
+--------------------------------------------------------------------------
+
+get_txb_ctx
+
+OOB
+
+--------------------------------------------------------------------------
+
+highbd_frame_error
+
+uint16_t tmp[WARP_ERROR_BLOCK * WARP_ERROR_BLOCK];
+highdb_wrap_plane called with tmp as arg 5
+--> does not follow the call, so we will follow the call
+
+called from highbd_warp_error as tmp
+ref passed into highbd_frame_error as 0th argument 
+sum_error += highbd_error_measure(dst[j + i * p_stride] - ref[j + i * stride], bd);
+claim: ref[j + i * stride] uninit
+
+has been refactored since, and report does not include the
+key function. Going to call this IRRELEVANT as a result
+
+--------------------------------------------------------------------------
+
+is_motion_variation_allowed_bsize
+
+OOB
+
+--------------------------------------------------------------------------
+
+filter_selectively_horiz
+
+uint8_t lfl[MI_BLOCK_SIZE * MI_BLOCK_SIZE];
+!(lfl[(r << 3) + (c >> ss_x)] = get_filter_level(&cm->lf_info, mi))
+
+filter_selectively_vert(dst->buf, dst->stride, mask_16x16_c & border_mask,
+  mask_8x8_c & border_mask, mask_4x4_c & border_mask, mask_4x4_int[r],
+  cm->lf_info.lfthr, &lfl[r << 3]);
+
+--> looks bad...
+
+fsh called with &lfl[r << 3] as lfl
+lfl passed into filter_selectively_horiz as final argument
+const loop_filter_thresh *lfi = lfthr + *lfl;
+claim: lfl uninit
+
+--------------------------------------------------------------------------
+
+decode_coefs
+
+int eob_bin
+skip switch statement initializing eob_bin
+if (eob_bin > 1)
+claim: eob_bin uninit
+
+FALSE: default case
+https://searchfox.org/mozilla-central/source/__GENERATED__/media/libdav1d/16bd_recon_tmpl.c#322
+unchanged
+
+--------------------------------------------------------------------------
+
+av1_highbd_convolve_2d_sr_c
+
+same as below but unfortunately different function
+FALSE
+
+--------------------------------------------------------------------------
+
+av1_convolve_2d_sr_c
+
+int16_t im_block[(MAX_SB_SIZE + MAX_FILTER_TAP - 1) * MAX_SB_SIZE];
+for (int y = 0; y < im_h; ++y) 
+  // initialize   
+int16_t *src_vert = im_block + fo_vert * im_stride;
+for (int x = 0; x < w; ++x)
+  for (int k = 0; k < filter_params_y->taps; ++k)
+    sum += y_filter[k] * src_vert[(y - fo_vert + k) * im_stride + x];
+claim:
+src_vert uninit
+
+FALSE: loop, code unchanged
+https://searchfox.org/mozilla-central/source/third_party/aom/av1/common/convolve.c#76
+
+--------------------------------------------------------------------------
+
+prep_bilin_scaled_c
+
+--------------------------------------------------------------------------
+
+prep_bilin_c
+
+--------------------------------------------------------------------------
+
+put_bilin_scaled_c
+
+--------------------------------------------------------------------------
+
+put_bilin_c
+
+--------------------------------------------------------------------------
+
+prep_8tap_scaled_c
+
+--------------------------------------------------------------------------
+
+prep_8tap_scaled_c
+
+--------------------------------------------------------------------------
+
+prep_8tap_scaled_c
+
+--------------------------------------------------------------------------
+
+prep_8tap_c
+
+--------------------------------------------------------------------------
+
+prep_8tap_c
+
+--------------------------------------------------------------------------
+
+put_8tap_scaled_c
+
+--------------------------------------------------------------------------
+
+put_8tap_scaled_c
+
+--------------------------------------------------------------------------
+
+put_8tap_scaled_c
+
+--------------------------------------------------------------------------
+
+put_8tap_c
+
+--------------------------------------------------------------------------
+
+put_8tap_c
+
+FALSE: all args to macro init (including flagged stride)
+https://searchfox.org/mozilla-central/source/third_party/dav1d/src/mc_tmpl.c#108
+
+--------------------------------------------------------------------------
+
+selfguided_filter
+
+SAME as prior
+
+--------------------------------------------------------------------------
+
+selfguided_filter
+
+SAME as prior
+
+--------------------------------------------------------------------------
+
+wiener_c
+
+uint16_t hor[70 /*(64 + 3 + 3)*/ * REST_UNIT_STRIDE];
+uint16_t *hor_ptr = hor;
+
+for (int j = 0; j < h + 6; j++) // assume false
+  initialize hor
+
+for (int i = 0; i < w; i++) // assume true
+  int sum = (hor[(j + 3) * REST_UNIT_STRIDE + i] << 7) - round_offset;
+claim: hor uninit
+
+FALSE: loop. unchanged
+https://searchfox.org/mozilla-central/source/third_party/dav1d/src/looprestoration_tmpl.c#157
+
+--------------------------------------------------------------------------
+
+set_lpf_parameters
+
+OOB
+
+--------------------------------------------------------------------------
+
+set_lpf_parameters
+
+OOB
+
+--------------------------------------------------------------------------
+
+av1_reset_skip_context
+
+OOB
+
+--------------------------------------------------------------------------
+
+scan_col_mbmi
+
+SHIFT
+
+--------------------------------------------------------------------------
+
+scan_row_mbmi
+
+SHIFT
+
+--------------------------------------------------------------------------
+
+dav1d_submit_frame
+
+int ref_coded_width[7];
+if (f->frame_hdr->frame_type & 1) // assume false
+  for (int i = 0; i < 7; i++) init ref_coded_width
+
+if ((f->frame_hdr->frame_type & 1) // assume true
+  guards ref_coded_width[i] == f->cur.p.w &&
+claim: ref_coded_width[i] uninit
+
+FALSE: value reasoning
+
+--------------------------------------------------------------------------
+
+derive_warpmv
+
+OOB
+
+--------------------------------------------------------------------------
+
+resolveExplicitLevels
+
+OOB
+
+--------------------------------------------------------------------------
+
+ubidi_getRuns_64
+
+SHIFT
+
+--------------------------------------------------------------------------
+
+ubidi_getRuns_64
+
+SHIFT
+
+--------------------------------------------------------------------------
+
+ubidi_getRuns_64
+
+SHIFT
+
+--------------------------------------------------------------------------
+
+getSingleRun
+
+SHIFT
+
+--------------------------------------------------------------------------
+
+formatToValue
+
+Same. appears to be actually exactly the same error
+
+--------------------------------------------------------------------------
+
+formatToValue
+
+int8_t firstIndex;
+formatIntervalImpl(dtInterval, string, firstIndex, handler, status)
+--> if U_FAILURE(status) return without init
+if (U_FAILURE(status) return early
+if (firstIndex != -1)
+claim: firstIndex uninit
+
+FALSE: value reasoning
+
+--------------------------------------------------------------------------
+
+floor1_encode
+
+for(i=0;i<posts;i++) // assume false, no initialization for post
+  // init posts
+out[0] = post[0]
+out[1] = post[1]
+for(i=2;i<posts;i++) // assume false, no initialization for out
+  // init out
+for(k=0;k<cdim;k++)
+  if(out[j+k]<(books+book)->entries)
+claim: out[j+k] uninit
+
+FALSE: loop
+https://searchfox.org/mozilla-central/source/media/libvorbis/lib/vorbis_floor1.c#753
+code unchanged
+
+--------------------------------------------------------------------------
+
+decApplyRound
+
+OOB
+
+--------------------------------------------------------------------------
+
+decDivideOp
+
+Unit  varbuff[SD2U(DECBUFFER*2+DECDPUN)];  /* buffer for var1  */
+Unit  *var1=varbuff;             /* -> var1 array for long subtraction  */
+if ((var1units+1)*sizeof(Unit)>sizeof(varbuff)) var1 = malloc
+for (target=msu1; source>=lhs->lsu; source--, target--) *target=*source;
+^ initialization loop
+if (*var1==0 && var1units==1)
+claim: var1 uninit
+
+FALSE: initialization loop
+https://searchfox.org/mozilla-central/source/intl/icu/source/i18n/decNumber.cpp#4482
+Code unchanged
+
+--------------------------------------------------------------------------
+
+validate_script
+
+int *last_bitpos_ptr;
+int last_bitpos[MAX_COMPONENTS][DCTSIZE2];
+
+last_bitpos_ptr = &last_bitpos[0][0];
+
+for (coefi = 0; coefi < DCTSIZE2; coefi++)
+  *last_bitpos_ptr++ = -1;
+
+for (ci = 0; ci < cinfo->num_components; ci++)
+  if (last_bitpos[ci][0] < 0)
+
+claim: last_bitpos[ci][0] is garbage
+
+FALSE: loop, unchanged
+https://searchfox.org/mozilla-central/source/media/libjpeg/jcmaster.c#300
+
+--------------------------------------------------------------------------
+
+validate_script
+
+SAME as above 
+
+
+--------------------------------------------------------------------------
+
+truncateWeight
+
+SHIFT
+
+--------------------------------------------------------------------------
+
+mdb_freelist_save
+MDB_val key, data
+rc = mdb_cursor_first(&mc, &key, &data)
+--> return with MDB_SUCCESS without initializing data
+for (; !rc; rc = mdb_cursor_next(&mc, &key, &data, MDB_NEXT)) {
+  ssize_t len = (ssize_t)(data.mv_size / sizeof(MDB_ID)) - 1;
+claim: data.mv_size uninit
+
+TRUE: fixed! yay 
+
+--------------------------------------------------------------------------
+
+makeCE32FromTagAndIndex
+
+SHIFT
+
+--------------------------------------------------------------------------
+
+classify_argument
+
+OOB
+
+--------------------------------------------------------------------------
+
+classify_argument
+
+OOB
+
+--------------------------------------------------------------------------
+
+generateMTFValues
+
+UChar   yy[256];
+for (i = 0; i < s->nInUse; i++) yy[i] = (UChar) i; // assume false
+for (i = 0; i < s->nblock; i++) // assume true
+  if (yy[0] == ll_i)
+claim: yy[0] uninit
+
+FALSE: initialization (negative in use blocks), but function is now gone
+
+--------------------------------------------------------------------------
+
+expm1
+
+SHIFT
+
+--------------------------------------------------------------------------
+
+hypot
+
+SHIFT

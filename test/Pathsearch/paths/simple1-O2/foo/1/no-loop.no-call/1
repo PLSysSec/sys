@@ -1,0 +1,1 @@
+%foo_4 = icmp sgt i32 %foo_0, %foo_1 

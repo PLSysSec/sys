@@ -1,0 +1,1870 @@
+; ModuleID = '/home/firefox/firefox/mozilla-unified/tools/power/rapl.cpp'
+source_filename = "/home/firefox/firefox/mozilla-unified/tools/power/rapl.cpp"
+target datalayout = "e-m:e-i64:64-f80:128-n8:16:32:64-S128"
+target triple = "x86_64-pc-linux-gnu"
+
+%"class.std::vector" = type { %"struct.std::_Vector_base" }
+%"struct.std::_Vector_base" = type { %"struct.std::_Vector_base<double, std::allocator<double> >::_Vector_impl" }
+%"struct.std::_Vector_base<double, std::allocator<double> >::_Vector_impl" = type { double*, double*, double* }
+%struct.option = type { i8*, i32, i32*, i32 }
+%struct._IO_FILE = type { i32, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, %struct._IO_marker*, %struct._IO_FILE*, i32, i32, i64, i16, i8, [1 x i8], i8*, i64, %struct._IO_codecvt*, %struct._IO_wide_data*, %struct._IO_FILE*, i8*, i64, i32, [20 x i8] }
+%struct._IO_marker = type opaque
+%struct._IO_codecvt = type opaque
+%struct._IO_wide_data = type opaque
+%class.RAPL = type { %class.Domain*, %class.Domain*, %class.Domain*, %class.Domain* }
+%class.Domain = type { i8, double, i32, double }
+%struct.sigaction = type { %union.anon, %struct.__sigset_t, i32, void ()* }
+%union.anon = type { void (i32)* }
+%struct.__sigset_t = type { [16 x i64] }
+%struct.itimerval = type { %struct.timeval, %struct.timeval }
+%struct.timeval = type { i64, i64 }
+%struct.siginfo_t = type { i32, i32, i32, i32, %union.anon.0 }
+%union.anon.0 = type { %struct.anon.3, [80 x i8] }
+%struct.anon.3 = type { i32, i32, i32, i64, i64 }
+%struct.__va_list_tag = type { i32, i32, i8*, i8* }
+%struct.perf_event_attr = type { i32, i32, i64, %union.anon.9, i64, i64, i64, %union.anon.10, i32, %union.anon.11, %union.anon.12, i64, i64, i32, i32, i64, i32, i16, i16 }
+%union.anon.9 = type { i64 }
+%union.anon.10 = type { i32 }
+%union.anon.11 = type { i64 }
+%union.anon.12 = type { i64 }
+
+$_ZNSt6vectorIdSaIdEED2Ev = comdat any
+
+$_ZN4RAPLC2Ev = comdat any
+
+$_ZN6DomainC2EPKcjNS_10IsOptionalE = comdat any
+
+$_ZN4RAPL15EnergyEstimatesERdS0_S0_S0_ = comdat any
+
+$_ZSt4sortIN9__gnu_cxx17__normal_iteratorIPdSt6vectorIdSaIdEEEEEvT_S7_ = comdat any
+
+$_ZSt16__introsort_loopIN9__gnu_cxx17__normal_iteratorIPdSt6vectorIdSaIdEEEElNS0_5__ops15_Iter_less_iterEEvT_S9_T0_T1_ = comdat any
+
+$_ZSt22__final_insertion_sortIN9__gnu_cxx17__normal_iteratorIPdSt6vectorIdSaIdEEEENS0_5__ops15_Iter_less_iterEEvT_S9_T0_ = comdat any
+
+@_ZL9gTotals_W = internal global %"class.std::vector" zeroinitializer, align 8
+@__dso_handle = external hidden global i8
+@_ZL6gArgv0 = internal unnamed_addr global i8* null, align 8
+@.str = private unnamed_addr constant [5 x i8] c"help\00", align 1
+@.str.1 = private unnamed_addr constant [16 x i8] c"sample-interval\00", align 1
+@.str.2 = private unnamed_addr constant [13 x i8] c"sample-count\00", align 1
+@_ZZ4mainE11longOptions = private unnamed_addr constant [4 x %struct.option] [%struct.option { i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str, i32 0, i32 0), i32 0, i32* null, i32 104 }, %struct.option { i8* getelementptr inbounds ([16 x i8], [16 x i8]* @.str.1, i32 0, i32 0), i32 1, i32* null, i32 105 }, %struct.option { i8* getelementptr inbounds ([13 x i8], [13 x i8]* @.str.2, i32 0, i32 0), i32 1, i32* null, i32 110 }, %struct.option zeroinitializer], align 16
+@.str.3 = private unnamed_addr constant [6 x i8] c"hi:n:\00", align 1
+@optarg = external local_unnamed_addr global i8*, align 8
+@.str.4 = private unnamed_addr constant [34 x i8] c"sample interval is not an integer\00", align 1
+@.str.5 = private unnamed_addr constant [51 x i8] c"sample interval must be in the range 1..3600000 ms\00", align 1
+@.str.6 = private unnamed_addr constant [31 x i8] c"sample count is not an integer\00", align 1
+@.str.7 = private unnamed_addr constant [45 x i8] c"sample count must be in the range 0..1000000\00", align 1
+@stderr = external local_unnamed_addr global %struct._IO_FILE*, align 8
+@.str.8 = private unnamed_addr constant [80 x i8] c"\0AWARNING: sample intervals < 50 ms are likely to produce inaccurate estimates\0A\0A\00", align 1
+@_ZL19gSampleInterval_sec = internal unnamed_addr global double 0.000000e+00, align 8
+@_ZL5gRapl = internal unnamed_addr global %class.RAPL* null, align 8
+@.str.10 = private unnamed_addr constant [21 x i8] c"sigemptyset() failed\00", align 1
+@.str.11 = private unnamed_addr constant [26 x i8] c"sigaction(SIGALRM) failed\00", align 1
+@.str.12 = private unnamed_addr constant [25 x i8] c"sigaction(SIGINT) failed\00", align 1
+@.str.13 = private unnamed_addr constant [19 x i8] c"setitimer() failed\00", align 1
+@.str.14 = private unnamed_addr constant [55 x i8] c"    total W = _pkg_ (cores + _gpu_ + other) + _ram_ W\0A\00", align 1
+@.str.16 = private unnamed_addr constant [8 x i8] c"%s: %s\0A\00", align 1
+@.str.17 = private unnamed_addr constant [34 x i8] c"Use --help for more information.\0A\00", align 1
+@.str.18 = private unnamed_addr constant [5 x i8] c"type\00", align 1
+@.str.19 = private unnamed_addr constant [1 x i8] zeroinitializer, align 1
+@.str.20 = private unnamed_addr constant [3 x i8] c"%u\00", align 1
+@.str.21 = private unnamed_addr constant [4 x i8] c"pkg\00", align 1
+@.str.22 = private unnamed_addr constant [6 x i8] c"cores\00", align 1
+@.str.23 = private unnamed_addr constant [4 x i8] c"gpu\00", align 1
+@.str.24 = private unnamed_addr constant [4 x i8] c"ram\00", align 1
+@.str.25 = private unnamed_addr constant [20 x i8] c"new Domain() failed\00", align 1
+@.str.26 = private unnamed_addr constant [43 x i8] c"/sys/bus/event_source/devices/power/%s%s%s\00", align 1
+@.str.27 = private unnamed_addr constant [2 x i8] c"r\00", align 1
+@.str.28 = private unnamed_addr constant [16 x i8] c"fscanf() failed\00", align 1
+@.str.29 = private unnamed_addr constant [15 x i8] c"events/energy-\00", align 1
+@.str.30 = private unnamed_addr constant [11 x i8] c"event=%llx\00", align 1
+@.str.31 = private unnamed_addr constant [125 x i8] c"failed to open file for non-optional domain '%s'\0A- Is your kernel version 3.14 or later, as required? Run |uname -r| to see.\00", align 1
+@.str.32 = private unnamed_addr constant [7 x i8] c".scale\00", align 1
+@.str.33 = private unnamed_addr constant [4 x i8] c"%lf\00", align 1
+@.str.34 = private unnamed_addr constant [6 x i8] c".unit\00", align 1
+@.str.35 = private unnamed_addr constant [6 x i8] c"%127s\00", align 1
+@.str.36 = private unnamed_addr constant [7 x i8] c"Joules\00", align 1
+@.str.37 = private unnamed_addr constant [35 x i8] c"unexpected unit '%s' in .unit file\00", align 1
+@.str.38 = private unnamed_addr constant [131 x i8] c"perf_event_open() failed\0A- Did you run as root (e.g. with |sudo|) or set\0A  /proc/sys/kernel/perf_event_paranoid to 0, as required?\00", align 1
+@.str.39 = private unnamed_addr constant [5 x i8] c"%s: \00", align 1
+@_ZZL14SigAlrmHandleriP9siginfo_tPvE12sampleNumber = internal unnamed_addr global i32 1, align 4
+@_ZZL14SigAlrmHandleriP9siginfo_tPvE6pkgStr = internal global [16 x i8] zeroinitializer, align 16
+@_ZZL14SigAlrmHandleriP9siginfo_tPvE8coresStr = internal global [16 x i8] zeroinitializer, align 16
+@_ZZL14SigAlrmHandleriP9siginfo_tPvE6gpuStr = internal global [16 x i8] zeroinitializer, align 16
+@_ZZL14SigAlrmHandleriP9siginfo_tPvE6ramStr = internal global [16 x i8] zeroinitializer, align 16
+@.str.41 = private unnamed_addr constant [39 x i8] c"#%02d %s W = %s (%s + %s + %s) + %s W\0A\00", align 1
+@.str.42 = private unnamed_addr constant [14 x i8] c"read() failed\00", align 1
+@.str.44 = private unnamed_addr constant [6 x i8] c" n/a \00", align 1
+@.str.45 = private unnamed_addr constant [6 x i8] c"%5.2f\00", align 1
+@stdout = external local_unnamed_addr global %struct._IO_FILE*, align 8
+@.str.47 = private unnamed_addr constant [50 x i8] c"%d sample%s taken over a period of %.3f second%s\0A\00", align 1
+@.str.48 = private unnamed_addr constant [2 x i8] c"s\00", align 1
+@.str.50 = private unnamed_addr constant [28 x i8] c"            mean = %5.2f W\0A\00", align 1
+@.str.51 = private unnamed_addr constant [28 x i8] c"         std dev = %5.2f W\0A\00", align 1
+@.str.52 = private unnamed_addr constant [34 x i8] c"  0th percentile = %5.2f W (min)\0A\00", align 1
+@.str.53 = private unnamed_addr constant [28 x i8] c"  5th percentile = %5.2f W\0A\00", align 1
+@.str.54 = private unnamed_addr constant [28 x i8] c" 25th percentile = %5.2f W\0A\00", align 1
+@.str.55 = private unnamed_addr constant [28 x i8] c" 50th percentile = %5.2f W\0A\00", align 1
+@.str.56 = private unnamed_addr constant [28 x i8] c" 75th percentile = %5.2f W\0A\00", align 1
+@.str.57 = private unnamed_addr constant [28 x i8] c" 95th percentile = %5.2f W\0A\00", align 1
+@.str.58 = private unnamed_addr constant [34 x i8] c"100th percentile = %5.2f W (max)\0A\00", align 1
+@llvm.global_ctors = appending global [1 x { i32, void ()*, i8* }] [{ i32, void ()*, i8* } { i32 65535, void ()* @_GLOBAL__sub_I_rapl.cpp, i8* null }]
+@str = private unnamed_addr constant [354 x i8] c"usage: rapl [options]\0A\0AOptions:\0A\0A  -h --help                 show this message\0A  -i --sample-interval <N>  sample every N ms [default=1000]\0A  -n --sample-count <N>     get N samples (0 means unlimited) [default=0]\0A\0AOn Linux this program can only be run by the super-user unless the contents\0Aof /proc/sys/kernel/perf_event_paranoid is set to 0 or lower.\0A\00"
+@str.59 = private unnamed_addr constant [32 x i8] c"Distribution of 'total' values:\00"
+
+; Function Attrs: nounwind sspstrong uwtable
+define linkonce_odr void @_ZNSt6vectorIdSaIdEED2Ev(%"class.std::vector"*) unnamed_addr #0 comdat align 2 {
+  %2 = getelementptr inbounds %"class.std::vector", %"class.std::vector"* %0, i64 0, i32 0, i32 0, i32 0
+  %3 = load double*, double** %2, align 8
+  %4 = icmp eq double* %3, null
+  br i1 %4, label %7, label %5
+
+; <label>:5:                                      ; preds = %1
+  %6 = bitcast double* %3 to i8*
+  tail call void @_ZdlPv(i8* %6) #1
+  br label %7
+
+; <label>:7:                                      ; preds = %1, %5
+  ret void
+}
+
+; Function Attrs: nounwind
+declare i32 @__cxa_atexit(void (i8*)*, i8*, i8*) local_unnamed_addr #1
+
+; Function Attrs: norecurse noreturn nounwind sspstrong uwtable
+define hidden i32 @main(i32, i8**) local_unnamed_addr #2 {
+  %3 = alloca [4 x %struct.option], align 16
+  %4 = alloca i8*, align 8
+  %5 = alloca %struct.sigaction, align 8
+  %6 = alloca %struct.itimerval, align 8
+  %7 = bitcast i8** %1 to i64*
+  %8 = load i64, i64* %7, align 8
+  store i64 %8, i64* bitcast (i8** @_ZL6gArgv0 to i64*), align 8
+  %9 = bitcast [4 x %struct.option]* %3 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 128, i8* nonnull %9) #1
+  call void @llvm.memcpy.p0i8.p0i8.i64(i8* nonnull align 16 %9, i8* align 16 bitcast ([4 x %struct.option]* @_ZZ4mainE11longOptions to i8*), i64 128, i1 false)
+  %10 = bitcast i8** %4 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 8, i8* nonnull %10) #1
+  %11 = getelementptr inbounds [4 x %struct.option], [4 x %struct.option]* %3, i64 0, i64 0
+  br label %12
+
+; <label>:12:                                     ; preds = %39, %2
+  %13 = phi i32 [ %34, %39 ], [ 0, %2 ]
+  %14 = phi i32 [ %16, %39 ], [ 1000, %2 ]
+  br label %15
+
+; <label>:15:                                     ; preds = %12, %27
+  %16 = phi i32 [ %22, %27 ], [ %14, %12 ]
+  %17 = call i32 @getopt_long(i32 %0, i8** %1, i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.str.3, i64 0, i64 0), %struct.option* nonnull %11, i32* null) #1
+  switch i32 %17, label %42 [
+    i32 -1, label %43
+    i32 104, label %18
+    i32 105, label %19
+    i32 110, label %31
+  ]
+
+; <label>:18:                                     ; preds = %15
+  call fastcc void @_ZL10PrintUsagev()
+  call void @exit(i32 0) #15
+  unreachable
+
+; <label>:19:                                     ; preds = %15
+  %20 = load i8*, i8** @optarg, align 8
+  %21 = call i64 @strtol(i8* %20, i8** nonnull %4, i32 10) #1
+  %22 = trunc i64 %21 to i32
+  %23 = load i8*, i8** %4, align 8
+  %24 = load i8, i8* %23, align 1
+  %25 = icmp eq i8 %24, 0
+  br i1 %25, label %27, label %26
+
+; <label>:26:                                     ; preds = %19
+  call fastcc void @_ZL12CmdLineAbortPKc(i8* getelementptr inbounds ([34 x i8], [34 x i8]* @.str.4, i64 0, i64 0))
+  unreachable
+
+; <label>:27:                                     ; preds = %19
+  %28 = add i32 %22, -1
+  %29 = icmp ugt i32 %28, 3599999
+  br i1 %29, label %30, label %15
+
+; <label>:30:                                     ; preds = %27
+  call fastcc void @_ZL12CmdLineAbortPKc(i8* getelementptr inbounds ([51 x i8], [51 x i8]* @.str.5, i64 0, i64 0))
+  unreachable
+
+; <label>:31:                                     ; preds = %15
+  %32 = load i8*, i8** @optarg, align 8
+  %33 = call i64 @strtol(i8* %32, i8** nonnull %4, i32 10) #1
+  %34 = trunc i64 %33 to i32
+  %35 = load i8*, i8** %4, align 8
+  %36 = load i8, i8* %35, align 1
+  %37 = icmp eq i8 %36, 0
+  br i1 %37, label %39, label %38
+
+; <label>:38:                                     ; preds = %31
+  call fastcc void @_ZL12CmdLineAbortPKc(i8* getelementptr inbounds ([31 x i8], [31 x i8]* @.str.6, i64 0, i64 0))
+  unreachable
+
+; <label>:39:                                     ; preds = %31
+  %40 = icmp ugt i32 %34, 1000000
+  br i1 %40, label %41, label %12
+
+; <label>:41:                                     ; preds = %39
+  call fastcc void @_ZL12CmdLineAbortPKc(i8* getelementptr inbounds ([45 x i8], [45 x i8]* @.str.7, i64 0, i64 0))
+  unreachable
+
+; <label>:42:                                     ; preds = %15
+  call fastcc void @_ZL12CmdLineAbortPKc(i8* null)
+  unreachable
+
+; <label>:43:                                     ; preds = %15
+  %44 = icmp slt i32 %16, 50
+  br i1 %44, label %45, label %48
+
+; <label>:45:                                     ; preds = %43
+  %46 = load %struct._IO_FILE*, %struct._IO_FILE** @stderr, align 8
+  %47 = call i64 @fwrite(i8* getelementptr inbounds ([80 x i8], [80 x i8]* @.str.8, i64 0, i64 0), i64 79, i64 1, %struct._IO_FILE* %46) #16
+  br label %48
+
+; <label>:48:                                     ; preds = %45, %43
+  %49 = sitofp i32 %16 to double
+  %50 = fdiv double %49, 1.000000e+03
+  store double %50, double* @_ZL19gSampleInterval_sec, align 8
+  %51 = call i8* @_Znwm(i64 32) #17
+  %52 = bitcast i8* %51 to %class.RAPL*
+  call void @_ZN4RAPLC2Ev(%class.RAPL* nonnull %52)
+  store i8* %51, i8** bitcast (%class.RAPL** @_ZL5gRapl to i8**), align 8
+  %53 = bitcast %struct.sigaction* %5 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 152, i8* nonnull %53) #1
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %53, i8 0, i64 152, i1 false)
+  %54 = getelementptr inbounds %struct.sigaction, %struct.sigaction* %5, i64 0, i32 2
+  store i32 268435460, i32* %54, align 8
+  %55 = getelementptr inbounds %struct.sigaction, %struct.sigaction* %5, i64 0, i32 1
+  %56 = call i32 @sigemptyset(%struct.__sigset_t* nonnull %55) #1
+  %57 = icmp slt i32 %56, 0
+  br i1 %57, label %58, label %59
+
+; <label>:58:                                     ; preds = %48
+  call void (i8*, ...) @_ZL5AbortPKcz(i8* getelementptr inbounds ([21 x i8], [21 x i8]* @.str.10, i64 0, i64 0))
+  unreachable
+
+; <label>:59:                                     ; preds = %48
+  %60 = bitcast %struct.sigaction* %5 to void (i32, %struct.siginfo_t*, i8*)**
+  store void (i32, %struct.siginfo_t*, i8*)* @_ZL14SigAlrmHandleriP9siginfo_tPv, void (i32, %struct.siginfo_t*, i8*)** %60, align 8
+  %61 = call i32 @sigaction(i32 14, %struct.sigaction* nonnull %5, %struct.sigaction* null) #1
+  %62 = icmp slt i32 %61, 0
+  br i1 %62, label %63, label %64
+
+; <label>:63:                                     ; preds = %59
+  call void (i8*, ...) @_ZL5AbortPKcz(i8* getelementptr inbounds ([26 x i8], [26 x i8]* @.str.11, i64 0, i64 0))
+  unreachable
+
+; <label>:64:                                     ; preds = %59
+  store void (i32, %struct.siginfo_t*, i8*)* @_ZL13SigIntHandleriP9siginfo_tPv, void (i32, %struct.siginfo_t*, i8*)** %60, align 8
+  %65 = call i32 @sigaction(i32 2, %struct.sigaction* nonnull %5, %struct.sigaction* null) #1
+  %66 = icmp slt i32 %65, 0
+  br i1 %66, label %67, label %68
+
+; <label>:67:                                     ; preds = %64
+  call void (i8*, ...) @_ZL5AbortPKcz(i8* getelementptr inbounds ([25 x i8], [25 x i8]* @.str.12, i64 0, i64 0))
+  unreachable
+
+; <label>:68:                                     ; preds = %64
+  %69 = bitcast %struct.itimerval* %6 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 32, i8* nonnull %69) #1
+  %70 = sdiv i32 %16, 1000
+  %71 = sext i32 %70 to i64
+  %72 = getelementptr inbounds %struct.itimerval, %struct.itimerval* %6, i64 0, i32 0, i32 0
+  store i64 %71, i64* %72, align 8
+  %73 = srem i32 %16, 1000
+  %74 = mul nsw i32 %73, 1000
+  %75 = sext i32 %74 to i64
+  %76 = getelementptr inbounds %struct.itimerval, %struct.itimerval* %6, i64 0, i32 0, i32 1
+  store i64 %75, i64* %76, align 8
+  %77 = getelementptr inbounds %struct.itimerval, %struct.itimerval* %6, i64 0, i32 1
+  %78 = bitcast %struct.timeval* %77 to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i64(i8* nonnull align 8 %78, i8* nonnull align 8 %69, i64 16, i1 false)
+  %79 = call i32 @setitimer(i32 0, %struct.itimerval* nonnull %6, %struct.itimerval* null) #1
+  %80 = icmp slt i32 %79, 0
+  br i1 %80, label %81, label %82
+
+; <label>:81:                                     ; preds = %68
+  call void (i8*, ...) @_ZL5AbortPKcz(i8* getelementptr inbounds ([19 x i8], [19 x i8]* @.str.13, i64 0, i64 0))
+  unreachable
+
+; <label>:82:                                     ; preds = %68
+  call void (i8*, ...) @_ZL13PrintAndFlushPKcz(i8* getelementptr inbounds ([55 x i8], [55 x i8]* @.str.14, i64 0, i64 0))
+  %83 = icmp eq i32 %13, 0
+  br i1 %83, label %86, label %84
+
+; <label>:84:                                     ; preds = %82
+  %85 = icmp sgt i32 %13, 0
+  br i1 %85, label %89, label %88
+
+; <label>:86:                                     ; preds = %82, %86
+  %87 = call i32 @pause() #1
+  br label %86
+
+; <label>:88:                                     ; preds = %89, %84
+  call fastcc void @_ZL6Finishv()
+  unreachable
+
+; <label>:89:                                     ; preds = %84, %89
+  %90 = phi i32 [ %92, %89 ], [ 0, %84 ]
+  %91 = call i32 @pause() #1
+  %92 = add nuw nsw i32 %90, 1
+  %93 = icmp eq i32 %92, %13
+  br i1 %93, label %88, label %89
+}
+
+; Function Attrs: argmemonly nounwind
+declare void @llvm.lifetime.start.p0i8(i64, i8* nocapture) #3
+
+; Function Attrs: argmemonly nounwind
+declare void @llvm.memcpy.p0i8.p0i8.i64(i8* nocapture writeonly, i8* nocapture readonly, i64, i1) #3
+
+; Function Attrs: nounwind
+declare i32 @getopt_long(i32, i8**, i8*, %struct.option*, i32*) local_unnamed_addr #4
+
+; Function Attrs: norecurse nounwind sspstrong uwtable
+define internal fastcc void @_ZL10PrintUsagev() unnamed_addr #5 {
+  %1 = tail call i32 @puts(i8* getelementptr inbounds ([354 x i8], [354 x i8]* @str, i64 0, i64 0))
+  ret void
+}
+
+; Function Attrs: noreturn nounwind
+declare void @exit(i32) local_unnamed_addr #6
+
+; Function Attrs: nounwind
+declare i64 @strtol(i8* readonly, i8** nocapture, i32) local_unnamed_addr #4
+
+; Function Attrs: norecurse noreturn nounwind sspstrong uwtable
+define internal fastcc void @_ZL12CmdLineAbortPKc(i8*) unnamed_addr #2 {
+  %2 = icmp eq i8* %0, null
+  br i1 %2, label %7, label %3
+
+; <label>:3:                                      ; preds = %1
+  %4 = load %struct._IO_FILE*, %struct._IO_FILE** @stderr, align 8
+  %5 = load i8*, i8** @_ZL6gArgv0, align 8
+  %6 = tail call i32 (%struct._IO_FILE*, i8*, ...) @fprintf(%struct._IO_FILE* %4, i8* getelementptr inbounds ([8 x i8], [8 x i8]* @.str.16, i64 0, i64 0), i8* %5, i8* nonnull %0) #16
+  br label %7
+
+; <label>:7:                                      ; preds = %1, %3
+  %8 = load %struct._IO_FILE*, %struct._IO_FILE** @stderr, align 8
+  %9 = tail call i64 @fwrite(i8* getelementptr inbounds ([34 x i8], [34 x i8]* @.str.17, i64 0, i64 0), i64 33, i64 1, %struct._IO_FILE* %8) #16
+  tail call void @exit(i32 1) #15
+  unreachable
+}
+
+; Function Attrs: nounwind
+declare i32 @fprintf(%struct._IO_FILE* nocapture, i8* nocapture readonly, ...) local_unnamed_addr #4
+
+; Function Attrs: nobuiltin
+declare noalias nonnull i8* @_Znwm(i64) local_unnamed_addr #7
+
+; Function Attrs: nounwind sspstrong uwtable
+define linkonce_odr hidden void @_ZN4RAPLC2Ev(%class.RAPL*) unnamed_addr #0 comdat align 2 {
+  %2 = alloca [256 x i8], align 16
+  %3 = alloca i32, align 4
+  %4 = bitcast i32* %3 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 4, i8* nonnull %4) #1
+  %5 = getelementptr inbounds [256 x i8], [256 x i8]* %2, i64 0, i64 0
+  call void @llvm.lifetime.start.p0i8(i64 256, i8* nonnull %5) #1
+  %6 = call i32 (i8*, i8*, ...) @sprintf(i8* nonnull %5, i8* getelementptr inbounds ([43 x i8], [43 x i8]* @.str.26, i64 0, i64 0), i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.18, i64 0, i64 0), i8* getelementptr inbounds ([1 x i8], [1 x i8]* @.str.19, i64 0, i64 0), i8* getelementptr inbounds ([1 x i8], [1 x i8]* @.str.19, i64 0, i64 0)) #1
+  %7 = call %struct._IO_FILE* @fopen(i8* nonnull %5, i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.27, i64 0, i64 0)) #1
+  %8 = icmp eq %struct._IO_FILE* %7, null
+  br i1 %8, label %16, label %9
+
+; <label>:9:                                      ; preds = %1
+  %10 = call i32 (%struct._IO_FILE*, i8*, ...) @fscanf(%struct._IO_FILE* nonnull %7, i8* getelementptr inbounds ([3 x i8], [3 x i8]* @.str.20, i64 0, i64 0), i32* nonnull %3) #1
+  %11 = icmp eq i32 %10, 1
+  br i1 %11, label %13, label %12
+
+; <label>:12:                                     ; preds = %9
+  call void (i8*, ...) @_ZL5AbortPKcz(i8* getelementptr inbounds ([16 x i8], [16 x i8]* @.str.28, i64 0, i64 0)) #1
+  unreachable
+
+; <label>:13:                                     ; preds = %9
+  %14 = call i32 @fclose(%struct._IO_FILE* nonnull %7) #1
+  %15 = load i32, i32* %3, align 4
+  br label %16
+
+; <label>:16:                                     ; preds = %1, %13
+  %17 = phi i32 [ undef, %1 ], [ %15, %13 ]
+  call void @llvm.lifetime.end.p0i8(i64 256, i8* nonnull %5) #1
+  %18 = call i8* @_Znwm(i64 32) #17
+  %19 = bitcast i8* %18 to %class.Domain*
+  call void @_ZN6DomainC2EPKcjNS_10IsOptionalE(%class.Domain* nonnull %19, i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.21, i64 0, i64 0), i32 %17, i32 1)
+  %20 = getelementptr inbounds %class.RAPL, %class.RAPL* %0, i64 0, i32 0
+  %21 = bitcast %class.RAPL* %0 to i8**
+  store i8* %18, i8** %21, align 8
+  %22 = call i8* @_Znwm(i64 32) #17
+  %23 = bitcast i8* %22 to %class.Domain*
+  %24 = load i32, i32* %3, align 4
+  call void @_ZN6DomainC2EPKcjNS_10IsOptionalE(%class.Domain* nonnull %23, i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.str.22, i64 0, i64 0), i32 %24, i32 1)
+  %25 = getelementptr inbounds %class.RAPL, %class.RAPL* %0, i64 0, i32 1
+  %26 = bitcast %class.Domain** %25 to i8**
+  store i8* %22, i8** %26, align 8
+  %27 = call i8* @_Znwm(i64 32) #17
+  %28 = bitcast i8* %27 to %class.Domain*
+  %29 = load i32, i32* %3, align 4
+  call void @_ZN6DomainC2EPKcjNS_10IsOptionalE(%class.Domain* nonnull %28, i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.23, i64 0, i64 0), i32 %29, i32 0)
+  %30 = getelementptr inbounds %class.RAPL, %class.RAPL* %0, i64 0, i32 2
+  %31 = bitcast %class.Domain** %30 to i8**
+  store i8* %27, i8** %31, align 8
+  %32 = call i8* @_Znwm(i64 32) #17
+  %33 = bitcast i8* %32 to %class.Domain*
+  %34 = load i32, i32* %3, align 4
+  call void @_ZN6DomainC2EPKcjNS_10IsOptionalE(%class.Domain* nonnull %33, i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.24, i64 0, i64 0), i32 %34, i32 0)
+  %35 = getelementptr inbounds %class.RAPL, %class.RAPL* %0, i64 0, i32 3
+  %36 = bitcast %class.Domain** %35 to i8**
+  store i8* %32, i8** %36, align 8
+  %37 = load %class.Domain*, %class.Domain** %20, align 8
+  %38 = icmp eq %class.Domain* %37, null
+  br i1 %38, label %45, label %39
+
+; <label>:39:                                     ; preds = %16
+  %40 = load %class.Domain*, %class.Domain** %25, align 8
+  %41 = icmp eq %class.Domain* %40, null
+  br i1 %41, label %45, label %42
+
+; <label>:42:                                     ; preds = %39
+  %43 = load %class.Domain*, %class.Domain** %30, align 8
+  %44 = icmp eq %class.Domain* %43, null
+  br i1 %44, label %45, label %46
+
+; <label>:45:                                     ; preds = %42, %39, %16
+  call void (i8*, ...) @_ZL5AbortPKcz(i8* getelementptr inbounds ([20 x i8], [20 x i8]* @.str.25, i64 0, i64 0))
+  unreachable
+
+; <label>:46:                                     ; preds = %42
+  call void @llvm.lifetime.end.p0i8(i64 4, i8* nonnull %4) #1
+  ret void
+}
+
+; Function Attrs: noreturn nounwind sspstrong uwtable
+define internal void @_ZL5AbortPKcz(i8*, ...) unnamed_addr #8 {
+  %2 = alloca [1 x %struct.__va_list_tag], align 16
+  %3 = bitcast [1 x %struct.__va_list_tag]* %2 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 24, i8* nonnull %3) #1
+  %4 = getelementptr inbounds [1 x %struct.__va_list_tag], [1 x %struct.__va_list_tag]* %2, i64 0, i64 0
+  call void @llvm.va_start(i8* nonnull %3)
+  %5 = load %struct._IO_FILE*, %struct._IO_FILE** @stderr, align 8
+  %6 = load i8*, i8** @_ZL6gArgv0, align 8
+  %7 = call i32 (%struct._IO_FILE*, i8*, ...) @fprintf(%struct._IO_FILE* %5, i8* getelementptr inbounds ([5 x i8], [5 x i8]* @.str.39, i64 0, i64 0), i8* %6) #16
+  %8 = load %struct._IO_FILE*, %struct._IO_FILE** @stderr, align 8
+  %9 = call i32 @__vfprintf_chk(%struct._IO_FILE* %8, i32 1, i8* %0, %struct.__va_list_tag* nonnull %4) #1
+  %10 = load %struct._IO_FILE*, %struct._IO_FILE** @stderr, align 8
+  %11 = call i32 @fputc(i32 10, %struct._IO_FILE* %10) #16
+  call void @llvm.va_end(i8* nonnull %3)
+  call void @exit(i32 1) #15
+  unreachable
+}
+
+; Function Attrs: argmemonly nounwind
+declare void @llvm.memset.p0i8.i64(i8* nocapture writeonly, i8, i64, i1) #3
+
+; Function Attrs: nounwind
+declare i32 @sigemptyset(%struct.__sigset_t*) local_unnamed_addr #4
+
+; Function Attrs: nounwind sspstrong uwtable
+define internal void @_ZL14SigAlrmHandleriP9siginfo_tPv(i32, %struct.siginfo_t* nocapture readnone, i8* nocapture readnone) #0 {
+  %4 = alloca double, align 8
+  %5 = alloca double, align 8
+  %6 = alloca double, align 8
+  %7 = alloca double, align 8
+  %8 = alloca [16 x i8], align 16
+  %9 = alloca [16 x i8], align 16
+  %10 = bitcast double* %4 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 8, i8* nonnull %10) #1
+  %11 = bitcast double* %5 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 8, i8* nonnull %11) #1
+  %12 = bitcast double* %6 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 8, i8* nonnull %12) #1
+  %13 = bitcast double* %7 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 8, i8* nonnull %13) #1
+  %14 = load %class.RAPL*, %class.RAPL** @_ZL5gRapl, align 8
+  call void @_ZN4RAPL15EnergyEstimatesERdS0_S0_S0_(%class.RAPL* %14, double* nonnull dereferenceable(8) %4, double* nonnull dereferenceable(8) %5, double* nonnull dereferenceable(8) %6, double* nonnull dereferenceable(8) %7)
+  %15 = load double, double* %4, align 8
+  %16 = fcmp oeq double %15, -1.000000e+00
+  br i1 %16, label %17, label %18
+
+; <label>:17:                                     ; preds = %3
+  store double 0.000000e+00, double* %4, align 8
+  call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 16 getelementptr inbounds ([16 x i8], [16 x i8]* @_ZZL14SigAlrmHandleriP9siginfo_tPvE6pkgStr, i64 0, i64 0), i8* align 1 getelementptr inbounds ([6 x i8], [6 x i8]* @.str.44, i64 0, i64 0), i64 6, i1 false) #1
+  br label %22
+
+; <label>:18:                                     ; preds = %3
+  %19 = load double, double* @_ZL19gSampleInterval_sec, align 8
+  %20 = fdiv double %15, %19
+  %21 = call i32 (i8*, i8*, ...) @sprintf(i8* getelementptr inbounds ([16 x i8], [16 x i8]* @_ZZL14SigAlrmHandleriP9siginfo_tPvE6pkgStr, i64 0, i64 0), i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.str.45, i64 0, i64 0), double %20) #1
+  br label %22
+
+; <label>:22:                                     ; preds = %17, %18
+  %23 = load double, double* %5, align 8
+  %24 = fcmp oeq double %23, -1.000000e+00
+  br i1 %24, label %25, label %26
+
+; <label>:25:                                     ; preds = %22
+  store double 0.000000e+00, double* %5, align 8
+  call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 16 getelementptr inbounds ([16 x i8], [16 x i8]* @_ZZL14SigAlrmHandleriP9siginfo_tPvE8coresStr, i64 0, i64 0), i8* align 1 getelementptr inbounds ([6 x i8], [6 x i8]* @.str.44, i64 0, i64 0), i64 6, i1 false) #1
+  br label %30
+
+; <label>:26:                                     ; preds = %22
+  %27 = load double, double* @_ZL19gSampleInterval_sec, align 8
+  %28 = fdiv double %23, %27
+  %29 = call i32 (i8*, i8*, ...) @sprintf(i8* getelementptr inbounds ([16 x i8], [16 x i8]* @_ZZL14SigAlrmHandleriP9siginfo_tPvE8coresStr, i64 0, i64 0), i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.str.45, i64 0, i64 0), double %28) #1
+  br label %30
+
+; <label>:30:                                     ; preds = %25, %26
+  %31 = load double, double* %6, align 8
+  %32 = fcmp oeq double %31, -1.000000e+00
+  br i1 %32, label %33, label %34
+
+; <label>:33:                                     ; preds = %30
+  store double 0.000000e+00, double* %6, align 8
+  call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 16 getelementptr inbounds ([16 x i8], [16 x i8]* @_ZZL14SigAlrmHandleriP9siginfo_tPvE6gpuStr, i64 0, i64 0), i8* align 1 getelementptr inbounds ([6 x i8], [6 x i8]* @.str.44, i64 0, i64 0), i64 6, i1 false) #1
+  br label %38
+
+; <label>:34:                                     ; preds = %30
+  %35 = load double, double* @_ZL19gSampleInterval_sec, align 8
+  %36 = fdiv double %31, %35
+  %37 = call i32 (i8*, i8*, ...) @sprintf(i8* getelementptr inbounds ([16 x i8], [16 x i8]* @_ZZL14SigAlrmHandleriP9siginfo_tPvE6gpuStr, i64 0, i64 0), i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.str.45, i64 0, i64 0), double %36) #1
+  br label %38
+
+; <label>:38:                                     ; preds = %33, %34
+  %39 = load double, double* %7, align 8
+  %40 = fcmp oeq double %39, -1.000000e+00
+  br i1 %40, label %41, label %42
+
+; <label>:41:                                     ; preds = %38
+  store double 0.000000e+00, double* %7, align 8
+  call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 16 getelementptr inbounds ([16 x i8], [16 x i8]* @_ZZL14SigAlrmHandleriP9siginfo_tPvE6ramStr, i64 0, i64 0), i8* align 1 getelementptr inbounds ([6 x i8], [6 x i8]* @.str.44, i64 0, i64 0), i64 6, i1 false) #1
+  br label %46
+
+; <label>:42:                                     ; preds = %38
+  %43 = load double, double* @_ZL19gSampleInterval_sec, align 8
+  %44 = fdiv double %39, %43
+  %45 = call i32 (i8*, i8*, ...) @sprintf(i8* getelementptr inbounds ([16 x i8], [16 x i8]* @_ZZL14SigAlrmHandleriP9siginfo_tPvE6ramStr, i64 0, i64 0), i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.str.45, i64 0, i64 0), double %44) #1
+  br label %46
+
+; <label>:46:                                     ; preds = %41, %42
+  %47 = getelementptr inbounds [16 x i8], [16 x i8]* %8, i64 0, i64 0
+  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %47) #1
+  %48 = load double, double* %4, align 8
+  %49 = load double, double* %5, align 8
+  %50 = fsub double %48, %49
+  %51 = load double, double* %6, align 8
+  %52 = fsub double %50, %51
+  %53 = fcmp oeq double %52, -1.000000e+00
+  br i1 %53, label %54, label %55
+
+; <label>:54:                                     ; preds = %46
+  call void @llvm.memcpy.p0i8.p0i8.i64(i8* nonnull align 16 %47, i8* align 1 getelementptr inbounds ([6 x i8], [6 x i8]* @.str.44, i64 0, i64 0), i64 6, i1 false) #1
+  br label %60
+
+; <label>:55:                                     ; preds = %46
+  %56 = load double, double* @_ZL19gSampleInterval_sec, align 8
+  %57 = fdiv double %52, %56
+  %58 = call i32 (i8*, i8*, ...) @sprintf(i8* nonnull %47, i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.str.45, i64 0, i64 0), double %57) #1
+  %59 = load double, double* %4, align 8
+  br label %60
+
+; <label>:60:                                     ; preds = %54, %55
+  %61 = phi double [ %48, %54 ], [ %59, %55 ]
+  %62 = getelementptr inbounds [16 x i8], [16 x i8]* %9, i64 0, i64 0
+  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %62) #1
+  %63 = load double, double* %7, align 8
+  %64 = fadd double %61, %63
+  %65 = fcmp oeq double %64, -1.000000e+00
+  br i1 %65, label %66, label %67
+
+; <label>:66:                                     ; preds = %60
+  call void @llvm.memcpy.p0i8.p0i8.i64(i8* nonnull align 16 %62, i8* align 1 getelementptr inbounds ([6 x i8], [6 x i8]* @.str.44, i64 0, i64 0), i64 6, i1 false) #1
+  br label %71
+
+; <label>:67:                                     ; preds = %60
+  %68 = load double, double* @_ZL19gSampleInterval_sec, align 8
+  %69 = fdiv double %64, %68
+  %70 = call i32 (i8*, i8*, ...) @sprintf(i8* nonnull %62, i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.str.45, i64 0, i64 0), double %69) #1
+  br label %71
+
+; <label>:71:                                     ; preds = %66, %67
+  %72 = phi double [ 0.000000e+00, %66 ], [ %64, %67 ]
+  %73 = load double, double* @_ZL19gSampleInterval_sec, align 8
+  %74 = fdiv double %72, %73
+  %75 = load double*, double** getelementptr inbounds (%"class.std::vector", %"class.std::vector"* @_ZL9gTotals_W, i64 0, i32 0, i32 0, i32 1), align 8
+  %76 = load double*, double** getelementptr inbounds (%"class.std::vector", %"class.std::vector"* @_ZL9gTotals_W, i64 0, i32 0, i32 0, i32 2), align 8
+  %77 = icmp eq double* %75, %76
+  br i1 %77, label %81, label %78
+
+; <label>:78:                                     ; preds = %71
+  store double %74, double* %75, align 8
+  %79 = load double*, double** getelementptr inbounds (%"class.std::vector", %"class.std::vector"* @_ZL9gTotals_W, i64 0, i32 0, i32 0, i32 1), align 8
+  %80 = getelementptr inbounds double, double* %79, i64 1
+  br label %114
+
+; <label>:81:                                     ; preds = %71
+  %82 = ptrtoint double* %75 to i64
+  %83 = load i64, i64* bitcast (%"class.std::vector"* @_ZL9gTotals_W to i64*), align 8
+  %84 = sub i64 %82, %83
+  %85 = ashr exact i64 %84, 3
+  %86 = icmp eq i64 %84, 0
+  %87 = select i1 %86, i64 1, i64 %85
+  %88 = add nsw i64 %87, %85
+  %89 = icmp ult i64 %88, %85
+  %90 = icmp ugt i64 %88, 2305843009213693951
+  %91 = or i1 %89, %90
+  %92 = select i1 %91, i64 2305843009213693951, i64 %88
+  %93 = icmp eq i64 %92, 0
+  br i1 %93, label %101, label %94
+
+; <label>:94:                                     ; preds = %81
+  %95 = icmp ugt i64 %92, 2305843009213693951
+  br i1 %95, label %96, label %97
+
+; <label>:96:                                     ; preds = %94
+  call void @_ZSt17__throw_bad_allocv() #15
+  unreachable
+
+; <label>:97:                                     ; preds = %94
+  %98 = shl i64 %92, 3
+  %99 = call i8* @_Znwm(i64 %98) #1
+  %100 = bitcast i8* %99 to double*
+  br label %101
+
+; <label>:101:                                    ; preds = %97, %81
+  %102 = phi i8* [ %99, %97 ], [ null, %81 ]
+  %103 = phi double* [ %100, %97 ], [ null, %81 ]
+  %104 = getelementptr inbounds double, double* %103, i64 %85
+  store double %74, double* %104, align 8
+  br i1 %86, label %107, label %105
+
+; <label>:105:                                    ; preds = %101
+  %106 = inttoptr i64 %83 to i8*
+  call void @llvm.memmove.p0i8.p0i8.i64(i8* align 8 %102, i8* align 8 %106, i64 %84, i1 false) #1
+  br label %107
+
+; <label>:107:                                    ; preds = %101, %105
+  %108 = getelementptr inbounds double, double* %104, i64 1
+  %109 = icmp eq i64 %83, 0
+  br i1 %109, label %112, label %110
+
+; <label>:110:                                    ; preds = %107
+  %111 = inttoptr i64 %83 to i8*
+  call void @_ZdlPv(i8* %111) #1
+  br label %112
+
+; <label>:112:                                    ; preds = %107, %110
+  store i8* %102, i8** bitcast (%"class.std::vector"* @_ZL9gTotals_W to i8**), align 8
+  store double* %108, double** getelementptr inbounds (%"class.std::vector", %"class.std::vector"* @_ZL9gTotals_W, i64 0, i32 0, i32 0, i32 1), align 8
+  %113 = getelementptr inbounds double, double* %103, i64 %92
+  br label %114
+
+; <label>:114:                                    ; preds = %78, %112
+  %115 = phi double** [ getelementptr inbounds (%"class.std::vector", %"class.std::vector"* @_ZL9gTotals_W, i64 0, i32 0, i32 0, i32 1), %78 ], [ getelementptr inbounds (%"class.std::vector", %"class.std::vector"* @_ZL9gTotals_W, i64 0, i32 0, i32 0, i32 2), %112 ]
+  %116 = phi double* [ %80, %78 ], [ %113, %112 ]
+  store double* %116, double** %115, align 8
+  %117 = load i32, i32* @_ZZL14SigAlrmHandleriP9siginfo_tPvE12sampleNumber, align 4
+  %118 = add nsw i32 %117, 1
+  store i32 %118, i32* @_ZZL14SigAlrmHandleriP9siginfo_tPvE12sampleNumber, align 4
+  call void (i8*, ...) @_ZL13PrintAndFlushPKcz(i8* getelementptr inbounds ([39 x i8], [39 x i8]* @.str.41, i64 0, i64 0), i32 %117, i8* nonnull %62, i8* getelementptr inbounds ([16 x i8], [16 x i8]* @_ZZL14SigAlrmHandleriP9siginfo_tPvE6pkgStr, i64 0, i64 0), i8* getelementptr inbounds ([16 x i8], [16 x i8]* @_ZZL14SigAlrmHandleriP9siginfo_tPvE8coresStr, i64 0, i64 0), i8* getelementptr inbounds ([16 x i8], [16 x i8]* @_ZZL14SigAlrmHandleriP9siginfo_tPvE6gpuStr, i64 0, i64 0), i8* nonnull %47, i8* getelementptr inbounds ([16 x i8], [16 x i8]* @_ZZL14SigAlrmHandleriP9siginfo_tPvE6ramStr, i64 0, i64 0))
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %62) #1
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %47) #1
+  call void @llvm.lifetime.end.p0i8(i64 8, i8* nonnull %13) #1
+  call void @llvm.lifetime.end.p0i8(i64 8, i8* nonnull %12) #1
+  call void @llvm.lifetime.end.p0i8(i64 8, i8* nonnull %11) #1
+  call void @llvm.lifetime.end.p0i8(i64 8, i8* nonnull %10) #1
+  ret void
+}
+
+; Function Attrs: nounwind
+declare i32 @sigaction(i32, %struct.sigaction*, %struct.sigaction*) local_unnamed_addr #4
+
+; Function Attrs: noreturn nounwind sspstrong uwtable
+define internal void @_ZL13SigIntHandleriP9siginfo_tPv(i32, %struct.siginfo_t* nocapture readnone, i8* nocapture readnone) #8 {
+  tail call fastcc void @_ZL6Finishv()
+  unreachable
+}
+
+; Function Attrs: nounwind
+declare i32 @setitimer(i32, %struct.itimerval* nocapture readonly, %struct.itimerval* nocapture) local_unnamed_addr #4
+
+; Function Attrs: nounwind sspstrong uwtable
+define internal void @_ZL13PrintAndFlushPKcz(i8*, ...) unnamed_addr #0 {
+  %2 = alloca [1 x %struct.__va_list_tag], align 16
+  %3 = bitcast [1 x %struct.__va_list_tag]* %2 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 24, i8* nonnull %3) #1
+  %4 = getelementptr inbounds [1 x %struct.__va_list_tag], [1 x %struct.__va_list_tag]* %2, i64 0, i64 0
+  call void @llvm.va_start(i8* nonnull %3)
+  %5 = load %struct._IO_FILE*, %struct._IO_FILE** @stdout, align 8
+  %6 = call i32 @__vfprintf_chk(%struct._IO_FILE* %5, i32 1, i8* %0, %struct.__va_list_tag* nonnull %4) #1
+  call void @llvm.va_end(i8* nonnull %3)
+  %7 = load %struct._IO_FILE*, %struct._IO_FILE** @stdout, align 8
+  %8 = call i32 @fflush(%struct._IO_FILE* %7)
+  call void @llvm.lifetime.end.p0i8(i64 24, i8* nonnull %3) #1
+  ret void
+}
+
+declare i32 @pause() local_unnamed_addr #9
+
+; Function Attrs: argmemonly nounwind
+declare void @llvm.lifetime.end.p0i8(i64, i8* nocapture) #3
+
+; Function Attrs: noreturn nounwind sspstrong uwtable
+define internal fastcc void @_ZL6Finishv() unnamed_addr #8 {
+  %1 = load i64, i64* bitcast (double** getelementptr inbounds (%"class.std::vector", %"class.std::vector"* @_ZL9gTotals_W, i64 0, i32 0, i32 0, i32 1) to i64*), align 8
+  %2 = load i64, i64* bitcast (%"class.std::vector"* @_ZL9gTotals_W to i64*), align 8
+  %3 = sub i64 %1, %2
+  %4 = ashr exact i64 %3, 3
+  %5 = uitofp i64 %4 to double
+  %6 = load double, double* @_ZL19gSampleInterval_sec, align 8
+  %7 = fmul double %6, %5
+  %8 = tail call i32 @putchar(i32 10)
+  %9 = trunc i64 %4 to i32
+  %10 = icmp eq i64 %3, 8
+  %11 = select i1 %10, i8* getelementptr inbounds ([1 x i8], [1 x i8]* @.str.19, i64 0, i64 0), i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.48, i64 0, i64 0)
+  %12 = load double, double* @_ZL19gSampleInterval_sec, align 8
+  %13 = fmul double %12, %5
+  %14 = fcmp oeq double %7, 1.000000e+00
+  %15 = select i1 %14, i8* getelementptr inbounds ([1 x i8], [1 x i8]* @.str.19, i64 0, i64 0), i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.48, i64 0, i64 0)
+  %16 = tail call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([50 x i8], [50 x i8]* @.str.47, i64 0, i64 0), i32 %9, i8* %11, double %13, i8* %15)
+  %17 = icmp ult i64 %4, 2
+  br i1 %17, label %18, label %19
+
+; <label>:18:                                     ; preds = %0
+  tail call void @exit(i32 0) #15
+  unreachable
+
+; <label>:19:                                     ; preds = %0
+  %20 = load double*, double** getelementptr inbounds (%"class.std::vector", %"class.std::vector"* @_ZL9gTotals_W, i64 0, i32 0, i32 0, i32 0), align 8
+  %21 = ptrtoint double* %20 to i64
+  %22 = load double*, double** getelementptr inbounds (%"class.std::vector", %"class.std::vector"* @_ZL9gTotals_W, i64 0, i32 0, i32 0, i32 1), align 8
+  %23 = icmp eq double* %20, %22
+  br i1 %23, label %46, label %24
+
+; <label>:24:                                     ; preds = %19
+  %25 = getelementptr double, double* %22, i64 -1
+  %26 = ptrtoint double* %25 to i64
+  %27 = sub i64 %26, %21
+  %28 = lshr i64 %27, 3
+  %29 = add nuw nsw i64 %28, 1
+  %30 = and i64 %29, 7
+  %31 = icmp eq i64 %30, 0
+  br i1 %31, label %41, label %32
+
+; <label>:32:                                     ; preds = %24, %32
+  %33 = phi double [ %37, %32 ], [ 0.000000e+00, %24 ]
+  %34 = phi double* [ %38, %32 ], [ %20, %24 ]
+  %35 = phi i64 [ %39, %32 ], [ %30, %24 ]
+  %36 = load double, double* %34, align 8
+  %37 = fadd double %33, %36
+  %38 = getelementptr inbounds double, double* %34, i64 1
+  %39 = add i64 %35, -1
+  %40 = icmp eq i64 %39, 0
+  br i1 %40, label %41, label %32, !llvm.loop !3
+
+; <label>:41:                                     ; preds = %32, %24
+  %42 = phi double [ undef, %24 ], [ %37, %32 ]
+  %43 = phi double [ 0.000000e+00, %24 ], [ %37, %32 ]
+  %44 = phi double* [ %20, %24 ], [ %38, %32 ]
+  %45 = icmp ult i64 %27, 56
+  br i1 %45, label %76, label %48
+
+; <label>:46:                                     ; preds = %19
+  %47 = fdiv double 0.000000e+00, %5
+  br label %103
+
+; <label>:48:                                     ; preds = %41, %48
+  %49 = phi double [ %73, %48 ], [ %43, %41 ]
+  %50 = phi double* [ %74, %48 ], [ %44, %41 ]
+  %51 = load double, double* %50, align 8
+  %52 = fadd double %49, %51
+  %53 = getelementptr inbounds double, double* %50, i64 1
+  %54 = load double, double* %53, align 8
+  %55 = fadd double %52, %54
+  %56 = getelementptr inbounds double, double* %50, i64 2
+  %57 = load double, double* %56, align 8
+  %58 = fadd double %55, %57
+  %59 = getelementptr inbounds double, double* %50, i64 3
+  %60 = load double, double* %59, align 8
+  %61 = fadd double %58, %60
+  %62 = getelementptr inbounds double, double* %50, i64 4
+  %63 = load double, double* %62, align 8
+  %64 = fadd double %61, %63
+  %65 = getelementptr inbounds double, double* %50, i64 5
+  %66 = load double, double* %65, align 8
+  %67 = fadd double %64, %66
+  %68 = getelementptr inbounds double, double* %50, i64 6
+  %69 = load double, double* %68, align 8
+  %70 = fadd double %67, %69
+  %71 = getelementptr inbounds double, double* %50, i64 7
+  %72 = load double, double* %71, align 8
+  %73 = fadd double %70, %72
+  %74 = getelementptr inbounds double, double* %50, i64 8
+  %75 = icmp eq double* %74, %22
+  br i1 %75, label %76, label %48
+
+; <label>:76:                                     ; preds = %48, %41
+  %77 = phi double [ %42, %41 ], [ %73, %48 ]
+  %78 = fdiv double %77, %5
+  br i1 %23, label %103, label %79
+
+; <label>:79:                                     ; preds = %76
+  %80 = getelementptr double, double* %22, i64 -1
+  %81 = ptrtoint double* %80 to i64
+  %82 = sub i64 %81, %21
+  %83 = lshr i64 %82, 3
+  %84 = add nuw nsw i64 %83, 1
+  %85 = and i64 %84, 3
+  %86 = icmp eq i64 %85, 0
+  br i1 %86, label %98, label %87
+
+; <label>:87:                                     ; preds = %79, %87
+  %88 = phi double [ %94, %87 ], [ 0.000000e+00, %79 ]
+  %89 = phi double* [ %95, %87 ], [ %20, %79 ]
+  %90 = phi i64 [ %96, %87 ], [ %85, %79 ]
+  %91 = load double, double* %89, align 8
+  %92 = fsub double %91, %78
+  %93 = fmul double %92, %92
+  %94 = fadd double %88, %93
+  %95 = getelementptr inbounds double, double* %89, i64 1
+  %96 = add i64 %90, -1
+  %97 = icmp eq i64 %96, 0
+  br i1 %97, label %98, label %87, !llvm.loop !5
+
+; <label>:98:                                     ; preds = %87, %79
+  %99 = phi double [ undef, %79 ], [ %94, %87 ]
+  %100 = phi double [ 0.000000e+00, %79 ], [ %94, %87 ]
+  %101 = phi double* [ %20, %79 ], [ %95, %87 ]
+  %102 = icmp ult i64 %82, 24
+  br i1 %102, label %103, label %160
+
+; <label>:103:                                    ; preds = %98, %160, %46, %76
+  %104 = phi double [ %78, %76 ], [ %47, %46 ], [ %78, %160 ], [ %78, %98 ]
+  %105 = phi double [ 0.000000e+00, %76 ], [ 0.000000e+00, %46 ], [ %99, %98 ], [ %181, %160 ]
+  %106 = fdiv double %105, %5
+  %107 = tail call double @llvm.sqrt.f64(double %106)
+  tail call void @_ZSt4sortIN9__gnu_cxx17__normal_iteratorIPdSt6vectorIdSaIdEEEEEvT_S7_(double* %20, double* %22)
+  %108 = tail call i32 @putchar(i32 10)
+  %109 = tail call i32 @puts(i8* getelementptr inbounds ([32 x i8], [32 x i8]* @str.59, i64 0, i64 0))
+  %110 = tail call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([28 x i8], [28 x i8]* @.str.50, i64 0, i64 0), double %104)
+  %111 = tail call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([28 x i8], [28 x i8]* @.str.51, i64 0, i64 0), double %107)
+  %112 = load double*, double** getelementptr inbounds (%"class.std::vector", %"class.std::vector"* @_ZL9gTotals_W, i64 0, i32 0, i32 0, i32 0), align 8
+  %113 = load double, double* %112, align 8
+  %114 = tail call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([34 x i8], [34 x i8]* @.str.52, i64 0, i64 0), double %113)
+  %115 = fmul double %5, 5.000000e-02
+  %116 = tail call double @llvm.ceil.f64(double %115)
+  %117 = fadd double %116, -1.000000e+00
+  %118 = fptoui double %117 to i64
+  %119 = load double*, double** getelementptr inbounds (%"class.std::vector", %"class.std::vector"* @_ZL9gTotals_W, i64 0, i32 0, i32 0, i32 0), align 8
+  %120 = getelementptr inbounds double, double* %119, i64 %118
+  %121 = load double, double* %120, align 8
+  %122 = tail call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([28 x i8], [28 x i8]* @.str.53, i64 0, i64 0), double %121)
+  %123 = fmul double %5, 2.500000e-01
+  %124 = tail call double @llvm.ceil.f64(double %123)
+  %125 = fadd double %124, -1.000000e+00
+  %126 = fptoui double %125 to i64
+  %127 = load double*, double** getelementptr inbounds (%"class.std::vector", %"class.std::vector"* @_ZL9gTotals_W, i64 0, i32 0, i32 0, i32 0), align 8
+  %128 = getelementptr inbounds double, double* %127, i64 %126
+  %129 = load double, double* %128, align 8
+  %130 = tail call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([28 x i8], [28 x i8]* @.str.54, i64 0, i64 0), double %129)
+  %131 = fmul double %5, 5.000000e-01
+  %132 = tail call double @llvm.ceil.f64(double %131)
+  %133 = fadd double %132, -1.000000e+00
+  %134 = fptoui double %133 to i64
+  %135 = load double*, double** getelementptr inbounds (%"class.std::vector", %"class.std::vector"* @_ZL9gTotals_W, i64 0, i32 0, i32 0, i32 0), align 8
+  %136 = getelementptr inbounds double, double* %135, i64 %134
+  %137 = load double, double* %136, align 8
+  %138 = tail call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([28 x i8], [28 x i8]* @.str.55, i64 0, i64 0), double %137)
+  %139 = fmul double %5, 7.500000e-01
+  %140 = tail call double @llvm.ceil.f64(double %139)
+  %141 = fadd double %140, -1.000000e+00
+  %142 = fptoui double %141 to i64
+  %143 = load double*, double** getelementptr inbounds (%"class.std::vector", %"class.std::vector"* @_ZL9gTotals_W, i64 0, i32 0, i32 0, i32 0), align 8
+  %144 = getelementptr inbounds double, double* %143, i64 %142
+  %145 = load double, double* %144, align 8
+  %146 = tail call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([28 x i8], [28 x i8]* @.str.56, i64 0, i64 0), double %145)
+  %147 = fmul double %5, 0x3FEE666666666666
+  %148 = tail call double @llvm.ceil.f64(double %147)
+  %149 = fadd double %148, -1.000000e+00
+  %150 = fptoui double %149 to i64
+  %151 = load double*, double** getelementptr inbounds (%"class.std::vector", %"class.std::vector"* @_ZL9gTotals_W, i64 0, i32 0, i32 0, i32 0), align 8
+  %152 = getelementptr inbounds double, double* %151, i64 %150
+  %153 = load double, double* %152, align 8
+  %154 = tail call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([28 x i8], [28 x i8]* @.str.57, i64 0, i64 0), double %153)
+  %155 = add nsw i64 %4, -1
+  %156 = load double*, double** getelementptr inbounds (%"class.std::vector", %"class.std::vector"* @_ZL9gTotals_W, i64 0, i32 0, i32 0, i32 0), align 8
+  %157 = getelementptr inbounds double, double* %156, i64 %155
+  %158 = load double, double* %157, align 8
+  %159 = tail call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([34 x i8], [34 x i8]* @.str.58, i64 0, i64 0), double %158)
+  tail call void @exit(i32 0) #15
+  unreachable
+
+; <label>:160:                                    ; preds = %98, %160
+  %161 = phi double [ %181, %160 ], [ %100, %98 ]
+  %162 = phi double* [ %182, %160 ], [ %101, %98 ]
+  %163 = load double, double* %162, align 8
+  %164 = fsub double %163, %78
+  %165 = fmul double %164, %164
+  %166 = fadd double %161, %165
+  %167 = getelementptr inbounds double, double* %162, i64 1
+  %168 = load double, double* %167, align 8
+  %169 = fsub double %168, %78
+  %170 = fmul double %169, %169
+  %171 = fadd double %166, %170
+  %172 = getelementptr inbounds double, double* %162, i64 2
+  %173 = load double, double* %172, align 8
+  %174 = fsub double %173, %78
+  %175 = fmul double %174, %174
+  %176 = fadd double %171, %175
+  %177 = getelementptr inbounds double, double* %162, i64 3
+  %178 = load double, double* %177, align 8
+  %179 = fsub double %178, %78
+  %180 = fmul double %179, %179
+  %181 = fadd double %176, %180
+  %182 = getelementptr inbounds double, double* %162, i64 4
+  %183 = icmp eq double* %182, %22
+  br i1 %183, label %103, label %160
+}
+
+; Function Attrs: nounwind
+declare i32 @printf(i8* nocapture readonly, ...) local_unnamed_addr #4
+
+; Function Attrs: nounwind sspstrong uwtable
+define linkonce_odr hidden void @_ZN6DomainC2EPKcjNS_10IsOptionalE(%class.Domain*, i8*, i32, i32) unnamed_addr #0 comdat align 2 {
+  %5 = alloca [256 x i8], align 16
+  %6 = alloca i64, align 8
+  %7 = alloca [128 x i8], align 16
+  %8 = alloca %struct.perf_event_attr, align 8
+  %9 = bitcast i64* %6 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 8, i8* nonnull %9) #1
+  %10 = getelementptr inbounds [256 x i8], [256 x i8]* %5, i64 0, i64 0
+  call void @llvm.lifetime.start.p0i8(i64 256, i8* nonnull %10) #1
+  %11 = call i32 (i8*, i8*, ...) @sprintf(i8* nonnull %10, i8* getelementptr inbounds ([43 x i8], [43 x i8]* @.str.26, i64 0, i64 0), i8* getelementptr inbounds ([15 x i8], [15 x i8]* @.str.29, i64 0, i64 0), i8* %1, i8* getelementptr inbounds ([1 x i8], [1 x i8]* @.str.19, i64 0, i64 0)) #1
+  %12 = call %struct._IO_FILE* @fopen(i8* nonnull %10, i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.27, i64 0, i64 0)) #1
+  %13 = icmp eq %struct._IO_FILE* %12, null
+  br i1 %13, label %18, label %14
+
+; <label>:14:                                     ; preds = %4
+  %15 = call i32 (%struct._IO_FILE*, i8*, ...) @fscanf(%struct._IO_FILE* nonnull %12, i8* getelementptr inbounds ([11 x i8], [11 x i8]* @.str.30, i64 0, i64 0), i64* nonnull %6) #1
+  %16 = icmp eq i32 %15, 1
+  br i1 %16, label %23, label %17
+
+; <label>:17:                                     ; preds = %14
+  call void (i8*, ...) @_ZL5AbortPKcz(i8* getelementptr inbounds ([16 x i8], [16 x i8]* @.str.28, i64 0, i64 0)) #1
+  unreachable
+
+; <label>:18:                                     ; preds = %4
+  call void @llvm.lifetime.end.p0i8(i64 256, i8* nonnull %10) #1
+  %19 = icmp eq i32 %3, 1
+  br i1 %19, label %20, label %21
+
+; <label>:20:                                     ; preds = %18
+  tail call void (i8*, ...) @_ZL5AbortPKcz(i8* getelementptr inbounds ([125 x i8], [125 x i8]* @.str.31, i64 0, i64 0), i8* %1)
+  unreachable
+
+; <label>:21:                                     ; preds = %18
+  %22 = getelementptr inbounds %class.Domain, %class.Domain* %0, i64 0, i32 0
+  store i8 0, i8* %22, align 8
+  br label %66
+
+; <label>:23:                                     ; preds = %14
+  %24 = call i32 @fclose(%struct._IO_FILE* nonnull %12) #1
+  call void @llvm.lifetime.end.p0i8(i64 256, i8* nonnull %10) #1
+  %25 = getelementptr inbounds %class.Domain, %class.Domain* %0, i64 0, i32 0
+  store i8 1, i8* %25, align 8
+  call void @llvm.lifetime.start.p0i8(i64 256, i8* nonnull %10) #1
+  %26 = call i32 (i8*, i8*, ...) @sprintf(i8* nonnull %10, i8* getelementptr inbounds ([43 x i8], [43 x i8]* @.str.26, i64 0, i64 0), i8* getelementptr inbounds ([15 x i8], [15 x i8]* @.str.29, i64 0, i64 0), i8* %1, i8* getelementptr inbounds ([7 x i8], [7 x i8]* @.str.32, i64 0, i64 0)) #1
+  %27 = call %struct._IO_FILE* @fopen(i8* nonnull %10, i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.27, i64 0, i64 0)) #1
+  %28 = icmp eq %struct._IO_FILE* %27, null
+  br i1 %28, label %36, label %29
+
+; <label>:29:                                     ; preds = %23
+  %30 = getelementptr inbounds %class.Domain, %class.Domain* %0, i64 0, i32 1
+  %31 = call i32 (%struct._IO_FILE*, i8*, ...) @fscanf(%struct._IO_FILE* nonnull %27, i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str.33, i64 0, i64 0), double* nonnull %30) #1
+  %32 = icmp eq i32 %31, 1
+  br i1 %32, label %34, label %33
+
+; <label>:33:                                     ; preds = %29
+  call void (i8*, ...) @_ZL5AbortPKcz(i8* getelementptr inbounds ([16 x i8], [16 x i8]* @.str.28, i64 0, i64 0)) #1
+  unreachable
+
+; <label>:34:                                     ; preds = %29
+  %35 = call i32 @fclose(%struct._IO_FILE* nonnull %27) #1
+  br label %36
+
+; <label>:36:                                     ; preds = %23, %34
+  call void @llvm.lifetime.end.p0i8(i64 256, i8* nonnull %10) #1
+  %37 = getelementptr inbounds [128 x i8], [128 x i8]* %7, i64 0, i64 0
+  call void @llvm.lifetime.start.p0i8(i64 128, i8* nonnull %37) #1
+  call void @llvm.lifetime.start.p0i8(i64 256, i8* nonnull %10) #1
+  %38 = call i32 (i8*, i8*, ...) @sprintf(i8* nonnull %10, i8* getelementptr inbounds ([43 x i8], [43 x i8]* @.str.26, i64 0, i64 0), i8* getelementptr inbounds ([15 x i8], [15 x i8]* @.str.29, i64 0, i64 0), i8* %1, i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.str.34, i64 0, i64 0)) #1
+  %39 = call %struct._IO_FILE* @fopen(i8* nonnull %10, i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.27, i64 0, i64 0)) #1
+  %40 = icmp eq %struct._IO_FILE* %39, null
+  br i1 %40, label %47, label %41
+
+; <label>:41:                                     ; preds = %36
+  %42 = call i32 (%struct._IO_FILE*, i8*, ...) @fscanf(%struct._IO_FILE* nonnull %39, i8* getelementptr inbounds ([6 x i8], [6 x i8]* @.str.35, i64 0, i64 0), i8* nonnull %37) #1
+  %43 = icmp eq i32 %42, 1
+  br i1 %43, label %45, label %44
+
+; <label>:44:                                     ; preds = %41
+  call void (i8*, ...) @_ZL5AbortPKcz(i8* getelementptr inbounds ([16 x i8], [16 x i8]* @.str.28, i64 0, i64 0)) #1
+  unreachable
+
+; <label>:45:                                     ; preds = %41
+  %46 = call i32 @fclose(%struct._IO_FILE* nonnull %39) #1
+  br label %47
+
+; <label>:47:                                     ; preds = %36, %45
+  call void @llvm.lifetime.end.p0i8(i64 256, i8* nonnull %10) #1
+  %48 = call i32 @strcmp(i8* nonnull %37, i8* getelementptr inbounds ([7 x i8], [7 x i8]* @.str.36, i64 0, i64 0)) #18
+  %49 = icmp eq i32 %48, 0
+  br i1 %49, label %51, label %50
+
+; <label>:50:                                     ; preds = %47
+  call void (i8*, ...) @_ZL5AbortPKcz(i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.37, i64 0, i64 0), i8* nonnull %37)
+  unreachable
+
+; <label>:51:                                     ; preds = %47
+  %52 = bitcast %struct.perf_event_attr* %8 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 112, i8* nonnull %52) #1
+  %53 = getelementptr inbounds %struct.perf_event_attr, %struct.perf_event_attr* %8, i64 0, i32 3
+  %54 = bitcast %union.anon.9* %53 to i8*
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %54, i8 0, i64 96, i1 false)
+  %55 = getelementptr inbounds %struct.perf_event_attr, %struct.perf_event_attr* %8, i64 0, i32 0
+  store i32 %2, i32* %55, align 8
+  %56 = getelementptr inbounds %struct.perf_event_attr, %struct.perf_event_attr* %8, i64 0, i32 1
+  store i32 112, i32* %56, align 4
+  %57 = load i64, i64* %6, align 8
+  %58 = getelementptr inbounds %struct.perf_event_attr, %struct.perf_event_attr* %8, i64 0, i32 2
+  store i64 %57, i64* %58, align 8
+  %59 = call i64 (i64, ...) @syscall(i64 298, %struct.perf_event_attr* nonnull %8, i32 -1, i32 0, i32 -1, i64 0) #1
+  %60 = trunc i64 %59 to i32
+  %61 = getelementptr inbounds %class.Domain, %class.Domain* %0, i64 0, i32 2
+  store i32 %60, i32* %61, align 8
+  %62 = icmp slt i32 %60, 0
+  br i1 %62, label %63, label %64
+
+; <label>:63:                                     ; preds = %51
+  call void (i8*, ...) @_ZL5AbortPKcz(i8* getelementptr inbounds ([131 x i8], [131 x i8]* @.str.38, i64 0, i64 0))
+  unreachable
+
+; <label>:64:                                     ; preds = %51
+  %65 = getelementptr inbounds %class.Domain, %class.Domain* %0, i64 0, i32 3
+  store double 0.000000e+00, double* %65, align 8
+  call void @llvm.lifetime.end.p0i8(i64 112, i8* nonnull %52) #1
+  call void @llvm.lifetime.end.p0i8(i64 128, i8* nonnull %37) #1
+  br label %66
+
+; <label>:66:                                     ; preds = %64, %21
+  call void @llvm.lifetime.end.p0i8(i64 8, i8* nonnull %9) #1
+  ret void
+}
+
+; Function Attrs: nounwind
+declare i32 @sprintf(i8* nocapture, i8* nocapture readonly, ...) local_unnamed_addr #4
+
+; Function Attrs: nounwind
+declare noalias %struct._IO_FILE* @fopen(i8* nocapture readonly, i8* nocapture readonly) local_unnamed_addr #4
+
+; Function Attrs: nounwind
+declare i32 @fscanf(%struct._IO_FILE* nocapture, i8* nocapture readonly, ...) local_unnamed_addr #4
+
+; Function Attrs: nounwind
+declare i32 @fclose(%struct._IO_FILE* nocapture) local_unnamed_addr #4
+
+; Function Attrs: nounwind readonly
+declare i32 @strcmp(i8* nocapture, i8* nocapture) local_unnamed_addr #10
+
+; Function Attrs: nounwind
+declare i64 @syscall(i64, ...) local_unnamed_addr #4
+
+; Function Attrs: nounwind
+declare void @llvm.va_start(i8*) #1
+
+; Function Attrs: nounwind
+declare void @llvm.va_end(i8*) #1
+
+declare i32 @__vfprintf_chk(%struct._IO_FILE*, i32, i8*, %struct.__va_list_tag*) local_unnamed_addr #9
+
+; Function Attrs: nounwind sspstrong uwtable
+define linkonce_odr hidden void @_ZN4RAPL15EnergyEstimatesERdS0_S0_S0_(%class.RAPL*, double* dereferenceable(8), double* dereferenceable(8), double* dereferenceable(8), double* dereferenceable(8)) local_unnamed_addr #0 comdat align 2 {
+  %6 = alloca i64, align 8
+  %7 = alloca i64, align 8
+  %8 = alloca i64, align 8
+  %9 = alloca i64, align 8
+  %10 = getelementptr inbounds %class.RAPL, %class.RAPL* %0, i64 0, i32 0
+  %11 = load %class.Domain*, %class.Domain** %10, align 8
+  %12 = getelementptr inbounds %class.Domain, %class.Domain* %11, i64 0, i32 0
+  %13 = load i8, i8* %12, align 8, !range !6
+  %14 = icmp eq i8 %13, 0
+  br i1 %14, label %33, label %15
+
+; <label>:15:                                     ; preds = %5
+  %16 = bitcast i64* %9 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 8, i8* nonnull %16) #1
+  %17 = getelementptr inbounds %class.Domain, %class.Domain* %11, i64 0, i32 2
+  %18 = load i32, i32* %17, align 8
+  %19 = call i64 @read(i32 %18, i8* nonnull %16, i64 8) #1
+  %20 = icmp eq i64 %19, 8
+  br i1 %20, label %22, label %21
+
+; <label>:21:                                     ; preds = %15
+  tail call void (i8*, ...) @_ZL5AbortPKcz(i8* getelementptr inbounds ([14 x i8], [14 x i8]* @.str.42, i64 0, i64 0)) #1
+  unreachable
+
+; <label>:22:                                     ; preds = %15
+  %23 = load i64, i64* %9, align 8
+  %24 = uitofp i64 %23 to double
+  %25 = getelementptr inbounds %class.Domain, %class.Domain* %11, i64 0, i32 3
+  %26 = load double, double* %25, align 8
+  %27 = fsub double %24, %26
+  %28 = fptoui double %27 to i64
+  store double %24, double* %25, align 8
+  %29 = uitofp i64 %28 to double
+  %30 = getelementptr inbounds %class.Domain, %class.Domain* %11, i64 0, i32 1
+  %31 = load double, double* %30, align 8
+  %32 = fmul double %31, %29
+  call void @llvm.lifetime.end.p0i8(i64 8, i8* nonnull %16) #1
+  br label %33
+
+; <label>:33:                                     ; preds = %5, %22
+  %34 = phi double [ %32, %22 ], [ -1.000000e+00, %5 ]
+  store double %34, double* %1, align 8
+  %35 = getelementptr inbounds %class.RAPL, %class.RAPL* %0, i64 0, i32 1
+  %36 = load %class.Domain*, %class.Domain** %35, align 8
+  %37 = getelementptr inbounds %class.Domain, %class.Domain* %36, i64 0, i32 0
+  %38 = load i8, i8* %37, align 8, !range !6
+  %39 = icmp eq i8 %38, 0
+  br i1 %39, label %58, label %40
+
+; <label>:40:                                     ; preds = %33
+  %41 = bitcast i64* %8 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 8, i8* nonnull %41) #1
+  %42 = getelementptr inbounds %class.Domain, %class.Domain* %36, i64 0, i32 2
+  %43 = load i32, i32* %42, align 8
+  %44 = call i64 @read(i32 %43, i8* nonnull %41, i64 8) #1
+  %45 = icmp eq i64 %44, 8
+  br i1 %45, label %47, label %46
+
+; <label>:46:                                     ; preds = %40
+  tail call void (i8*, ...) @_ZL5AbortPKcz(i8* getelementptr inbounds ([14 x i8], [14 x i8]* @.str.42, i64 0, i64 0)) #1
+  unreachable
+
+; <label>:47:                                     ; preds = %40
+  %48 = load i64, i64* %8, align 8
+  %49 = uitofp i64 %48 to double
+  %50 = getelementptr inbounds %class.Domain, %class.Domain* %36, i64 0, i32 3
+  %51 = load double, double* %50, align 8
+  %52 = fsub double %49, %51
+  %53 = fptoui double %52 to i64
+  store double %49, double* %50, align 8
+  %54 = uitofp i64 %53 to double
+  %55 = getelementptr inbounds %class.Domain, %class.Domain* %36, i64 0, i32 1
+  %56 = load double, double* %55, align 8
+  %57 = fmul double %56, %54
+  call void @llvm.lifetime.end.p0i8(i64 8, i8* nonnull %41) #1
+  br label %58
+
+; <label>:58:                                     ; preds = %33, %47
+  %59 = phi double [ %57, %47 ], [ -1.000000e+00, %33 ]
+  store double %59, double* %2, align 8
+  %60 = getelementptr inbounds %class.RAPL, %class.RAPL* %0, i64 0, i32 2
+  %61 = load %class.Domain*, %class.Domain** %60, align 8
+  %62 = getelementptr inbounds %class.Domain, %class.Domain* %61, i64 0, i32 0
+  %63 = load i8, i8* %62, align 8, !range !6
+  %64 = icmp eq i8 %63, 0
+  br i1 %64, label %83, label %65
+
+; <label>:65:                                     ; preds = %58
+  %66 = bitcast i64* %7 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 8, i8* nonnull %66) #1
+  %67 = getelementptr inbounds %class.Domain, %class.Domain* %61, i64 0, i32 2
+  %68 = load i32, i32* %67, align 8
+  %69 = call i64 @read(i32 %68, i8* nonnull %66, i64 8) #1
+  %70 = icmp eq i64 %69, 8
+  br i1 %70, label %72, label %71
+
+; <label>:71:                                     ; preds = %65
+  tail call void (i8*, ...) @_ZL5AbortPKcz(i8* getelementptr inbounds ([14 x i8], [14 x i8]* @.str.42, i64 0, i64 0)) #1
+  unreachable
+
+; <label>:72:                                     ; preds = %65
+  %73 = load i64, i64* %7, align 8
+  %74 = uitofp i64 %73 to double
+  %75 = getelementptr inbounds %class.Domain, %class.Domain* %61, i64 0, i32 3
+  %76 = load double, double* %75, align 8
+  %77 = fsub double %74, %76
+  %78 = fptoui double %77 to i64
+  store double %74, double* %75, align 8
+  %79 = uitofp i64 %78 to double
+  %80 = getelementptr inbounds %class.Domain, %class.Domain* %61, i64 0, i32 1
+  %81 = load double, double* %80, align 8
+  %82 = fmul double %81, %79
+  call void @llvm.lifetime.end.p0i8(i64 8, i8* nonnull %66) #1
+  br label %83
+
+; <label>:83:                                     ; preds = %58, %72
+  %84 = phi double [ %82, %72 ], [ -1.000000e+00, %58 ]
+  store double %84, double* %3, align 8
+  %85 = getelementptr inbounds %class.RAPL, %class.RAPL* %0, i64 0, i32 3
+  %86 = load %class.Domain*, %class.Domain** %85, align 8
+  %87 = getelementptr inbounds %class.Domain, %class.Domain* %86, i64 0, i32 0
+  %88 = load i8, i8* %87, align 8, !range !6
+  %89 = icmp eq i8 %88, 0
+  br i1 %89, label %108, label %90
+
+; <label>:90:                                     ; preds = %83
+  %91 = bitcast i64* %6 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 8, i8* nonnull %91) #1
+  %92 = getelementptr inbounds %class.Domain, %class.Domain* %86, i64 0, i32 2
+  %93 = load i32, i32* %92, align 8
+  %94 = call i64 @read(i32 %93, i8* nonnull %91, i64 8) #1
+  %95 = icmp eq i64 %94, 8
+  br i1 %95, label %97, label %96
+
+; <label>:96:                                     ; preds = %90
+  tail call void (i8*, ...) @_ZL5AbortPKcz(i8* getelementptr inbounds ([14 x i8], [14 x i8]* @.str.42, i64 0, i64 0)) #1
+  unreachable
+
+; <label>:97:                                     ; preds = %90
+  %98 = load i64, i64* %6, align 8
+  %99 = uitofp i64 %98 to double
+  %100 = getelementptr inbounds %class.Domain, %class.Domain* %86, i64 0, i32 3
+  %101 = load double, double* %100, align 8
+  %102 = fsub double %99, %101
+  %103 = fptoui double %102 to i64
+  store double %99, double* %100, align 8
+  %104 = uitofp i64 %103 to double
+  %105 = getelementptr inbounds %class.Domain, %class.Domain* %86, i64 0, i32 1
+  %106 = load double, double* %105, align 8
+  %107 = fmul double %106, %104
+  call void @llvm.lifetime.end.p0i8(i64 8, i8* nonnull %91) #1
+  br label %108
+
+; <label>:108:                                    ; preds = %83, %97
+  %109 = phi double [ %107, %97 ], [ -1.000000e+00, %83 ]
+  store double %109, double* %4, align 8
+  ret void
+}
+
+declare i64 @read(i32, i8* nocapture, i64) local_unnamed_addr #9
+
+; Function Attrs: noreturn
+declare void @_ZSt17__throw_bad_allocv() local_unnamed_addr #11
+
+; Function Attrs: argmemonly nounwind
+declare void @llvm.memmove.p0i8.p0i8.i64(i8* nocapture, i8* nocapture readonly, i64, i1) #3
+
+; Function Attrs: nobuiltin nounwind
+declare void @_ZdlPv(i8*) local_unnamed_addr #12
+
+; Function Attrs: nounwind
+declare i32 @fflush(%struct._IO_FILE* nocapture) local_unnamed_addr #4
+
+; Function Attrs: nounwind readnone speculatable
+declare double @llvm.sqrt.f64(double) #13
+
+; Function Attrs: inlinehint nounwind sspstrong uwtable
+define linkonce_odr void @_ZSt4sortIN9__gnu_cxx17__normal_iteratorIPdSt6vectorIdSaIdEEEEEvT_S7_(double*, double*) local_unnamed_addr #14 comdat {
+  %3 = icmp eq double* %0, %1
+  br i1 %3, label %12, label %4
+
+; <label>:4:                                      ; preds = %2
+  %5 = ptrtoint double* %1 to i64
+  %6 = ptrtoint double* %0 to i64
+  %7 = sub i64 %5, %6
+  %8 = ashr exact i64 %7, 3
+  %9 = tail call i64 @llvm.ctlz.i64(i64 %8, i1 true) #1, !range !7
+  %10 = shl nuw nsw i64 %9, 1
+  %11 = xor i64 %10, 126
+  tail call void @_ZSt16__introsort_loopIN9__gnu_cxx17__normal_iteratorIPdSt6vectorIdSaIdEEEElNS0_5__ops15_Iter_less_iterEEvT_S9_T0_T1_(double* %0, double* %1, i64 %11) #1
+  tail call void @_ZSt22__final_insertion_sortIN9__gnu_cxx17__normal_iteratorIPdSt6vectorIdSaIdEEEENS0_5__ops15_Iter_less_iterEEvT_S9_T0_(double* %0, double* %1) #1
+  br label %12
+
+; <label>:12:                                     ; preds = %2, %4
+  ret void
+}
+
+; Function Attrs: nounwind readnone speculatable
+declare double @llvm.ceil.f64(double) #13
+
+; Function Attrs: nounwind sspstrong uwtable
+define linkonce_odr void @_ZSt16__introsort_loopIN9__gnu_cxx17__normal_iteratorIPdSt6vectorIdSaIdEEEElNS0_5__ops15_Iter_less_iterEEvT_S9_T0_T1_(double*, double*, i64) local_unnamed_addr #0 comdat {
+  %4 = ptrtoint double* %0 to i64
+  %5 = ptrtoint double* %1 to i64
+  %6 = sub i64 %5, %4
+  %7 = icmp sgt i64 %6, 128
+  br i1 %7, label %8, label %194
+
+; <label>:8:                                      ; preds = %3
+  %9 = getelementptr inbounds double, double* %0, i64 1
+  %10 = bitcast double* %0 to i64*
+  %11 = bitcast double* %9 to i64*
+  br label %12
+
+; <label>:12:                                     ; preds = %8, %190
+  %13 = phi i64 [ %6, %8 ], [ %192, %190 ]
+  %14 = phi i64 [ %2, %8 ], [ %142, %190 ]
+  %15 = phi double* [ %1, %8 ], [ %178, %190 ]
+  %16 = icmp eq i64 %14, 0
+  br i1 %16, label %17, label %141
+
+; <label>:17:                                     ; preds = %12
+  %18 = lshr exact i64 %13, 3
+  %19 = add nsw i64 %18, -2
+  %20 = sdiv i64 %19, 2
+  %21 = add nsw i64 %18, -1
+  %22 = sdiv i64 %21, 2
+  %23 = and i64 %13, 8
+  %24 = icmp eq i64 %23, 0
+  %25 = shl nsw i64 %20, 1
+  %26 = or i64 %25, 1
+  %27 = getelementptr inbounds double, double* %0, i64 %26
+  %28 = bitcast double* %27 to i64*
+  %29 = getelementptr inbounds double, double* %0, i64 %20
+  %30 = bitcast double* %29 to i64*
+  br label %31
+
+; <label>:31:                                     ; preds = %72, %17
+  %32 = phi i64 [ %20, %17 ], [ %76, %72 ]
+  %33 = getelementptr inbounds double, double* %0, i64 %32
+  %34 = load double, double* %33, align 8
+  %35 = icmp sgt i64 %22, %32
+  br i1 %35, label %36, label %53
+
+; <label>:36:                                     ; preds = %31, %36
+  %37 = phi i64 [ %46, %36 ], [ %32, %31 ]
+  %38 = shl i64 %37, 1
+  %39 = add i64 %38, 2
+  %40 = getelementptr inbounds double, double* %0, i64 %39
+  %41 = or i64 %38, 1
+  %42 = getelementptr inbounds double, double* %0, i64 %41
+  %43 = load double, double* %40, align 8
+  %44 = load double, double* %42, align 8
+  %45 = fcmp olt double %43, %44
+  %46 = select i1 %45, i64 %41, i64 %39
+  %47 = getelementptr inbounds double, double* %0, i64 %46
+  %48 = bitcast double* %47 to i64*
+  %49 = load i64, i64* %48, align 8
+  %50 = getelementptr inbounds double, double* %0, i64 %37
+  %51 = bitcast double* %50 to i64*
+  store i64 %49, i64* %51, align 8
+  %52 = icmp slt i64 %46, %22
+  br i1 %52, label %36, label %53
+
+; <label>:53:                                     ; preds = %36, %31
+  %54 = phi i64 [ %32, %31 ], [ %46, %36 ]
+  %55 = icmp eq i64 %54, %20
+  %56 = and i1 %24, %55
+  br i1 %56, label %57, label %59
+
+; <label>:57:                                     ; preds = %53
+  %58 = load i64, i64* %28, align 8
+  store i64 %58, i64* %30, align 8
+  br label %59
+
+; <label>:59:                                     ; preds = %57, %53
+  %60 = phi i64 [ %26, %57 ], [ %54, %53 ]
+  %61 = icmp sgt i64 %60, %32
+  br i1 %61, label %62, label %72
+
+; <label>:62:                                     ; preds = %59, %69
+  %63 = phi i64 [ %65, %69 ], [ %60, %59 ]
+  %64 = add nsw i64 %63, -1
+  %65 = sdiv i64 %64, 2
+  %66 = getelementptr inbounds double, double* %0, i64 %65
+  %67 = load double, double* %66, align 8
+  %68 = fcmp olt double %67, %34
+  br i1 %68, label %69, label %72
+
+; <label>:69:                                     ; preds = %62
+  %70 = getelementptr inbounds double, double* %0, i64 %63
+  store double %67, double* %70, align 8
+  %71 = icmp sgt i64 %65, %32
+  br i1 %71, label %62, label %72
+
+; <label>:72:                                     ; preds = %69, %62, %59
+  %73 = phi i64 [ %60, %59 ], [ %65, %69 ], [ %63, %62 ]
+  %74 = getelementptr inbounds double, double* %0, i64 %73
+  store double %34, double* %74, align 8
+  %75 = icmp eq i64 %32, 0
+  %76 = add nsw i64 %32, -1
+  br i1 %75, label %77, label %31
+
+; <label>:77:                                     ; preds = %72
+  %78 = icmp sgt i64 %13, 8
+  br i1 %78, label %79, label %194
+
+; <label>:79:                                     ; preds = %77, %137
+  %80 = phi double* [ %81, %137 ], [ %15, %77 ]
+  %81 = getelementptr inbounds double, double* %80, i64 -1
+  %82 = ptrtoint double* %81 to i64
+  %83 = bitcast double* %81 to i64*
+  %84 = load double, double* %81, align 8
+  %85 = load i64, i64* %10, align 8
+  store i64 %85, i64* %83, align 8
+  %86 = sub i64 %82, %4
+  %87 = ashr exact i64 %86, 3
+  %88 = add nsw i64 %87, -1
+  %89 = sdiv i64 %88, 2
+  %90 = icmp sgt i64 %86, 16
+  br i1 %90, label %91, label %108
+
+; <label>:91:                                     ; preds = %79, %91
+  %92 = phi i64 [ %101, %91 ], [ 0, %79 ]
+  %93 = shl i64 %92, 1
+  %94 = add i64 %93, 2
+  %95 = getelementptr inbounds double, double* %0, i64 %94
+  %96 = or i64 %93, 1
+  %97 = getelementptr inbounds double, double* %0, i64 %96
+  %98 = load double, double* %95, align 8
+  %99 = load double, double* %97, align 8
+  %100 = fcmp olt double %98, %99
+  %101 = select i1 %100, i64 %96, i64 %94
+  %102 = getelementptr inbounds double, double* %0, i64 %101
+  %103 = bitcast double* %102 to i64*
+  %104 = load i64, i64* %103, align 8
+  %105 = getelementptr inbounds double, double* %0, i64 %92
+  %106 = bitcast double* %105 to i64*
+  store i64 %104, i64* %106, align 8
+  %107 = icmp slt i64 %101, %89
+  br i1 %107, label %91, label %108
+
+; <label>:108:                                    ; preds = %91, %79
+  %109 = phi i64 [ 0, %79 ], [ %101, %91 ]
+  %110 = and i64 %86, 8
+  %111 = icmp eq i64 %110, 0
+  br i1 %111, label %112, label %124
+
+; <label>:112:                                    ; preds = %108
+  %113 = add nsw i64 %87, -2
+  %114 = sdiv i64 %113, 2
+  %115 = icmp eq i64 %109, %114
+  br i1 %115, label %116, label %124
+
+; <label>:116:                                    ; preds = %112
+  %117 = shl i64 %109, 1
+  %118 = or i64 %117, 1
+  %119 = getelementptr inbounds double, double* %0, i64 %118
+  %120 = bitcast double* %119 to i64*
+  %121 = load i64, i64* %120, align 8
+  %122 = getelementptr inbounds double, double* %0, i64 %109
+  %123 = bitcast double* %122 to i64*
+  store i64 %121, i64* %123, align 8
+  br label %124
+
+; <label>:124:                                    ; preds = %116, %112, %108
+  %125 = phi i64 [ %118, %116 ], [ %109, %112 ], [ %109, %108 ]
+  %126 = icmp sgt i64 %125, 0
+  br i1 %126, label %127, label %137
+
+; <label>:127:                                    ; preds = %124, %134
+  %128 = phi i64 [ %130, %134 ], [ %125, %124 ]
+  %129 = add nsw i64 %128, -1
+  %130 = sdiv i64 %129, 2
+  %131 = getelementptr inbounds double, double* %0, i64 %130
+  %132 = load double, double* %131, align 8
+  %133 = fcmp olt double %132, %84
+  br i1 %133, label %134, label %137
+
+; <label>:134:                                    ; preds = %127
+  %135 = getelementptr inbounds double, double* %0, i64 %128
+  store double %132, double* %135, align 8
+  %136 = icmp sgt i64 %128, 2
+  br i1 %136, label %127, label %137
+
+; <label>:137:                                    ; preds = %134, %127, %124
+  %138 = phi i64 [ %125, %124 ], [ %130, %134 ], [ %128, %127 ]
+  %139 = getelementptr inbounds double, double* %0, i64 %138
+  store double %84, double* %139, align 8
+  %140 = icmp sgt i64 %86, 8
+  br i1 %140, label %79, label %194
+
+; <label>:141:                                    ; preds = %12
+  %142 = add nsw i64 %14, -1
+  %143 = lshr i64 %13, 4
+  %144 = getelementptr inbounds double, double* %0, i64 %143
+  %145 = getelementptr inbounds double, double* %15, i64 -1
+  %146 = load double, double* %9, align 8
+  %147 = load double, double* %144, align 8
+  %148 = fcmp olt double %146, %147
+  %149 = load double, double* %145, align 8
+  br i1 %148, label %150, label %161
+
+; <label>:150:                                    ; preds = %141
+  %151 = fcmp olt double %147, %149
+  br i1 %151, label %152, label %155
+
+; <label>:152:                                    ; preds = %150
+  %153 = load i64, i64* %10, align 8
+  %154 = bitcast double* %144 to i64*
+  store double %147, double* %0, align 8
+  store i64 %153, i64* %154, align 8
+  br label %172
+
+; <label>:155:                                    ; preds = %150
+  %156 = fcmp olt double %146, %149
+  %157 = load i64, i64* %10, align 8
+  br i1 %156, label %158, label %160
+
+; <label>:158:                                    ; preds = %155
+  %159 = bitcast double* %145 to i64*
+  store double %149, double* %0, align 8
+  store i64 %157, i64* %159, align 8
+  br label %172
+
+; <label>:160:                                    ; preds = %155
+  store double %146, double* %0, align 8
+  store i64 %157, i64* %11, align 8
+  br label %172
+
+; <label>:161:                                    ; preds = %141
+  %162 = fcmp olt double %146, %149
+  br i1 %162, label %163, label %165
+
+; <label>:163:                                    ; preds = %161
+  %164 = load i64, i64* %10, align 8
+  store double %146, double* %0, align 8
+  store i64 %164, i64* %11, align 8
+  br label %172
+
+; <label>:165:                                    ; preds = %161
+  %166 = fcmp olt double %147, %149
+  %167 = load i64, i64* %10, align 8
+  br i1 %166, label %168, label %170
+
+; <label>:168:                                    ; preds = %165
+  %169 = bitcast double* %145 to i64*
+  store double %149, double* %0, align 8
+  store i64 %167, i64* %169, align 8
+  br label %172
+
+; <label>:170:                                    ; preds = %165
+  %171 = bitcast double* %144 to i64*
+  store double %147, double* %0, align 8
+  store i64 %167, i64* %171, align 8
+  br label %172
+
+; <label>:172:                                    ; preds = %170, %168, %163, %160, %158, %152
+  br label %173
+
+; <label>:173:                                    ; preds = %172, %189
+  %174 = phi double* [ %181, %189 ], [ %9, %172 ]
+  %175 = phi double* [ %184, %189 ], [ %15, %172 ]
+  %176 = load double, double* %0, align 8
+  br label %177
+
+; <label>:177:                                    ; preds = %177, %173
+  %178 = phi double* [ %174, %173 ], [ %181, %177 ]
+  %179 = load double, double* %178, align 8
+  %180 = fcmp olt double %179, %176
+  %181 = getelementptr inbounds double, double* %178, i64 1
+  br i1 %180, label %177, label %182
+
+; <label>:182:                                    ; preds = %177, %182
+  %183 = phi double* [ %184, %182 ], [ %175, %177 ]
+  %184 = getelementptr inbounds double, double* %183, i64 -1
+  %185 = load double, double* %184, align 8
+  %186 = fcmp olt double %176, %185
+  br i1 %186, label %182, label %187
+
+; <label>:187:                                    ; preds = %182
+  %188 = icmp ult double* %178, %184
+  br i1 %188, label %189, label %190
+
+; <label>:189:                                    ; preds = %187
+  store double %185, double* %178, align 8
+  store double %179, double* %184, align 8
+  br label %173
+
+; <label>:190:                                    ; preds = %187
+  tail call void @_ZSt16__introsort_loopIN9__gnu_cxx17__normal_iteratorIPdSt6vectorIdSaIdEEEElNS0_5__ops15_Iter_less_iterEEvT_S9_T0_T1_(double* %178, double* %15, i64 %142)
+  %191 = ptrtoint double* %178 to i64
+  %192 = sub i64 %191, %4
+  %193 = icmp sgt i64 %192, 128
+  br i1 %193, label %12, label %194
+
+; <label>:194:                                    ; preds = %190, %137, %3, %77
+  ret void
+}
+
+; Function Attrs: nounwind sspstrong uwtable
+define linkonce_odr void @_ZSt22__final_insertion_sortIN9__gnu_cxx17__normal_iteratorIPdSt6vectorIdSaIdEEEENS0_5__ops15_Iter_less_iterEEvT_S9_T0_(double*, double*) local_unnamed_addr #0 comdat {
+  %3 = ptrtoint double* %0 to i64
+  %4 = ptrtoint double* %1 to i64
+  %5 = sub i64 %4, %3
+  %6 = icmp sgt i64 %5, 128
+  br i1 %6, label %7, label %96
+
+; <label>:7:                                      ; preds = %2
+  %8 = bitcast double* %0 to i8*
+  %9 = getelementptr double, double* %0, i64 1
+  %10 = bitcast double* %9 to i8*
+  br label %11
+
+; <label>:11:                                     ; preds = %32, %7
+  %12 = phi i64 [ 1, %7 ], [ %34, %32 ]
+  %13 = phi double* [ %0, %7 ], [ %14, %32 ]
+  %14 = getelementptr inbounds double, double* %0, i64 %12
+  %15 = load double, double* %14, align 8
+  %16 = load double, double* %0, align 8
+  %17 = fcmp olt double %15, %16
+  br i1 %17, label %18, label %20
+
+; <label>:18:                                     ; preds = %11
+  %19 = shl nuw i64 %12, 3
+  tail call void @llvm.memmove.p0i8.p0i8.i64(i8* nonnull align 8 %10, i8* nonnull align 8 %8, i64 %19, i1 false) #1
+  br label %32
+
+; <label>:20:                                     ; preds = %11
+  %21 = load double, double* %13, align 8
+  %22 = fcmp ogt double %21, %15
+  br i1 %22, label %23, label %32
+
+; <label>:23:                                     ; preds = %20, %23
+  %24 = phi double* [ %29, %23 ], [ %13, %20 ]
+  %25 = phi double* [ %24, %23 ], [ %14, %20 ]
+  %26 = bitcast double* %24 to i64*
+  %27 = load i64, i64* %26, align 8
+  %28 = bitcast double* %25 to i64*
+  store i64 %27, i64* %28, align 8
+  %29 = getelementptr inbounds double, double* %24, i64 -1
+  %30 = load double, double* %29, align 8
+  %31 = fcmp ogt double %30, %15
+  br i1 %31, label %23, label %32
+
+; <label>:32:                                     ; preds = %23, %20, %18
+  %33 = phi double* [ %0, %18 ], [ %14, %20 ], [ %24, %23 ]
+  store double %15, double* %33, align 8
+  %34 = add nuw nsw i64 %12, 1
+  %35 = icmp eq i64 %34, 16
+  br i1 %35, label %36, label %11
+
+; <label>:36:                                     ; preds = %32
+  %37 = getelementptr inbounds double, double* %0, i64 16
+  %38 = icmp eq double* %37, %1
+  br i1 %38, label %135, label %39
+
+; <label>:39:                                     ; preds = %36
+  %40 = getelementptr double, double* %1, i64 -17
+  %41 = ptrtoint double* %40 to i64
+  %42 = sub i64 %41, %3
+  %43 = and i64 %42, 8
+  %44 = icmp eq i64 %43, 0
+  br i1 %44, label %45, label %66
+
+; <label>:45:                                     ; preds = %39
+  %46 = bitcast double* %37 to i64*
+  %47 = load i64, i64* %46, align 8
+  %48 = getelementptr inbounds double, double* %0, i64 15
+  %49 = bitcast i64 %47 to double
+  %50 = load double, double* %48, align 8
+  %51 = fcmp ogt double %50, %49
+  br i1 %51, label %52, label %63
+
+; <label>:52:                                     ; preds = %45, %52
+  %53 = phi double* [ %58, %52 ], [ %48, %45 ]
+  %54 = phi double* [ %53, %52 ], [ %37, %45 ]
+  %55 = bitcast double* %53 to i64*
+  %56 = load i64, i64* %55, align 8
+  %57 = bitcast double* %54 to i64*
+  store i64 %56, i64* %57, align 8
+  %58 = getelementptr inbounds double, double* %53, i64 -1
+  %59 = load double, double* %58, align 8
+  %60 = fcmp ogt double %59, %49
+  br i1 %60, label %52, label %61
+
+; <label>:61:                                     ; preds = %52
+  %62 = bitcast double* %53 to i64*
+  br label %63
+
+; <label>:63:                                     ; preds = %61, %45
+  %64 = phi i64* [ %46, %45 ], [ %62, %61 ]
+  store i64 %47, i64* %64, align 8
+  %65 = getelementptr inbounds double, double* %0, i64 17
+  br label %66
+
+; <label>:66:                                     ; preds = %63, %39
+  %67 = phi double* [ %37, %39 ], [ %65, %63 ]
+  %68 = icmp ult i64 %42, 8
+  br i1 %68, label %135, label %69
+
+; <label>:69:                                     ; preds = %66, %147
+  %70 = phi double* [ %149, %147 ], [ %67, %66 ]
+  %71 = bitcast double* %70 to i64*
+  %72 = load i64, i64* %71, align 8
+  %73 = getelementptr inbounds double, double* %70, i64 -1
+  %74 = bitcast i64 %72 to double
+  %75 = load double, double* %73, align 8
+  %76 = fcmp ogt double %75, %74
+  br i1 %76, label %77, label %88
+
+; <label>:77:                                     ; preds = %69, %77
+  %78 = phi double* [ %83, %77 ], [ %73, %69 ]
+  %79 = phi double* [ %78, %77 ], [ %70, %69 ]
+  %80 = bitcast double* %78 to i64*
+  %81 = load i64, i64* %80, align 8
+  %82 = bitcast double* %79 to i64*
+  store i64 %81, i64* %82, align 8
+  %83 = getelementptr inbounds double, double* %78, i64 -1
+  %84 = load double, double* %83, align 8
+  %85 = fcmp ogt double %84, %74
+  br i1 %85, label %77, label %86
+
+; <label>:86:                                     ; preds = %77
+  %87 = bitcast double* %78 to i64*
+  br label %88
+
+; <label>:88:                                     ; preds = %86, %69
+  %89 = phi i64* [ %71, %69 ], [ %87, %86 ]
+  store i64 %72, i64* %89, align 8
+  %90 = getelementptr inbounds double, double* %70, i64 1
+  %91 = bitcast double* %90 to i64*
+  %92 = load i64, i64* %91, align 8
+  %93 = bitcast i64 %92 to double
+  %94 = load double, double* %70, align 8
+  %95 = fcmp ogt double %94, %93
+  br i1 %95, label %136, label %147
+
+; <label>:96:                                     ; preds = %2
+  %97 = icmp eq double* %0, %1
+  br i1 %97, label %135, label %98
+
+; <label>:98:                                     ; preds = %96
+  %99 = getelementptr inbounds double, double* %0, i64 1
+  %100 = icmp eq double* %99, %1
+  br i1 %100, label %135, label %101
+
+; <label>:101:                                    ; preds = %98
+  %102 = bitcast double* %0 to i8*
+  br label %103
+
+; <label>:103:                                    ; preds = %131, %101
+  %104 = phi double* [ %99, %101 ], [ %133, %131 ]
+  %105 = phi double* [ %0, %101 ], [ %104, %131 ]
+  %106 = load double, double* %104, align 8
+  %107 = load double, double* %0, align 8
+  %108 = fcmp olt double %106, %107
+  br i1 %108, label %109, label %119
+
+; <label>:109:                                    ; preds = %103
+  %110 = ptrtoint double* %104 to i64
+  %111 = sub i64 %110, %3
+  %112 = icmp eq i64 %111, 0
+  br i1 %112, label %131, label %113
+
+; <label>:113:                                    ; preds = %109
+  %114 = getelementptr inbounds double, double* %105, i64 2
+  %115 = ashr exact i64 %111, 3
+  %116 = sub nsw i64 0, %115
+  %117 = getelementptr inbounds double, double* %114, i64 %116
+  %118 = bitcast double* %117 to i8*
+  tail call void @llvm.memmove.p0i8.p0i8.i64(i8* nonnull align 8 %118, i8* nonnull align 8 %102, i64 %111, i1 false) #1
+  br label %131
+
+; <label>:119:                                    ; preds = %103
+  %120 = load double, double* %105, align 8
+  %121 = fcmp ogt double %120, %106
+  br i1 %121, label %122, label %131
+
+; <label>:122:                                    ; preds = %119, %122
+  %123 = phi double* [ %128, %122 ], [ %105, %119 ]
+  %124 = phi double* [ %123, %122 ], [ %104, %119 ]
+  %125 = bitcast double* %123 to i64*
+  %126 = load i64, i64* %125, align 8
+  %127 = bitcast double* %124 to i64*
+  store i64 %126, i64* %127, align 8
+  %128 = getelementptr inbounds double, double* %123, i64 -1
+  %129 = load double, double* %128, align 8
+  %130 = fcmp ogt double %129, %106
+  br i1 %130, label %122, label %131
+
+; <label>:131:                                    ; preds = %122, %119, %109, %113
+  %132 = phi double* [ %0, %113 ], [ %0, %109 ], [ %104, %119 ], [ %123, %122 ]
+  store double %106, double* %132, align 8
+  %133 = getelementptr inbounds double, double* %104, i64 1
+  %134 = icmp eq double* %133, %1
+  br i1 %134, label %135, label %103
+
+; <label>:135:                                    ; preds = %131, %66, %147, %98, %96, %36
+  ret void
+
+; <label>:136:                                    ; preds = %88, %136
+  %137 = phi double* [ %142, %136 ], [ %70, %88 ]
+  %138 = phi double* [ %137, %136 ], [ %90, %88 ]
+  %139 = bitcast double* %137 to i64*
+  %140 = load i64, i64* %139, align 8
+  %141 = bitcast double* %138 to i64*
+  store i64 %140, i64* %141, align 8
+  %142 = getelementptr inbounds double, double* %137, i64 -1
+  %143 = load double, double* %142, align 8
+  %144 = fcmp ogt double %143, %93
+  br i1 %144, label %136, label %145
+
+; <label>:145:                                    ; preds = %136
+  %146 = bitcast double* %137 to i64*
+  br label %147
+
+; <label>:147:                                    ; preds = %145, %88
+  %148 = phi i64* [ %91, %88 ], [ %146, %145 ]
+  store i64 %92, i64* %148, align 8
+  %149 = getelementptr inbounds double, double* %70, i64 2
+  %150 = icmp eq double* %149, %1
+  br i1 %150, label %135, label %69
+}
+
+; Function Attrs: nounwind readnone speculatable
+declare i64 @llvm.ctlz.i64(i64, i1) #13
+
+; Function Attrs: nounwind sspstrong uwtable
+define internal void @_GLOBAL__sub_I_rapl.cpp() #0 section ".text.startup" {
+  tail call void @llvm.memset.p0i8.i64(i8* align 8 bitcast (%"class.std::vector"* @_ZL9gTotals_W to i8*), i8 0, i64 24, i1 false) #1
+  %1 = tail call i32 @__cxa_atexit(void (i8*)* bitcast (void (%"class.std::vector"*)* @_ZNSt6vectorIdSaIdEED2Ev to void (i8*)*), i8* bitcast (%"class.std::vector"* @_ZL9gTotals_W to i8*), i8* nonnull @__dso_handle) #1
+  ret void
+}
+
+; Function Attrs: nounwind
+declare i64 @fwrite(i8* nocapture, i64, i64, %struct._IO_FILE* nocapture) local_unnamed_addr #1
+
+; Function Attrs: nounwind
+declare i32 @puts(i8* nocapture readonly) local_unnamed_addr #1
+
+; Function Attrs: nounwind
+declare i32 @fputc(i32, %struct._IO_FILE* nocapture) local_unnamed_addr #1
+
+; Function Attrs: nounwind
+declare i32 @putchar(i32) local_unnamed_addr #1
+
+attributes #0 = { nounwind sspstrong uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind }
+attributes #2 = { norecurse noreturn nounwind sspstrong uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { argmemonly nounwind }
+attributes #4 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #5 = { norecurse nounwind sspstrong uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #6 = { noreturn nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #7 = { nobuiltin "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #8 = { noreturn nounwind sspstrong uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #9 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #10 = { nounwind readonly "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #11 = { noreturn "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #12 = { nobuiltin nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #13 = { nounwind readnone speculatable }
+attributes #14 = { inlinehint nounwind sspstrong uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #15 = { noreturn nounwind }
+attributes #16 = { cold }
+attributes #17 = { builtin nounwind }
+attributes #18 = { nounwind readonly }
+
+!llvm.module.flags = !{!0, !1}
+!llvm.ident = !{!2}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{i32 7, !"PIC Level", i32 2}
+!2 = !{!"clang version 7.0.1 (tags/RELEASE_701/final)"}
+!3 = distinct !{!3, !4}
+!4 = !{!"llvm.loop.unroll.disable"}
+!5 = distinct !{!5, !4}
+!6 = !{i8 0, i8 2}
+!7 = !{i64 0, i64 65}

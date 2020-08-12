@@ -1,0 +1,739 @@
+Assigned value is garbage or undefined
+
+----------------------------------------------------------------------
+
+find_ref_mvs
+SAME
+
+----------------------------------------------------------------------
+
+find_ref_mvs
+SAME
+
+----------------------------------------------------------------------
+
+find_ref_mvs
+SAME
+
+----------------------------------------------------------------------
+
+find_ref_mvs
+SAME
+
+----------------------------------------------------------------------
+
+find_ref_mvs
+SAME
+
+----------------------------------------------------------------------
+
+find_ref_mvs
+
+
+RETURN_MV(s->above_mv_ctx[2 * col + (sb & 1)][0]);
+I THINK FALSE
+compare to
+https://searchfox.org/mozilla-central/source/media/ffvpx/libavcodec/vp9mvs.c#99
+
+----------------------------------------------------------------------
+
+vp78_decode_frame
+
+UNCLEAR report again, same as those below
+
+----------------------------------------------------------------------
+
+avcodec_find_best_pix_fmt_of_list
+US too
+
+----------------------------------------------------------------------
+
+decode_subframe_fixed
+
+unsigned av_uninit(a), av_uninit(b), av_uninit(c), av_uninit(d);
+(expands to a=a. a is not passed in, so does not look relevant to us
+
+UNCLEAR report 
+
+----------------------------------------------------------------------
+
+av_opt_set_from_string
+
+UNCLEAR report, same as above:
+char *av_uninit(parsed_key), *av_uninit(value);
+parsed_key not relevant to us    
+
+----------------------------------------------------------------------
+
+av_frame_apply_cropping
+
+size_t offsets[4];
+calc_cropping_offsets(offsets, frame, desc);
+--> for (i = 0; frame->data[i]; i++) // assume false 
+-->  // init offsets 
+for (i = 0; frame->data[i]; i++) // assume true
+  frame->data[i] += offsets[i];
+claim: offsets uninit
+
+FALSE: value reasoning
+
+----------------------------------------------------------------------
+
+MoveToFront
+
+uint8_t mtf[256];
+for (i = 0; i <= max_value; ++i) // assume false
+  // init mtf 
+MoveToFront(mtf, index); <- mtf is v
+MoveToFront with v as 0th argument
+for (i = 0; i < v_size; ++i) // assume true
+  uint8_t value = v[index]
+claim: v is uninit
+
+FALSE: loops
+
+----------------------------------------------------------------------
+
+fast_composite_scaled_bilinear_sse2_8888_n_8888_normal_OVER
+
+file:///home/mlfbrown/compare/mozilla-central/scan-build-2020-01-20-124025-951-1/report-b9cd94.html#EndPath
+
+SAME
+
+----------------------------------------------------------------------
+
+fast_composite_scaled_bilinear_sse2_8888_n_8888_normal_OVER
+
+SAME
+
+----------------------------------------------------------------------
+
+fast_composite_scaled_bilinear_sse2_8888_8_8888_normal_OVER
+
+SAME
+
+----------------------------------------------------------------------
+
+fast_composite_scaled_bilinear_sse2_8888_8_8888_normal_OVER
+
+SAME
+
+----------------------------------------------------------------------
+
+fast_composite_scaled_bilinear_sse2_8888_0565_normal_OVER
+
+SAME
+
+----------------------------------------------------------------------
+
+fast_composite_scaled_bilinear_sse2_8888_0565_normal_OVER
+
+SAME
+
+----------------------------------------------------------------------
+
+fast_composite_scaled_bilinear_sse2_8888_8888_normal_OVER
+
+SAME
+
+----------------------------------------------------------------------
+
+fast_composite_scaled_bilinear_sse2_8888_8888_normal_OVER
+
+SAME
+
+----------------------------------------------------------------------
+
+fast_composite_scaled_bilinear_sse2_x888_8888_normal_SRC
+
+SAME
+
+----------------------------------------------------------------------
+
+fast_composite_scaled_bilinear_sse2_x888_8888_normal_SRC
+
+SAME
+
+----------------------------------------------------------------------
+
+fast_composite_scaled_bilinear_sse2_8888_8888_normal_SRC
+
+SAME
+
+----------------------------------------------------------------------
+
+fast_composite_scaled_bilinear_sse2_8888_8888_normal_SRC
+
+SAME
+
+----------------------------------------------------------------------
+
+gen_alpha_deltas
+
+SkAnalyticCubicEdge storage;
+SkAnalyticEdge* currE   = &storage;
+edgeSet = static_cast<SkAnalyticQuadraticEdge*>(currE)->setQuadratic(pts);
+originalWinding = static_cast<SkAnalyticQuadraticEdge*>(currE)->fQEdge.fWinding;
+currE->fX =  currE->fUpperX;
+
+TRUE? looks wrong, what's going on
+gen_alpha_delts is gone
+Too far in function for us
+
+----------------------------------------------------------------------
+
+fast_composite_scaled_bilinear_8888_8888_normal_OVER
+
+SAME
+
+----------------------------------------------------------------------
+
+fast_composite_scaled_bilinear_8888_8888_normal_OVER
+
+SAME
+
+----------------------------------------------------------------------
+
+fast_composite_scaled_bilinear_8888_565_normal_OVER
+
+SAME
+
+----------------------------------------------------------------------
+
+fast_composite_scaled_bilinear_8888_565_normal_OVER
+
+SAME
+
+----------------------------------------------------------------------
+
+cairo_type1_font_subset_generate
+
+
+status = _cairo_type1_font_subset_init (&font, unscaled_font, hex_encode);
+----> Does not initialize font if face is NULL, return NO_MEMORY error
+----> So the status is not 0 and we don't make it to the bad use 
+if (status) return status
+....
+status = cairo_type1_font_subset_generate (&font, name);
+
+
+Pass garbage to font_subset_generate:
+
+    cairo_type1_font_subset_generate (font <-- first arg)
+    ft_unscaled_font = (cairo_ft_unscaled_font_t *) font->base.unscaled_font;
+
+FALSE: value reasoning
+
+----------------------------------------------------------------------
+
+fast_composite_scaled_bilinear_565_565_normal_SRC
+
+SAME
+
+----------------------------------------------------------------------
+
+fast_composite_scaled_bilinear_565_565_normal_SRC
+
+FALSE
+
+----------------------------------------------------------------------
+
+read_curveType
+
+
+struct curveType *curve = NULL;
+curve = malloc(sizeof(struct curveType));
+float a = curve->parameter[1]; <-- undefined 
+
+HEAP UNINIT 
+
+----------------------------------------------------------------------
+
+unknown_toUtf8
+
+      const char *utf8;
+      utf8 = uenc->utf8[(unsigned char)**fromP];
+      *(*toP)++ = *utf8++;
+
+https://searchfox.org/mozilla-central/source/parser/expat/lib/xmltok.c#1396
+FALSE: complicated pointer logic 
+
+----------------------------------------------------------------------
+
+WebRtcAgc_VirtualMic
+
+gain = kGainTableVirtualMic[gainIdx - 127];
+
+OOB: kGainTableVirtualMic is constant
+https://searchfox.org/mozilla-central/source/media/webrtc/trunk/webrtc/modules/audio_processing/agc/legacy/analog_agc.c#278
+
+----------------------------------------------------------------------
+
+WebRtcAgc_VirtualMic
+
+SAME as above 
+
+----------------------------------------------------------------------
+
+m_split
+
+SAME as below
+
+----------------------------------------------------------------------
+
+m_split
+
+SAME as below
+
+----------------------------------------------------------------------
+
+m_split
+
+SAME as below
+
+----------------------------------------------------------------------
+
+mb_dupcl(n) 
+
+n->m_flags |= M_EXT;
+
+mb_dupcl passed n as 0th argument
+claim: n->m_flags is uninit
+
+FALSE: same logic as the mget issues from the undefResult.txt
+
+----------------------------------------------------------------------
+
+unorm_cmpEquivFold
+
+c2=*(s2-1);
+s2 passed in as argument and report starts within the function, so
+not oob IRRELEVANT 
+
+----------------------------------------------------------------------
+
+retain
+
+OOB (similar to below)
+
+----------------------------------------------------------------------
+
+retain
+
+
+UChar32 range[3] = { start, end+1, UNICODESET_HIGH };
+retain(range...)
+
+for ;;
+  1. First iteration
+  switch(polarity) -> case 2
+  b < a
+  b = other[j++]
+   
+  2. Second iteration
+
+claim: other uninit?
+
+OOB
+
+----------------------------------------------------------------------
+
+exclusiveOr
+
+OOB (same as above)
+
+----------------------------------------------------------------------
+
+makeHashCode
+
+uint32_t hashCode = blockData[blockStart++]; <-- uninit
+uint32_t makeHashCode called with blockData and blockStart as arguments
+--
+called uint32_t hashCode = makeHashCode(data, start);
+int32_t start = prevDataLength - blockLength;
+data and prevDataLen passed into extend() as arguments 1 and 3
+--
+mixedBlocks.extend(fastIndex, 0, 0, fastIndexLength);
+fastIndex as data and prevDataLen is 0
+so fastIndex is the issue
+for (int32_t i = 0, j = 0; i < fastILimit; ++j) <--- fast index initialization
+https://searchfox.org/mozilla-central/source/intl/icu/source/common/umutablecptrie.cpp#1195
+
+FALSE: unchanged and init able 
+
+
+----------------------------------------------------------------------
+
+_SCSUFromUnicode
+
+c=cnv->fromUChar32;
+int32_t length;
+//assumes that length is assigned to 3
+length = 3;
+
+c>>=8*length; /* length was reduced by targetCapacity */
+claim: either bad shift or c or length undefined 
+
+i think SHIFT, because c and length are definitely defined, but I can't
+figure out why. Shift of 24 seems ok
+
+----------------------------------------------------------------------
+
+vpx_int_pro_row_c
+
+const int norm_factor = height >> 1;
+for (idx = 0; idx < 16; ++idx)
+  for (i = 0; i < height; ++i) hbuf[idx] += ref[i * ref_stride];
+
+https://searchfox.org/mozilla-central/source/media/libvpx/libvpx/vpx_dsp/avg.c#139
+FALSE: still fine, don't see why report was made
+      
+
+----------------------------------------------------------------------
+
+remap_prob
+
+i = map_table[i];
+
+OOB
+
+----------------------------------------------------------------------
+
+choose_tx_size_from_rd
+
+int64_t d[TX_SIZES]; (4)
+&d passed to txm_rd_in_plane as argument 3 (int64_t *distortion)
+--> D IS BIG
+*distortion = d[mi->tx_size];
+
+claim: d or mi->tx_size uninit
+
+OOB
+
+----------------------------------------------------------------------
+
+max_block_wide
+
+int max_blocks_wide = block_size_wide[bsize]; <-- bsize passed in as arg 2
+into max_block_wide
+--
+decode_token_recon_block
+called with max_block_wide(xd, bsize, 0)
+--
+bsize passed in decode_block
+
+FALSE: unclear why flagged
+https://searchfox.org/mozilla-central/source/third_party/aom/av1/decoder/decodeframe.c#1107
+Still there
+
+----------------------------------------------------------------------
+
+is_chroma_reference
+
+const int bw = mi_size_wide[bsize];
+Same issue? Looks like either it doesn't understand global arrays or is reporting OOBS
+without telling us that
+
+FALSEOROOB
+
+----------------------------------------------------------------------
+
+av1_get_txb_size_index
+
+FALSE: global arrays
+
+----------------------------------------------------------------------
+
+boxsum5sqr SAME
+
+----------------------------------------------------------------------
+
+boxsum5sqr SAME
+
+----------------------------------------------------------------------
+
+boxsum5sqr SAME
+
+----------------------------------------------------------------------
+
+boxsum5 SAME
+
+----------------------------------------------------------------------
+
+boxsum5 SAME
+
+----------------------------------------------------------------------
+
+boxsum5 SAME
+
+----------------------------------------------------------------------
+
+boxsum3 SAME
+
+----------------------------------------------------------------------
+
+boxsum3 SAME
+
+----------------------------------------------------------------------
+
+boxsum5sqr SAME
+
+----------------------------------------------------------------------
+
+boxsum5sqr FALSE - different function
+
+----------------------------------------------------------------------
+
+boxsum5sqr SAME
+
+----------------------------------------------------------------------
+
+boxsum5 SAME
+
+----------------------------------------------------------------------
+
+boxsum5 SAME
+
+----------------------------------------------------------------------
+
+boxsum5
+
+FALSE - different function
+
+----------------------------------------------------------------------
+
+boxsum3 SAME
+
+----------------------------------------------------------------------
+
+boxsum3
+
+selfguided_filter
+boxsum3(B_, src, w + 6, h + 6);
+coef B_[70 /*(64 + 3 + 3)*/ * REST_UNIT_STRIDE];
+
+
+---->
+dst passed in to boxsum3 as first argument 
+
+for (int x = 1; x < w - 1; x++)  <-- does not execute
+
+for (int y = 2; y < h - 2; y++)
+  int a = dst[1], b = dst[2]; <-- dst undef 
+
+FALSE: not fixed, LOOP
+https://searchfox.org/mozilla-central/source/third_party/dav1d/src/looprestoration_tmpl.c#211
+
+----------------------------------------------------------------------
+
+av1_loop_filter_frame_init
+
+int filt_lvl[MAX_MB_PLANE], filt_lvl_r[MAX_MB_PLANE];
+filt_lvls = cm->lf.filter_level etc <--- these all seem fine
+for (seg_id = 0; seg_id < MAX_SEGMENTS; seg_id++)
+  for (int dir = 0; dir < 2; ++dir)
+    int lvl_seg = (dir == 0) ? filt_lvl[plane] : filt_lvl_r[plane];
+claim: filt_lvl is uninit I think
+
+FALSE: the assert is certainly not a bug (no assign in there at all)
+cm is passed in so I don't know whay it is uninit
+
+----------------------------------------------------------------------
+
+vp8_rd_pick_inter_mode
+
+unsigned char *plane[4][3];
+get_predictor_pointers(cpi, plane, recon_yoffset, recon_uvoffset);
+---> cpi->ref_frame_flags & VP8_LAST_FRAME // assume false
+---> cpi->ref_frame_flags & VP8_GOLD_FRAME // assume false
+---> cpi->ref_frame_flags & VP8_ALTR_FRAME // assume false 
+if (x->e_mbd.mode_info_context->mbmi.ref_frame) 
+  x->e_mbd.pre.y_buffer = plane[this_ref_frame][0]; <-- plane or this_ref_frame
+
+More detail: there are only three ref_frame_type flags availble, the ones
+listed above
+https://searchfox.org/mozilla-central/source/media/libvpx/libvpx/vpx/vp8.h#101
+This bug is only real if ref_frame_flags can be false
+
+https://searchfox.org/mozilla-central/source/media/libvpx/libvpx/vp8/encoder/rdopt.c#1738
+Code unchanged, but I think bad
+TRUE CONTACT
+
+----------------------------------------------------------------------
+
+labels2mode
+
+
+int_mv mode_mv[B_MODE_COUNT];
+only initialized in `if (this_mode == NEW4X4)` branch
+call labels2mode with &mode_mv[this_mode] as argument
+this_mv passed into labels2mode as argument four
+d->bmi.mv.as_int = this_mv->as_int;
+
+TRUE: It is now actually fixed with a for loop i believe 
+https://searchfox.org/mozilla-central/source/media/libvpx/libvpx/vp8/encoder/rdopt.c#1124
+
+----------------------------------------------------------------------
+
+format_
+
+if (U_FAILURE(errorCode)) return appendTo 
+int32_t offsetFirst;
+joinStringsAndReplace(...&offsetFirst)
+--> pat.formatAndReplace(....errorCode)
+----> error code can get set here, so could fail 
+--> if (U_FAILURE(erroCde)) return // take this brnach
+prefixLength += offsetFirst;
+
+
+TRUE: FIXED
+https://searchfox.org/mozilla-central/source/intl/icu/source/i18n/listformatter.cpp#487
+
+
+----------------------------------------------------------------------
+
+vp8_pick_inter_mode
+
+int_mv best_ref_mv_sb[2];
+(https://searchfox.org/mozilla-central/source/media/libvpx/libvpx/vp8/encoder/pickinter.c#567)
+
+if (ref_frame_map[1] > 0) // assume false, possible init
+(https://searchfox.org/mozilla-central/source/media/libvpx/libvpx/vp8/encoder/pickinter.c#726)
+
+if (sign_bias != cpi->common.ref_frame_sign_bias[xd->mode_info_context->mbmi.ref_frame])
+  ... best_ref_mv.as_int = best_ref_mv_sb[!sign_bias].as_int
+(https://searchfox.org/mozilla-central/source/media/libvpx/libvpx/vp8/encoder/pickinter.c#1296)  
+
+claim: best_ref_mv_sb uninit
+UNCLEAR: This seems like a bug, but I think it's unlikely for the sign_bias to be anything except INTRA_FRAME (0).
+DS https://searchfox.org/mozilla-central/source/media/libvpx/libvpx/vp8/encoder/pickinter.c#558
+
+
+----------------------------------------------------------------------
+
+operator
+
+UNCLEAR report 
+
+----------------------------------------------------------------------
+
+writeBranchSubNode
+
+int32_t starts[kMaxBranchLinearSubNodeLength];
+do/while loop that inits: int32_t i=starts[unitNumber]=start; // assumes false
+                          start=i
+the condition for the above is: while(++unitNumber<length-1)
+
+while(--unitNumber>=0) // assumes true 
+  start=starts[unitNumber];
+
+claim: starts uninit
+
+FALSE: loop init, unchaged
+https://searchfox.org/mozilla-central/source/intl/icu/source/common/stringtriebuilder.cpp#135
+
+----------------------------------------------------------------------
+
+floor1_encode
+
+int out[VIF_POSIT+2];
+
+out[0]=post[0];
+out[1]=post[1];
+for(i=2;i<posts;i++) out
+
+for(l=0;l<csub;l++)
+  int val=out[j+k];
+
+claim: out uninit
+
+FALSE: unchanged, loop 
+https://searchfox.org/mozilla-central/source/media/libvorbis/lib/vorbis_floor1.c#753
+
+----------------------------------------------------------------------
+
+mdb_drop0
+
+MDB_cursor mx;
+mdb_cursor_copy(mc, &mx);
+--> for (i=0; i<csrc->mc_snum; i++) // assume loop false
+-->   cdst->mc_pg[i] = csrc->mc_pg[i];
+for (i=1; i<mc->mc_snum; i++) // assume loop true
+  mc->mc_pg[i] = mx.mc_pg[i];
+claim: mx.mc_pg[i] uninit
+
+FALSE: value reasoning. 
+
+----------------------------------------------------------------------
+
+mdb_env_open2
+
+MDB_meta meta;
+
+if !((i = mdb_env_read_header(env, &meta)) != 0)
+--> take rc != size branch 
+--> rc = rc < 0 ? (int) ErrCode() : MDB_INVALID
+--> return rc
+  env->me_psize = meta.mm_psize;
+
+FALSE: value reasoning. rc will be an error code, so i != 0 
+
+for (i=off=0; i<NUM_METAS; i++, off += meta->mm_psize) {
+https://searchfox.org/mozilla-central/source/third_party/rust/lmdb-rkv-sys/lmdb/libraries/liblmdb/mdb.c#3676
+
+----------------------------------------------------------------------
+
+fieldDifference
+
+int32_t max = -1;
+max <<= 1;
+
+SHIFT
+aha its a shift!!! of the sign bit off the end of max. they should *really* say that
+not fixed, function remains, not clear what the deal is
+file:///home/mlfbrown/compare/mozilla-central/scan-build-2020-01-20-124025-951-1/report-791332.html#EndPath
+
+----------------------------------------------------------------------
+
+getEquivalents2
+
+UChar USeg[256];
+int32_t segLen = segment.extract(USeg, 256, status);
+https://searchfox.org/mozilla-central/source/intl/icu/source/common/unistr.cpp#875
+--> if don't initialized, return an error code
+getEquivalents2(&basic, USeg, segLen, status);
+segment passed as argument 1 to getEquivalents2
+if failure return null
+for (int32_t i = 0; i < segLen; i += U16_LENGTH(cp))
+  ...segment[i]
+  
+I believe it is referring to segment[i]
+FALSE
+
+----------------------------------------------------------------------
+
+BZ2_decompress
+
+UChar pos[BZ_N_GROUPS], tmp, v;
+for (v = 0; v < nGroups; v++) pos[v] = v; // assumes doesn't execute  
+for (i = 0; i < nSelectors; i++) tmp = pos[v]; // assumes executes
+
+claim: pos[v] uninit
+
+FALSE: loop invariant, function is gone though
+
+----------------------------------------------------------------------
+
+generateMTFValues
+
+rtmp  = yy[1];
+SAME as from undefResults
+
+----------------------------------------------------------------------
+
+main
+
+TEST
+
+----------------------------------------------------------------------
+

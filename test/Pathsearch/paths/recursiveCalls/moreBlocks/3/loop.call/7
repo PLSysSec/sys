@@ -1,0 +1,2 @@
+store  i32 5, i32* %moreBlocks_5, align 4 
+store  i32 0, i32* %moreBlocks_6, align 4 

@@ -1,0 +1,2 @@
+%foo_8 = bitcast i32 %foo_2 to i32 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "foo_8")

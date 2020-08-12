@@ -1,0 +1,2 @@
+%myFree_pointer = bitcast i8* zeroinitializer to i8*
+%myFree_nextpointer = getelementptr i8, i8* %myFree_pointer, i32 1

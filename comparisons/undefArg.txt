@@ -1,0 +1,648 @@
+Uninitialized argument value
+
+--------------------------------------------------------------------------
+
+HandleConnection
+
+client_auth_option clientAuth;
+
+if (out_flags & PR_POLL_READ && buffers[s].areafree()) init clientAuth
+if (out_flags & PR_POLL_WRITE) use clientAuth
+
+claim: clientAuth passed to ConfigureSSLServerSocket is undef
+
+FALSE: value reasoning 
+
+--------------------------------------------------------------------------
+
+Foo
+TEST
+
+--------------------------------------------------------------------------
+
+Foo
+TEST
+
+--------------------------------------------------------------------------
+
+av_opt_is_set_to_default_by_name
+
+o = av_opt_find2(obj, name, NULL, 0, search_flags, &target);
+--> av_opt_find2 target_obj is uninit
+--> no initialization of target->flags even though o is returned
+--> BUT recursive call back to find2, so the invariant must be that we will
+--> eventually get the object 
+if (!o) return AVERROR_OPTION_NOT_FOUND;
+return av_opt_is_set_to_default(target, o);
+
+FALSE: not currently in the listed bugs, not fixed in source
+https://searchfox.org/mozilla-central/source/media/ffvpx/libavutil/opt.c#1969
+
+--------------------------------------------------------------------------
+
+StoreBlockSwitch
+
+BlockEncoder command_enc;
+InitBlockEncoder(&command_enc....)
+--> initializes a bunch of fields but not length_deps
+BuildAndStoreBlockSwitchEntropyCodes(&command_enc)
+--> calls BuildAndStoreBlockSplitCode
+--> assumes num_types > 1 so that length_depths is not inialized 
+StoreSymbol called with &command_enc as the 0th argument
+self is the 0th argument to StoreSymbol 
+StoreBlockSwitch called with &self->block_split_code_ as code 
+code passed as 0th arg to StoreBlockSwitch
+lencode initialized and not marked, so code must be the issue
+BrotliWriteBits(code->length_depths[lencode]...)
+
+claim: code->length_depths[lencode] is uninit
+
+TRUE: I think this may be a legit bug.  mb->command_split.num_types on https://searchfox.org/mozilla-central/source/modules/brotli/enc/brotli_bit_stream.c#980 can be <= 1 (looking at one of the callsites to BortliStoreMetaBlock). I would maybe cleanup this to not depend on the argument: https://searchfox.org/mozilla-central/source/modules/brotli/enc/brotli_bit_stream.c#783
+https://searchfox.org/mozilla-central/source/modules/brotli/enc/brotli_bit_stream.c#796
+
+--------------------------------------------------------------------------
+
+StoreBlockSwitch
+
+Same logic, same function, same bug 
+
+--------------------------------------------------------------------------
+
+RAPL
+
+if (!ReadValueFromPowerFile("type", "", "", "%u", &type) abort
+--> ReadValueFromPowerFile can fail, but if so it returns null
+mPkg = new Domain("pkg", type); // would have aborted by now
+FALSE
+
+--------------------------------------------------------------------------
+
+main
+TOOLS
+
+--------------------------------------------------------------------------
+
+main
+TOOLS
+
+--------------------------------------------------------------------------
+
+main
+TOOLS
+
+--------------------------------------------------------------------------
+
+main
+TOOLS
+
+--------------------------------------------------------------------------
+
+BrotliBuildCodeLengthsHuffmanTable
+
+int sorted[BROTLI_CODE_LENGTH_CODES(17 + 1)];  /* symbols sorted by code length */
+BROTLI_REPEAT(sorted[offset[code_lengths[symbol]]--] = symbol // init
+while symbol != 0
+code = ConstructHuffmanCode((uint8_t)bits, (uint16_t)sorted[symbol++]);
+
+FALSE: invariants in initialization, but very hard to read this report
+code unchanged
+https://searchfox.org/mozilla-central/source/modules/brotli/dec/huffman.c#104
+
+--------------------------------------------------------------------------
+
+BrotliBuildCodeLengthsHuffmanTable
+
+SAME 
+
+--------------------------------------------------------------------------
+
+CheckTcpConnectivity
+
+NrSocketBase* accepted_sock;
+(!Connect(from, to, &accepted_sock))
+--> Dispatch(WrapRunnableRet(...accepted_sock)
+----> very confusing c++
+--> claims to return without writing to accepted_sock
+if (!WaitForReadable(accepted_sock))
+
+claim: accepted_sock is uninit
+(https://searchfox.org/mozilla-central/source/media/mtransport/test/test_nr_socket_unittest.cpp#175)
+
+FALSE: accespted_sock is clearly init in Connect. doesn't understand NS_DISPATCH_SYNC afaict
+
+--------------------------------------------------------------------------
+
+ShowSlowScriptDialog
+
+unsigned lineno;
+unsigned* linenop = XRE_IsParentProcess() ? &lineno : nullptr; // assume not parent 
+bool hasFrame = JS::DescribeScriptedCaller(aCx, &filename, linenop);
+--> size_t linenoLen = SprintfLiteral(linenoBuf, "%u", lineno);
+msg.AppendInt(lineno);
+claim: lineno uninit
+
+FALSE: initialized in the lineno function
+
+--------------------------------------------------------------------------
+
+op_bilinear_over_8888_0565
+https://searchfox.org/mozilla-central/source/gfx/cairo/libpixman/src/pixman-arm-neon.c#288
+https://searchfox.org/mozilla-central/source/gfx/cairo/libpixman/src/pixman-arm-neon-asm.S#337
+
+UNCLEAR: this one is really hard to track down in searchfox. If we really want to look at it we need to get the source post cpp.
+
+--------------------------------------------------------------------------
+
+_cairo_xlib_surface_composite_trapezoids
+
+cairo_xlib_surface_t *src;
+status = _cairo_xlib_surface_acquire_pattern_surface(src)
+-->
+--> return CAIRO_STATUS_NO_MEMORY
+if (unlikely(status)) goto bail
+operation = _recategorize_composite_operation (dst, op, src) <-- uninit
+
+FALSE: value reasoning
+
+--------------------------------------------------------------------------
+
+_cairo_xlib_display_get_xrender_format
+(https://searchfox.org/mozilla-central/source/gfx/cairo/cairo/src/cairo-xlib-display.c#572)
+
+int pict_format;
+
+switch (format)
+  case CAIRO_FORMAT_RGB16_565:
+    *visual = NULL
+    // break without setting pict_format
+if (!visual) return NULL 
+if (!xrender_format) use pict_format // won't get here, because visual is NULL
+
+FALSE: value reasoning
+
+--------------------------------------------------------------------------
+
+_cairo_type1_fallback_init_internal
+
+cairo_type1_font_t *font;
+status = cairo_type1_font_create (scaled_font_subset, &font, hex_encode);
+
+FALSE: value reasoning
+
+--------------------------------------------------------------------------
+
+_cairo_ps_surface_emit_linear_colorgradient
+
+....
+called in _cairo_ps_surface_emit_stitched_colorgradient (surface, n_stops,stops);
+stops is argument 2 to _cairo_ps_surface_emit_stitched_colorgradient
+_cairo_ps_surface_emit_linear_colorgradient (surface, &stops[i], &stops[i+1]);
+thinks stops[i]->color[0] is uninit
+....
+HEAP:
+allstops = _cairo_malloc_ab ((pattern->n_stops + 2), sizeof (cairo_ps_color_stop_t));
+stops = &allstops[1];
+
+--------------------------------------------------------------------------
+
+TranslateRecording
+
+https://searchfox.org/mozilla-central/source/gfx/2d/InlineTranslator.cpp#48
+
+FALSE: pass by reference 
+
+--------------------------------------------------------------------------
+
+_cairo_pdf_surface_paint_surface_pattern
+
+status = _cairo_pdf_surface_add_source_surface (...height...)
+if (unlikely (status)) if did not init, should not work, STATUS_NO_MEMORY
+cairo_matrix_translate (&pdf_p2d, 0.0, height);
+
+FALSE: value reasoning
+
+--------------------------------------------------------------------------
+
+cairo_pdf_surface_emit_rgb_linear_function
+
+allstops = _cairo_malloc_ab ((pattern->n_stops + 2), sizeof (cairo_pdf_color_stop_t));
+stops = &allstops[1];
+stops[0] passed into the following: 
+cairo_pdf_surface_emit_rgb_linear_function
+stop1->color[0]
+claim: uninit stop1
+
+HEAP: see above and logic 
+
+--------------------------------------------------------------------------
+
+_moz_cairo_ft_font_face_create_for_ft_face
+
+unscaled;
+_cairo_ft_unscaled_font_create_from_face(unscaled) STATUS NO MEMORY
+if (unlikely (status)) exit
+font_face = _cairo_ft_font_face_create (unscaled, &ft_options); // use
+
+FALSE: value reasoning 
+
+--------------------------------------------------------------------------
+
+_cairo_ft_scaled_glyph_init
+
+cairo_image_surface_t	*surface;
+status = _render_glyph_bitmap(&surface)
+--> returns FT_Err_Out_Of_Memory
+(unlikely (status)) goto fail;
+cairo_scaled_glyph_set_surface(...surface)
+
+FALSE: value reasoning
+
+--------------------------------------------------------------------------
+
+_transform_glyph_bitmap
+
+CALLED FROM _cairo_ft_scaled_glyph_init
+surface passed into _transform_glyph_bitmap as argument 1 
+cairo_surface_get_device_offset (&(*surface)->base, &origin_x, &origin_y);
+claim: surface->base uninit
+
+SAME Same as previous, false
+
+--------------------------------------------------------------------------
+
+cff_dict_read
+
+cff_dict_operator_t *op;
+status = cff_dict_create_operator with op as argument
+--> returns CAIRO_STATUS_NO_MEMORY
+if (unlikely (status)) goto fail;
+use op;
+
+FALSE: value reasoning 
+
+--------------------------------------------------------------------------
+
+_cairo_bo_event_queue_sort
+
+SAME as below
+
+--------------------------------------------------------------------------
+
+_cairo_bo_event_queue_sort
+
+cairo_bo_event_t *stack_event_ptrs[ARRAY_LENGTH (stack_events) + 1]
+cairo_bo_event_t **event_ptrs;
+for (i = 0; i < num_events; i++) // assume false
+  // init event_ptrs
+event_ptrs passed into bo_edges thing
+start_events passed in as 0th argument to _cairo_bentley_ottmann_tessellate_bo_edges
+_cairo_bo_event_queue_init called with start_events from _cairo_bentley_ottmann_tessellate_bo_edges
+_cairo_bo_event_queue_init passed start_events as 1st argument
+claim: start_events uninit
+
+FALSE: loop, similar to below 
+
+--------------------------------------------------------------------------
+
+_rectangle_sort
+
+rectangle_t **rectangles_ptrs;
+rectangle_t *stack_rectangles_ptrs[ARRAY_LENGTH (stack_rectangles) + 1];    
+rectangles_ptrs = stack_rectangles_ptrs;
+
+for (i = 0; i < chunk->count; i++) // assume false
+  // init rectangles_ptrs
+
+rectangles_ptrs passed into cairo_bently as 0 argument 
+rectangles passed into cairo_bentley as 0th argument
+sweep_line_init call from _cairo_bentley_ottmann_tessellate_rectangular
+rectangle_sort called from sweep_line_init
+_rectangle_sort (rectangles, num_rectangles);
+claim: rectangles is uninit
+
+FALSE: loop,
+code unchanged
+https://searchfox.org/mozilla-central/source/gfx/cairo/cairo/src/cairo-bentley-ottmann-rectangular.c#802
+
+--------------------------------------------------------------------------
+
+WebRtcAecm_FreeCore
+
+AecmCore* aecm = static_cast<AecmCore*>(malloc(sizeof(AecmCore)));
+if (aecm->delay_estimator == NULL)
+  WebRtcAecm_FreeCore(aecm)
+WebRtcAecm_FreeCore(aecm) ... free aecm->real_fft
+
+HEAP: still there. CONTACT
+https://searchfox.org/mozilla-central/source/media/webrtc/trunk/webrtc/modules/audio_processing/aecm/aecm_core.cc#258
+
+
+--------------------------------------------------------------------------
+
+WebRtcAecm_FreeCore
+
+HEAP
+
+--------------------------------------------------------------------------
+
+WebRtcAecm_FreeCore
+
+HEAP
+
+--------------------------------------------------------------------------
+
+WebRtcAecm_FreeCore
+
+HEAP 
+
+--------------------------------------------------------------------------
+
+WebRtcAecm_FreeCore
+
+HEAP
+
+--------------------------------------------------------------------------
+
+WebRtcAecm_Free
+
+HEAP
+
+--------------------------------------------------------------------------
+
+m_copyback
+
+HEAP
+--------------------------------------------------------------------------
+
+m_copym
+
+HEAP
+
+
+--------------------------------------------------------------------------
+
+m_pulldown
+
+HEAP
+
+--------------------------------------------------------------------------
+
+m_dup1
+
+struct mbuf *n = NULL;
+n = m_get(wait, m->m_type)
+--> mret = SCTP_ZONE_GET(zone_mbuf, struct mbuf);
+--> (alias for malloc)
+m_copydata(m, off, len, mtod(n, caddr_t));
+--> ((caddr_t)((n)->m_hdr.mh_data))
+aclaim: n->m_hdr.mh_data is uninit
+
+HEAP
+
+--------------------------------------------------------------------------
+
+usrsctp_connect
+
+struct sockaddr *sa;
+errno = getsockaddr(&sa, (caddr_t)name, namelen);
+--> assume len > SOCK_MAXADDRLEN
+--> return ENAMETOOLONG
+if (errno) return -1 <-- assume false, but is actually ENAMETOOLONG
+errno = user_connect(so, sa);
+claim: sa undefined
+
+FALSE: value reasoning
+
+--------------------------------------------------------------------------
+
+usrsctp_socket
+
+struct socket *so;
+
+errno = socreate(domain, &so, type, protocol);
+--> assume dom != AF_INET is true
+--> return EINVAL
+if (errno) return NULL <--- assume false, but actually returned EINVAL
+register_recv_cb(so, receive_cb);
+claim: so undefined
+
+FALSE: value reasoning
+
+--------------------------------------------------------------------------
+
+snext
+
+https://searchfox.org/mozilla-central/source/intl/icu/source/i18n/coll.cpp#846
+
+1. const UnicodeString *s=snext(status); from unext
+2. int32_t length
+3. const char *s=next(&length, status);
+--> call to StringEnumeration::snext (recursive)
+--> claim to return without writing...
+4. return setChars(s, length, status);
+with claim that length is undefined 
+
+UNCLEAR report 
+NONSENSE: The original code is nonsense. The code on searchfox is fine. I don't think we should count this bug as true or false.
+
+--------------------------------------------------------------------------
+
+ures_getUTF8StringByKey_64
+
+TRUE
+
+--------------------------------------------------------------------------
+
+ures_getUTF8StringByIndex_64
+
+TRUE, US
+
+--------------------------------------------------------------------------
+
+ures_getUTF8String_64
+
+Both of us report, TRUE
+
+--------------------------------------------------------------------------
+
+CopyToNative
+
+uint32_t myPerms;
+GetPermissions(&myPerms);
+--> if !aPermissions -> return error
+--> if cacheErrorMacro -> return no location error
+----> ENSURE_STAT_CACHE checks for file stats
+----> https://searchfox.org/mozilla-central/source/xpcom/io/nsLocalFileUnix.cpp#77
+----> question is: should this be fine?
+rv = newFile->CreateAndKeepOpen
+  (NORMAL_FILE_TYPE, PR_WRONLY | PR_CREATE_FILE | PR_TRUNCATE, myPerms, &newFD);
+
+TRUE: this should wrap GetPermissions(&myPerms) like https://searchfox.org/mozilla-central/source/xpcom/io/nsLocalFileUnix.cpp#691
+file unchaged: https://searchfox.org/mozilla-central/source/xpcom/io/nsLocalFileUnix.cpp#832
+Still appears in clang bug report 
+
+--------------------------------------------------------------------------
+
+CopyDirectoryTo
+
+SAME as below, just lower down in the function
+
+--------------------------------------------------------------------------
+
+CopyDirectoryTo
+
+uint32_t oldPerms;
+if (NS_FAILED(rv = GetPermissions(&oldPerms))) return rv;
+...use oldPerms...
+
+FALSE: returns if oldPerms doesnt get written
+code unchanged, see
+https://searchfox.org/mozilla-central/source/xpcom/io/nsLocalFileUnix.cpp#663
+
+--------------------------------------------------------------------------
+
+searchCurrencyName
+
+claim: text[index] in searchCurrencyName uninit
+index is the loop variable, text is passed as argument 2 to searchCurrencyName
+searchCurrencyName called with inputText from uprv_parseCurrency:
+
+UChar inputText[MAX_CURRENCY_NAME_LEN];  
+text.extract(start, textLen, inputText);
+--> unicode extraction from a start to a target (inputText)
+searchCurrencyName(inputText)
+
+FALSE: misunderstanding of C++ classes
+code unchanged: https://searchfox.org/mozilla-central/source/intl/icu/source/common/ucurr.cpp#1483
+
+--------------------------------------------------------------------------
+
+decode_partition
+
+block_size_wide[subsize]
+claim: block_size_wide is uninit
+
+OOB: i assume i thinks this is an oob because the thing is a constant and intialized
+https://searchfox.org/mozilla-central/source/third_party/aom/av1/common/common_data.h#46
+would really be helpful if they said that
+
+unchanged:
+https://searchfox.org/mozilla-central/source/third_party/aom/av1/decoder/decodeframe.c#1758
+
+
+--------------------------------------------------------------------------
+
+av1_build_intra_predictors_for_interintra
+
+Thinks max_txsize_rect_lookup[plane_bsize] is uninit.
+Function is just asserts then a call
+BLOCK_SIZE plane_bsize = get_plane_block_size(bsize, ssx, ssy);
+max_txsize_rect_lookup appears to be some sort of global?
+
+FALSE: misunderstanding global arrays
+https://searchfox.org/mozilla-central/source/third_party/aom/av1/common/reconinter.c#1092
+Function appears unchanged, unless somehow the global array changed?
+
+--------------------------------------------------------------------------
+
+dav1d_prepare_intra_edges_16bpc
+
+const pixel *dst_top;
+pixel_copy(top, dst_top, px_have);
+
+FASE: already marked in underPtr
+
+--------------------------------------------------------------------------
+
+vp8_pick_inter_mode
+
+get_predictor_pointers(cpi, plane, recon_yoffset, recon_uvoffset);
+does nothing if none of the following are true:
+cpi->ref_frame_flags & VP8_LAST_FRAME, cpi->ref_frame_flags & VP8_GOLD_FRAME, cpi->ref_frame_flags & VP8_ALTR_FRAME
+
+if (cpi->ref_frame_flags & VP8_LAST_FRAME) 
+  claim: plane[LAST_FRAME][0] is uninit
+
+FALSE: value reasoning: assumes cpi->ref_frame_flags & VP8_LAST_FRAME is both
+true and false at the same time 
+code unchanged: https://searchfox.org/mozilla-central/source/media/libvpx/libvpx/vp8/encoder/pickinter.c#558
+
+--------------------------------------------------------------------------
+
+mask_edges_inter
+
+for (int x_off = 0, x = 0; x < w4; x += t_dim->w, x_off++) assume false
+  init txa
+
+for (x = 0, mask = 1U << bx4; x < w4; x++, mask <<= 1)  assume x < w4, assume true
+  use txa
+
+FALSE: value reasoning
+
+--------------------------------------------------------------------------
+
+mask_edges_inter
+for (int x_off = 0, x = 0; x < w4; x += t_dim->w, x_off++) assume false
+  init txa
+
+for (y = 0; y < h4; y++, mask <<= 1)
+  masks[0][bx4][imin(txa[0][0][y][0], l[y])][sidx] |= smask;
+
+claim: txa uninit
+
+FALSE: loop initializations
+code unchanged:
+https://searchfox.org/mozilla-central/source/third_party/dav1d/src/lf_mask.c#82
+
+--------------------------------------------------------------------------
+
+dav1d_submit_frame
+(https://searchfox.org/mozilla-central/source/third_party/dav1d/src/decode.c#3156)
+
+claim: out_delayed uninit
+
+Dav1dThreadPicture *out_delayed;
+if (c->n_fc > 1) assign out_delayed
+if !(c->n_fc == 1): dav1d_thread_picture_ref(out_delayed, &f->sr_cur);
+
+claim: out_delayed uninit
+This bug can only happen if c->n_fc can be 0 or negative
+In that case, c->n_fc < 1, so out_delayed is not assigned
+But c->n_fc != 1, so dav1d_thread_picture_ref will be called
+https://searchfox.org/mozilla-central/source/third_party/dav1d/src/internal.h#77
+^ n_fc field
+
+--------------------------------------------------------------------------
+
+classify_argument
+
+claim: classes[i + pos] is uninit
+merge_classes (subclasses[i], classes[i + pos]);
+
+classes is passed in as argument 1 to classify_argument
+classify_argument is called from examine_argument
+classes is passed as argument 1 to examine_argument
+examine_argument is called from ffi_closure_unix64_inner with
+enum x86_64_reg_class classes[MAX_CLASSES]; (uninitialized)
+
+classes initialized for one iteration:
+for (i = 0; i < words; i++) classes[i] = X86_64_NO_CLASS;
+num = classify_argument (*ptr, subclasses, byte_offset % 8);
+for (i = 0; i < num; i++) { ..
+  classes[i + pos] = merge_classes (subclasses[i], classes[i + pos]);
+}
+
+FALSE: Think invariant between the two loops, code unchanged:
+https://searchfox.org/mozilla-central/source/js/src/ctypes/libffi/src/x86/ffi64.c#156
+
+--------------------------------------------------------------------------
+
+copyfile
+
+claim: sb.st_size is uninit
+if (ftruncate(tofd, sb.st_size) < 0) fail("cannot truncate %s", toname);
+
+if (fromfd < 0 || fstat(fromfd, &sb) < 0) fail("cannot access %s", name);
+It assumes fromfd is < 0, which hits "fail" so it exits
+
+FALSE: failure misunderstanding 

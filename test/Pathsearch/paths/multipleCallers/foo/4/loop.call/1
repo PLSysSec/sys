@@ -1,0 +1,19 @@
+%foo_4 = alloca i32, align 4 
+%foo_5 = alloca i32, align 4 
+%foo_6 = alloca i32, align 4 
+%foo_7 = alloca i32, align 4 
+store  i32 %foo_0, i32* %foo_5, align 4 
+store  i32 %foo_1, i32* %foo_6, align 4 
+store  i32 %foo_2, i32* %foo_7, align 4 
+%foo_8 = load  i32, i32* %foo_5, align 4 
+%foo_9 = load  i32, i32* %foo_6, align 4 
+%foo_10 = icmp slt i32 %foo_8, %foo_9 
+path-eq %foo_10 = bitcast i1 1 to i1 
+%foo_12 = load  i32, i32* %foo_5, align 4 
+%foo_13 = load  i32, i32* %foo_7, align 4 
+%foo_14 = add  nsw i32 %foo_12, %foo_13 
+store  i32 %foo_14, i32* %foo_4, align 4 
+%foo_20 = load  i32, i32* %foo_4, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "foo_20")
+%caller1_10 = bitcast i32 %foo_20 to i32 
+store  i32 %caller1_10, i32* %caller1_2, align 4 

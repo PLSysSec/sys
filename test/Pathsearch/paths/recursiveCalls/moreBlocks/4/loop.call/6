@@ -1,0 +1,6 @@
+%moreBlocks_14 = load  i32, i32* %moreBlocks_4, align 4 
+%moreBlocks_15 = srem i32 %moreBlocks_14, 3 
+%moreBlocks_16 = icmp eq i32 %moreBlocks_15, 1 
+path-eq %moreBlocks_16 = bitcast i1 1 to i1 
+store  i32 5, i32* %moreBlocks_5, align 4 
+store  i32 0, i32* %moreBlocks_6, align 4 

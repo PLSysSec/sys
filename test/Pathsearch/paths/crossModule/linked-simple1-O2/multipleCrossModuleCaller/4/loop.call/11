@@ -1,0 +1,19 @@
+%multipleCrossModuleCaller_30 = load  i32, i32* %multipleCrossModuleCaller_4, align 4 
+%multipleCrossModuleCaller_31 = load  i32, i32* %multipleCrossModuleCaller_5, align 4 
+%multipleCrossModuleCaller_32 = sub  nsw i32 %multipleCrossModuleCaller_30, %multipleCrossModuleCaller_31 
+%multipleCrossModuleCaller_33 = load  i32, i32* %multipleCrossModuleCaller_4, align 4 
+%multipleCrossModuleCaller_34 = load  i32, i32* %multipleCrossModuleCaller_5, align 4 
+%multipleCrossModuleCaller_35 = add  nsw i32 %multipleCrossModuleCaller_33, %multipleCrossModuleCaller_34 
+%multipleCrossModuleCaller_36 = load  i32, i32* %multipleCrossModuleCaller_4, align 4 
+%multipleCrossModuleCaller_37 = load  i32, i32* %multipleCrossModuleCaller_5, align 4 
+%multipleCrossModuleCaller_38 = srem i32 %multipleCrossModuleCaller_36, %multipleCrossModuleCaller_37 
+enter-call foo
+%foo_0 = bitcast i32 %multipleCrossModuleCaller_32 to i32 
+%foo_1 = bitcast i32 %multipleCrossModuleCaller_35 to i32 
+%foo_2 = bitcast i32 %multipleCrossModuleCaller_38 to i32 
+%foo_4 = icmp sgt i32 %foo_0, %foo_1 
+path-eq %foo_4 = bitcast i1 0 to i1 
+%foo_6 = icmp sgt i32 %foo_0, 55 
+path-eq %foo_6 = bitcast i1 0 to i1 
+%foo_10 = add  nsw i32 %foo_2, 53 
+%foo_11 = mul  nsw i32 %foo_10, %foo_0 

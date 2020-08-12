@@ -1,0 +1,2 @@
+%foo_6 = mul  nsw i32 %foo_1, 3 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "foo_6")

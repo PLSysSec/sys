@@ -1,0 +1,7 @@
+%notTailRec_2 = alloca i32, align 4 
+%notTailRec_3 = alloca i32, align 4 
+%notTailRec_4 = alloca i32, align 4 
+store  i32 %notTailRec_0, i32* %notTailRec_3, align 4 
+%notTailRec_5 = load  i32, i32* %notTailRec_3, align 4 
+%notTailRec_6 = icmp sgt i32 %notTailRec_5, 7 
+track-ops LocalReference (IntegerType {typeBits = 1}) (Name "notTailRec_6")

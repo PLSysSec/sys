@@ -1,0 +1,922 @@
+; ModuleID = '/home/firefox/firefox/mozilla-unified/third_party/prio/prio/client.c'
+source_filename = "/home/firefox/firefox/mozilla-unified/third_party/prio/prio/client.c"
+target datalayout = "e-m:e-i64:64-f80:128-n8:16:32:64-S128"
+target triple = "x86_64-pc-linux-gnu"
+
+%struct.prio_packet_client = type { %struct.beaver_triple*, %struct.mp_int, %struct.mp_int, %struct.mp_int, i32, %union.anon }
+%struct.beaver_triple = type { %struct.mp_int, %struct.mp_int, %struct.mp_int }
+%struct.mp_int = type { i32, i32, i32, i64* }
+%union.anon = type { %struct.server_a_data }
+%struct.server_a_data = type { %struct.mparray*, %struct.mparray* }
+%struct.mparray = type { i32, %struct.mp_int* }
+%struct.prio_config = type { i32, i8*, i32, %struct.SECKEYPublicKeyStr*, %struct.SECKEYPublicKeyStr*, %struct.mp_int, %struct.mp_int, i32, %struct.mparray*, %struct.mparray* }
+%struct.SECKEYPublicKeyStr = type { %struct.PLArenaPool*, i32, %struct.PK11SlotInfoStr*, i64, %union.anon.0 }
+%struct.PLArenaPool = type { %struct.PLArena, %struct.PLArena*, i32, i64 }
+%struct.PLArena = type { %struct.PLArena*, i64, i64, i64 }
+%struct.PK11SlotInfoStr = type opaque
+%union.anon.0 = type { %struct.SECKEYFortezzaPublicKeyStr }
+%struct.SECKEYFortezzaPublicKeyStr = type { i32, i32, [8 x i8], %struct.SECItemStr, %struct.SECItemStr, %struct.SECItemStr, %struct.SECItemStr, %struct.SECItemStr, %struct.SECKEYPQGParamsStr, %struct.SECKEYPQGParamsStr }
+%struct.SECItemStr = type { i32, i8*, i32 }
+%struct.SECKEYPQGParamsStr = type { %struct.PLArenaPool*, %struct.SECItemStr, %struct.SECItemStr, %struct.SECItemStr }
+%struct.prg = type opaque
+%struct.msgpack_sbuffer = type { i64, i8*, i64 }
+%struct.msgpack_packer = type { i8*, i32 (i8*, i8*, i64)* }
+%struct.SECKEYPrivateKeyStr = type { %struct.PLArenaPool*, i32, %struct.PK11SlotInfoStr*, i64, i32, i8*, i32 }
+%struct.msgpack_unpacker = type { i8*, i64, i64, i64, i64, %struct.msgpack_zone*, i64, i8* }
+%struct.msgpack_zone = type { %struct.msgpack_zone_chunk_list, %struct.msgpack_zone_finalizer_array, i64 }
+%struct.msgpack_zone_chunk_list = type { i64, i8*, %struct.msgpack_zone_chunk* }
+%struct.msgpack_zone_chunk = type opaque
+%struct.msgpack_zone_finalizer_array = type { %struct.msgpack_zone_finalizer*, %struct.msgpack_zone_finalizer*, %struct.msgpack_zone_finalizer* }
+%struct.msgpack_zone_finalizer = type { void (i8*)*, i8* }
+
+; Function Attrs: nounwind sspstrong uwtable
+define %struct.prio_packet_client* @PrioPacketClient_new(%struct.prio_config*, i32) local_unnamed_addr #0 {
+  %3 = getelementptr inbounds %struct.prio_config, %struct.prio_config* %0, i64 0, i32 0
+  %4 = load i32, i32* %3, align 8
+  %5 = tail call noalias i8* @malloc(i64 104) #6
+  %6 = bitcast i8* %5 to %struct.prio_packet_client*
+  %7 = icmp eq i8* %5, null
+  br i1 %7, label %55, label %8
+
+; <label>:8:                                      ; preds = %2
+  %9 = getelementptr inbounds i8, i8* %5, i64 80
+  %10 = bitcast i8* %9 to i32*
+  store i32 %1, i32* %10, align 8
+  %11 = bitcast i8* %5 to %struct.beaver_triple**
+  store %struct.beaver_triple* null, %struct.beaver_triple** %11, align 8
+  %12 = getelementptr inbounds i8, i8* %5, i64 8
+  %13 = bitcast i8* %12 to %struct.mp_int*
+  %14 = getelementptr inbounds i8, i8* %5, i64 24
+  %15 = bitcast i8* %14 to i64**
+  store i64* null, i64** %15, align 8
+  %16 = getelementptr inbounds i8, i8* %5, i64 32
+  %17 = bitcast i8* %16 to %struct.mp_int*
+  %18 = getelementptr inbounds i8, i8* %5, i64 48
+  %19 = bitcast i8* %18 to i64**
+  store i64* null, i64** %19, align 8
+  %20 = getelementptr inbounds i8, i8* %5, i64 56
+  %21 = bitcast i8* %20 to %struct.mp_int*
+  %22 = getelementptr inbounds i8, i8* %5, i64 72
+  %23 = bitcast i8* %22 to i64**
+  store i64* null, i64** %23, align 8
+  switch i32 %1, label %54 [
+    i32 0, label %24
+    i32 1, label %26
+  ]
+
+; <label>:24:                                     ; preds = %8
+  %25 = getelementptr inbounds i8, i8* %5, i64 88
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %25, i8 0, i64 16, i1 false)
+  br label %28
+
+; <label>:26:                                     ; preds = %8
+  %27 = getelementptr inbounds i8, i8* %5, i64 88
+  tail call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %27, i8 0, i64 16, i1 false)
+  br label %28
+
+; <label>:28:                                     ; preds = %24, %26
+  %29 = tail call i32 @mp_init(%struct.mp_int* nonnull %13) #6
+  %30 = icmp eq i32 %29, 0
+  br i1 %30, label %31, label %54
+
+; <label>:31:                                     ; preds = %28
+  %32 = tail call i32 @mp_init(%struct.mp_int* nonnull %17) #6
+  %33 = icmp eq i32 %32, 0
+  br i1 %33, label %34, label %54
+
+; <label>:34:                                     ; preds = %31
+  %35 = tail call i32 @mp_init(%struct.mp_int* nonnull %21) #6
+  %36 = icmp eq i32 %35, 0
+  br i1 %36, label %37, label %54
+
+; <label>:37:                                     ; preds = %34
+  %38 = tail call %struct.beaver_triple* @BeaverTriple_new() #6
+  store %struct.beaver_triple* %38, %struct.beaver_triple** %11, align 8
+  %39 = icmp eq %struct.beaver_triple* %38, null
+  br i1 %39, label %54, label %40
+
+; <label>:40:                                     ; preds = %37
+  %41 = load i32, i32* %10, align 8
+  %42 = icmp eq i32 %41, 0
+  br i1 %42, label %43, label %55
+
+; <label>:43:                                     ; preds = %40
+  %44 = tail call i32 @PrioConfig_hPoints(%struct.prio_config* nonnull %0) #6
+  %45 = tail call %struct.mparray* @MPArray_new(i32 %4) #6
+  %46 = getelementptr inbounds i8, i8* %5, i64 88
+  %47 = bitcast i8* %46 to %struct.mparray**
+  store %struct.mparray* %45, %struct.mparray** %47, align 8
+  %48 = icmp eq %struct.mparray* %45, null
+  br i1 %48, label %54, label %49
+
+; <label>:49:                                     ; preds = %43
+  %50 = tail call %struct.mparray* @MPArray_new(i32 %44) #6
+  %51 = getelementptr inbounds i8, i8* %5, i64 96
+  %52 = bitcast i8* %51 to %struct.mparray**
+  store %struct.mparray* %50, %struct.mparray** %52, align 8
+  %53 = icmp eq %struct.mparray* %50, null
+  br i1 %53, label %54, label %55
+
+; <label>:54:                                     ; preds = %49, %43, %37, %34, %31, %28, %8
+  tail call void @PrioPacketClient_clear(%struct.prio_packet_client* nonnull %6)
+  br label %55
+
+; <label>:55:                                     ; preds = %49, %40, %2, %54
+  %56 = phi %struct.prio_packet_client* [ null, %54 ], [ null, %2 ], [ %6, %49 ], [ %6, %40 ]
+  ret %struct.prio_packet_client* %56
+}
+
+; Function Attrs: argmemonly nounwind
+declare void @llvm.lifetime.start.p0i8(i64, i8* nocapture) #1
+
+; Function Attrs: nounwind
+declare noalias i8* @malloc(i64) local_unnamed_addr #2
+
+; Function Attrs: argmemonly nounwind
+declare void @llvm.memset.p0i8.i64(i8* nocapture writeonly, i8, i64, i1) #1
+
+declare i32 @mp_init(%struct.mp_int*) local_unnamed_addr #3
+
+declare %struct.beaver_triple* @BeaverTriple_new() local_unnamed_addr #3
+
+declare i32 @PrioConfig_hPoints(%struct.prio_config*) local_unnamed_addr #3
+
+declare %struct.mparray* @MPArray_new(i32) local_unnamed_addr #3
+
+; Function Attrs: argmemonly nounwind
+declare void @llvm.lifetime.end.p0i8(i64, i8* nocapture) #1
+
+; Function Attrs: nounwind sspstrong uwtable
+define void @PrioPacketClient_clear(%struct.prio_packet_client*) local_unnamed_addr #0 {
+  %2 = icmp eq %struct.prio_packet_client* %0, null
+  br i1 %2, label %19, label %3
+
+; <label>:3:                                      ; preds = %1
+  %4 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %0, i64 0, i32 4
+  %5 = load i32, i32* %4, align 8
+  %6 = icmp eq i32 %5, 0
+  br i1 %6, label %7, label %12
+
+; <label>:7:                                      ; preds = %3
+  %8 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %0, i64 0, i32 5, i32 0, i32 1
+  %9 = load %struct.mparray*, %struct.mparray** %8, align 8
+  tail call void @MPArray_clear(%struct.mparray* %9) #6
+  %10 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %0, i64 0, i32 5, i32 0, i32 0
+  %11 = load %struct.mparray*, %struct.mparray** %10, align 8
+  tail call void @MPArray_clear(%struct.mparray* %11) #6
+  br label %12
+
+; <label>:12:                                     ; preds = %7, %3
+  %13 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %0, i64 0, i32 0
+  %14 = load %struct.beaver_triple*, %struct.beaver_triple** %13, align 8
+  tail call void @BeaverTriple_clear(%struct.beaver_triple* %14) #6
+  %15 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %0, i64 0, i32 1
+  tail call void @mp_clear(%struct.mp_int* nonnull %15) #6
+  %16 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %0, i64 0, i32 2
+  tail call void @mp_clear(%struct.mp_int* nonnull %16) #6
+  %17 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %0, i64 0, i32 3
+  tail call void @mp_clear(%struct.mp_int* nonnull %17) #6
+  %18 = bitcast %struct.prio_packet_client* %0 to i8*
+  tail call void @free(i8* %18) #6
+  br label %19
+
+; <label>:19:                                     ; preds = %1, %12
+  ret void
+}
+
+; Function Attrs: nounwind sspstrong uwtable
+define i32 @PrioPacketClient_set_data(%struct.prio_config*, i8*, %struct.prio_packet_client*, %struct.prio_packet_client*) local_unnamed_addr #0 {
+  %5 = alloca %struct.mp_int, align 8
+  %6 = alloca %struct.mp_int, align 8
+  %7 = getelementptr inbounds %struct.prio_config, %struct.prio_config* %0, i64 0, i32 0
+  %8 = load i32, i32* %7, align 8
+  %9 = icmp eq i8* %1, null
+  br i1 %9, label %138, label %10
+
+; <label>:10:                                     ; preds = %4
+  %11 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %3, i64 0, i32 5
+  %12 = bitcast %union.anon* %11 to [16 x i8]*
+  %13 = tail call i32 @PrioPRGSeed_randomize([16 x i8]* nonnull %12) #6
+  %14 = icmp eq i32 %13, 0
+  br i1 %14, label %15, label %134
+
+; <label>:15:                                     ; preds = %10
+  %16 = bitcast %union.anon* %11 to i8*
+  %17 = tail call %struct.prg* @PRG_new(i8* nonnull %16) #6
+  %18 = icmp eq %struct.prg* %17, null
+  br i1 %18, label %134, label %19
+
+; <label>:19:                                     ; preds = %15
+  %20 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %2, i64 0, i32 0
+  %21 = load %struct.beaver_triple*, %struct.beaver_triple** %20, align 8
+  %22 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %3, i64 0, i32 0
+  %23 = load %struct.beaver_triple*, %struct.beaver_triple** %22, align 8
+  %24 = tail call i32 @BeaverTriple_set_rand(%struct.prio_config* nonnull %0, %struct.beaver_triple* %21, %struct.beaver_triple* %23) #6
+  %25 = icmp eq i32 %24, 0
+  br i1 %25, label %26, label %134
+
+; <label>:26:                                     ; preds = %19
+  %27 = tail call %struct.mparray* @MPArray_new_bool(i32 %8, i8* nonnull %1) #6
+  %28 = icmp eq %struct.mparray* %27, null
+  br i1 %28, label %134, label %29
+
+; <label>:29:                                     ; preds = %26
+  %30 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %2, i64 0, i32 5, i32 0, i32 0
+  %31 = load %struct.mparray*, %struct.mparray** %30, align 8
+  %32 = tail call i32 @PRG_share_array(%struct.prg* nonnull %17, %struct.mparray* %31, %struct.mparray* nonnull %27, %struct.prio_config* nonnull %0) #6
+  %33 = icmp eq i32 %32, 0
+  br i1 %33, label %34, label %134
+
+; <label>:34:                                     ; preds = %29
+  %35 = getelementptr inbounds %struct.prio_config, %struct.prio_config* %0, i64 0, i32 5
+  %36 = bitcast %struct.mp_int* %5 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 24, i8* nonnull %36) #6
+  %37 = bitcast %struct.mp_int* %6 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 24, i8* nonnull %37) #6
+  %38 = getelementptr inbounds %struct.mp_int, %struct.mp_int* %5, i64 0, i32 3
+  store i64* null, i64** %38, align 8
+  %39 = getelementptr inbounds %struct.mp_int, %struct.mp_int* %6, i64 0, i32 3
+  store i64* null, i64** %39, align 8
+  %40 = tail call %struct.mparray* @MPArray_dup(%struct.mparray* nonnull %27) #6
+  %41 = icmp eq %struct.mparray* %40, null
+  br i1 %41, label %130, label %42
+
+; <label>:42:                                     ; preds = %34
+  %43 = tail call %struct.mparray* @MPArray_new(i32 0) #6
+  %44 = icmp eq %struct.mparray* %43, null
+  br i1 %44, label %130, label %45
+
+; <label>:45:                                     ; preds = %42
+  %46 = tail call %struct.mparray* @MPArray_new(i32 0) #6
+  %47 = icmp eq %struct.mparray* %46, null
+  br i1 %47, label %130, label %48
+
+; <label>:48:                                     ; preds = %45
+  %49 = call i32 @mp_init(%struct.mp_int* nonnull %5) #6
+  %50 = icmp eq i32 %49, 0
+  br i1 %50, label %51, label %130
+
+; <label>:51:                                     ; preds = %48
+  %52 = call i32 @mp_init(%struct.mp_int* nonnull %6) #6
+  %53 = icmp eq i32 %52, 0
+  br i1 %53, label %54, label %130
+
+; <label>:54:                                     ; preds = %51
+  %55 = getelementptr inbounds %struct.mparray, %struct.mparray* %27, i64 0, i32 0
+  %56 = load i32, i32* %55, align 8
+  %57 = icmp sgt i32 %56, 0
+  br i1 %57, label %58, label %76
+
+; <label>:58:                                     ; preds = %54
+  %59 = getelementptr inbounds %struct.mparray, %struct.mparray* %40, i64 0, i32 1
+  br label %64
+
+; <label>:60:                                     ; preds = %70
+  %61 = load i32, i32* %55, align 8
+  %62 = sext i32 %61 to i64
+  %63 = icmp slt i64 %75, %62
+  br i1 %63, label %64, label %76
+
+; <label>:64:                                     ; preds = %60, %58
+  %65 = phi i64 [ 0, %58 ], [ %75, %60 ]
+  %66 = load %struct.mp_int*, %struct.mp_int** %59, align 8
+  %67 = getelementptr inbounds %struct.mp_int, %struct.mp_int* %66, i64 %65
+  %68 = call i32 @mp_sub_d(%struct.mp_int* %67, i64 1, %struct.mp_int* %67) #6
+  %69 = icmp eq i32 %68, 0
+  br i1 %69, label %70, label %130
+
+; <label>:70:                                     ; preds = %64
+  %71 = load %struct.mp_int*, %struct.mp_int** %59, align 8
+  %72 = getelementptr inbounds %struct.mp_int, %struct.mp_int* %71, i64 %65
+  %73 = call i32 @mp_mod(%struct.mp_int* %72, %struct.mp_int* nonnull %35, %struct.mp_int* %72) #6
+  %74 = icmp eq i32 %73, 0
+  %75 = add nuw nsw i64 %65, 1
+  br i1 %74, label %60, label %130
+
+; <label>:76:                                     ; preds = %60, %54
+  %77 = call fastcc i32 @data_polynomial_evals(%struct.prio_config* %0, %struct.mparray* nonnull %27, %struct.mparray* nonnull %43, %struct.mp_int* nonnull %5) #6
+  %78 = icmp eq i32 %77, 0
+  br i1 %78, label %79, label %130
+
+; <label>:79:                                     ; preds = %76
+  %80 = call fastcc i32 @data_polynomial_evals(%struct.prio_config* %0, %struct.mparray* nonnull %40, %struct.mparray* nonnull %46, %struct.mp_int* nonnull %6) #6
+  %81 = icmp eq i32 %80, 0
+  br i1 %81, label %82, label %130
+
+; <label>:82:                                     ; preds = %79
+  %83 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %2, i64 0, i32 1
+  %84 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %3, i64 0, i32 1
+  %85 = call i32 @share_int(%struct.prio_config* %0, %struct.mp_int* nonnull %5, %struct.mp_int* nonnull %83, %struct.mp_int* nonnull %84) #6
+  %86 = icmp eq i32 %85, 0
+  br i1 %86, label %87, label %130
+
+; <label>:87:                                     ; preds = %82
+  %88 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %2, i64 0, i32 2
+  %89 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %3, i64 0, i32 2
+  %90 = call i32 @share_int(%struct.prio_config* %0, %struct.mp_int* nonnull %6, %struct.mp_int* nonnull %88, %struct.mp_int* nonnull %89) #6
+  %91 = icmp eq i32 %90, 0
+  br i1 %91, label %92, label %130
+
+; <label>:92:                                     ; preds = %87
+  %93 = call i32 @mp_mulmod(%struct.mp_int* nonnull %5, %struct.mp_int* nonnull %6, %struct.mp_int* nonnull %35, %struct.mp_int* nonnull %5) #6
+  %94 = icmp eq i32 %93, 0
+  br i1 %94, label %95, label %130
+
+; <label>:95:                                     ; preds = %92
+  %96 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %2, i64 0, i32 3
+  %97 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %3, i64 0, i32 3
+  %98 = call i32 @share_int(%struct.prio_config* %0, %struct.mp_int* nonnull %5, %struct.mp_int* nonnull %96, %struct.mp_int* nonnull %97) #6
+  %99 = icmp eq i32 %98, 0
+  br i1 %99, label %100, label %130
+
+; <label>:100:                                    ; preds = %95
+  %101 = getelementptr inbounds %struct.mparray, %struct.mparray* %43, i64 0, i32 1
+  %102 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %2, i64 0, i32 5, i32 0, i32 1
+  %103 = getelementptr inbounds %struct.mparray, %struct.mparray* %43, i64 0, i32 0
+  %104 = load i32, i32* %103, align 8
+  %105 = icmp sgt i32 %104, 1
+  br i1 %105, label %106, label %130
+
+; <label>:106:                                    ; preds = %100
+  %107 = getelementptr inbounds %struct.mparray, %struct.mparray* %46, i64 0, i32 1
+  br label %108
+
+; <label>:108:                                    ; preds = %124, %106
+  %109 = phi i64 [ 0, %106 ], [ %125, %124 ]
+  %110 = phi i64 [ 1, %106 ], [ %126, %124 ]
+  %111 = load %struct.mp_int*, %struct.mp_int** %101, align 8
+  %112 = getelementptr inbounds %struct.mp_int, %struct.mp_int* %111, i64 %110
+  %113 = load %struct.mp_int*, %struct.mp_int** %107, align 8
+  %114 = getelementptr inbounds %struct.mp_int, %struct.mp_int* %113, i64 %110
+  %115 = call i32 @mp_mulmod(%struct.mp_int* nonnull %112, %struct.mp_int* nonnull %114, %struct.mp_int* nonnull %35, %struct.mp_int* nonnull %5) #6
+  %116 = icmp eq i32 %115, 0
+  br i1 %116, label %117, label %130
+
+; <label>:117:                                    ; preds = %108
+  %118 = load %struct.mparray*, %struct.mparray** %102, align 8
+  %119 = getelementptr inbounds %struct.mparray, %struct.mparray* %118, i64 0, i32 1
+  %120 = load %struct.mp_int*, %struct.mp_int** %119, align 8
+  %121 = getelementptr inbounds %struct.mp_int, %struct.mp_int* %120, i64 %109
+  %122 = call i32 @PRG_share_int(%struct.prg* nonnull %17, %struct.mp_int* %121, %struct.mp_int* nonnull %5, %struct.prio_config* %0) #6
+  %123 = icmp eq i32 %122, 0
+  br i1 %123, label %124, label %130
+
+; <label>:124:                                    ; preds = %117
+  %125 = add nuw i64 %109, 1
+  %126 = add nuw i64 %110, 2
+  %127 = load i32, i32* %103, align 8
+  %128 = trunc i64 %126 to i32
+  %129 = icmp sgt i32 %127, %128
+  br i1 %129, label %108, label %130
+
+; <label>:130:                                    ; preds = %64, %70, %108, %117, %124, %34, %42, %45, %48, %51, %76, %79, %82, %87, %92, %95, %100
+  %131 = phi i32 [ %77, %76 ], [ %80, %79 ], [ %85, %82 ], [ %90, %87 ], [ %98, %95 ], [ -1, %34 ], [ -1, %42 ], [ -1, %45 ], [ -1, %48 ], [ -1, %51 ], [ -1, %92 ], [ 0, %100 ], [ %122, %117 ], [ -1, %108 ], [ 0, %124 ], [ -1, %70 ], [ -1, %64 ]
+  %132 = phi %struct.mparray* [ %43, %76 ], [ %43, %79 ], [ %43, %82 ], [ %43, %87 ], [ %43, %95 ], [ null, %34 ], [ null, %42 ], [ %43, %45 ], [ %43, %48 ], [ %43, %51 ], [ %43, %92 ], [ %43, %100 ], [ %43, %124 ], [ %43, %117 ], [ %43, %108 ], [ %43, %70 ], [ %43, %64 ]
+  %133 = phi %struct.mparray* [ %46, %76 ], [ %46, %79 ], [ %46, %82 ], [ %46, %87 ], [ %46, %95 ], [ null, %34 ], [ null, %42 ], [ null, %45 ], [ %46, %48 ], [ %46, %51 ], [ %46, %92 ], [ %46, %100 ], [ %46, %124 ], [ %46, %117 ], [ %46, %108 ], [ %46, %70 ], [ %46, %64 ]
+  call void @MPArray_clear(%struct.mparray* %132) #6
+  call void @MPArray_clear(%struct.mparray* %133) #6
+  call void @MPArray_clear(%struct.mparray* %40) #6
+  call void @mp_clear(%struct.mp_int* nonnull %5) #6
+  call void @mp_clear(%struct.mp_int* nonnull %6) #6
+  call void @llvm.lifetime.end.p0i8(i64 24, i8* nonnull %37) #6
+  call void @llvm.lifetime.end.p0i8(i64 24, i8* nonnull %36) #6
+  br label %134
+
+; <label>:134:                                    ; preds = %26, %15, %29, %19, %10, %130
+  %135 = phi %struct.mparray* [ null, %10 ], [ null, %19 ], [ %27, %29 ], [ %27, %130 ], [ null, %15 ], [ null, %26 ]
+  %136 = phi %struct.prg* [ null, %10 ], [ %17, %19 ], [ %17, %29 ], [ %17, %130 ], [ null, %15 ], [ %17, %26 ]
+  %137 = phi i32 [ %13, %10 ], [ %24, %19 ], [ %32, %29 ], [ %131, %130 ], [ -1, %15 ], [ -1, %26 ]
+  call void @MPArray_clear(%struct.mparray* %135) #6
+  call void @PRG_clear(%struct.prg* %136) #6
+  br label %138
+
+; <label>:138:                                    ; preds = %4, %134
+  %139 = phi i32 [ %137, %134 ], [ -1, %4 ]
+  ret i32 %139
+}
+
+declare i32 @PrioPRGSeed_randomize([16 x i8]*) local_unnamed_addr #3
+
+declare %struct.prg* @PRG_new(i8*) local_unnamed_addr #3
+
+declare i32 @BeaverTriple_set_rand(%struct.prio_config*, %struct.beaver_triple*, %struct.beaver_triple*) local_unnamed_addr #3
+
+declare %struct.mparray* @MPArray_new_bool(i32, i8*) local_unnamed_addr #3
+
+declare i32 @PRG_share_array(%struct.prg*, %struct.mparray*, %struct.mparray*, %struct.prio_config*) local_unnamed_addr #3
+
+declare void @MPArray_clear(%struct.mparray*) local_unnamed_addr #3
+
+declare void @PRG_clear(%struct.prg*) local_unnamed_addr #3
+
+declare void @BeaverTriple_clear(%struct.beaver_triple*) local_unnamed_addr #3
+
+declare void @mp_clear(%struct.mp_int*) local_unnamed_addr #3
+
+; Function Attrs: nounwind
+declare void @free(i8* nocapture) local_unnamed_addr #2
+
+; Function Attrs: nounwind sspstrong uwtable
+define zeroext i1 @PrioPacketClient_areEqual(%struct.prio_packet_client*, %struct.prio_packet_client*) local_unnamed_addr #0 {
+  %3 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %0, i64 0, i32 0
+  %4 = load %struct.beaver_triple*, %struct.beaver_triple** %3, align 8
+  %5 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %1, i64 0, i32 0
+  %6 = load %struct.beaver_triple*, %struct.beaver_triple** %5, align 8
+  %7 = tail call zeroext i1 @BeaverTriple_areEqual(%struct.beaver_triple* %4, %struct.beaver_triple* %6) #6
+  br i1 %7, label %8, label %50
+
+; <label>:8:                                      ; preds = %2
+  %9 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %0, i64 0, i32 1
+  %10 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %1, i64 0, i32 1
+  %11 = tail call i32 @mp_cmp(%struct.mp_int* nonnull %9, %struct.mp_int* nonnull %10) #6
+  %12 = icmp eq i32 %11, 0
+  br i1 %12, label %13, label %50
+
+; <label>:13:                                     ; preds = %8
+  %14 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %0, i64 0, i32 2
+  %15 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %1, i64 0, i32 2
+  %16 = tail call i32 @mp_cmp(%struct.mp_int* nonnull %14, %struct.mp_int* nonnull %15) #6
+  %17 = icmp eq i32 %16, 0
+  br i1 %17, label %18, label %50
+
+; <label>:18:                                     ; preds = %13
+  %19 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %0, i64 0, i32 3
+  %20 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %1, i64 0, i32 3
+  %21 = tail call i32 @mp_cmp(%struct.mp_int* nonnull %19, %struct.mp_int* nonnull %20) #6
+  %22 = icmp eq i32 %21, 0
+  br i1 %22, label %23, label %50
+
+; <label>:23:                                     ; preds = %18
+  %24 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %0, i64 0, i32 4
+  %25 = load i32, i32* %24, align 8
+  %26 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %1, i64 0, i32 4
+  %27 = load i32, i32* %26, align 8
+  %28 = icmp eq i32 %25, %27
+  br i1 %28, label %29, label %50
+
+; <label>:29:                                     ; preds = %23
+  switch i32 %25, label %50 [
+    i32 0, label %30
+    i32 1, label %42
+  ]
+
+; <label>:30:                                     ; preds = %29
+  %31 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %0, i64 0, i32 5, i32 0, i32 0
+  %32 = load %struct.mparray*, %struct.mparray** %31, align 8
+  %33 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %1, i64 0, i32 5, i32 0, i32 0
+  %34 = load %struct.mparray*, %struct.mparray** %33, align 8
+  %35 = tail call zeroext i1 @MPArray_areEqual(%struct.mparray* %32, %struct.mparray* %34) #6
+  br i1 %35, label %36, label %50
+
+; <label>:36:                                     ; preds = %30
+  %37 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %0, i64 0, i32 5, i32 0, i32 1
+  %38 = load %struct.mparray*, %struct.mparray** %37, align 8
+  %39 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %1, i64 0, i32 5, i32 0, i32 1
+  %40 = load %struct.mparray*, %struct.mparray** %39, align 8
+  %41 = tail call zeroext i1 @MPArray_areEqual(%struct.mparray* %38, %struct.mparray* %40) #6
+  br i1 %41, label %49, label %50
+
+; <label>:42:                                     ; preds = %29
+  %43 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %0, i64 0, i32 5
+  %44 = bitcast %union.anon* %43 to i8*
+  %45 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %1, i64 0, i32 5
+  %46 = bitcast %union.anon* %45 to i8*
+  %47 = tail call i32 @memcmp(i8* nonnull %44, i8* nonnull %46, i64 16) #7
+  %48 = icmp eq i32 %47, 0
+  br i1 %48, label %49, label %50
+
+; <label>:49:                                     ; preds = %42, %36
+  br label %50
+
+; <label>:50:                                     ; preds = %29, %42, %36, %30, %23, %18, %13, %8, %2, %49
+  %51 = phi i1 [ true, %49 ], [ false, %2 ], [ false, %8 ], [ false, %13 ], [ false, %18 ], [ false, %23 ], [ false, %30 ], [ false, %36 ], [ false, %42 ], [ false, %29 ]
+  ret i1 %51
+}
+
+declare zeroext i1 @BeaverTriple_areEqual(%struct.beaver_triple*, %struct.beaver_triple*) local_unnamed_addr #3
+
+declare i32 @mp_cmp(%struct.mp_int*, %struct.mp_int*) local_unnamed_addr #3
+
+declare zeroext i1 @MPArray_areEqual(%struct.mparray*, %struct.mparray*) local_unnamed_addr #3
+
+; Function Attrs: nounwind readonly
+declare i32 @memcmp(i8* nocapture, i8* nocapture, i64) local_unnamed_addr #4
+
+; Function Attrs: nounwind sspstrong uwtable
+define i32 @PrioClient_encode(%struct.prio_config*, i8*, i8** nocapture, i32*, i8** nocapture, i32*) local_unnamed_addr #0 {
+  %7 = alloca %struct.msgpack_sbuffer, align 8
+  %8 = alloca %struct.msgpack_sbuffer, align 8
+  %9 = alloca %struct.msgpack_packer, align 8
+  %10 = alloca %struct.msgpack_packer, align 8
+  %11 = alloca i32, align 4
+  %12 = alloca i32, align 4
+  store i8* null, i8** %2, align 8
+  store i8* null, i8** %4, align 8
+  %13 = tail call %struct.prio_packet_client* @PrioPacketClient_new(%struct.prio_config* %0, i32 0)
+  %14 = icmp eq %struct.prio_packet_client* %13, null
+  br i1 %14, label %85, label %15
+
+; <label>:15:                                     ; preds = %6
+  %16 = tail call %struct.prio_packet_client* @PrioPacketClient_new(%struct.prio_config* %0, i32 1)
+  %17 = icmp eq %struct.prio_packet_client* %16, null
+  br i1 %17, label %85, label %18
+
+; <label>:18:                                     ; preds = %15
+  %19 = bitcast %struct.msgpack_sbuffer* %7 to i8*
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %19, i8 0, i64 24, i1 false) #6
+  %20 = bitcast %struct.msgpack_sbuffer* %8 to i8*
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %20, i8 0, i64 24, i1 false) #6
+  %21 = bitcast %struct.msgpack_packer* %9 to %struct.msgpack_sbuffer**
+  store %struct.msgpack_sbuffer* %7, %struct.msgpack_sbuffer** %21, align 8
+  %22 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %9, i64 0, i32 1
+  store i32 (i8*, i8*, i64)* @msgpack_sbuffer_write, i32 (i8*, i8*, i64)** %22, align 8
+  %23 = bitcast %struct.msgpack_packer* %10 to %struct.msgpack_sbuffer**
+  store %struct.msgpack_sbuffer* %8, %struct.msgpack_sbuffer** %23, align 8
+  %24 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %10, i64 0, i32 1
+  store i32 (i8*, i8*, i64)* @msgpack_sbuffer_write, i32 (i8*, i8*, i64)** %24, align 8
+  %25 = call i32 @PrioPacketClient_set_data(%struct.prio_config* %0, i8* %1, %struct.prio_packet_client* nonnull %13, %struct.prio_packet_client* nonnull %16)
+  %26 = icmp eq i32 %25, 0
+  br i1 %26, label %27, label %85
+
+; <label>:27:                                     ; preds = %18
+  %28 = call i32 @serial_write_packet_client(%struct.msgpack_packer* nonnull %9, %struct.prio_packet_client* nonnull %13, %struct.prio_config* %0) #6
+  %29 = icmp eq i32 %28, 0
+  br i1 %29, label %30, label %85
+
+; <label>:30:                                     ; preds = %27
+  %31 = call i32 @serial_write_packet_client(%struct.msgpack_packer* nonnull %10, %struct.prio_packet_client* nonnull %16, %struct.prio_config* %0) #6
+  %32 = icmp eq i32 %31, 0
+  br i1 %32, label %33, label %85
+
+; <label>:33:                                     ; preds = %30
+  %34 = getelementptr inbounds %struct.msgpack_sbuffer, %struct.msgpack_sbuffer* %7, i64 0, i32 0
+  %35 = load i64, i64* %34, align 8
+  %36 = trunc i64 %35 to i32
+  %37 = call i32 @PublicKey_encryptSize(i32 %36, i32* %3) #6
+  %38 = icmp eq i32 %37, 0
+  br i1 %38, label %39, label %85
+
+; <label>:39:                                     ; preds = %33
+  %40 = getelementptr inbounds %struct.msgpack_sbuffer, %struct.msgpack_sbuffer* %8, i64 0, i32 0
+  %41 = load i64, i64* %40, align 8
+  %42 = trunc i64 %41 to i32
+  %43 = call i32 @PublicKey_encryptSize(i32 %42, i32* %5) #6
+  %44 = icmp eq i32 %43, 0
+  br i1 %44, label %45, label %85
+
+; <label>:45:                                     ; preds = %39
+  %46 = load i32, i32* %3, align 4
+  %47 = zext i32 %46 to i64
+  %48 = call noalias i8* @malloc(i64 %47) #6
+  store i8* %48, i8** %2, align 8
+  %49 = icmp eq i8* %48, null
+  br i1 %49, label %91, label %50
+
+; <label>:50:                                     ; preds = %45
+  %51 = load i32, i32* %5, align 4
+  %52 = zext i32 %51 to i64
+  %53 = call noalias i8* @malloc(i64 %52) #6
+  store i8* %53, i8** %4, align 8
+  %54 = icmp eq i8* %53, null
+  br i1 %54, label %85, label %55
+
+; <label>:55:                                     ; preds = %50
+  %56 = getelementptr inbounds %struct.prio_config, %struct.prio_config* %0, i64 0, i32 3
+  %57 = load %struct.SECKEYPublicKeyStr*, %struct.SECKEYPublicKeyStr** %56, align 8
+  %58 = load i8*, i8** %2, align 8
+  %59 = load i32, i32* %3, align 4
+  %60 = getelementptr inbounds %struct.msgpack_sbuffer, %struct.msgpack_sbuffer* %7, i64 0, i32 1
+  %61 = load i8*, i8** %60, align 8
+  %62 = load i64, i64* %34, align 8
+  %63 = trunc i64 %62 to i32
+  %64 = call i32 @PublicKey_encrypt(%struct.SECKEYPublicKeyStr* %57, i8* %58, i32* nonnull %11, i32 %59, i8* %61, i32 %63) #6
+  %65 = icmp eq i32 %64, 0
+  br i1 %65, label %66, label %85
+
+; <label>:66:                                     ; preds = %55
+  %67 = getelementptr inbounds %struct.prio_config, %struct.prio_config* %0, i64 0, i32 4
+  %68 = load %struct.SECKEYPublicKeyStr*, %struct.SECKEYPublicKeyStr** %67, align 8
+  %69 = load i8*, i8** %4, align 8
+  %70 = load i32, i32* %5, align 4
+  %71 = getelementptr inbounds %struct.msgpack_sbuffer, %struct.msgpack_sbuffer* %8, i64 0, i32 1
+  %72 = load i8*, i8** %71, align 8
+  %73 = load i64, i64* %40, align 8
+  %74 = trunc i64 %73 to i32
+  %75 = call i32 @PublicKey_encrypt(%struct.SECKEYPublicKeyStr* %68, i8* %69, i32* nonnull %12, i32 %70, i8* %72, i32 %74) #6
+  %76 = icmp eq i32 %75, 0
+  br i1 %76, label %77, label %85
+
+; <label>:77:                                     ; preds = %66
+  %78 = load i32, i32* %11, align 4
+  %79 = load i32, i32* %3, align 4
+  %80 = icmp eq i32 %78, %79
+  br i1 %80, label %81, label %85
+
+; <label>:81:                                     ; preds = %77
+  %82 = load i32, i32* %12, align 4
+  %83 = load i32, i32* %5, align 4
+  %84 = icmp eq i32 %82, %83
+  br i1 %84, label %100, label %85
+
+; <label>:85:                                     ; preds = %18, %27, %30, %33, %39, %55, %66, %6, %15, %50, %77, %81
+  %86 = phi i32 [ %25, %18 ], [ %28, %27 ], [ %31, %30 ], [ %37, %33 ], [ %43, %39 ], [ %64, %55 ], [ %75, %66 ], [ -1, %6 ], [ -1, %15 ], [ -1, %50 ], [ -1, %77 ], [ -1, %81 ]
+  %87 = phi %struct.prio_packet_client* [ %16, %18 ], [ %16, %27 ], [ %16, %30 ], [ %16, %33 ], [ %16, %39 ], [ %16, %55 ], [ %16, %66 ], [ null, %6 ], [ null, %15 ], [ %16, %50 ], [ %16, %77 ], [ %16, %81 ]
+  %88 = load i8*, i8** %2, align 8
+  %89 = icmp eq i8* %88, null
+  br i1 %89, label %91, label %90
+
+; <label>:90:                                     ; preds = %85
+  call void @free(i8* nonnull %88) #6
+  br label %91
+
+; <label>:91:                                     ; preds = %45, %85, %90
+  %92 = phi %struct.prio_packet_client* [ %87, %85 ], [ %87, %90 ], [ %16, %45 ]
+  %93 = phi i32 [ %86, %85 ], [ %86, %90 ], [ -1, %45 ]
+  %94 = load i8*, i8** %4, align 8
+  %95 = icmp eq i8* %94, null
+  br i1 %95, label %97, label %96
+
+; <label>:96:                                     ; preds = %91
+  call void @free(i8* nonnull %94) #6
+  br label %97
+
+; <label>:97:                                     ; preds = %91, %96
+  store i8* null, i8** %2, align 8
+  store i8* null, i8** %4, align 8
+  %98 = getelementptr inbounds %struct.msgpack_sbuffer, %struct.msgpack_sbuffer* %7, i64 0, i32 1
+  %99 = getelementptr inbounds %struct.msgpack_sbuffer, %struct.msgpack_sbuffer* %8, i64 0, i32 1
+  br label %100
+
+; <label>:100:                                    ; preds = %81, %97
+  %101 = phi i8** [ %71, %81 ], [ %99, %97 ]
+  %102 = phi i8** [ %60, %81 ], [ %98, %97 ]
+  %103 = phi %struct.prio_packet_client* [ %16, %81 ], [ %92, %97 ]
+  %104 = phi i32 [ 0, %81 ], [ %93, %97 ]
+  call void @PrioPacketClient_clear(%struct.prio_packet_client* %13)
+  call void @PrioPacketClient_clear(%struct.prio_packet_client* %103)
+  %105 = load i8*, i8** %102, align 8
+  call void @free(i8* %105) #6
+  %106 = load i8*, i8** %101, align 8
+  call void @free(i8* %106) #6
+  ret i32 %104
+}
+
+; Function Attrs: inlinehint nounwind sspstrong uwtable
+define internal i32 @msgpack_sbuffer_write(i8* nocapture, i8* nocapture readonly, i64) #5 {
+  %4 = getelementptr inbounds i8, i8* %0, i64 16
+  %5 = bitcast i8* %4 to i64*
+  %6 = load i64, i64* %5, align 8
+  %7 = bitcast i8* %0 to i64*
+  %8 = load i64, i64* %7, align 8
+  %9 = sub i64 %6, %8
+  %10 = icmp ult i64 %9, %2
+  br i1 %10, label %15, label %11
+
+; <label>:11:                                     ; preds = %3
+  %12 = getelementptr inbounds i8, i8* %0, i64 8
+  %13 = bitcast i8* %12 to i8**
+  %14 = load i8*, i8** %13, align 8
+  br label %35
+
+; <label>:15:                                     ; preds = %3
+  %16 = icmp eq i64 %6, 0
+  %17 = shl i64 %6, 1
+  %18 = select i1 %16, i64 8192, i64 %17
+  %19 = add i64 %8, %2
+  br label %20
+
+; <label>:20:                                     ; preds = %23, %15
+  %21 = phi i64 [ %18, %15 ], [ %24, %23 ]
+  %22 = icmp ult i64 %21, %19
+  br i1 %22, label %23, label %26
+
+; <label>:23:                                     ; preds = %20
+  %24 = shl i64 %21, 1
+  %25 = icmp ugt i64 %24, %21
+  br i1 %25, label %20, label %26
+
+; <label>:26:                                     ; preds = %23, %20
+  %27 = phi i64 [ %19, %23 ], [ %21, %20 ]
+  %28 = getelementptr inbounds i8, i8* %0, i64 8
+  %29 = bitcast i8* %28 to i8**
+  %30 = load i8*, i8** %29, align 8
+  %31 = tail call i8* @realloc(i8* %30, i64 %27) #6
+  %32 = icmp eq i8* %31, null
+  br i1 %32, label %41, label %33
+
+; <label>:33:                                     ; preds = %26
+  store i8* %31, i8** %29, align 8
+  store i64 %27, i64* %5, align 8
+  %34 = load i64, i64* %7, align 8
+  br label %35
+
+; <label>:35:                                     ; preds = %11, %33
+  %36 = phi i64 [ %8, %11 ], [ %34, %33 ]
+  %37 = phi i8* [ %14, %11 ], [ %31, %33 ]
+  %38 = getelementptr inbounds i8, i8* %37, i64 %36
+  tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 1 %38, i8* align 1 %1, i64 %2, i1 false)
+  %39 = load i64, i64* %7, align 8
+  %40 = add i64 %39, %2
+  store i64 %40, i64* %7, align 8
+  br label %41
+
+; <label>:41:                                     ; preds = %26, %35
+  %42 = phi i32 [ 0, %35 ], [ -1, %26 ]
+  ret i32 %42
+}
+
+declare i32 @serial_write_packet_client(%struct.msgpack_packer*, %struct.prio_packet_client*, %struct.prio_config*) local_unnamed_addr #3
+
+declare i32 @PublicKey_encryptSize(i32, i32*) local_unnamed_addr #3
+
+declare i32 @PublicKey_encrypt(%struct.SECKEYPublicKeyStr*, i8*, i32*, i32, i8*, i32) local_unnamed_addr #3
+
+; Function Attrs: nounwind sspstrong uwtable
+define i32 @PrioPacketClient_decrypt(%struct.prio_packet_client*, %struct.prio_config*, %struct.SECKEYPrivateKeyStr*, i8*, i32) local_unnamed_addr #0 {
+  %6 = alloca %struct.msgpack_unpacker, align 8
+  %7 = alloca i32, align 4
+  %8 = bitcast %struct.msgpack_unpacker* %6 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 64, i8* nonnull %8) #6
+  %9 = zext i32 %4 to i64
+  %10 = call zeroext i1 @msgpack_unpacker_init(%struct.msgpack_unpacker* nonnull %6, i64 %9) #6
+  br i1 %10, label %11, label %28
+
+; <label>:11:                                     ; preds = %5
+  %12 = getelementptr inbounds %struct.msgpack_unpacker, %struct.msgpack_unpacker* %6, i64 0, i32 0
+  %13 = load i8*, i8** %12, align 8
+  %14 = getelementptr inbounds %struct.msgpack_unpacker, %struct.msgpack_unpacker* %6, i64 0, i32 1
+  %15 = load i64, i64* %14, align 8
+  %16 = getelementptr inbounds i8, i8* %13, i64 %15
+  %17 = call i32 @PrivateKey_decrypt(%struct.SECKEYPrivateKeyStr* %2, i8* %16, i32* nonnull %7, i32 %4, i8* %3, i32 %4) #6
+  %18 = icmp eq i32 %17, 0
+  br i1 %18, label %19, label %28
+
+; <label>:19:                                     ; preds = %11
+  %20 = load i32, i32* %7, align 4
+  %21 = zext i32 %20 to i64
+  %22 = load i64, i64* %14, align 8
+  %23 = add i64 %22, %21
+  store i64 %23, i64* %14, align 8
+  %24 = getelementptr inbounds %struct.msgpack_unpacker, %struct.msgpack_unpacker* %6, i64 0, i32 2
+  %25 = load i64, i64* %24, align 8
+  %26 = sub i64 %25, %21
+  store i64 %26, i64* %24, align 8
+  %27 = call i32 @serial_read_packet_client(%struct.msgpack_unpacker* nonnull %6, %struct.prio_packet_client* %0, %struct.prio_config* %1) #6
+  br label %28
+
+; <label>:28:                                     ; preds = %5, %11, %19
+  %29 = phi i32 [ %17, %11 ], [ %27, %19 ], [ -1, %5 ]
+  call void @msgpack_unpacker_destroy(%struct.msgpack_unpacker* nonnull %6) #6
+  call void @llvm.lifetime.end.p0i8(i64 64, i8* nonnull %8) #6
+  ret i32 %29
+}
+
+declare zeroext i1 @msgpack_unpacker_init(%struct.msgpack_unpacker*, i64) local_unnamed_addr #3
+
+declare i32 @PrivateKey_decrypt(%struct.SECKEYPrivateKeyStr*, i8*, i32*, i32, i8*, i32) local_unnamed_addr #3
+
+declare i32 @serial_read_packet_client(%struct.msgpack_unpacker*, %struct.prio_packet_client*, %struct.prio_config*) local_unnamed_addr #3
+
+declare void @msgpack_unpacker_destroy(%struct.msgpack_unpacker*) local_unnamed_addr #3
+
+declare %struct.mparray* @MPArray_dup(%struct.mparray*) local_unnamed_addr #3
+
+declare i32 @mp_sub_d(%struct.mp_int*, i64, %struct.mp_int*) local_unnamed_addr #3
+
+declare i32 @mp_mod(%struct.mp_int*, %struct.mp_int*, %struct.mp_int*) local_unnamed_addr #3
+
+; Function Attrs: nounwind sspstrong uwtable
+define internal fastcc i32 @data_polynomial_evals(%struct.prio_config*, %struct.mparray* nocapture readonly, %struct.mparray*, %struct.mp_int*) unnamed_addr #0 {
+  %5 = getelementptr inbounds %struct.prio_config, %struct.prio_config* %0, i64 0, i32 5
+  %6 = getelementptr inbounds %struct.prio_config, %struct.prio_config* %0, i64 0, i32 0
+  %7 = load i32, i32* %6, align 8
+  %8 = add nsw i32 %7, 1
+  %9 = icmp sgt i32 %7, -1
+  br i1 %9, label %10, label %16
+
+; <label>:10:                                     ; preds = %4, %10
+  %11 = phi i32 [ %14, %10 ], [ %8, %4 ]
+  %12 = phi i32 [ %13, %10 ], [ 0, %4 ]
+  %13 = add nuw nsw i32 %12, 1
+  %14 = lshr i32 %11, 1
+  %15 = icmp eq i32 %14, 0
+  br i1 %15, label %16, label %10
+
+; <label>:16:                                     ; preds = %10, %4
+  %17 = phi i32 [ 0, %4 ], [ %13, %10 ]
+  %18 = shl i32 1, %17
+  %19 = icmp sgt i32 %18, 1
+  %20 = sdiv i32 %18, 2
+  %21 = icmp eq i32 %20, %8
+  %22 = and i1 %19, %21
+  %23 = select i1 %22, i32 %8, i32 %18
+  %24 = tail call %struct.mparray* @MPArray_new(i32 %23) #6
+  %25 = icmp eq %struct.mparray* %24, null
+  br i1 %25, label %67, label %26
+
+; <label>:26:                                     ; preds = %16
+  %27 = tail call %struct.mparray* @MPArray_new(i32 %23) #6
+  %28 = icmp eq %struct.mparray* %27, null
+  br i1 %28, label %67, label %29
+
+; <label>:29:                                     ; preds = %26
+  %30 = getelementptr inbounds %struct.mparray, %struct.mparray* %24, i64 0, i32 1
+  %31 = load %struct.mp_int*, %struct.mp_int** %30, align 8
+  %32 = tail call i32 @rand_int(%struct.mp_int* %31, %struct.mp_int* nonnull %5) #6
+  %33 = icmp eq i32 %32, 0
+  br i1 %33, label %34, label %67
+
+; <label>:34:                                     ; preds = %29
+  %35 = load %struct.mp_int*, %struct.mp_int** %30, align 8
+  %36 = tail call i32 @mp_copy(%struct.mp_int* %35, %struct.mp_int* %3) #6
+  %37 = icmp eq i32 %36, 0
+  br i1 %37, label %38, label %67
+
+; <label>:38:                                     ; preds = %34
+  %39 = icmp slt i32 %7, 1
+  br i1 %39, label %55, label %40
+
+; <label>:40:                                     ; preds = %38
+  %41 = getelementptr inbounds %struct.mparray, %struct.mparray* %1, i64 0, i32 1
+  %42 = sext i32 %7 to i64
+  br label %46
+
+; <label>:43:                                     ; preds = %46
+  %44 = add nuw nsw i64 %47, 1
+  %45 = icmp slt i64 %47, %42
+  br i1 %45, label %46, label %55
+
+; <label>:46:                                     ; preds = %43, %40
+  %47 = phi i64 [ %44, %43 ], [ 1, %40 ]
+  %48 = load %struct.mp_int*, %struct.mp_int** %41, align 8
+  %49 = add nsw i64 %47, -1
+  %50 = getelementptr inbounds %struct.mp_int, %struct.mp_int* %48, i64 %49
+  %51 = load %struct.mp_int*, %struct.mp_int** %30, align 8
+  %52 = getelementptr inbounds %struct.mp_int, %struct.mp_int* %51, i64 %47
+  %53 = tail call i32 @mp_copy(%struct.mp_int* %50, %struct.mp_int* nonnull %52) #6
+  %54 = icmp eq i32 %53, 0
+  br i1 %54, label %43, label %67
+
+; <label>:55:                                     ; preds = %43, %38
+  %56 = tail call i32 @poly_fft(%struct.mparray* nonnull %27, %struct.mparray* nonnull %24, %struct.prio_config* %0, i1 zeroext true) #6
+  %57 = icmp eq i32 %56, 0
+  br i1 %57, label %58, label %67
+
+; <label>:58:                                     ; preds = %55
+  %59 = shl nsw i32 %23, 1
+  %60 = tail call i32 @MPArray_resize(%struct.mparray* nonnull %27, i32 %59) #6
+  %61 = icmp eq i32 %60, 0
+  br i1 %61, label %62, label %67
+
+; <label>:62:                                     ; preds = %58
+  %63 = tail call i32 @MPArray_resize(%struct.mparray* %2, i32 %59) #6
+  %64 = icmp eq i32 %63, 0
+  br i1 %64, label %65, label %67
+
+; <label>:65:                                     ; preds = %62
+  %66 = tail call i32 @poly_fft(%struct.mparray* %2, %struct.mparray* nonnull %27, %struct.prio_config* %0, i1 zeroext false) #6
+  br label %67
+
+; <label>:67:                                     ; preds = %46, %65, %29, %55, %58, %62, %16, %26, %34
+  %68 = phi %struct.mparray* [ %27, %29 ], [ %27, %55 ], [ %27, %58 ], [ %27, %62 ], [ %27, %65 ], [ null, %16 ], [ null, %26 ], [ %27, %34 ], [ %27, %46 ]
+  %69 = phi i32 [ %32, %29 ], [ %56, %55 ], [ %60, %58 ], [ %63, %62 ], [ %66, %65 ], [ -1, %16 ], [ -1, %26 ], [ -1, %34 ], [ -1, %46 ]
+  tail call void @MPArray_clear(%struct.mparray* %24) #6
+  tail call void @MPArray_clear(%struct.mparray* %68) #6
+  ret i32 %69
+}
+
+declare i32 @share_int(%struct.prio_config*, %struct.mp_int*, %struct.mp_int*, %struct.mp_int*) local_unnamed_addr #3
+
+declare i32 @mp_mulmod(%struct.mp_int*, %struct.mp_int*, %struct.mp_int*, %struct.mp_int*) local_unnamed_addr #3
+
+declare i32 @PRG_share_int(%struct.prg*, %struct.mp_int*, %struct.mp_int*, %struct.prio_config*) local_unnamed_addr #3
+
+declare i32 @rand_int(%struct.mp_int*, %struct.mp_int*) local_unnamed_addr #3
+
+declare i32 @mp_copy(%struct.mp_int*, %struct.mp_int*) local_unnamed_addr #3
+
+declare i32 @poly_fft(%struct.mparray*, %struct.mparray*, %struct.prio_config*, i1 zeroext) local_unnamed_addr #3
+
+declare i32 @MPArray_resize(%struct.mparray*, i32) local_unnamed_addr #3
+
+; Function Attrs: nounwind
+declare noalias i8* @realloc(i8* nocapture, i64) local_unnamed_addr #2
+
+; Function Attrs: argmemonly nounwind
+declare void @llvm.memcpy.p0i8.p0i8.i64(i8* nocapture writeonly, i8* nocapture readonly, i64, i1) #1
+
+attributes #0 = { nounwind sspstrong uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { argmemonly nounwind }
+attributes #2 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { nounwind readonly "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #5 = { inlinehint nounwind sspstrong uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #6 = { nounwind }
+attributes #7 = { nounwind readonly }
+
+!llvm.module.flags = !{!0, !1}
+!llvm.ident = !{!2}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{i32 7, !"PIC Level", i32 2}
+!2 = !{!"clang version 7.0.1 (tags/RELEASE_701/final)"}

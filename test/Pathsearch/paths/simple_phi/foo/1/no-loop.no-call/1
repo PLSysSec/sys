@@ -1,0 +1,1 @@
+%foo_3 = icmp slt i64 %foo_0, 3 

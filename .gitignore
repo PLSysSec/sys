@@ -1,0 +1,7 @@
+.stack-work/
+*.cabal
+*~
+#*
+*.prof.html
+site
+logs

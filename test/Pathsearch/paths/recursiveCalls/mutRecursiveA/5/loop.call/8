@@ -1,0 +1,10 @@
+%mutRecursiveA_13 = load  i32, i32* %mutRecursiveA_2, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "mutRecursiveA_13")
+%mutRecursiveB_11 = bitcast i32 %mutRecursiveA_13 to i32 
+store  i32 %mutRecursiveB_11, i32* %mutRecursiveB_2, align 4 
+%mutRecursiveB_13 = load  i32, i32* %mutRecursiveB_2, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "mutRecursiveB_13")
+%mutRecursiveA_11 = bitcast i32 %mutRecursiveB_13 to i32 
+store  i32 %mutRecursiveA_11, i32* %mutRecursiveA_2, align 4 
+%mutRecursiveA_13_1 = load  i32, i32* %mutRecursiveA_2, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "mutRecursiveA_13_1")

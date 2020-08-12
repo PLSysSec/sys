@@ -1,0 +1,17 @@
+%nestedRecursive_2 = alloca i32, align 4 
+%nestedRecursive_3 = alloca i32, align 4 
+%nestedRecursive_4 = alloca i32, align 4 
+store  i32 %nestedRecursive_0, i32* %nestedRecursive_3, align 4 
+%nestedRecursive_5 = load  i32, i32* %nestedRecursive_3, align 4 
+enter-call notRecursive
+%notRecursive_0 = bitcast i32 3 to i32 
+%notRecursive_1 = bitcast i32 %nestedRecursive_5 to i32 
+%notRecursive_3 = alloca i32, align 4 
+%notRecursive_4 = alloca i32, align 4 
+store  i32 %notRecursive_0, i32* %notRecursive_3, align 4 
+store  i32 %notRecursive_1, i32* %notRecursive_4, align 4 
+%notRecursive_5 = load  i32, i32* %notRecursive_3, align 4 
+%notRecursive_6 = load  i32, i32* %notRecursive_4, align 4 
+%notRecursive_7 = mul  nsw i32 %notRecursive_6, 3 
+%notRecursive_8 = add  nsw i32 %notRecursive_5, %notRecursive_7 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "notRecursive_8")

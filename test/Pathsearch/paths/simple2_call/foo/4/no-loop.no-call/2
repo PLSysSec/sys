@@ -1,0 +1,13 @@
+%foo_13 = load  i32, i32* %foo_6, align 4 
+%foo_14 =  call ccc  i32  @bar(i32  %foo_13, i32  3)  
+%foo_15 = load  i32, i32* %foo_5, align 4 
+%foo_16 = add  nsw i32 %foo_15, %foo_14 
+store  i32 %foo_16, i32* %foo_5, align 4 
+%foo_18 = load  i32, i32* %foo_7, align 4 
+%foo_19 = add  nsw i32 %foo_18, 1 
+store  i32 %foo_19, i32* %foo_7, align 4 
+%foo_9 = load  i32, i32* %foo_7, align 4 
+%foo_10 = load  i32, i32* %foo_4, align 4 
+%foo_11 = icmp slt i32 %foo_9, %foo_10 
+path-eq %foo_11 = bitcast i1 0 to i1 
+%foo_21 = load  i32, i32* %foo_5, align 4 

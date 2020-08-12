@@ -1,0 +1,76 @@
+Garbage return value
+
+----------------------------------------------------------------------
+
+ff_get_format
+
+file:///home/mlfbrown/compare/mozilla-central/scan-build-2020-01-20-124025-951-1/report-97eebc.html#EndPath
+
+enum AVPixelFormat ret;
+
+for (i = 0; i < n; i++) {
+  if (i == n) {
+     av_log(avctx, AV_LOG_ERROR, "Invalid return from get_format(): "
+     1353	                      "%s not in possible list.\n", desc->name);
+     1354			                  break;
+   // break without setting ret 
+return ret;
+claim: ret undefined
+
+TRUE: looks legit to me CONTACT
+https://searchfox.org/mozilla-central/source/media/ffvpx/libavcodec/decode.c#1352
+
+----------------------------------------------------------------------
+
+Get32BitNameHash
+
+file:///home/mlfbrown/compare/mozilla-central/scan-build-2020-01-20-124025-951-1/report-ecfe5f.html#EndPath
+
+SECItem *name;
+ConvertFromSID(&sce, sid);
+--> Does not initialize the rest 
+name = &sid->u.ssl3.srvName;
+now = CacheSrvName(cache, name, &sce);
+CacheSrvName has name as second argument 
+called from CacheSrvName
+
+BitNameHash(name)    
+PLHashNumber rv = SECITEM_Hash(name);
+PRUint8 *rvc = (PRUint8 *)&rv;
+rvc[name->len % sizeof(rv)] ^= name->type;
+return rv;
+
+FALSE: This assumes that sid->u.ssl3.srvName->type is not initialized,
+which seems far fetched (loolking at SECItem allocators).
+
+----------------------------------------------------------------------
+
+NSC_Finalize
+
+file:///home/mlfbrown/compare/mozilla-central/scan-build-2020-01-20-124025-951-1/report-a2c4f6.html#EndPath
+
+    CK_RV crv;
+    if (sftk_ForkReset(pReserved, &crv)) return crv;
+    ----> within ForkReset 
+    ----> if it doesn't set crv, it returns 0, so the branch won't execute
+    ...get crv some other way...
+
+    FALSE: value reasoning
+    Indeed, no change: https://searchfox.org/mozilla-central/source/security/nss/lib/softoken/pkcs11.c#3333
+
+----------------------------------------------------------------------
+
+_moz_cairo_ft_font_face_create_for_pattern
+
+    cairo_font_face_t *font_face;
+    // try to initialize with _cairo_ft_font_face_create_for_pattern
+    status = function(&font_face)
+    ---> within the function:
+    ---> if font_face is null, it returns an error
+
+    if (unlikely (status)) ... return early 
+    ...
+    return font_face; // could be garbage 
+
+
+    FALSE: value reasoning + understanding stack pointer nullness 

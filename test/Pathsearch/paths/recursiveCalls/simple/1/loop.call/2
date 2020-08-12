@@ -1,0 +1,2 @@
+%simple_10 = load  i32, i32* %simple_4, align 4 
+store  i32 %simple_10, i32* %simple_2, align 4 

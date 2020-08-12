@@ -1,0 +1,2182 @@
+; ModuleID = '/home/firefox/firefox/mozilla-unified/nsprpub/pr/src/misc/prtpool.c'
+source_filename = "/home/firefox/firefox/mozilla-unified/nsprpub/pr/src/misc/prtpool.c"
+target datalayout = "e-m:e-i64:64-f80:128-n8:16:32:64-S128"
+target triple = "x86_64-pc-linux-gnu"
+
+%struct.PRThreadPool = type { i32, i32, i32, i32, i32, %struct.tp_jobq, %struct.io_jobq, %struct.timer_jobq, %struct.PRLock*, %struct.PRCondVar*, i32 }
+%struct.tp_jobq = type { %struct.PRCListStr, i32, %struct.PRLock*, %struct.PRCondVar*, %struct.PRCListStr }
+%struct.PRCListStr = type { %struct.PRCListStr*, %struct.PRCListStr* }
+%struct.io_jobq = type { %struct.PRCListStr, %struct.PRPollDesc*, i32, %struct.PRJob**, %struct.PRLock*, i32, %struct.PRFileDesc*, %struct.PRCListStr }
+%struct.PRPollDesc = type { %struct.PRFileDesc*, i16, i16 }
+%struct.PRJob = type { %struct.PRCListStr, i32, i32, void (i8*)*, i8*, %struct.PRCondVar*, i32, %struct.PRCondVar*, i32, %struct.PRThreadPool*, %struct.PRJobIoDesc*, i32, i16, %union.PRNetAddr*, i32, i32 }
+%struct.PRJobIoDesc = type { %struct.PRFileDesc*, i32, i32 }
+%union.PRNetAddr = type { %struct.anon.1, [80 x i8] }
+%struct.anon.1 = type { i16, i16, i32, %struct.PRIPv6Addr, i32 }
+%struct.PRIPv6Addr = type { %union.anon }
+%union.anon = type { [2 x i64] }
+%struct.PRFileDesc = type { %struct.PRIOMethods*, %struct.PRFilePrivate*, %struct.PRFileDesc*, %struct.PRFileDesc*, void (%struct.PRFileDesc*)*, i32 }
+%struct.PRIOMethods = type { i32, i32 (%struct.PRFileDesc*)*, i32 (%struct.PRFileDesc*, i8*, i32)*, i32 (%struct.PRFileDesc*, i8*, i32)*, i32 (%struct.PRFileDesc*)*, i64 (%struct.PRFileDesc*)*, i32 (%struct.PRFileDesc*)*, i32 (%struct.PRFileDesc*, i32, i32)*, i64 (%struct.PRFileDesc*, i64, i32)*, i32 (%struct.PRFileDesc*, %struct.PRFileInfo*)*, i32 (%struct.PRFileDesc*, %struct.PRFileInfo64*)*, i32 (%struct.PRFileDesc*, %struct.PRIOVec*, i32, i32)*, i32 (%struct.PRFileDesc*, %union.PRNetAddr*, i32)*, %struct.PRFileDesc* (%struct.PRFileDesc*, %union.PRNetAddr*, i32)*, i32 (%struct.PRFileDesc*, %union.PRNetAddr*)*, i32 (%struct.PRFileDesc*, i32)*, i32 (%struct.PRFileDesc*, i32)*, i32 (%struct.PRFileDesc*, i8*, i32, i32, i32)*, i32 (%struct.PRFileDesc*, i8*, i32, i32, i32)*, i32 (%struct.PRFileDesc*, i8*, i32, i32, %union.PRNetAddr*, i32)*, i32 (%struct.PRFileDesc*, i8*, i32, i32, %union.PRNetAddr*, i32)*, i16 (%struct.PRFileDesc*, i16, i16*)*, i32 (%struct.PRFileDesc*, %struct.PRFileDesc**, %union.PRNetAddr**, i8*, i32, i32)*, i32 (%struct.PRFileDesc*, %struct.PRFileDesc*, i8*, i32, i32, i32)*, i32 (%struct.PRFileDesc*, %union.PRNetAddr*)*, i32 (%struct.PRFileDesc*, %union.PRNetAddr*)*, i32 (%struct.PRFileDesc*)*, i32 (%struct.PRFileDesc*)*, i32 (%struct.PRFileDesc*, %struct.PRSocketOptionData*)*, i32 (%struct.PRFileDesc*, %struct.PRSocketOptionData*)*, i32 (%struct.PRFileDesc*, %struct.PRSendFileData*, i32, i32)*, i32 (%struct.PRFileDesc*, i16)*, i32 (%struct.PRFileDesc*)*, i32 (%struct.PRFileDesc*)*, i32 (%struct.PRFileDesc*)*, i32 (%struct.PRFileDesc*)* }
+%struct.PRFileInfo = type { i32, i32, i64, i64 }
+%struct.PRFileInfo64 = type { i32, i64, i64, i64 }
+%struct.PRIOVec = type { i8*, i32 }
+%struct.PRSocketOptionData = type { i32, %union.anon.3 }
+%union.anon.3 = type { %struct.PRMcastRequest }
+%struct.PRMcastRequest = type { %union.PRNetAddr, %union.PRNetAddr }
+%struct.PRSendFileData = type { %struct.PRFileDesc*, i32, i64, i8*, i32, i8*, i32 }
+%struct.PRFilePrivate = type opaque
+%struct.timer_jobq = type { %struct.PRCListStr, %struct.PRLock*, %struct.PRCondVar*, i32, %struct.PRCListStr }
+%struct.PRLock = type opaque
+%struct.PRCondVar = type opaque
+%struct.PRThread = type opaque
+
+; Function Attrs: nounwind sspstrong uwtable
+define %struct.PRThreadPool* @PR_CreateThreadPool(i32, i32, i32) local_unnamed_addr #0 {
+  %4 = tail call fastcc %struct.PRThreadPool* @alloc_threadpool()
+  %5 = icmp eq %struct.PRThreadPool* %4, null
+  br i1 %5, label %82, label %6
+
+; <label>:6:                                      ; preds = %3
+  %7 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %4, i64 0, i32 0
+  store i32 %0, i32* %7, align 8
+  %8 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %4, i64 0, i32 1
+  store i32 %1, i32* %8, align 4
+  %9 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %4, i64 0, i32 4
+  store i32 %2, i32* %9, align 8
+  %10 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %4, i64 0, i32 5
+  %11 = getelementptr inbounds %struct.tp_jobq, %struct.tp_jobq* %10, i64 0, i32 0
+  %12 = getelementptr inbounds %struct.tp_jobq, %struct.tp_jobq* %10, i64 0, i32 0, i32 0
+  store %struct.PRCListStr* %11, %struct.PRCListStr** %12, align 8
+  %13 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %4, i64 0, i32 5, i32 0, i32 1
+  store %struct.PRCListStr* %11, %struct.PRCListStr** %13, align 8
+  %14 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %4, i64 0, i32 6
+  %15 = getelementptr inbounds %struct.io_jobq, %struct.io_jobq* %14, i64 0, i32 0
+  %16 = getelementptr inbounds %struct.io_jobq, %struct.io_jobq* %14, i64 0, i32 0, i32 0
+  store %struct.PRCListStr* %15, %struct.PRCListStr** %16, align 8
+  %17 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %4, i64 0, i32 6, i32 0, i32 1
+  store %struct.PRCListStr* %15, %struct.PRCListStr** %17, align 8
+  %18 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %4, i64 0, i32 7
+  %19 = getelementptr inbounds %struct.timer_jobq, %struct.timer_jobq* %18, i64 0, i32 0
+  %20 = getelementptr inbounds %struct.timer_jobq, %struct.timer_jobq* %18, i64 0, i32 0, i32 0
+  store %struct.PRCListStr* %19, %struct.PRCListStr** %20, align 8
+  %21 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %4, i64 0, i32 7, i32 0, i32 1
+  store %struct.PRCListStr* %19, %struct.PRCListStr** %21, align 8
+  %22 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %4, i64 0, i32 5, i32 4
+  %23 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %22, i64 0, i32 0
+  store %struct.PRCListStr* %22, %struct.PRCListStr** %23, align 8
+  %24 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %4, i64 0, i32 5, i32 4, i32 1
+  store %struct.PRCListStr* %22, %struct.PRCListStr** %24, align 8
+  %25 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %4, i64 0, i32 6, i32 7
+  %26 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %25, i64 0, i32 0
+  store %struct.PRCListStr* %25, %struct.PRCListStr** %26, align 8
+  %27 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %4, i64 0, i32 6, i32 7, i32 1
+  store %struct.PRCListStr* %25, %struct.PRCListStr** %27, align 8
+  %28 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %4, i64 0, i32 7, i32 4
+  %29 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %28, i64 0, i32 0
+  store %struct.PRCListStr* %28, %struct.PRCListStr** %29, align 8
+  %30 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %4, i64 0, i32 7, i32 4, i32 1
+  store %struct.PRCListStr* %28, %struct.PRCListStr** %30, align 8
+  %31 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %4, i64 0, i32 10
+  store i32 0, i32* %31, align 8
+  %32 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %4, i64 0, i32 5, i32 2
+  %33 = load %struct.PRLock*, %struct.PRLock** %32, align 8
+  tail call void @PR_Lock(%struct.PRLock* %33) #2
+  %34 = icmp sgt i32 %0, 0
+  br i1 %34, label %35, label %53
+
+; <label>:35:                                     ; preds = %6
+  %36 = bitcast %struct.PRThreadPool* %4 to i8*
+  %37 = bitcast %struct.PRCListStr** %24 to i64*
+  %38 = bitcast %struct.PRCListStr** %24 to i8***
+  %39 = bitcast %struct.PRCListStr** %24 to i8**
+  br label %40
+
+; <label>:40:                                     ; preds = %40, %35
+  %41 = phi i32 [ 0, %35 ], [ %51, %40 ]
+  %42 = tail call %struct.PRThread* @PR_CreateThread(i32 0, void (i8*)* nonnull @wstart, i8* %36, i32 1, i32 1, i32 0, i32 %2) #2
+  %43 = tail call i8* @PR_Calloc(i32 1, i32 24) #2
+  %44 = getelementptr inbounds i8, i8* %43, i64 16
+  %45 = bitcast i8* %44 to %struct.PRThread**
+  store %struct.PRThread* %42, %struct.PRThread** %45, align 8
+  %46 = bitcast i8* %43 to %struct.PRCListStr**
+  store %struct.PRCListStr* %22, %struct.PRCListStr** %46, align 8
+  %47 = load i64, i64* %37, align 8
+  %48 = getelementptr inbounds i8, i8* %43, i64 8
+  %49 = bitcast i8* %48 to i64*
+  store i64 %47, i64* %49, align 8
+  %50 = load i8**, i8*** %38, align 8
+  store i8* %43, i8** %50, align 8
+  store i8* %43, i8** %39, align 8
+  %51 = add nuw nsw i32 %41, 1
+  %52 = icmp eq i32 %51, %0
+  br i1 %52, label %53, label %40
+
+; <label>:53:                                     ; preds = %40, %6
+  %54 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %4, i64 0, i32 2
+  store i32 %0, i32* %54, align 8
+  %55 = bitcast %struct.PRThreadPool* %4 to i8*
+  %56 = tail call %struct.PRThread* @PR_CreateThread(i32 0, void (i8*)* nonnull @io_wstart, i8* %55, i32 1, i32 1, i32 0, i32 %2) #2
+  %57 = tail call i8* @PR_Calloc(i32 1, i32 24) #2
+  %58 = getelementptr inbounds i8, i8* %57, i64 16
+  %59 = bitcast i8* %58 to %struct.PRThread**
+  store %struct.PRThread* %56, %struct.PRThread** %59, align 8
+  %60 = bitcast i8* %57 to %struct.PRCListStr**
+  store %struct.PRCListStr* %25, %struct.PRCListStr** %60, align 8
+  %61 = bitcast %struct.PRCListStr** %27 to i64*
+  %62 = load i64, i64* %61, align 8
+  %63 = getelementptr inbounds i8, i8* %57, i64 8
+  %64 = bitcast i8* %63 to i64*
+  store i64 %62, i64* %64, align 8
+  %65 = bitcast %struct.PRCListStr** %27 to i8***
+  %66 = load i8**, i8*** %65, align 8
+  store i8* %57, i8** %66, align 8
+  %67 = bitcast %struct.PRCListStr** %27 to i8**
+  store i8* %57, i8** %67, align 8
+  %68 = tail call %struct.PRThread* @PR_CreateThread(i32 0, void (i8*)* nonnull @timer_wstart, i8* %55, i32 1, i32 1, i32 0, i32 %2) #2
+  %69 = tail call i8* @PR_Calloc(i32 1, i32 24) #2
+  %70 = getelementptr inbounds i8, i8* %69, i64 16
+  %71 = bitcast i8* %70 to %struct.PRThread**
+  store %struct.PRThread* %68, %struct.PRThread** %71, align 8
+  %72 = bitcast i8* %69 to %struct.PRCListStr**
+  store %struct.PRCListStr* %28, %struct.PRCListStr** %72, align 8
+  %73 = bitcast %struct.PRCListStr** %30 to i64*
+  %74 = load i64, i64* %73, align 8
+  %75 = getelementptr inbounds i8, i8* %69, i64 8
+  %76 = bitcast i8* %75 to i64*
+  store i64 %74, i64* %76, align 8
+  %77 = bitcast %struct.PRCListStr** %30 to i8***
+  %78 = load i8**, i8*** %77, align 8
+  store i8* %69, i8** %78, align 8
+  %79 = bitcast %struct.PRCListStr** %30 to i8**
+  store i8* %69, i8** %79, align 8
+  %80 = load %struct.PRLock*, %struct.PRLock** %32, align 8
+  %81 = tail call i32 @PR_Unlock(%struct.PRLock* %80) #2
+  br label %82
+
+; <label>:82:                                     ; preds = %3, %53
+  ret %struct.PRThreadPool* %4
+}
+
+; Function Attrs: nounwind sspstrong uwtable
+define internal fastcc %struct.PRThreadPool* @alloc_threadpool() unnamed_addr #0 {
+  %1 = tail call i8* @PR_Calloc(i32 1, i32 240) #2
+  %2 = bitcast i8* %1 to %struct.PRThreadPool*
+  %3 = icmp eq i8* %1, null
+  br i1 %3, label %45, label %4
+
+; <label>:4:                                      ; preds = %0
+  %5 = tail call %struct.PRLock* @PR_NewLock() #2
+  %6 = getelementptr inbounds i8, i8* %1, i64 48
+  %7 = bitcast i8* %6 to %struct.PRLock**
+  store %struct.PRLock* %5, %struct.PRLock** %7, align 8
+  %8 = icmp eq %struct.PRLock* %5, null
+  br i1 %8, label %45, label %9
+
+; <label>:9:                                      ; preds = %4
+  %10 = tail call %struct.PRCondVar* @PR_NewCondVar(%struct.PRLock* nonnull %5) #2
+  %11 = getelementptr inbounds i8, i8* %1, i64 56
+  %12 = bitcast i8* %11 to %struct.PRCondVar**
+  store %struct.PRCondVar* %10, %struct.PRCondVar** %12, align 8
+  %13 = icmp eq %struct.PRCondVar* %10, null
+  br i1 %13, label %45, label %14
+
+; <label>:14:                                     ; preds = %9
+  %15 = tail call %struct.PRLock* @PR_NewLock() #2
+  %16 = getelementptr inbounds i8, i8* %1, i64 216
+  %17 = bitcast i8* %16 to %struct.PRLock**
+  store %struct.PRLock* %15, %struct.PRLock** %17, align 8
+  %18 = icmp eq %struct.PRLock* %15, null
+  br i1 %18, label %45, label %19
+
+; <label>:19:                                     ; preds = %14
+  %20 = tail call %struct.PRLock* @PR_NewLock() #2
+  %21 = getelementptr inbounds i8, i8* %1, i64 120
+  %22 = bitcast i8* %21 to %struct.PRLock**
+  store %struct.PRLock* %20, %struct.PRLock** %22, align 8
+  %23 = icmp eq %struct.PRLock* %20, null
+  br i1 %23, label %45, label %24
+
+; <label>:24:                                     ; preds = %19
+  %25 = tail call %struct.PRLock* @PR_NewLock() #2
+  %26 = getelementptr inbounds i8, i8* %1, i64 176
+  %27 = bitcast i8* %26 to %struct.PRLock**
+  store %struct.PRLock* %25, %struct.PRLock** %27, align 8
+  %28 = icmp eq %struct.PRLock* %25, null
+  br i1 %28, label %45, label %29
+
+; <label>:29:                                     ; preds = %24
+  %30 = tail call %struct.PRCondVar* @PR_NewCondVar(%struct.PRLock* nonnull %25) #2
+  %31 = getelementptr inbounds i8, i8* %1, i64 184
+  %32 = bitcast i8* %31 to %struct.PRCondVar**
+  store %struct.PRCondVar* %30, %struct.PRCondVar** %32, align 8
+  %33 = icmp eq %struct.PRCondVar* %30, null
+  br i1 %33, label %45, label %34
+
+; <label>:34:                                     ; preds = %29
+  %35 = load %struct.PRLock*, %struct.PRLock** %7, align 8
+  %36 = tail call %struct.PRCondVar* @PR_NewCondVar(%struct.PRLock* %35) #2
+  %37 = getelementptr inbounds i8, i8* %1, i64 224
+  %38 = bitcast i8* %37 to %struct.PRCondVar**
+  store %struct.PRCondVar* %36, %struct.PRCondVar** %38, align 8
+  %39 = icmp eq %struct.PRCondVar* %36, null
+  br i1 %39, label %45, label %40
+
+; <label>:40:                                     ; preds = %34
+  %41 = tail call %struct.PRFileDesc* @PR_NewPollableEvent() #2
+  %42 = getelementptr inbounds i8, i8* %1, i64 136
+  %43 = bitcast i8* %42 to %struct.PRFileDesc**
+  store %struct.PRFileDesc* %41, %struct.PRFileDesc** %43, align 8
+  %44 = icmp eq %struct.PRFileDesc* %41, null
+  br i1 %44, label %45, label %46
+
+; <label>:45:                                     ; preds = %40, %34, %29, %24, %19, %14, %9, %4, %0
+  tail call fastcc void @delete_threadpool(%struct.PRThreadPool* %2)
+  tail call void @PR_SetError(i32 -6000, i32 0) #2
+  br label %46
+
+; <label>:46:                                     ; preds = %40, %45
+  %47 = phi %struct.PRThreadPool* [ null, %45 ], [ %2, %40 ]
+  ret %struct.PRThreadPool* %47
+}
+
+declare void @PR_Lock(%struct.PRLock*) local_unnamed_addr #1
+
+declare %struct.PRThread* @PR_CreateThread(i32, void (i8*)*, i8*, i32, i32, i32, i32) local_unnamed_addr #1
+
+; Function Attrs: nounwind sspstrong uwtable
+define internal void @wstart(i8*) #0 {
+  %2 = getelementptr inbounds i8, i8* %0, i64 232
+  %3 = bitcast i8* %2 to i32*
+  %4 = load i32, i32* %3, align 8
+  %5 = icmp eq i32 %4, 0
+  br i1 %5, label %6, label %89
+
+; <label>:6:                                      ; preds = %1
+  %7 = getelementptr inbounds i8, i8* %0, i64 24
+  %8 = getelementptr inbounds i8, i8* %0, i64 48
+  %9 = bitcast i8* %8 to %struct.PRLock**
+  %10 = bitcast i8* %7 to %struct.PRCListStr*
+  %11 = bitcast i8* %7 to %struct.PRCListStr**
+  %12 = getelementptr inbounds i8, i8* %0, i64 12
+  %13 = bitcast i8* %12 to i32*
+  %14 = getelementptr inbounds i8, i8* %0, i64 56
+  %15 = bitcast i8* %14 to %struct.PRCondVar**
+  %16 = getelementptr inbounds i8, i8* %0, i64 40
+  %17 = bitcast i8* %16 to i32*
+  br label %18
+
+; <label>:18:                                     ; preds = %6, %72
+  %19 = load %struct.PRLock*, %struct.PRLock** %9, align 8
+  tail call void @PR_Lock(%struct.PRLock* %19) #2
+  %20 = load %struct.PRCListStr*, %struct.PRCListStr** %11, align 8
+  %21 = icmp eq %struct.PRCListStr* %20, %10
+  %22 = load i32, i32* %3, align 8
+  %23 = icmp eq i32 %22, 0
+  br i1 %21, label %24, label %37
+
+; <label>:24:                                     ; preds = %18, %26
+  %25 = phi i1 [ %36, %26 ], [ %23, %18 ]
+  br i1 %25, label %26, label %40
+
+; <label>:26:                                     ; preds = %24
+  %27 = load i32, i32* %13, align 4
+  %28 = add nsw i32 %27, 1
+  store i32 %28, i32* %13, align 4
+  %29 = load %struct.PRCondVar*, %struct.PRCondVar** %15, align 8
+  %30 = tail call i32 @PR_WaitCondVar(%struct.PRCondVar* %29, i32 -1) #2
+  %31 = load i32, i32* %13, align 4
+  %32 = add nsw i32 %31, -1
+  store i32 %32, i32* %13, align 4
+  %33 = load %struct.PRCListStr*, %struct.PRCListStr** %11, align 8
+  %34 = icmp eq %struct.PRCListStr* %33, %10
+  %35 = load i32, i32* %3, align 8
+  %36 = icmp eq i32 %35, 0
+  br i1 %34, label %24, label %37
+
+; <label>:37:                                     ; preds = %26, %18
+  %38 = phi %struct.PRCListStr* [ %20, %18 ], [ %33, %26 ]
+  %39 = phi i1 [ %23, %18 ], [ %36, %26 ]
+  br i1 %39, label %44, label %40
+
+; <label>:40:                                     ; preds = %37, %24
+  %41 = bitcast i8* %8 to %struct.PRLock**
+  %42 = load %struct.PRLock*, %struct.PRLock** %41, align 8
+  %43 = tail call i32 @PR_Unlock(%struct.PRLock* %42) #2
+  br label %89
+
+; <label>:44:                                     ; preds = %37
+  %45 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %38, i64 0, i32 0
+  %46 = bitcast %struct.PRCListStr* %38 to i64*
+  %47 = load i64, i64* %46, align 8
+  %48 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %38, i64 0, i32 1
+  %49 = bitcast %struct.PRCListStr** %48 to i64**
+  %50 = load i64*, i64** %49, align 8
+  store i64 %47, i64* %50, align 8
+  %51 = bitcast %struct.PRCListStr** %48 to i64*
+  %52 = load i64, i64* %51, align 8
+  %53 = load %struct.PRCListStr*, %struct.PRCListStr** %45, align 8
+  %54 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %53, i64 0, i32 1
+  %55 = bitcast %struct.PRCListStr** %54 to i64*
+  store i64 %52, i64* %55, align 8
+  store %struct.PRCListStr* %38, %struct.PRCListStr** %45, align 8
+  store %struct.PRCListStr* %38, %struct.PRCListStr** %48, align 8
+  %56 = load i32, i32* %17, align 8
+  %57 = add nsw i32 %56, -1
+  store i32 %57, i32* %17, align 8
+  %58 = load %struct.PRLock*, %struct.PRLock** %9, align 8
+  %59 = tail call i32 @PR_Unlock(%struct.PRLock* %58) #2
+  %60 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %38, i64 1, i32 1
+  %61 = bitcast %struct.PRCListStr** %60 to void (i8*)**
+  %62 = load void (i8*)*, void (i8*)** %61, align 8
+  %63 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %38, i64 2
+  %64 = bitcast %struct.PRCListStr* %63 to i8**
+  %65 = load i8*, i8** %64, align 8
+  tail call void %62(i8* %65) #2
+  %66 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %38, i64 2, i32 1
+  %67 = bitcast %struct.PRCListStr** %66 to %struct.PRCondVar**
+  %68 = load %struct.PRCondVar*, %struct.PRCondVar** %67, align 8
+  %69 = icmp eq %struct.PRCondVar* %68, null
+  br i1 %69, label %70, label %75
+
+; <label>:70:                                     ; preds = %44
+  %71 = bitcast %struct.PRCListStr* %38 to %struct.PRJob*
+  tail call fastcc void @delete_job(%struct.PRJob* %71)
+  br label %72
+
+; <label>:72:                                     ; preds = %70, %75
+  %73 = load i32, i32* %3, align 8
+  %74 = icmp eq i32 %73, 0
+  br i1 %74, label %18, label %89
+
+; <label>:75:                                     ; preds = %44
+  %76 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %38, i64 4, i32 1
+  %77 = bitcast %struct.PRCListStr** %76 to %struct.PRThreadPool**
+  %78 = load %struct.PRThreadPool*, %struct.PRThreadPool** %77, align 8
+  %79 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %78, i64 0, i32 8
+  %80 = load %struct.PRLock*, %struct.PRLock** %79, align 8
+  tail call void @PR_Lock(%struct.PRLock* %80) #2
+  %81 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %38, i64 3
+  %82 = bitcast %struct.PRCListStr* %81 to i32*
+  store i32 0, i32* %82, align 8
+  %83 = load %struct.PRCondVar*, %struct.PRCondVar** %67, align 8
+  %84 = tail call i32 @PR_NotifyCondVar(%struct.PRCondVar* %83) #2
+  %85 = load %struct.PRThreadPool*, %struct.PRThreadPool** %77, align 8
+  %86 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %85, i64 0, i32 8
+  %87 = load %struct.PRLock*, %struct.PRLock** %86, align 8
+  %88 = tail call i32 @PR_Unlock(%struct.PRLock* %87) #2
+  br label %72
+
+; <label>:89:                                     ; preds = %72, %1, %40
+  %90 = getelementptr inbounds i8, i8* %0, i64 48
+  %91 = bitcast i8* %90 to %struct.PRLock**
+  %92 = load %struct.PRLock*, %struct.PRLock** %91, align 8
+  tail call void @PR_Lock(%struct.PRLock* %92) #2
+  %93 = getelementptr inbounds i8, i8* %0, i64 8
+  %94 = bitcast i8* %93 to i32*
+  %95 = load i32, i32* %94, align 8
+  %96 = add nsw i32 %95, -1
+  store i32 %96, i32* %94, align 8
+  %97 = load %struct.PRLock*, %struct.PRLock** %91, align 8
+  %98 = tail call i32 @PR_Unlock(%struct.PRLock* %97) #2
+  ret void
+}
+
+declare i8* @PR_Calloc(i32, i32) local_unnamed_addr #1
+
+; Function Attrs: nounwind sspstrong uwtable
+define internal void @io_wstart(i8*) #0 {
+  %2 = bitcast i8* %0 to %struct.PRThreadPool*
+  %3 = getelementptr inbounds i8, i8* %0, i64 232
+  %4 = bitcast i8* %3 to i32*
+  %5 = load i32, i32* %4, align 8
+  %6 = icmp eq i32 %5, 0
+  br i1 %6, label %7, label %352
+
+; <label>:7:                                      ; preds = %1
+  %8 = getelementptr inbounds i8, i8* %0, i64 80
+  %9 = getelementptr inbounds i8, i8* %0, i64 128
+  %10 = bitcast i8* %9 to i32*
+  %11 = getelementptr inbounds i8, i8* %0, i64 104
+  %12 = bitcast i8* %11 to i32*
+  %13 = getelementptr inbounds i8, i8* %0, i64 96
+  %14 = bitcast i8* %13 to %struct.PRPollDesc**
+  %15 = getelementptr inbounds i8, i8* %0, i64 136
+  %16 = bitcast i8* %15 to %struct.PRFileDesc**
+  %17 = bitcast i8* %15 to i64*
+  %18 = getelementptr inbounds i8, i8* %0, i64 120
+  %19 = bitcast i8* %18 to %struct.PRLock**
+  %20 = bitcast i8* %8 to %struct.PRCListStr*
+  %21 = bitcast i8* %8 to %struct.PRCListStr**
+  %22 = bitcast i8* %13 to i8**
+  %23 = getelementptr inbounds i8, i8* %0, i64 112
+  %24 = bitcast i8* %23 to %struct.PRPollDesc**
+  %25 = getelementptr inbounds i8, i8* %0, i64 96
+  %26 = bitcast i8* %25 to %struct.PRPollDesc**
+  br label %27
+
+; <label>:27:                                     ; preds = %7, %347
+  %28 = phi %struct.PRPollDesc* [ null, %7 ], [ %48, %347 ]
+  %29 = phi %struct.PRJob** [ null, %7 ], [ %47, %347 ]
+  %30 = load i32, i32* %10, align 8
+  %31 = add nsw i32 %30, 10
+  %32 = load i32, i32* %12, align 8
+  %33 = icmp sgt i32 %31, %32
+  br i1 %33, label %34, label %46
+
+; <label>:34:                                     ; preds = %27
+  %35 = load %struct.PRPollDesc*, %struct.PRPollDesc** %14, align 8
+  %36 = icmp eq %struct.PRPollDesc* %35, null
+  br i1 %36, label %39, label %37
+
+; <label>:37:                                     ; preds = %34
+  %38 = bitcast %struct.PRPollDesc* %35 to i8*
+  tail call void @PR_Free(i8* %38) #2
+  br label %39
+
+; <label>:39:                                     ; preds = %34, %37
+  %40 = sext i32 %31 to i64
+  %41 = mul i32 %31, 24
+  %42 = tail call i8* @PR_Malloc(i32 %41) #2
+  %43 = bitcast i8* %42 to %struct.PRPollDesc*
+  store i8* %42, i8** %22, align 8
+  %44 = getelementptr inbounds %struct.PRPollDesc, %struct.PRPollDesc* %43, i64 %40
+  %45 = bitcast %struct.PRPollDesc* %44 to %struct.PRJob**
+  store %struct.PRPollDesc* %44, %struct.PRPollDesc** %24, align 8
+  store i32 %31, i32* %12, align 8
+  br label %46
+
+; <label>:46:                                     ; preds = %39, %27
+  %47 = phi %struct.PRJob** [ %45, %39 ], [ %29, %27 ]
+  %48 = phi %struct.PRPollDesc* [ %43, %39 ], [ %28, %27 ]
+  %49 = load i64, i64* %17, align 8
+  %50 = bitcast %struct.PRPollDesc* %48 to i64*
+  store i64 %49, i64* %50, align 8
+  %51 = getelementptr inbounds %struct.PRPollDesc, %struct.PRPollDesc* %48, i64 0, i32 1
+  store i16 1, i16* %51, align 8
+  %52 = getelementptr inbounds %struct.PRPollDesc, %struct.PRPollDesc* %48, i64 0, i32 2
+  store i16 0, i16* %52, align 2
+  store %struct.PRJob* null, %struct.PRJob** %47, align 8
+  %53 = load %struct.PRLock*, %struct.PRLock** %19, align 8
+  tail call void @PR_Lock(%struct.PRLock* %53) #2
+  %54 = load %struct.PRCListStr*, %struct.PRCListStr** %21, align 8
+  %55 = icmp eq %struct.PRCListStr* %54, %20
+  br i1 %55, label %105, label %56
+
+; <label>:56:                                     ; preds = %46, %102
+  %57 = phi %struct.PRCListStr* [ %61, %102 ], [ %54, %46 ]
+  %58 = phi i32 [ %103, %102 ], [ 1, %46 ]
+  %59 = bitcast %struct.PRCListStr* %57 to %struct.PRJob*
+  %60 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %57, i64 0, i32 0
+  %61 = load %struct.PRCListStr*, %struct.PRCListStr** %60, align 8
+  %62 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %57, i64 4
+  %63 = bitcast %struct.PRCListStr* %62 to i32*
+  %64 = load i32, i32* %63, align 8
+  %65 = icmp eq i32 %64, 0
+  br i1 %65, label %85, label %66
+
+; <label>:66:                                     ; preds = %56
+  store i32 0, i32* %63, align 8
+  %67 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %57, i64 1
+  %68 = bitcast %struct.PRCListStr* %67 to i32*
+  store i32 0, i32* %68, align 8
+  %69 = bitcast %struct.PRCListStr* %57 to i64*
+  %70 = load i64, i64* %69, align 8
+  %71 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %57, i64 0, i32 1
+  %72 = bitcast %struct.PRCListStr** %71 to i64**
+  %73 = load i64*, i64** %72, align 8
+  store i64 %70, i64* %73, align 8
+  %74 = bitcast %struct.PRCListStr** %71 to i64*
+  %75 = load i64, i64* %74, align 8
+  %76 = load %struct.PRCListStr*, %struct.PRCListStr** %60, align 8
+  %77 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %76, i64 0, i32 1
+  %78 = bitcast %struct.PRCListStr** %77 to i64*
+  store i64 %75, i64* %78, align 8
+  store %struct.PRCListStr* %57, %struct.PRCListStr** %60, align 8
+  store %struct.PRCListStr* %57, %struct.PRCListStr** %71, align 8
+  %79 = load i32, i32* %10, align 8
+  %80 = add nsw i32 %79, -1
+  store i32 %80, i32* %10, align 8
+  %81 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %57, i64 3, i32 1
+  %82 = bitcast %struct.PRCListStr** %81 to %struct.PRCondVar**
+  %83 = load %struct.PRCondVar*, %struct.PRCondVar** %82, align 8
+  %84 = tail call i32 @PR_NotifyCondVar(%struct.PRCondVar* %83) #2
+  br label %102
+
+; <label>:85:                                     ; preds = %56
+  %86 = icmp eq i32 %58, %31
+  br i1 %86, label %105, label %87
+
+; <label>:87:                                     ; preds = %85
+  %88 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %57, i64 5
+  %89 = bitcast %struct.PRCListStr* %88 to i64**
+  %90 = load i64*, i64** %89, align 8
+  %91 = load i64, i64* %90, align 8
+  %92 = sext i32 %58 to i64
+  %93 = getelementptr inbounds %struct.PRPollDesc, %struct.PRPollDesc* %48, i64 %92
+  %94 = bitcast %struct.PRPollDesc* %93 to i64*
+  store i64 %91, i64* %94, align 8
+  %95 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %59, i64 0, i32 12
+  %96 = load i16, i16* %95, align 4
+  %97 = getelementptr inbounds %struct.PRPollDesc, %struct.PRPollDesc* %48, i64 %92, i32 1
+  store i16 %96, i16* %97, align 8
+  %98 = getelementptr inbounds %struct.PRPollDesc, %struct.PRPollDesc* %48, i64 %92, i32 2
+  store i16 0, i16* %98, align 2
+  %99 = getelementptr inbounds %struct.PRJob*, %struct.PRJob** %47, i64 %92
+  %100 = bitcast %struct.PRJob** %99 to %struct.PRCListStr**
+  store %struct.PRCListStr* %57, %struct.PRCListStr** %100, align 8
+  %101 = add nsw i32 %58, 1
+  br label %102
+
+; <label>:102:                                    ; preds = %87, %66
+  %103 = phi i32 [ %58, %66 ], [ %101, %87 ]
+  %104 = icmp eq %struct.PRCListStr* %61, %20
+  br i1 %104, label %105, label %56
+
+; <label>:105:                                    ; preds = %85, %102, %46
+  %106 = phi i32 [ 1, %46 ], [ %103, %102 ], [ %58, %85 ]
+  %107 = load %struct.PRCListStr*, %struct.PRCListStr** %21, align 8
+  %108 = icmp eq %struct.PRCListStr* %107, %20
+  br i1 %108, label %122, label %109
+
+; <label>:109:                                    ; preds = %105
+  %110 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %107, i64 6, i32 1
+  %111 = bitcast %struct.PRCListStr** %110 to i32*
+  %112 = load i32, i32* %111, align 8
+  switch i32 %112, label %114 [
+    i32 -1, label %122
+    i32 0, label %113
+  ]
+
+; <label>:113:                                    ; preds = %109
+  br label %122
+
+; <label>:114:                                    ; preds = %109
+  %115 = bitcast %struct.PRCListStr* %107 to %struct.PRJob*
+  %116 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %115, i64 0, i32 15
+  %117 = load i32, i32* %116, align 4
+  %118 = tail call i32 @PR_IntervalNow() #2
+  %119 = sub i32 %117, %118
+  %120 = icmp sgt i32 %119, 0
+  %121 = select i1 %120, i32 %119, i32 0
+  br label %122
+
+; <label>:122:                                    ; preds = %105, %109, %114, %113
+  %123 = phi i32 [ 0, %113 ], [ %121, %114 ], [ %112, %109 ], [ -1, %105 ]
+  %124 = load %struct.PRLock*, %struct.PRLock** %19, align 8
+  %125 = tail call i32 @PR_Unlock(%struct.PRLock* %124) #2
+  %126 = load %struct.PRPollDesc*, %struct.PRPollDesc** %26, align 8
+  %127 = tail call i32 @PR_Poll(%struct.PRPollDesc* %126, i32 %106, i32 %123) #2
+  %128 = load i32, i32* %4, align 8
+  %129 = icmp eq i32 %128, 0
+  br i1 %129, label %130, label %352
+
+; <label>:130:                                    ; preds = %122
+  %131 = icmp sgt i32 %127, 0
+  br i1 %131, label %132, label %284
+
+; <label>:132:                                    ; preds = %130
+  %133 = load i16, i16* %52, align 2
+  %134 = and i16 %133, 1
+  %135 = icmp eq i16 %134, 0
+  br i1 %135, label %139, label %136
+
+; <label>:136:                                    ; preds = %132
+  %137 = load %struct.PRFileDesc*, %struct.PRFileDesc** %16, align 8
+  %138 = tail call i32 @PR_WaitForPollableEvent(%struct.PRFileDesc* %137) #2
+  br label %139
+
+; <label>:139:                                    ; preds = %132, %136
+  %140 = icmp sgt i32 %106, 1
+  br i1 %140, label %141, label %284
+
+; <label>:141:                                    ; preds = %139
+  %142 = zext i32 %106 to i64
+  br label %143
+
+; <label>:143:                                    ; preds = %281, %141
+  %144 = phi i64 [ 1, %141 ], [ %282, %281 ]
+  %145 = getelementptr inbounds %struct.PRPollDesc, %struct.PRPollDesc* %48, i64 %144
+  %146 = getelementptr inbounds %struct.PRPollDesc, %struct.PRPollDesc* %48, i64 %144, i32 2
+  %147 = load i16, i16* %146, align 2
+  %148 = getelementptr inbounds %struct.PRJob*, %struct.PRJob** %47, i64 %144
+  %149 = load %struct.PRJob*, %struct.PRJob** %148, align 8
+  %150 = sext i16 %147 to i32
+  %151 = and i32 %150, 16
+  %152 = icmp ne i32 %151, 0
+  %153 = xor i1 %152, true
+  %154 = and i32 %150, 8
+  %155 = icmp eq i32 %154, 0
+  %156 = and i1 %155, %153
+  br i1 %156, label %157, label %165
+
+; <label>:157:                                    ; preds = %143
+  %158 = getelementptr inbounds %struct.PRPollDesc, %struct.PRPollDesc* %48, i64 %144, i32 1
+  %159 = load i16, i16* %158, align 8
+  %160 = and i16 %159, 2
+  %161 = icmp eq i16 %160, 0
+  %162 = and i32 %150, 32
+  %163 = icmp eq i32 %162, 0
+  %164 = or i1 %163, %161
+  br i1 %164, label %222, label %165
+
+; <label>:165:                                    ; preds = %157, %143
+  %166 = load %struct.PRLock*, %struct.PRLock** %19, align 8
+  tail call void @PR_Lock(%struct.PRLock* %166) #2
+  %167 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %149, i64 0, i32 8
+  %168 = load i32, i32* %167, align 8
+  %169 = icmp eq i32 %168, 0
+  br i1 %169, label %191, label %170
+
+; <label>:170:                                    ; preds = %165
+  store i32 0, i32* %167, align 8
+  %171 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %149, i64 0, i32 1
+  store i32 0, i32* %171, align 8
+  %172 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %149, i64 0, i32 0
+  %173 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %149, i64 0, i32 0, i32 0
+  %174 = bitcast %struct.PRJob* %149 to i64*
+  %175 = load i64, i64* %174, align 8
+  %176 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %149, i64 0, i32 0, i32 1
+  %177 = bitcast %struct.PRCListStr** %176 to i64**
+  %178 = load i64*, i64** %177, align 8
+  store i64 %175, i64* %178, align 8
+  %179 = bitcast %struct.PRCListStr** %176 to i64*
+  %180 = load i64, i64* %179, align 8
+  %181 = load %struct.PRCListStr*, %struct.PRCListStr** %173, align 8
+  %182 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %181, i64 0, i32 1
+  %183 = bitcast %struct.PRCListStr** %182 to i64*
+  store i64 %180, i64* %183, align 8
+  store %struct.PRCListStr* %172, %struct.PRCListStr** %173, align 8
+  store %struct.PRCListStr* %172, %struct.PRCListStr** %176, align 8
+  %184 = load i32, i32* %10, align 8
+  %185 = add nsw i32 %184, -1
+  store i32 %185, i32* %10, align 8
+  %186 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %149, i64 0, i32 7
+  %187 = load %struct.PRCondVar*, %struct.PRCondVar** %186, align 8
+  %188 = tail call i32 @PR_NotifyCondVar(%struct.PRCondVar* %187) #2
+  %189 = load %struct.PRLock*, %struct.PRLock** %19, align 8
+  %190 = tail call i32 @PR_Unlock(%struct.PRLock* %189) #2
+  br label %281
+
+; <label>:191:                                    ; preds = %165
+  %192 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %149, i64 0, i32 0
+  %193 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %149, i64 0, i32 0, i32 0
+  %194 = bitcast %struct.PRJob* %149 to i64*
+  %195 = load i64, i64* %194, align 8
+  %196 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %149, i64 0, i32 0, i32 1
+  %197 = bitcast %struct.PRCListStr** %196 to i64**
+  %198 = load i64*, i64** %197, align 8
+  store i64 %195, i64* %198, align 8
+  %199 = bitcast %struct.PRCListStr** %196 to i64*
+  %200 = load i64, i64* %199, align 8
+  %201 = load %struct.PRCListStr*, %struct.PRCListStr** %193, align 8
+  %202 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %201, i64 0, i32 1
+  %203 = bitcast %struct.PRCListStr** %202 to i64*
+  store i64 %200, i64* %203, align 8
+  store %struct.PRCListStr* %192, %struct.PRCListStr** %193, align 8
+  store %struct.PRCListStr* %192, %struct.PRCListStr** %196, align 8
+  %204 = load i32, i32* %10, align 8
+  %205 = add nsw i32 %204, -1
+  store i32 %205, i32* %10, align 8
+  %206 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %149, i64 0, i32 1
+  store i32 0, i32* %206, align 8
+  %207 = load %struct.PRLock*, %struct.PRLock** %19, align 8
+  %208 = tail call i32 @PR_Unlock(%struct.PRLock* %207) #2
+  br i1 %152, label %209, label %213
+
+; <label>:209:                                    ; preds = %191
+  %210 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %149, i64 0, i32 10
+  %211 = load %struct.PRJobIoDesc*, %struct.PRJobIoDesc** %210, align 8
+  %212 = getelementptr inbounds %struct.PRJobIoDesc, %struct.PRJobIoDesc* %211, i64 0, i32 1
+  store i32 -5999, i32* %212, align 8
+  br label %221
+
+; <label>:213:                                    ; preds = %191
+  %214 = and i32 %150, 32
+  %215 = icmp eq i32 %214, 0
+  %216 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %149, i64 0, i32 10
+  %217 = load %struct.PRJobIoDesc*, %struct.PRJobIoDesc** %216, align 8
+  %218 = getelementptr inbounds %struct.PRJobIoDesc, %struct.PRJobIoDesc* %217, i64 0, i32 1
+  br i1 %215, label %220, label %219
+
+; <label>:219:                                    ; preds = %213
+  store i32 -5961, i32* %218, align 8
+  br label %221
+
+; <label>:220:                                    ; preds = %213
+  store i32 -5991, i32* %218, align 8
+  br label %221
+
+; <label>:221:                                    ; preds = %219, %220, %209
+  tail call fastcc void @add_to_jobq(%struct.PRThreadPool* nonnull %2, %struct.PRJob* nonnull %149)
+  br label %281
+
+; <label>:222:                                    ; preds = %157
+  %223 = icmp eq i16 %147, 0
+  br i1 %223, label %281, label %224
+
+; <label>:224:                                    ; preds = %222
+  %225 = load %struct.PRLock*, %struct.PRLock** %19, align 8
+  tail call void @PR_Lock(%struct.PRLock* %225) #2
+  %226 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %149, i64 0, i32 8
+  %227 = load i32, i32* %226, align 8
+  %228 = icmp eq i32 %227, 0
+  br i1 %228, label %250, label %229
+
+; <label>:229:                                    ; preds = %224
+  store i32 0, i32* %226, align 8
+  %230 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %149, i64 0, i32 1
+  store i32 0, i32* %230, align 8
+  %231 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %149, i64 0, i32 0
+  %232 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %149, i64 0, i32 0, i32 0
+  %233 = bitcast %struct.PRJob* %149 to i64*
+  %234 = load i64, i64* %233, align 8
+  %235 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %149, i64 0, i32 0, i32 1
+  %236 = bitcast %struct.PRCListStr** %235 to i64**
+  %237 = load i64*, i64** %236, align 8
+  store i64 %234, i64* %237, align 8
+  %238 = bitcast %struct.PRCListStr** %235 to i64*
+  %239 = load i64, i64* %238, align 8
+  %240 = load %struct.PRCListStr*, %struct.PRCListStr** %232, align 8
+  %241 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %240, i64 0, i32 1
+  %242 = bitcast %struct.PRCListStr** %241 to i64*
+  store i64 %239, i64* %242, align 8
+  store %struct.PRCListStr* %231, %struct.PRCListStr** %232, align 8
+  store %struct.PRCListStr* %231, %struct.PRCListStr** %235, align 8
+  %243 = load i32, i32* %10, align 8
+  %244 = add nsw i32 %243, -1
+  store i32 %244, i32* %10, align 8
+  %245 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %149, i64 0, i32 7
+  %246 = load %struct.PRCondVar*, %struct.PRCondVar** %245, align 8
+  %247 = tail call i32 @PR_NotifyCondVar(%struct.PRCondVar* %246) #2
+  %248 = load %struct.PRLock*, %struct.PRLock** %19, align 8
+  %249 = tail call i32 @PR_Unlock(%struct.PRLock* %248) #2
+  br label %281
+
+; <label>:250:                                    ; preds = %224
+  %251 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %149, i64 0, i32 0
+  %252 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %149, i64 0, i32 0, i32 0
+  %253 = bitcast %struct.PRJob* %149 to i64*
+  %254 = load i64, i64* %253, align 8
+  %255 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %149, i64 0, i32 0, i32 1
+  %256 = bitcast %struct.PRCListStr** %255 to i64**
+  %257 = load i64*, i64** %256, align 8
+  store i64 %254, i64* %257, align 8
+  %258 = bitcast %struct.PRCListStr** %255 to i64*
+  %259 = load i64, i64* %258, align 8
+  %260 = load %struct.PRCListStr*, %struct.PRCListStr** %252, align 8
+  %261 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %260, i64 0, i32 1
+  %262 = bitcast %struct.PRCListStr** %261 to i64*
+  store i64 %259, i64* %262, align 8
+  store %struct.PRCListStr* %251, %struct.PRCListStr** %252, align 8
+  store %struct.PRCListStr* %251, %struct.PRCListStr** %255, align 8
+  %263 = load i32, i32* %10, align 8
+  %264 = add nsw i32 %263, -1
+  store i32 %264, i32* %10, align 8
+  %265 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %149, i64 0, i32 1
+  store i32 0, i32* %265, align 8
+  %266 = load %struct.PRLock*, %struct.PRLock** %19, align 8
+  %267 = tail call i32 @PR_Unlock(%struct.PRLock* %266) #2
+  %268 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %149, i64 0, i32 11
+  %269 = load i32, i32* %268, align 8
+  %270 = icmp eq i32 %269, 2
+  br i1 %270, label %271, label %276
+
+; <label>:271:                                    ; preds = %250
+  %272 = tail call i32 @PR_GetConnectStatus(%struct.PRPollDesc* nonnull %145) #2
+  %273 = icmp eq i32 %272, 0
+  br i1 %273, label %276, label %274
+
+; <label>:274:                                    ; preds = %271
+  %275 = tail call i32 @PR_GetError() #2
+  br label %276
+
+; <label>:276:                                    ; preds = %250, %271, %274
+  %277 = phi i32 [ %275, %274 ], [ 0, %271 ], [ 0, %250 ]
+  %278 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %149, i64 0, i32 10
+  %279 = load %struct.PRJobIoDesc*, %struct.PRJobIoDesc** %278, align 8
+  %280 = getelementptr inbounds %struct.PRJobIoDesc, %struct.PRJobIoDesc* %279, i64 0, i32 1
+  store i32 %277, i32* %280, align 8
+  tail call fastcc void @add_to_jobq(%struct.PRThreadPool* nonnull %2, %struct.PRJob* nonnull %149)
+  br label %281
+
+; <label>:281:                                    ; preds = %221, %276, %222, %229, %170
+  %282 = add nuw nsw i64 %144, 1
+  %283 = icmp eq i64 %282, %142
+  br i1 %283, label %284, label %143
+
+; <label>:284:                                    ; preds = %281, %139, %130
+  %285 = tail call i32 @PR_IntervalNow() #2
+  %286 = load %struct.PRLock*, %struct.PRLock** %19, align 8
+  tail call void @PR_Lock(%struct.PRLock* %286) #2
+  %287 = load %struct.PRCListStr*, %struct.PRCListStr** %21, align 8
+  %288 = icmp eq %struct.PRCListStr* %287, %20
+  br i1 %288, label %347, label %289
+
+; <label>:289:                                    ; preds = %284, %345
+  %290 = phi %struct.PRCListStr* [ %293, %345 ], [ %287, %284 ]
+  %291 = bitcast %struct.PRCListStr* %290 to %struct.PRJob*
+  %292 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %290, i64 0, i32 0
+  %293 = load %struct.PRCListStr*, %struct.PRCListStr** %292, align 8
+  %294 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %290, i64 4
+  %295 = bitcast %struct.PRCListStr* %294 to i32*
+  %296 = load i32, i32* %295, align 8
+  %297 = icmp eq i32 %296, 0
+  br i1 %297, label %317, label %298
+
+; <label>:298:                                    ; preds = %289
+  store i32 0, i32* %295, align 8
+  %299 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %290, i64 1
+  %300 = bitcast %struct.PRCListStr* %299 to i32*
+  store i32 0, i32* %300, align 8
+  %301 = bitcast %struct.PRCListStr* %290 to i64*
+  %302 = load i64, i64* %301, align 8
+  %303 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %290, i64 0, i32 1
+  %304 = bitcast %struct.PRCListStr** %303 to i64**
+  %305 = load i64*, i64** %304, align 8
+  store i64 %302, i64* %305, align 8
+  %306 = bitcast %struct.PRCListStr** %303 to i64*
+  %307 = load i64, i64* %306, align 8
+  %308 = load %struct.PRCListStr*, %struct.PRCListStr** %292, align 8
+  %309 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %308, i64 0, i32 1
+  %310 = bitcast %struct.PRCListStr** %309 to i64*
+  store i64 %307, i64* %310, align 8
+  store %struct.PRCListStr* %290, %struct.PRCListStr** %292, align 8
+  store %struct.PRCListStr* %290, %struct.PRCListStr** %303, align 8
+  %311 = load i32, i32* %10, align 8
+  %312 = add nsw i32 %311, -1
+  store i32 %312, i32* %10, align 8
+  %313 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %290, i64 3, i32 1
+  %314 = bitcast %struct.PRCListStr** %313 to %struct.PRCondVar**
+  %315 = load %struct.PRCondVar*, %struct.PRCondVar** %314, align 8
+  %316 = tail call i32 @PR_NotifyCondVar(%struct.PRCondVar* %315) #2
+  br label %345
+
+; <label>:317:                                    ; preds = %289
+  %318 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %290, i64 6, i32 1
+  %319 = bitcast %struct.PRCListStr** %318 to i32*
+  %320 = load i32, i32* %319, align 8
+  switch i32 %320, label %321 [
+    i32 -1, label %347
+    i32 0, label %326
+  ]
+
+; <label>:321:                                    ; preds = %317
+  %322 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %291, i64 0, i32 15
+  %323 = load i32, i32* %322, align 4
+  %324 = sub i32 %323, %285
+  %325 = icmp sgt i32 %324, 0
+  br i1 %325, label %347, label %326
+
+; <label>:326:                                    ; preds = %317, %321
+  %327 = bitcast %struct.PRCListStr* %290 to i64*
+  %328 = load i64, i64* %327, align 8
+  %329 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %290, i64 0, i32 1
+  %330 = bitcast %struct.PRCListStr** %329 to i64**
+  %331 = load i64*, i64** %330, align 8
+  store i64 %328, i64* %331, align 8
+  %332 = bitcast %struct.PRCListStr** %329 to i64*
+  %333 = load i64, i64* %332, align 8
+  %334 = load %struct.PRCListStr*, %struct.PRCListStr** %292, align 8
+  %335 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %334, i64 0, i32 1
+  %336 = bitcast %struct.PRCListStr** %335 to i64*
+  store i64 %333, i64* %336, align 8
+  store %struct.PRCListStr* %290, %struct.PRCListStr** %292, align 8
+  store %struct.PRCListStr* %290, %struct.PRCListStr** %329, align 8
+  %337 = load i32, i32* %10, align 8
+  %338 = add nsw i32 %337, -1
+  store i32 %338, i32* %10, align 8
+  %339 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %290, i64 1
+  %340 = bitcast %struct.PRCListStr* %339 to i32*
+  store i32 0, i32* %340, align 8
+  %341 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %290, i64 5
+  %342 = bitcast %struct.PRCListStr* %341 to %struct.PRJobIoDesc**
+  %343 = load %struct.PRJobIoDesc*, %struct.PRJobIoDesc** %342, align 8
+  %344 = getelementptr inbounds %struct.PRJobIoDesc, %struct.PRJobIoDesc* %343, i64 0, i32 1
+  store i32 -5990, i32* %344, align 8
+  tail call fastcc void @add_to_jobq(%struct.PRThreadPool* nonnull %2, %struct.PRJob* nonnull %291)
+  br label %345
+
+; <label>:345:                                    ; preds = %326, %298
+  %346 = icmp eq %struct.PRCListStr* %293, %20
+  br i1 %346, label %347, label %289
+
+; <label>:347:                                    ; preds = %321, %345, %317, %284
+  %348 = load %struct.PRLock*, %struct.PRLock** %19, align 8
+  %349 = tail call i32 @PR_Unlock(%struct.PRLock* %348) #2
+  %350 = load i32, i32* %4, align 8
+  %351 = icmp eq i32 %350, 0
+  br i1 %351, label %27, label %352
+
+; <label>:352:                                    ; preds = %347, %122, %1
+  ret void
+}
+
+; Function Attrs: nounwind sspstrong uwtable
+define internal void @timer_wstart(i8*) #0 {
+  %2 = bitcast i8* %0 to %struct.PRThreadPool*
+  %3 = getelementptr inbounds i8, i8* %0, i64 232
+  %4 = bitcast i8* %3 to i32*
+  %5 = load i32, i32* %4, align 8
+  %6 = icmp eq i32 %5, 0
+  br i1 %6, label %7, label %72
+
+; <label>:7:                                      ; preds = %1
+  %8 = getelementptr inbounds i8, i8* %0, i64 160
+  %9 = getelementptr inbounds i8, i8* %0, i64 176
+  %10 = bitcast i8* %9 to %struct.PRLock**
+  %11 = bitcast i8* %8 to %struct.PRCListStr*
+  %12 = bitcast i8* %8 to %struct.PRCListStr**
+  %13 = getelementptr inbounds i8, i8* %0, i64 184
+  %14 = bitcast i8* %13 to %struct.PRCondVar**
+  %15 = getelementptr inbounds i8, i8* %0, i64 192
+  %16 = bitcast i8* %15 to i32*
+  br label %17
+
+; <label>:17:                                     ; preds = %7, %67
+  %18 = load %struct.PRLock*, %struct.PRLock** %10, align 8
+  tail call void @PR_Lock(%struct.PRLock* %18) #2
+  %19 = load %struct.PRCListStr*, %struct.PRCListStr** %12, align 8
+  %20 = icmp eq %struct.PRCListStr* %19, %11
+  br i1 %20, label %28, label %21
+
+; <label>:21:                                     ; preds = %17
+  %22 = bitcast %struct.PRCListStr* %19 to %struct.PRJob*
+  %23 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %22, i64 0, i32 15
+  %24 = load i32, i32* %23, align 4
+  %25 = tail call i32 @PR_IntervalNow() #2
+  %26 = sub i32 %24, %25
+  %27 = icmp eq i32 %26, 0
+  br i1 %27, label %32, label %28
+
+; <label>:28:                                     ; preds = %17, %21
+  %29 = phi i32 [ %26, %21 ], [ -1, %17 ]
+  %30 = load %struct.PRCondVar*, %struct.PRCondVar** %14, align 8
+  %31 = tail call i32 @PR_WaitCondVar(%struct.PRCondVar* %30, i32 %29) #2
+  br label %32
+
+; <label>:32:                                     ; preds = %21, %28
+  %33 = load i32, i32* %4, align 8
+  %34 = icmp eq i32 %33, 0
+  br i1 %34, label %39, label %35
+
+; <label>:35:                                     ; preds = %32
+  %36 = bitcast i8* %9 to %struct.PRLock**
+  %37 = load %struct.PRLock*, %struct.PRLock** %36, align 8
+  %38 = tail call i32 @PR_Unlock(%struct.PRLock* %37) #2
+  br label %72
+
+; <label>:39:                                     ; preds = %32
+  %40 = tail call i32 @PR_IntervalNow() #2
+  %41 = load %struct.PRCListStr*, %struct.PRCListStr** %12, align 8
+  %42 = icmp eq %struct.PRCListStr* %41, %11
+  br i1 %42, label %67, label %43
+
+; <label>:43:                                     ; preds = %39, %50
+  %44 = phi %struct.PRCListStr* [ %65, %50 ], [ %41, %39 ]
+  %45 = bitcast %struct.PRCListStr* %44 to %struct.PRJob*
+  %46 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %45, i64 0, i32 15
+  %47 = load i32, i32* %46, align 4
+  %48 = sub i32 %47, %40
+  %49 = icmp sgt i32 %48, 0
+  br i1 %49, label %67, label %50
+
+; <label>:50:                                     ; preds = %43
+  %51 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %44, i64 0, i32 0
+  %52 = bitcast %struct.PRCListStr* %44 to i64*
+  %53 = load i64, i64* %52, align 8
+  %54 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %44, i64 0, i32 1
+  %55 = bitcast %struct.PRCListStr** %54 to i64**
+  %56 = load i64*, i64** %55, align 8
+  store i64 %53, i64* %56, align 8
+  %57 = bitcast %struct.PRCListStr** %54 to i64*
+  %58 = load i64, i64* %57, align 8
+  %59 = load %struct.PRCListStr*, %struct.PRCListStr** %51, align 8
+  %60 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %59, i64 0, i32 1
+  %61 = bitcast %struct.PRCListStr** %60 to i64*
+  store i64 %58, i64* %61, align 8
+  store %struct.PRCListStr* %44, %struct.PRCListStr** %51, align 8
+  store %struct.PRCListStr* %44, %struct.PRCListStr** %54, align 8
+  %62 = load i32, i32* %16, align 8
+  %63 = add nsw i32 %62, -1
+  store i32 %63, i32* %16, align 8
+  %64 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %45, i64 0, i32 2
+  store i32 0, i32* %64, align 4
+  tail call fastcc void @add_to_jobq(%struct.PRThreadPool* nonnull %2, %struct.PRJob* %45)
+  %65 = load %struct.PRCListStr*, %struct.PRCListStr** %12, align 8
+  %66 = icmp eq %struct.PRCListStr* %65, %11
+  br i1 %66, label %67, label %43
+
+; <label>:67:                                     ; preds = %43, %50, %39
+  %68 = load %struct.PRLock*, %struct.PRLock** %10, align 8
+  %69 = tail call i32 @PR_Unlock(%struct.PRLock* %68) #2
+  %70 = load i32, i32* %4, align 8
+  %71 = icmp eq i32 %70, 0
+  br i1 %71, label %17, label %72
+
+; <label>:72:                                     ; preds = %67, %1, %35
+  ret void
+}
+
+declare i32 @PR_Unlock(%struct.PRLock*) local_unnamed_addr #1
+
+; Function Attrs: nounwind sspstrong uwtable
+define %struct.PRJob* @PR_QueueJob(%struct.PRThreadPool*, void (i8*)*, i8*, i32) local_unnamed_addr #0 {
+  %5 = tail call fastcc %struct.PRJob* @alloc_job(i32 %3, %struct.PRThreadPool* %0)
+  %6 = icmp eq %struct.PRJob* %5, null
+  br i1 %6, label %11, label %7
+
+; <label>:7:                                      ; preds = %4
+  %8 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %5, i64 0, i32 3
+  store void (i8*)* %1, void (i8*)** %8, align 8
+  %9 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %5, i64 0, i32 4
+  store i8* %2, i8** %9, align 8
+  %10 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %5, i64 0, i32 9
+  store %struct.PRThreadPool* %0, %struct.PRThreadPool** %10, align 8
+  tail call fastcc void @add_to_jobq(%struct.PRThreadPool* %0, %struct.PRJob* nonnull %5)
+  br label %11
+
+; <label>:11:                                     ; preds = %4, %7
+  ret %struct.PRJob* %5
+}
+
+; Function Attrs: nounwind sspstrong uwtable
+define internal fastcc %struct.PRJob* @alloc_job(i32, %struct.PRThreadPool* nocapture readonly) unnamed_addr #0 {
+  %3 = tail call i8* @PR_Calloc(i32 1, i32 112) #2
+  %4 = bitcast i8* %3 to %struct.PRJob*
+  %5 = icmp eq i8* %3, null
+  br i1 %5, label %20, label %6
+
+; <label>:6:                                      ; preds = %2
+  %7 = icmp eq i32 %0, 0
+  br i1 %7, label %17, label %8
+
+; <label>:8:                                      ; preds = %6
+  %9 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %1, i64 0, i32 8
+  %10 = load %struct.PRLock*, %struct.PRLock** %9, align 8
+  %11 = tail call %struct.PRCondVar* @PR_NewCondVar(%struct.PRLock* %10) #2
+  %12 = getelementptr inbounds i8, i8* %3, i64 40
+  %13 = bitcast i8* %12 to %struct.PRCondVar**
+  store %struct.PRCondVar* %11, %struct.PRCondVar** %13, align 8
+  %14 = getelementptr inbounds i8, i8* %3, i64 48
+  %15 = bitcast i8* %14 to i32*
+  store i32 1, i32* %15, align 8
+  %16 = icmp eq %struct.PRCondVar* %11, null
+  br i1 %16, label %20, label %21
+
+; <label>:17:                                     ; preds = %6
+  %18 = getelementptr inbounds i8, i8* %3, i64 40
+  %19 = bitcast i8* %18 to %struct.PRCondVar**
+  store %struct.PRCondVar* null, %struct.PRCondVar** %19, align 8
+  br label %21
+
+; <label>:20:                                     ; preds = %8, %2
+  tail call fastcc void @delete_job(%struct.PRJob* %4)
+  tail call void @PR_SetError(i32 -6000, i32 0) #2
+  br label %21
+
+; <label>:21:                                     ; preds = %17, %8, %20
+  %22 = phi %struct.PRJob* [ null, %20 ], [ %4, %8 ], [ %4, %17 ]
+  ret %struct.PRJob* %22
+}
+
+; Function Attrs: nounwind sspstrong uwtable
+define internal fastcc void @add_to_jobq(%struct.PRThreadPool*, %struct.PRJob*) unnamed_addr #0 {
+  %3 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 5, i32 2
+  %4 = load %struct.PRLock*, %struct.PRLock** %3, align 8
+  tail call void @PR_Lock(%struct.PRLock* %4) #2
+  %5 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 5, i32 0
+  %6 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %1, i64 0, i32 0
+  %7 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %1, i64 0, i32 0, i32 0
+  store %struct.PRCListStr* %5, %struct.PRCListStr** %7, align 8
+  %8 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 5, i32 0, i32 1
+  %9 = bitcast %struct.PRCListStr** %8 to i64*
+  %10 = load i64, i64* %9, align 8
+  %11 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %1, i64 0, i32 0, i32 1
+  %12 = bitcast %struct.PRCListStr** %11 to i64*
+  store i64 %10, i64* %12, align 8
+  %13 = load %struct.PRCListStr*, %struct.PRCListStr** %8, align 8
+  %14 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %13, i64 0, i32 0
+  store %struct.PRCListStr* %6, %struct.PRCListStr** %14, align 8
+  store %struct.PRCListStr* %6, %struct.PRCListStr** %8, align 8
+  %15 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 5, i32 1
+  %16 = load i32, i32* %15, align 8
+  %17 = add nsw i32 %16, 1
+  store i32 %17, i32* %15, align 8
+  %18 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 3
+  %19 = load i32, i32* %18, align 4
+  %20 = icmp sgt i32 %19, %16
+  br i1 %20, label %60, label %21
+
+; <label>:21:                                     ; preds = %2
+  %22 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 2
+  %23 = load i32, i32* %22, align 8
+  %24 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 1
+  %25 = load i32, i32* %24, align 4
+  %26 = icmp slt i32 %23, %25
+  br i1 %26, label %27, label %60
+
+; <label>:27:                                     ; preds = %21
+  %28 = add nsw i32 %23, 1
+  store i32 %28, i32* %22, align 8
+  %29 = load %struct.PRLock*, %struct.PRLock** %3, align 8
+  %30 = tail call i32 @PR_Unlock(%struct.PRLock* %29) #2
+  %31 = tail call i8* @PR_Calloc(i32 1, i32 24) #2
+  %32 = icmp eq i8* %31, null
+  br i1 %32, label %55, label %33
+
+; <label>:33:                                     ; preds = %27
+  %34 = bitcast %struct.PRThreadPool* %0 to i8*
+  %35 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 4
+  %36 = load i32, i32* %35, align 8
+  %37 = tail call %struct.PRThread* @PR_CreateThread(i32 0, void (i8*)* nonnull @wstart, i8* %34, i32 1, i32 1, i32 0, i32 %36) #2
+  %38 = getelementptr inbounds i8, i8* %31, i64 16
+  %39 = bitcast i8* %38 to %struct.PRThread**
+  store %struct.PRThread* %37, %struct.PRThread** %39, align 8
+  %40 = icmp eq %struct.PRThread* %37, null
+  br i1 %40, label %53, label %41
+
+; <label>:41:                                     ; preds = %33
+  %42 = load %struct.PRLock*, %struct.PRLock** %3, align 8
+  tail call void @PR_Lock(%struct.PRLock* %42) #2
+  %43 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 5, i32 4
+  %44 = bitcast i8* %31 to %struct.PRCListStr**
+  store %struct.PRCListStr* %43, %struct.PRCListStr** %44, align 8
+  %45 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 5, i32 4, i32 1
+  %46 = bitcast %struct.PRCListStr** %45 to i64*
+  %47 = load i64, i64* %46, align 8
+  %48 = getelementptr inbounds i8, i8* %31, i64 8
+  %49 = bitcast i8* %48 to i64*
+  store i64 %47, i64* %49, align 8
+  %50 = bitcast %struct.PRCListStr** %45 to i8***
+  %51 = load i8**, i8*** %50, align 8
+  store i8* %31, i8** %51, align 8
+  %52 = bitcast %struct.PRCListStr** %45 to i8**
+  store i8* %31, i8** %52, align 8
+  br label %60
+
+; <label>:53:                                     ; preds = %33
+  tail call void @PR_Free(i8* nonnull %31) #2
+  %54 = load %struct.PRLock*, %struct.PRLock** %3, align 8
+  tail call void @PR_Lock(%struct.PRLock* %54) #2
+  br label %57
+
+; <label>:55:                                     ; preds = %27
+  %56 = load %struct.PRLock*, %struct.PRLock** %3, align 8
+  tail call void @PR_Lock(%struct.PRLock* %56) #2
+  br label %57
+
+; <label>:57:                                     ; preds = %55, %53
+  %58 = load i32, i32* %22, align 8
+  %59 = add nsw i32 %58, -1
+  store i32 %59, i32* %22, align 8
+  br label %60
+
+; <label>:60:                                     ; preds = %57, %41, %2, %21
+  %61 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 5, i32 3
+  %62 = load %struct.PRCondVar*, %struct.PRCondVar** %61, align 8
+  %63 = tail call i32 @PR_NotifyCondVar(%struct.PRCondVar* %62) #2
+  %64 = load %struct.PRLock*, %struct.PRLock** %3, align 8
+  %65 = tail call i32 @PR_Unlock(%struct.PRLock* %64) #2
+  ret void
+}
+
+; Function Attrs: nounwind sspstrong uwtable
+define %struct.PRJob* @PR_QueueJob_Read(%struct.PRThreadPool*, %struct.PRJobIoDesc*, void (i8*)*, i8*, i32) local_unnamed_addr #0 {
+  %6 = tail call fastcc %struct.PRJob* @queue_io_job(%struct.PRThreadPool* %0, %struct.PRJobIoDesc* %1, void (i8*)* %2, i8* %3, i32 %4, i32 0)
+  ret %struct.PRJob* %6
+}
+
+; Function Attrs: nounwind sspstrong uwtable
+define internal fastcc %struct.PRJob* @queue_io_job(%struct.PRThreadPool*, %struct.PRJobIoDesc*, void (i8*)*, i8*, i32, i32) unnamed_addr #0 {
+  %7 = tail call fastcc %struct.PRJob* @alloc_job(i32 %4, %struct.PRThreadPool* %0)
+  %8 = icmp eq %struct.PRJob* %7, null
+  br i1 %8, label %94, label %9
+
+; <label>:9:                                      ; preds = %6
+  %10 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %7, i64 0, i32 3
+  store void (i8*)* %2, void (i8*)** %10, align 8
+  %11 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %7, i64 0, i32 4
+  store i8* %3, i8** %11, align 8
+  %12 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %7, i64 0, i32 9
+  store %struct.PRThreadPool* %0, %struct.PRThreadPool** %12, align 8
+  %13 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %7, i64 0, i32 10
+  store %struct.PRJobIoDesc* %1, %struct.PRJobIoDesc** %13, align 8
+  %14 = icmp ult i32 %5, 4
+  br i1 %14, label %16, label %15
+
+; <label>:15:                                     ; preds = %9
+  tail call fastcc void @delete_job(%struct.PRJob* nonnull %7)
+  tail call void @PR_SetError(i32 -5987, i32 0) #2
+  br label %94
+
+; <label>:16:                                     ; preds = %9
+  %17 = zext i32 %5 to i64
+  %18 = shl nuw nsw i64 %17, 4
+  %19 = lshr i64 281500746645505, %18
+  %20 = trunc i64 %19 to i16
+  %21 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %7, i64 0, i32 11
+  store i32 %5, i32* %21, align 8
+  %22 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %7, i64 0, i32 12
+  store i16 %20, i16* %22, align 4
+  %23 = getelementptr inbounds %struct.PRJobIoDesc, %struct.PRJobIoDesc* %1, i64 0, i32 2
+  %24 = load i32, i32* %23, align 4
+  %25 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %7, i64 0, i32 14
+  store i32 %24, i32* %25, align 8
+  %26 = load i32, i32* %23, align 4
+  switch i32 %26, label %27 [
+    i32 -1, label %31
+    i32 0, label %31
+  ]
+
+; <label>:27:                                     ; preds = %16
+  %28 = tail call i32 @PR_IntervalNow() #2
+  %29 = load i32, i32* %23, align 4
+  %30 = add i32 %29, %28
+  br label %31
+
+; <label>:31:                                     ; preds = %16, %16, %27
+  %32 = phi i32 [ %30, %27 ], [ %26, %16 ], [ %26, %16 ]
+  %33 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %7, i64 0, i32 15
+  store i32 %32, i32* %33, align 4
+  %34 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 6
+  %35 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 6, i32 4
+  %36 = load %struct.PRLock*, %struct.PRLock** %35, align 8
+  tail call void @PR_Lock(%struct.PRLock* %36) #2
+  %37 = getelementptr inbounds %struct.io_jobq, %struct.io_jobq* %34, i64 0, i32 0
+  %38 = getelementptr inbounds %struct.io_jobq, %struct.io_jobq* %34, i64 0, i32 0, i32 0
+  %39 = load %struct.PRCListStr*, %struct.PRCListStr** %38, align 8
+  %40 = icmp eq %struct.PRCListStr* %39, %37
+  br i1 %40, label %43, label %41
+
+; <label>:41:                                     ; preds = %31
+  %42 = load i32, i32* %23, align 4
+  switch i32 %42, label %59 [
+    i32 -1, label %43
+    i32 0, label %53
+  ]
+
+; <label>:43:                                     ; preds = %41, %31
+  %44 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %7, i64 0, i32 0
+  %45 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %7, i64 0, i32 0, i32 0
+  store %struct.PRCListStr* %37, %struct.PRCListStr** %45, align 8
+  %46 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 6, i32 0, i32 1
+  %47 = bitcast %struct.PRCListStr** %46 to i64*
+  %48 = load i64, i64* %47, align 8
+  %49 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %7, i64 0, i32 0, i32 1
+  %50 = bitcast %struct.PRCListStr** %49 to i64*
+  store i64 %48, i64* %50, align 8
+  %51 = load %struct.PRCListStr*, %struct.PRCListStr** %46, align 8
+  %52 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %51, i64 0, i32 0
+  store %struct.PRCListStr* %44, %struct.PRCListStr** %52, align 8
+  store %struct.PRCListStr* %44, %struct.PRCListStr** %46, align 8
+  br label %87
+
+; <label>:53:                                     ; preds = %41
+  %54 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %7, i64 0, i32 0
+  %55 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %7, i64 0, i32 0, i32 0
+  store %struct.PRCListStr* %39, %struct.PRCListStr** %55, align 8
+  %56 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %7, i64 0, i32 0, i32 1
+  store %struct.PRCListStr* %37, %struct.PRCListStr** %56, align 8
+  %57 = load %struct.PRCListStr*, %struct.PRCListStr** %38, align 8
+  %58 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %57, i64 0, i32 1
+  store %struct.PRCListStr* %54, %struct.PRCListStr** %58, align 8
+  store %struct.PRCListStr* %54, %struct.PRCListStr** %38, align 8
+  br label %87
+
+; <label>:59:                                     ; preds = %41
+  %60 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 6, i32 0, i32 1
+  %61 = load %struct.PRCListStr*, %struct.PRCListStr** %60, align 8
+  %62 = icmp eq %struct.PRCListStr* %61, %37
+  br i1 %62, label %77, label %63
+
+; <label>:63:                                     ; preds = %59
+  %64 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %7, i64 0, i32 15
+  %65 = load i32, i32* %64, align 4
+  br label %66
+
+; <label>:66:                                     ; preds = %63, %73
+  %67 = phi %struct.PRCListStr* [ %61, %63 ], [ %75, %73 ]
+  %68 = bitcast %struct.PRCListStr* %67 to %struct.PRJob*
+  %69 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %68, i64 0, i32 15
+  %70 = load i32, i32* %69, align 4
+  %71 = sub i32 %65, %70
+  %72 = icmp sgt i32 %71, -1
+  br i1 %72, label %77, label %73
+
+; <label>:73:                                     ; preds = %66
+  %74 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %67, i64 0, i32 1
+  %75 = load %struct.PRCListStr*, %struct.PRCListStr** %74, align 8
+  %76 = icmp eq %struct.PRCListStr* %75, %37
+  br i1 %76, label %77, label %66
+
+; <label>:77:                                     ; preds = %66, %73, %59
+  %78 = phi %struct.PRCListStr* [ %61, %59 ], [ %75, %73 ], [ %67, %66 ]
+  %79 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %78, i64 0, i32 0
+  %80 = bitcast %struct.PRCListStr* %78 to i64*
+  %81 = load i64, i64* %80, align 8
+  %82 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %7, i64 0, i32 0
+  %83 = bitcast %struct.PRJob* %7 to i64*
+  store i64 %81, i64* %83, align 8
+  %84 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %7, i64 0, i32 0, i32 1
+  store %struct.PRCListStr* %78, %struct.PRCListStr** %84, align 8
+  %85 = load %struct.PRCListStr*, %struct.PRCListStr** %79, align 8
+  %86 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %85, i64 0, i32 1
+  store %struct.PRCListStr* %82, %struct.PRCListStr** %86, align 8
+  store %struct.PRCListStr* %82, %struct.PRCListStr** %79, align 8
+  br label %87
+
+; <label>:87:                                     ; preds = %53, %77, %43
+  %88 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %7, i64 0, i32 1
+  store i32 1, i32* %88, align 8
+  %89 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 6, i32 5
+  %90 = load i32, i32* %89, align 8
+  %91 = add nsw i32 %90, 1
+  store i32 %91, i32* %89, align 8
+  %92 = load %struct.PRLock*, %struct.PRLock** %35, align 8
+  %93 = tail call i32 @PR_Unlock(%struct.PRLock* %92) #2
+  tail call fastcc void @notify_ioq(%struct.PRThreadPool* %0)
+  br label %94
+
+; <label>:94:                                     ; preds = %6, %87, %15
+  %95 = phi %struct.PRJob* [ %7, %87 ], [ null, %15 ], [ null, %6 ]
+  ret %struct.PRJob* %95
+}
+
+; Function Attrs: nounwind sspstrong uwtable
+define %struct.PRJob* @PR_QueueJob_Write(%struct.PRThreadPool*, %struct.PRJobIoDesc*, void (i8*)*, i8*, i32) local_unnamed_addr #0 {
+  %6 = tail call fastcc %struct.PRJob* @queue_io_job(%struct.PRThreadPool* %0, %struct.PRJobIoDesc* %1, void (i8*)* %2, i8* %3, i32 %4, i32 1)
+  ret %struct.PRJob* %6
+}
+
+; Function Attrs: nounwind sspstrong uwtable
+define %struct.PRJob* @PR_QueueJob_Accept(%struct.PRThreadPool*, %struct.PRJobIoDesc*, void (i8*)*, i8*, i32) local_unnamed_addr #0 {
+  %6 = tail call fastcc %struct.PRJob* @queue_io_job(%struct.PRThreadPool* %0, %struct.PRJobIoDesc* %1, void (i8*)* %2, i8* %3, i32 %4, i32 3)
+  ret %struct.PRJob* %6
+}
+
+; Function Attrs: nounwind sspstrong uwtable
+define %struct.PRJob* @PR_QueueJob_Connect(%struct.PRThreadPool*, %struct.PRJobIoDesc*, %union.PRNetAddr*, void (i8*)*, i8*, i32) local_unnamed_addr #0 {
+  %7 = getelementptr inbounds %struct.PRJobIoDesc, %struct.PRJobIoDesc* %1, i64 0, i32 0
+  %8 = load %struct.PRFileDesc*, %struct.PRFileDesc** %7, align 8
+  %9 = tail call i32 @PR_Connect(%struct.PRFileDesc* %8, %union.PRNetAddr* %2, i32 0) #2
+  %10 = icmp eq i32 %9, -1
+  br i1 %10, label %11, label %16
+
+; <label>:11:                                     ; preds = %6
+  %12 = tail call i32 @PR_GetError() #2
+  %13 = icmp eq i32 %12, -5934
+  br i1 %13, label %14, label %16
+
+; <label>:14:                                     ; preds = %11
+  %15 = tail call fastcc %struct.PRJob* @queue_io_job(%struct.PRThreadPool* %0, %struct.PRJobIoDesc* nonnull %1, void (i8*)* %3, i8* %4, i32 %5, i32 2)
+  br label %20
+
+; <label>:16:                                     ; preds = %6, %11
+  %17 = phi i32 [ %12, %11 ], [ 0, %6 ]
+  %18 = getelementptr inbounds %struct.PRJobIoDesc, %struct.PRJobIoDesc* %1, i64 0, i32 1
+  store i32 %17, i32* %18, align 8
+  %19 = tail call %struct.PRJob* @PR_QueueJob(%struct.PRThreadPool* %0, void (i8*)* %3, i8* %4, i32 %5)
+  br label %20
+
+; <label>:20:                                     ; preds = %16, %14
+  %21 = phi %struct.PRJob* [ %15, %14 ], [ %19, %16 ]
+  ret %struct.PRJob* %21
+}
+
+declare i32 @PR_Connect(%struct.PRFileDesc*, %union.PRNetAddr*, i32) local_unnamed_addr #1
+
+declare i32 @PR_GetError() local_unnamed_addr #1
+
+; Function Attrs: nounwind sspstrong uwtable
+define %struct.PRJob* @PR_QueueJob_Timer(%struct.PRThreadPool*, i32, void (i8*)*, i8*, i32) local_unnamed_addr #0 {
+  switch i32 %1, label %9 [
+    i32 -1, label %6
+    i32 0, label %7
+  ]
+
+; <label>:6:                                      ; preds = %5
+  tail call void @PR_SetError(i32 -5987, i32 0) #2
+  br label %71
+
+; <label>:7:                                      ; preds = %5
+  %8 = tail call %struct.PRJob* @PR_QueueJob(%struct.PRThreadPool* %0, void (i8*)* %2, i8* %3, i32 %4)
+  br label %71
+
+; <label>:9:                                      ; preds = %5
+  %10 = tail call fastcc %struct.PRJob* @alloc_job(i32 %4, %struct.PRThreadPool* %0)
+  %11 = icmp eq %struct.PRJob* %10, null
+  br i1 %11, label %71, label %12
+
+; <label>:12:                                     ; preds = %9
+  %13 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %10, i64 0, i32 3
+  store void (i8*)* %2, void (i8*)** %13, align 8
+  %14 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %10, i64 0, i32 4
+  store i8* %3, i8** %14, align 8
+  %15 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %10, i64 0, i32 9
+  store %struct.PRThreadPool* %0, %struct.PRThreadPool** %15, align 8
+  %16 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %10, i64 0, i32 14
+  store i32 %1, i32* %16, align 8
+  %17 = tail call i32 @PR_IntervalNow() #2
+  %18 = add i32 %17, %1
+  %19 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %10, i64 0, i32 15
+  store i32 %18, i32* %19, align 4
+  %20 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 7
+  %21 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 7, i32 1
+  %22 = load %struct.PRLock*, %struct.PRLock** %21, align 8
+  tail call void @PR_Lock(%struct.PRLock* %22) #2
+  %23 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %10, i64 0, i32 2
+  store i32 1, i32* %23, align 4
+  %24 = getelementptr inbounds %struct.timer_jobq, %struct.timer_jobq* %20, i64 0, i32 0
+  %25 = getelementptr inbounds %struct.timer_jobq, %struct.timer_jobq* %20, i64 0, i32 0, i32 0
+  %26 = load %struct.PRCListStr*, %struct.PRCListStr** %25, align 8
+  %27 = icmp eq %struct.PRCListStr* %26, %24
+  br i1 %27, label %28, label %38
+
+; <label>:28:                                     ; preds = %12
+  %29 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %10, i64 0, i32 0
+  %30 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %10, i64 0, i32 0, i32 0
+  store %struct.PRCListStr* %24, %struct.PRCListStr** %30, align 8
+  %31 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 7, i32 0, i32 1
+  %32 = bitcast %struct.PRCListStr** %31 to i64*
+  %33 = load i64, i64* %32, align 8
+  %34 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %10, i64 0, i32 0, i32 1
+  %35 = bitcast %struct.PRCListStr** %34 to i64*
+  store i64 %33, i64* %35, align 8
+  %36 = load %struct.PRCListStr*, %struct.PRCListStr** %31, align 8
+  %37 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %36, i64 0, i32 0
+  store %struct.PRCListStr* %29, %struct.PRCListStr** %37, align 8
+  store %struct.PRCListStr* %29, %struct.PRCListStr** %31, align 8
+  br label %65
+
+; <label>:38:                                     ; preds = %12
+  %39 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 7, i32 0, i32 1
+  %40 = load %struct.PRCListStr*, %struct.PRCListStr** %39, align 8
+  %41 = icmp eq %struct.PRCListStr* %40, %24
+  br i1 %41, label %55, label %42
+
+; <label>:42:                                     ; preds = %38
+  %43 = load i32, i32* %19, align 4
+  br label %44
+
+; <label>:44:                                     ; preds = %42, %51
+  %45 = phi %struct.PRCListStr* [ %40, %42 ], [ %53, %51 ]
+  %46 = bitcast %struct.PRCListStr* %45 to %struct.PRJob*
+  %47 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %46, i64 0, i32 15
+  %48 = load i32, i32* %47, align 4
+  %49 = sub i32 %43, %48
+  %50 = icmp sgt i32 %49, -1
+  br i1 %50, label %55, label %51
+
+; <label>:51:                                     ; preds = %44
+  %52 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %45, i64 0, i32 1
+  %53 = load %struct.PRCListStr*, %struct.PRCListStr** %52, align 8
+  %54 = icmp eq %struct.PRCListStr* %53, %24
+  br i1 %54, label %55, label %44
+
+; <label>:55:                                     ; preds = %44, %51, %38
+  %56 = phi %struct.PRCListStr* [ %40, %38 ], [ %53, %51 ], [ %45, %44 ]
+  %57 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %56, i64 0, i32 0
+  %58 = bitcast %struct.PRCListStr* %56 to i64*
+  %59 = load i64, i64* %58, align 8
+  %60 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %10, i64 0, i32 0
+  %61 = bitcast %struct.PRJob* %10 to i64*
+  store i64 %59, i64* %61, align 8
+  %62 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %10, i64 0, i32 0, i32 1
+  store %struct.PRCListStr* %56, %struct.PRCListStr** %62, align 8
+  %63 = load %struct.PRCListStr*, %struct.PRCListStr** %57, align 8
+  %64 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %63, i64 0, i32 1
+  store %struct.PRCListStr* %60, %struct.PRCListStr** %64, align 8
+  store %struct.PRCListStr* %60, %struct.PRCListStr** %57, align 8
+  br label %65
+
+; <label>:65:                                     ; preds = %55, %28
+  %66 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 7, i32 3
+  %67 = load i32, i32* %66, align 8
+  %68 = add nsw i32 %67, 1
+  store i32 %68, i32* %66, align 8
+  tail call fastcc void @notify_timerq(%struct.PRThreadPool* %0)
+  %69 = load %struct.PRLock*, %struct.PRLock** %21, align 8
+  %70 = tail call i32 @PR_Unlock(%struct.PRLock* %69) #2
+  br label %71
+
+; <label>:71:                                     ; preds = %9, %65, %7, %6
+  %72 = phi %struct.PRJob* [ null, %6 ], [ %8, %7 ], [ %10, %65 ], [ null, %9 ]
+  ret %struct.PRJob* %72
+}
+
+declare void @PR_SetError(i32, i32) local_unnamed_addr #1
+
+declare i32 @PR_IntervalNow() local_unnamed_addr #1
+
+; Function Attrs: nounwind sspstrong uwtable
+define internal fastcc void @notify_timerq(%struct.PRThreadPool* nocapture readonly) unnamed_addr #0 {
+  %2 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 7, i32 2
+  %3 = load %struct.PRCondVar*, %struct.PRCondVar** %2, align 8
+  %4 = tail call i32 @PR_NotifyCondVar(%struct.PRCondVar* %3) #2
+  ret void
+}
+
+; Function Attrs: nounwind sspstrong uwtable
+define i32 @PR_CancelJob(%struct.PRJob*) local_unnamed_addr #0 {
+  %2 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %0, i64 0, i32 2
+  %3 = load i32, i32* %2, align 4
+  %4 = icmp eq i32 %3, 0
+  br i1 %4, label %48, label %5
+
+; <label>:5:                                      ; preds = %1
+  %6 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %0, i64 0, i32 9
+  %7 = load %struct.PRThreadPool*, %struct.PRThreadPool** %6, align 8
+  %8 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %7, i64 0, i32 7, i32 1
+  %9 = load %struct.PRLock*, %struct.PRLock** %8, align 8
+  tail call void @PR_Lock(%struct.PRLock* %9) #2
+  %10 = load i32, i32* %2, align 4
+  %11 = icmp eq i32 %10, 0
+  br i1 %11, label %45, label %12
+
+; <label>:12:                                     ; preds = %5
+  store i32 0, i32* %2, align 4
+  %13 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %0, i64 0, i32 0
+  %14 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %0, i64 0, i32 0, i32 0
+  %15 = bitcast %struct.PRJob* %0 to i64*
+  %16 = load i64, i64* %15, align 8
+  %17 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %0, i64 0, i32 0, i32 1
+  %18 = bitcast %struct.PRCListStr** %17 to i64**
+  %19 = load i64*, i64** %18, align 8
+  store i64 %16, i64* %19, align 8
+  %20 = bitcast %struct.PRCListStr** %17 to i64*
+  %21 = load i64, i64* %20, align 8
+  %22 = load %struct.PRCListStr*, %struct.PRCListStr** %14, align 8
+  %23 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %22, i64 0, i32 1
+  %24 = bitcast %struct.PRCListStr** %23 to i64*
+  store i64 %21, i64* %24, align 8
+  store %struct.PRCListStr* %13, %struct.PRCListStr** %14, align 8
+  store %struct.PRCListStr* %13, %struct.PRCListStr** %17, align 8
+  %25 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %7, i64 0, i32 7, i32 3
+  %26 = load i32, i32* %25, align 8
+  %27 = add nsw i32 %26, -1
+  store i32 %27, i32* %25, align 8
+  %28 = load %struct.PRLock*, %struct.PRLock** %8, align 8
+  %29 = tail call i32 @PR_Unlock(%struct.PRLock* %28) #2
+  %30 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %0, i64 0, i32 5
+  %31 = load %struct.PRCondVar*, %struct.PRCondVar** %30, align 8
+  %32 = icmp eq %struct.PRCondVar* %31, null
+  br i1 %32, label %33, label %34
+
+; <label>:33:                                     ; preds = %12
+  tail call fastcc void @delete_job(%struct.PRJob* nonnull %0)
+  br label %100
+
+; <label>:34:                                     ; preds = %12
+  %35 = load %struct.PRThreadPool*, %struct.PRThreadPool** %6, align 8
+  %36 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %35, i64 0, i32 8
+  %37 = load %struct.PRLock*, %struct.PRLock** %36, align 8
+  tail call void @PR_Lock(%struct.PRLock* %37) #2
+  %38 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %0, i64 0, i32 6
+  store i32 0, i32* %38, align 8
+  %39 = load %struct.PRCondVar*, %struct.PRCondVar** %30, align 8
+  %40 = tail call i32 @PR_NotifyCondVar(%struct.PRCondVar* %39) #2
+  %41 = load %struct.PRThreadPool*, %struct.PRThreadPool** %6, align 8
+  %42 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %41, i64 0, i32 8
+  %43 = load %struct.PRLock*, %struct.PRLock** %42, align 8
+  %44 = tail call i32 @PR_Unlock(%struct.PRLock* %43) #2
+  br label %100
+
+; <label>:45:                                     ; preds = %5
+  %46 = load %struct.PRLock*, %struct.PRLock** %8, align 8
+  %47 = tail call i32 @PR_Unlock(%struct.PRLock* %46) #2
+  br label %99
+
+; <label>:48:                                     ; preds = %1
+  %49 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %0, i64 0, i32 1
+  %50 = load i32, i32* %49, align 8
+  %51 = icmp eq i32 %50, 0
+  br i1 %51, label %99, label %52
+
+; <label>:52:                                     ; preds = %48
+  %53 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %0, i64 0, i32 9
+  %54 = load %struct.PRThreadPool*, %struct.PRThreadPool** %53, align 8
+  %55 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %54, i64 0, i32 6, i32 4
+  %56 = load %struct.PRLock*, %struct.PRLock** %55, align 8
+  tail call void @PR_Lock(%struct.PRLock* %56) #2
+  %57 = load i32, i32* %49, align 8
+  %58 = icmp eq i32 %57, 0
+  %59 = load %struct.PRLock*, %struct.PRLock** %55, align 8
+  br i1 %58, label %97, label %60
+
+; <label>:60:                                     ; preds = %52
+  %61 = tail call %struct.PRCondVar* @PR_NewCondVar(%struct.PRLock* %59) #2
+  %62 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %0, i64 0, i32 7
+  store %struct.PRCondVar* %61, %struct.PRCondVar** %62, align 8
+  %63 = icmp eq %struct.PRCondVar* %61, null
+  br i1 %63, label %64, label %67
+
+; <label>:64:                                     ; preds = %60
+  %65 = load %struct.PRLock*, %struct.PRLock** %55, align 8
+  %66 = tail call i32 @PR_Unlock(%struct.PRLock* %65) #2
+  tail call void @PR_SetError(i32 -5974, i32 0) #2
+  br label %100
+
+; <label>:67:                                     ; preds = %60
+  %68 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %0, i64 0, i32 8
+  store i32 1, i32* %68, align 8
+  %69 = load %struct.PRLock*, %struct.PRLock** %55, align 8
+  %70 = tail call i32 @PR_Unlock(%struct.PRLock* %69) #2
+  tail call fastcc void @notify_ioq(%struct.PRThreadPool* %54)
+  %71 = load %struct.PRLock*, %struct.PRLock** %55, align 8
+  tail call void @PR_Lock(%struct.PRLock* %71) #2
+  %72 = load i32, i32* %68, align 8
+  %73 = icmp eq i32 %72, 0
+  br i1 %73, label %79, label %74
+
+; <label>:74:                                     ; preds = %67, %74
+  %75 = load %struct.PRCondVar*, %struct.PRCondVar** %62, align 8
+  %76 = tail call i32 @PR_WaitCondVar(%struct.PRCondVar* %75, i32 -1) #2
+  %77 = load i32, i32* %68, align 8
+  %78 = icmp eq i32 %77, 0
+  br i1 %78, label %79, label %74
+
+; <label>:79:                                     ; preds = %74, %67
+  %80 = load %struct.PRLock*, %struct.PRLock** %55, align 8
+  %81 = tail call i32 @PR_Unlock(%struct.PRLock* %80) #2
+  %82 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %0, i64 0, i32 5
+  %83 = load %struct.PRCondVar*, %struct.PRCondVar** %82, align 8
+  %84 = icmp eq %struct.PRCondVar* %83, null
+  br i1 %84, label %85, label %86
+
+; <label>:85:                                     ; preds = %79
+  tail call fastcc void @delete_job(%struct.PRJob* nonnull %0)
+  br label %100
+
+; <label>:86:                                     ; preds = %79
+  %87 = load %struct.PRThreadPool*, %struct.PRThreadPool** %53, align 8
+  %88 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %87, i64 0, i32 8
+  %89 = load %struct.PRLock*, %struct.PRLock** %88, align 8
+  tail call void @PR_Lock(%struct.PRLock* %89) #2
+  %90 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %0, i64 0, i32 6
+  store i32 0, i32* %90, align 8
+  %91 = load %struct.PRCondVar*, %struct.PRCondVar** %82, align 8
+  %92 = tail call i32 @PR_NotifyCondVar(%struct.PRCondVar* %91) #2
+  %93 = load %struct.PRThreadPool*, %struct.PRThreadPool** %53, align 8
+  %94 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %93, i64 0, i32 8
+  %95 = load %struct.PRLock*, %struct.PRLock** %94, align 8
+  %96 = tail call i32 @PR_Unlock(%struct.PRLock* %95) #2
+  br label %100
+
+; <label>:97:                                     ; preds = %52
+  %98 = tail call i32 @PR_Unlock(%struct.PRLock* %59) #2
+  br label %99
+
+; <label>:99:                                     ; preds = %45, %97, %48
+  tail call void @PR_SetError(i32 -5931, i32 0) #2
+  br label %100
+
+; <label>:100:                                    ; preds = %85, %86, %33, %34, %99, %64
+  %101 = phi i32 [ -1, %64 ], [ -1, %99 ], [ 0, %34 ], [ 0, %33 ], [ 0, %86 ], [ 0, %85 ]
+  ret i32 %101
+}
+
+; Function Attrs: nounwind sspstrong uwtable
+define internal fastcc void @delete_job(%struct.PRJob*) unnamed_addr #0 {
+  %2 = icmp eq %struct.PRJob* %0, null
+  br i1 %2, label %15, label %3
+
+; <label>:3:                                      ; preds = %1
+  %4 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %0, i64 0, i32 5
+  %5 = load %struct.PRCondVar*, %struct.PRCondVar** %4, align 8
+  %6 = icmp eq %struct.PRCondVar* %5, null
+  br i1 %6, label %8, label %7
+
+; <label>:7:                                      ; preds = %3
+  tail call void @PR_DestroyCondVar(%struct.PRCondVar* nonnull %5) #2
+  store %struct.PRCondVar* null, %struct.PRCondVar** %4, align 8
+  br label %8
+
+; <label>:8:                                      ; preds = %3, %7
+  %9 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %0, i64 0, i32 7
+  %10 = load %struct.PRCondVar*, %struct.PRCondVar** %9, align 8
+  %11 = icmp eq %struct.PRCondVar* %10, null
+  br i1 %11, label %13, label %12
+
+; <label>:12:                                     ; preds = %8
+  tail call void @PR_DestroyCondVar(%struct.PRCondVar* nonnull %10) #2
+  store %struct.PRCondVar* null, %struct.PRCondVar** %9, align 8
+  br label %13
+
+; <label>:13:                                     ; preds = %8, %12
+  %14 = bitcast %struct.PRJob* %0 to i8*
+  tail call void @PR_Free(i8* %14) #2
+  br label %15
+
+; <label>:15:                                     ; preds = %1, %13
+  ret void
+}
+
+declare i32 @PR_NotifyCondVar(%struct.PRCondVar*) local_unnamed_addr #1
+
+declare %struct.PRCondVar* @PR_NewCondVar(%struct.PRLock*) local_unnamed_addr #1
+
+; Function Attrs: nounwind sspstrong uwtable
+define internal fastcc void @notify_ioq(%struct.PRThreadPool* nocapture readonly) unnamed_addr #0 {
+  %2 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 6, i32 6
+  %3 = load %struct.PRFileDesc*, %struct.PRFileDesc** %2, align 8
+  %4 = tail call i32 @PR_SetPollableEvent(%struct.PRFileDesc* %3) #2
+  ret void
+}
+
+declare i32 @PR_WaitCondVar(%struct.PRCondVar*, i32) local_unnamed_addr #1
+
+; Function Attrs: nounwind sspstrong uwtable
+define i32 @PR_JoinJob(%struct.PRJob*) local_unnamed_addr #0 {
+  %2 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %0, i64 0, i32 5
+  %3 = load %struct.PRCondVar*, %struct.PRCondVar** %2, align 8
+  %4 = icmp eq %struct.PRCondVar* %3, null
+  br i1 %4, label %5, label %6
+
+; <label>:5:                                      ; preds = %1
+  tail call void @PR_SetError(i32 -5987, i32 0) #2
+  br label %24
+
+; <label>:6:                                      ; preds = %1
+  %7 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %0, i64 0, i32 9
+  %8 = load %struct.PRThreadPool*, %struct.PRThreadPool** %7, align 8
+  %9 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %8, i64 0, i32 8
+  %10 = load %struct.PRLock*, %struct.PRLock** %9, align 8
+  tail call void @PR_Lock(%struct.PRLock* %10) #2
+  %11 = getelementptr inbounds %struct.PRJob, %struct.PRJob* %0, i64 0, i32 6
+  %12 = load i32, i32* %11, align 8
+  %13 = icmp eq i32 %12, 0
+  br i1 %13, label %19, label %14
+
+; <label>:14:                                     ; preds = %6, %14
+  %15 = load %struct.PRCondVar*, %struct.PRCondVar** %2, align 8
+  %16 = tail call i32 @PR_WaitCondVar(%struct.PRCondVar* %15, i32 -1) #2
+  %17 = load i32, i32* %11, align 8
+  %18 = icmp eq i32 %17, 0
+  br i1 %18, label %19, label %14
+
+; <label>:19:                                     ; preds = %14, %6
+  %20 = load %struct.PRThreadPool*, %struct.PRThreadPool** %7, align 8
+  %21 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %20, i64 0, i32 8
+  %22 = load %struct.PRLock*, %struct.PRLock** %21, align 8
+  %23 = tail call i32 @PR_Unlock(%struct.PRLock* %22) #2
+  tail call fastcc void @delete_job(%struct.PRJob* nonnull %0)
+  br label %24
+
+; <label>:24:                                     ; preds = %19, %5
+  %25 = phi i32 [ 0, %19 ], [ -1, %5 ]
+  ret i32 %25
+}
+
+; Function Attrs: nounwind sspstrong uwtable
+define i32 @PR_ShutdownThreadPool(%struct.PRThreadPool* nocapture) local_unnamed_addr #0 {
+  %2 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 5, i32 2
+  %3 = load %struct.PRLock*, %struct.PRLock** %2, align 8
+  tail call void @PR_Lock(%struct.PRLock* %3) #2
+  %4 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 10
+  store i32 1, i32* %4, align 8
+  %5 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 9
+  %6 = load %struct.PRCondVar*, %struct.PRCondVar** %5, align 8
+  %7 = tail call i32 @PR_NotifyAllCondVar(%struct.PRCondVar* %6) #2
+  %8 = load %struct.PRLock*, %struct.PRLock** %2, align 8
+  %9 = tail call i32 @PR_Unlock(%struct.PRLock* %8) #2
+  ret i32 0
+}
+
+declare i32 @PR_NotifyAllCondVar(%struct.PRCondVar*) local_unnamed_addr #1
+
+; Function Attrs: nounwind sspstrong uwtable
+define i32 @PR_JoinThreadPool(%struct.PRThreadPool*) local_unnamed_addr #0 {
+  %2 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 5
+  %3 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 5, i32 2
+  %4 = load %struct.PRLock*, %struct.PRLock** %3, align 8
+  tail call void @PR_Lock(%struct.PRLock* %4) #2
+  %5 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 10
+  %6 = load i32, i32* %5, align 8
+  %7 = icmp eq i32 %6, 0
+  br i1 %7, label %8, label %15
+
+; <label>:8:                                      ; preds = %1
+  %9 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 9
+  br label %10
+
+; <label>:10:                                     ; preds = %8, %10
+  %11 = load %struct.PRCondVar*, %struct.PRCondVar** %9, align 8
+  %12 = tail call i32 @PR_WaitCondVar(%struct.PRCondVar* %11, i32 -1) #2
+  %13 = load i32, i32* %5, align 8
+  %14 = icmp eq i32 %13, 0
+  br i1 %14, label %10, label %15
+
+; <label>:15:                                     ; preds = %10, %1
+  %16 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 5, i32 3
+  %17 = load %struct.PRCondVar*, %struct.PRCondVar** %16, align 8
+  %18 = tail call i32 @PR_NotifyAllCondVar(%struct.PRCondVar* %17) #2
+  tail call fastcc void @notify_ioq(%struct.PRThreadPool* nonnull %0)
+  %19 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 7
+  %20 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 7, i32 1
+  %21 = load %struct.PRLock*, %struct.PRLock** %20, align 8
+  tail call void @PR_Lock(%struct.PRLock* %21) #2
+  tail call fastcc void @notify_timerq(%struct.PRThreadPool* nonnull %0)
+  %22 = load %struct.PRLock*, %struct.PRLock** %20, align 8
+  %23 = tail call i32 @PR_Unlock(%struct.PRLock* %22) #2
+  %24 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 5, i32 4
+  %25 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %24, i64 0, i32 0
+  %26 = load %struct.PRCListStr*, %struct.PRCListStr** %25, align 8
+  %27 = icmp eq %struct.PRCListStr* %26, %24
+  br i1 %27, label %51, label %28
+
+; <label>:28:                                     ; preds = %15, %28
+  %29 = phi %struct.PRCListStr* [ %49, %28 ], [ %26, %15 ]
+  %30 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %29, i64 0, i32 0
+  %31 = bitcast %struct.PRCListStr* %29 to i64*
+  %32 = load i64, i64* %31, align 8
+  %33 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %29, i64 0, i32 1
+  %34 = bitcast %struct.PRCListStr** %33 to i64**
+  %35 = load i64*, i64** %34, align 8
+  store i64 %32, i64* %35, align 8
+  %36 = bitcast %struct.PRCListStr** %33 to i64*
+  %37 = load i64, i64* %36, align 8
+  %38 = load %struct.PRCListStr*, %struct.PRCListStr** %30, align 8
+  %39 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %38, i64 0, i32 1
+  %40 = bitcast %struct.PRCListStr** %39 to i64*
+  store i64 %37, i64* %40, align 8
+  store %struct.PRCListStr* %29, %struct.PRCListStr** %30, align 8
+  store %struct.PRCListStr* %29, %struct.PRCListStr** %33, align 8
+  %41 = load %struct.PRLock*, %struct.PRLock** %3, align 8
+  %42 = tail call i32 @PR_Unlock(%struct.PRLock* %41) #2
+  %43 = bitcast %struct.PRCListStr* %29 to i8*
+  %44 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %29, i64 1
+  %45 = bitcast %struct.PRCListStr* %44 to %struct.PRThread**
+  %46 = load %struct.PRThread*, %struct.PRThread** %45, align 8
+  %47 = tail call i32 @PR_JoinThread(%struct.PRThread* %46) #2
+  tail call void @PR_Free(i8* %43) #2
+  %48 = load %struct.PRLock*, %struct.PRLock** %3, align 8
+  tail call void @PR_Lock(%struct.PRLock* %48) #2
+  %49 = load %struct.PRCListStr*, %struct.PRCListStr** %25, align 8
+  %50 = icmp eq %struct.PRCListStr* %49, %24
+  br i1 %50, label %51, label %28
+
+; <label>:51:                                     ; preds = %28, %15
+  %52 = load %struct.PRLock*, %struct.PRLock** %3, align 8
+  %53 = tail call i32 @PR_Unlock(%struct.PRLock* %52) #2
+  %54 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 6
+  %55 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 6, i32 7
+  %56 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %55, i64 0, i32 0
+  %57 = load %struct.PRCListStr*, %struct.PRCListStr** %56, align 8
+  %58 = icmp eq %struct.PRCListStr* %57, %55
+  br i1 %58, label %59, label %64
+
+; <label>:59:                                     ; preds = %64, %51
+  %60 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 7, i32 4
+  %61 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %60, i64 0, i32 0
+  %62 = load %struct.PRCListStr*, %struct.PRCListStr** %61, align 8
+  %63 = icmp eq %struct.PRCListStr* %62, %60
+  br i1 %63, label %84, label %91
+
+; <label>:64:                                     ; preds = %51, %64
+  %65 = phi %struct.PRCListStr* [ %82, %64 ], [ %57, %51 ]
+  %66 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %65, i64 0, i32 0
+  %67 = bitcast %struct.PRCListStr* %65 to i64*
+  %68 = load i64, i64* %67, align 8
+  %69 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %65, i64 0, i32 1
+  %70 = bitcast %struct.PRCListStr** %69 to i64**
+  %71 = load i64*, i64** %70, align 8
+  store i64 %68, i64* %71, align 8
+  %72 = bitcast %struct.PRCListStr** %69 to i64*
+  %73 = load i64, i64* %72, align 8
+  %74 = load %struct.PRCListStr*, %struct.PRCListStr** %66, align 8
+  %75 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %74, i64 0, i32 1
+  %76 = bitcast %struct.PRCListStr** %75 to i64*
+  store i64 %73, i64* %76, align 8
+  store %struct.PRCListStr* %65, %struct.PRCListStr** %66, align 8
+  store %struct.PRCListStr* %65, %struct.PRCListStr** %69, align 8
+  %77 = bitcast %struct.PRCListStr* %65 to i8*
+  %78 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %65, i64 1
+  %79 = bitcast %struct.PRCListStr* %78 to %struct.PRThread**
+  %80 = load %struct.PRThread*, %struct.PRThread** %79, align 8
+  %81 = tail call i32 @PR_JoinThread(%struct.PRThread* %80) #2
+  tail call void @PR_Free(i8* %77) #2
+  %82 = load %struct.PRCListStr*, %struct.PRCListStr** %56, align 8
+  %83 = icmp eq %struct.PRCListStr* %82, %55
+  br i1 %83, label %59, label %64
+
+; <label>:84:                                     ; preds = %91, %59
+  %85 = getelementptr inbounds %struct.tp_jobq, %struct.tp_jobq* %2, i64 0, i32 0
+  %86 = getelementptr inbounds %struct.tp_jobq, %struct.tp_jobq* %2, i64 0, i32 0, i32 0
+  %87 = load %struct.PRCListStr*, %struct.PRCListStr** %86, align 8
+  %88 = icmp eq %struct.PRCListStr* %87, %85
+  br i1 %88, label %111, label %89
+
+; <label>:89:                                     ; preds = %84
+  %90 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 5, i32 1
+  br label %118
+
+; <label>:91:                                     ; preds = %59, %91
+  %92 = phi %struct.PRCListStr* [ %109, %91 ], [ %62, %59 ]
+  %93 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %92, i64 0, i32 0
+  %94 = bitcast %struct.PRCListStr* %92 to i64*
+  %95 = load i64, i64* %94, align 8
+  %96 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %92, i64 0, i32 1
+  %97 = bitcast %struct.PRCListStr** %96 to i64**
+  %98 = load i64*, i64** %97, align 8
+  store i64 %95, i64* %98, align 8
+  %99 = bitcast %struct.PRCListStr** %96 to i64*
+  %100 = load i64, i64* %99, align 8
+  %101 = load %struct.PRCListStr*, %struct.PRCListStr** %93, align 8
+  %102 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %101, i64 0, i32 1
+  %103 = bitcast %struct.PRCListStr** %102 to i64*
+  store i64 %100, i64* %103, align 8
+  store %struct.PRCListStr* %92, %struct.PRCListStr** %93, align 8
+  store %struct.PRCListStr* %92, %struct.PRCListStr** %96, align 8
+  %104 = bitcast %struct.PRCListStr* %92 to i8*
+  %105 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %92, i64 1
+  %106 = bitcast %struct.PRCListStr* %105 to %struct.PRThread**
+  %107 = load %struct.PRThread*, %struct.PRThread** %106, align 8
+  %108 = tail call i32 @PR_JoinThread(%struct.PRThread* %107) #2
+  tail call void @PR_Free(i8* %104) #2
+  %109 = load %struct.PRCListStr*, %struct.PRCListStr** %61, align 8
+  %110 = icmp eq %struct.PRCListStr* %109, %60
+  br i1 %110, label %84, label %91
+
+; <label>:111:                                    ; preds = %118, %84
+  %112 = getelementptr inbounds %struct.io_jobq, %struct.io_jobq* %54, i64 0, i32 0
+  %113 = getelementptr inbounds %struct.io_jobq, %struct.io_jobq* %54, i64 0, i32 0, i32 0
+  %114 = load %struct.PRCListStr*, %struct.PRCListStr** %113, align 8
+  %115 = icmp eq %struct.PRCListStr* %114, %112
+  br i1 %115, label %136, label %116
+
+; <label>:116:                                    ; preds = %111
+  %117 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 6, i32 5
+  br label %143
+
+; <label>:118:                                    ; preds = %89, %118
+  %119 = phi %struct.PRCListStr* [ %87, %89 ], [ %134, %118 ]
+  %120 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %119, i64 0, i32 0
+  %121 = bitcast %struct.PRCListStr* %119 to i64*
+  %122 = load i64, i64* %121, align 8
+  %123 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %119, i64 0, i32 1
+  %124 = bitcast %struct.PRCListStr** %123 to i64**
+  %125 = load i64*, i64** %124, align 8
+  store i64 %122, i64* %125, align 8
+  %126 = bitcast %struct.PRCListStr** %123 to i64*
+  %127 = load i64, i64* %126, align 8
+  %128 = load %struct.PRCListStr*, %struct.PRCListStr** %120, align 8
+  %129 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %128, i64 0, i32 1
+  %130 = bitcast %struct.PRCListStr** %129 to i64*
+  store i64 %127, i64* %130, align 8
+  store %struct.PRCListStr* %119, %struct.PRCListStr** %120, align 8
+  store %struct.PRCListStr* %119, %struct.PRCListStr** %123, align 8
+  %131 = bitcast %struct.PRCListStr* %119 to %struct.PRJob*
+  %132 = load i32, i32* %90, align 8
+  %133 = add nsw i32 %132, -1
+  store i32 %133, i32* %90, align 8
+  tail call fastcc void @delete_job(%struct.PRJob* %131)
+  %134 = load %struct.PRCListStr*, %struct.PRCListStr** %86, align 8
+  %135 = icmp eq %struct.PRCListStr* %134, %85
+  br i1 %135, label %111, label %118
+
+; <label>:136:                                    ; preds = %143, %111
+  %137 = getelementptr inbounds %struct.timer_jobq, %struct.timer_jobq* %19, i64 0, i32 0
+  %138 = getelementptr inbounds %struct.timer_jobq, %struct.timer_jobq* %19, i64 0, i32 0, i32 0
+  %139 = load %struct.PRCListStr*, %struct.PRCListStr** %138, align 8
+  %140 = icmp eq %struct.PRCListStr* %139, %137
+  br i1 %140, label %179, label %141
+
+; <label>:141:                                    ; preds = %136
+  %142 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 7, i32 3
+  br label %161
+
+; <label>:143:                                    ; preds = %116, %143
+  %144 = phi %struct.PRCListStr* [ %114, %116 ], [ %159, %143 ]
+  %145 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %144, i64 0, i32 0
+  %146 = bitcast %struct.PRCListStr* %144 to i64*
+  %147 = load i64, i64* %146, align 8
+  %148 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %144, i64 0, i32 1
+  %149 = bitcast %struct.PRCListStr** %148 to i64**
+  %150 = load i64*, i64** %149, align 8
+  store i64 %147, i64* %150, align 8
+  %151 = bitcast %struct.PRCListStr** %148 to i64*
+  %152 = load i64, i64* %151, align 8
+  %153 = load %struct.PRCListStr*, %struct.PRCListStr** %145, align 8
+  %154 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %153, i64 0, i32 1
+  %155 = bitcast %struct.PRCListStr** %154 to i64*
+  store i64 %152, i64* %155, align 8
+  store %struct.PRCListStr* %144, %struct.PRCListStr** %145, align 8
+  store %struct.PRCListStr* %144, %struct.PRCListStr** %148, align 8
+  %156 = load i32, i32* %117, align 8
+  %157 = add nsw i32 %156, -1
+  store i32 %157, i32* %117, align 8
+  %158 = bitcast %struct.PRCListStr* %144 to %struct.PRJob*
+  tail call fastcc void @delete_job(%struct.PRJob* %158)
+  %159 = load %struct.PRCListStr*, %struct.PRCListStr** %113, align 8
+  %160 = icmp eq %struct.PRCListStr* %159, %112
+  br i1 %160, label %136, label %143
+
+; <label>:161:                                    ; preds = %141, %161
+  %162 = phi %struct.PRCListStr* [ %139, %141 ], [ %177, %161 ]
+  %163 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %162, i64 0, i32 0
+  %164 = bitcast %struct.PRCListStr* %162 to i64*
+  %165 = load i64, i64* %164, align 8
+  %166 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %162, i64 0, i32 1
+  %167 = bitcast %struct.PRCListStr** %166 to i64**
+  %168 = load i64*, i64** %167, align 8
+  store i64 %165, i64* %168, align 8
+  %169 = bitcast %struct.PRCListStr** %166 to i64*
+  %170 = load i64, i64* %169, align 8
+  %171 = load %struct.PRCListStr*, %struct.PRCListStr** %163, align 8
+  %172 = getelementptr inbounds %struct.PRCListStr, %struct.PRCListStr* %171, i64 0, i32 1
+  %173 = bitcast %struct.PRCListStr** %172 to i64*
+  store i64 %170, i64* %173, align 8
+  store %struct.PRCListStr* %162, %struct.PRCListStr** %163, align 8
+  store %struct.PRCListStr* %162, %struct.PRCListStr** %166, align 8
+  %174 = load i32, i32* %142, align 8
+  %175 = add nsw i32 %174, -1
+  store i32 %175, i32* %142, align 8
+  %176 = bitcast %struct.PRCListStr* %162 to %struct.PRJob*
+  tail call fastcc void @delete_job(%struct.PRJob* %176)
+  %177 = load %struct.PRCListStr*, %struct.PRCListStr** %138, align 8
+  %178 = icmp eq %struct.PRCListStr* %177, %137
+  br i1 %178, label %179, label %161
+
+; <label>:179:                                    ; preds = %161, %136
+  tail call fastcc void @delete_threadpool(%struct.PRThreadPool* nonnull %0)
+  ret i32 0
+}
+
+declare i32 @PR_JoinThread(%struct.PRThread*) local_unnamed_addr #1
+
+declare void @PR_Free(i8*) local_unnamed_addr #1
+
+; Function Attrs: nounwind sspstrong uwtable
+define internal fastcc void @delete_threadpool(%struct.PRThreadPool*) unnamed_addr #0 {
+  %2 = icmp eq %struct.PRThreadPool* %0, null
+  br i1 %2, label %52, label %3
+
+; <label>:3:                                      ; preds = %1
+  %4 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 9
+  %5 = load %struct.PRCondVar*, %struct.PRCondVar** %4, align 8
+  %6 = icmp eq %struct.PRCondVar* %5, null
+  br i1 %6, label %8, label %7
+
+; <label>:7:                                      ; preds = %3
+  tail call void @PR_DestroyCondVar(%struct.PRCondVar* nonnull %5) #2
+  br label %8
+
+; <label>:8:                                      ; preds = %3, %7
+  %9 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 5, i32 3
+  %10 = load %struct.PRCondVar*, %struct.PRCondVar** %9, align 8
+  %11 = icmp eq %struct.PRCondVar* %10, null
+  br i1 %11, label %13, label %12
+
+; <label>:12:                                     ; preds = %8
+  tail call void @PR_DestroyCondVar(%struct.PRCondVar* nonnull %10) #2
+  br label %13
+
+; <label>:13:                                     ; preds = %8, %12
+  %14 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 5, i32 2
+  %15 = load %struct.PRLock*, %struct.PRLock** %14, align 8
+  %16 = icmp eq %struct.PRLock* %15, null
+  br i1 %16, label %18, label %17
+
+; <label>:17:                                     ; preds = %13
+  tail call void @PR_DestroyLock(%struct.PRLock* nonnull %15) #2
+  br label %18
+
+; <label>:18:                                     ; preds = %13, %17
+  %19 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 8
+  %20 = load %struct.PRLock*, %struct.PRLock** %19, align 8
+  %21 = icmp eq %struct.PRLock* %20, null
+  br i1 %21, label %23, label %22
+
+; <label>:22:                                     ; preds = %18
+  tail call void @PR_DestroyLock(%struct.PRLock* nonnull %20) #2
+  br label %23
+
+; <label>:23:                                     ; preds = %18, %22
+  %24 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 7, i32 2
+  %25 = load %struct.PRCondVar*, %struct.PRCondVar** %24, align 8
+  %26 = icmp eq %struct.PRCondVar* %25, null
+  br i1 %26, label %28, label %27
+
+; <label>:27:                                     ; preds = %23
+  tail call void @PR_DestroyCondVar(%struct.PRCondVar* nonnull %25) #2
+  br label %28
+
+; <label>:28:                                     ; preds = %23, %27
+  %29 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 7, i32 1
+  %30 = load %struct.PRLock*, %struct.PRLock** %29, align 8
+  %31 = icmp eq %struct.PRLock* %30, null
+  br i1 %31, label %33, label %32
+
+; <label>:32:                                     ; preds = %28
+  tail call void @PR_DestroyLock(%struct.PRLock* nonnull %30) #2
+  br label %33
+
+; <label>:33:                                     ; preds = %28, %32
+  %34 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 6, i32 4
+  %35 = load %struct.PRLock*, %struct.PRLock** %34, align 8
+  %36 = icmp eq %struct.PRLock* %35, null
+  br i1 %36, label %38, label %37
+
+; <label>:37:                                     ; preds = %33
+  tail call void @PR_DestroyLock(%struct.PRLock* nonnull %35) #2
+  br label %38
+
+; <label>:38:                                     ; preds = %33, %37
+  %39 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 6, i32 1
+  %40 = load %struct.PRPollDesc*, %struct.PRPollDesc** %39, align 8
+  %41 = icmp eq %struct.PRPollDesc* %40, null
+  br i1 %41, label %44, label %42
+
+; <label>:42:                                     ; preds = %38
+  %43 = bitcast %struct.PRPollDesc* %40 to i8*
+  tail call void @PR_Free(i8* %43) #2
+  br label %44
+
+; <label>:44:                                     ; preds = %38, %42
+  %45 = getelementptr inbounds %struct.PRThreadPool, %struct.PRThreadPool* %0, i64 0, i32 6, i32 6
+  %46 = load %struct.PRFileDesc*, %struct.PRFileDesc** %45, align 8
+  %47 = icmp eq %struct.PRFileDesc* %46, null
+  br i1 %47, label %50, label %48
+
+; <label>:48:                                     ; preds = %44
+  %49 = tail call i32 @PR_DestroyPollableEvent(%struct.PRFileDesc* nonnull %46) #2
+  br label %50
+
+; <label>:50:                                     ; preds = %44, %48
+  %51 = bitcast %struct.PRThreadPool* %0 to i8*
+  tail call void @PR_Free(i8* %51) #2
+  br label %52
+
+; <label>:52:                                     ; preds = %1, %50
+  ret void
+}
+
+declare %struct.PRLock* @PR_NewLock() local_unnamed_addr #1
+
+declare %struct.PRFileDesc* @PR_NewPollableEvent() local_unnamed_addr #1
+
+declare i8* @PR_Malloc(i32) local_unnamed_addr #1
+
+declare i32 @PR_Poll(%struct.PRPollDesc*, i32, i32) local_unnamed_addr #1
+
+declare i32 @PR_WaitForPollableEvent(%struct.PRFileDesc*) local_unnamed_addr #1
+
+declare i32 @PR_GetConnectStatus(%struct.PRPollDesc*) local_unnamed_addr #1
+
+declare void @PR_DestroyCondVar(%struct.PRCondVar*) local_unnamed_addr #1
+
+declare i32 @PR_SetPollableEvent(%struct.PRFileDesc*) local_unnamed_addr #1
+
+declare void @PR_DestroyLock(%struct.PRLock*) local_unnamed_addr #1
+
+declare i32 @PR_DestroyPollableEvent(%struct.PRFileDesc*) local_unnamed_addr #1
+
+attributes #0 = { nounwind sspstrong uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { nounwind }
+
+!llvm.module.flags = !{!0, !1}
+!llvm.ident = !{!2}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{i32 7, !"PIC Level", i32 2}
+!2 = !{!"clang version 7.0.1 (tags/RELEASE_701/final)"}

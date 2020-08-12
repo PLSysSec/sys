@@ -1,0 +1,2 @@
+par-eqs [ [ %foo_13 = bitcast i32 %foo_8 to i32  ],[ %foo_13 = bitcast i32 %foo_11 to i32  ],[ %foo_13 = bitcast i32 3 to i32  ] ]
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "foo_13")

@@ -1,0 +1,1690 @@
+; ModuleID = '/home/firefox/firefox/mozilla-unified/third_party/prio/prio/serial.c'
+source_filename = "/home/firefox/firefox/mozilla-unified/third_party/prio/prio/serial.c"
+target datalayout = "e-m:e-i64:64-f80:128-n8:16:32:64-S128"
+target triple = "x86_64-pc-linux-gnu"
+
+%struct.msgpack_packer = type { i8*, i32 (i8*, i8*, i64)* }
+%struct.prio_packet_client = type { %struct.beaver_triple*, %struct.mp_int, %struct.mp_int, %struct.mp_int, i32, %union.anon }
+%struct.beaver_triple = type { %struct.mp_int, %struct.mp_int, %struct.mp_int }
+%struct.mp_int = type { i32, i32, i32, i64* }
+%union.anon = type { %struct.server_a_data }
+%struct.server_a_data = type { %struct.mparray*, %struct.mparray* }
+%struct.mparray = type { i32, %struct.mp_int* }
+%struct.prio_config = type { i32, i8*, i32, %struct.SECKEYPublicKeyStr*, %struct.SECKEYPublicKeyStr*, %struct.mp_int, %struct.mp_int, i32, %struct.mparray*, %struct.mparray* }
+%struct.SECKEYPublicKeyStr = type { %struct.PLArenaPool*, i32, %struct.PK11SlotInfoStr*, i64, %union.anon.0 }
+%struct.PLArenaPool = type { %struct.PLArena, %struct.PLArena*, i32, i64 }
+%struct.PLArena = type { %struct.PLArena*, i64, i64, i64 }
+%struct.PK11SlotInfoStr = type opaque
+%union.anon.0 = type { %struct.SECKEYFortezzaPublicKeyStr }
+%struct.SECKEYFortezzaPublicKeyStr = type { i32, i32, [8 x i8], %struct.SECItemStr, %struct.SECItemStr, %struct.SECItemStr, %struct.SECItemStr, %struct.SECItemStr, %struct.SECKEYPQGParamsStr, %struct.SECKEYPQGParamsStr }
+%struct.SECItemStr = type { i32, i8*, i32 }
+%struct.SECKEYPQGParamsStr = type { %struct.PLArenaPool*, %struct.SECItemStr, %struct.SECItemStr, %struct.SECItemStr }
+%struct.msgpack_unpacker = type { i8*, i64, i64, i64, i64, %struct.msgpack_zone*, i64, i8* }
+%struct.msgpack_zone = type { %struct.msgpack_zone_chunk_list, %struct.msgpack_zone_finalizer_array, i64 }
+%struct.msgpack_zone_chunk_list = type { i64, i8*, %struct.msgpack_zone_chunk* }
+%struct.msgpack_zone_chunk = type opaque
+%struct.msgpack_zone_finalizer_array = type { %struct.msgpack_zone_finalizer*, %struct.msgpack_zone_finalizer*, %struct.msgpack_zone_finalizer* }
+%struct.msgpack_zone_finalizer = type { void (i8*)*, i8* }
+%struct.msgpack_unpacked = type { %struct.msgpack_zone*, %struct.msgpack_object }
+%struct.msgpack_object = type { i32, %union.msgpack_object_union }
+%union.msgpack_object_union = type { %struct.msgpack_object_array }
+%struct.msgpack_object_array = type { i32, %struct.msgpack_object* }
+%struct.prio_packet_verify1 = type { %struct.mp_int, %struct.mp_int }
+%struct.prio_packet_verify2 = type { %struct.mp_int }
+%struct.prio_total_share = type { i32, %struct.mparray* }
+
+; Function Attrs: nounwind sspstrong uwtable
+define i32 @serial_write_packet_client(%struct.msgpack_packer* readonly, %struct.prio_packet_client*, %struct.prio_config* nocapture readonly) local_unnamed_addr #0 {
+  %4 = alloca i8, align 1
+  %5 = alloca i8, align 1
+  %6 = alloca [2 x i8], align 1
+  %7 = alloca [3 x i8], align 1
+  %8 = alloca [5 x i8], align 1
+  %9 = icmp eq %struct.msgpack_packer* %0, null
+  %10 = icmp eq %struct.prio_packet_client* %1, null
+  %11 = or i1 %9, %10
+  br i1 %11, label %116, label %12
+
+; <label>:12:                                     ; preds = %3
+  %13 = getelementptr inbounds %struct.prio_config, %struct.prio_config* %2, i64 0, i32 2
+  %14 = load i32, i32* %13, align 8
+  %15 = icmp ult i32 %14, 32
+  br i1 %15, label %16, label %24
+
+; <label>:16:                                     ; preds = %12
+  call void @llvm.lifetime.start.p0i8(i64 1, i8* nonnull %5) #7
+  %17 = trunc i32 %14 to i8
+  %18 = or i8 %17, -96
+  store i8 %18, i8* %5, align 1
+  %19 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 1
+  %20 = load i32 (i8*, i8*, i64)*, i32 (i8*, i8*, i64)** %19, align 8
+  %21 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 0
+  %22 = load i8*, i8** %21, align 8
+  %23 = call i32 %20(i8* %22, i8* nonnull %5, i64 1) #7
+  call void @llvm.lifetime.end.p0i8(i64 1, i8* nonnull %5) #7
+  br label %58
+
+; <label>:24:                                     ; preds = %12
+  %25 = icmp ult i32 %14, 256
+  br i1 %25, label %26, label %35
+
+; <label>:26:                                     ; preds = %24
+  %27 = getelementptr inbounds [2 x i8], [2 x i8]* %6, i64 0, i64 0
+  call void @llvm.lifetime.start.p0i8(i64 2, i8* nonnull %27) #7
+  store i8 -39, i8* %27, align 1
+  %28 = trunc i32 %14 to i8
+  %29 = getelementptr inbounds [2 x i8], [2 x i8]* %6, i64 0, i64 1
+  store i8 %28, i8* %29, align 1
+  %30 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 1
+  %31 = load i32 (i8*, i8*, i64)*, i32 (i8*, i8*, i64)** %30, align 8
+  %32 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 0
+  %33 = load i8*, i8** %32, align 8
+  %34 = call i32 %31(i8* %33, i8* nonnull %27, i64 2) #7
+  call void @llvm.lifetime.end.p0i8(i64 2, i8* nonnull %27) #7
+  br label %58
+
+; <label>:35:                                     ; preds = %24
+  %36 = icmp ult i32 %14, 65536
+  br i1 %36, label %37, label %48
+
+; <label>:37:                                     ; preds = %35
+  %38 = getelementptr inbounds [3 x i8], [3 x i8]* %7, i64 0, i64 0
+  call void @llvm.lifetime.start.p0i8(i64 3, i8* nonnull %38) #7
+  store i8 -38, i8* %38, align 1
+  %39 = trunc i32 %14 to i16
+  %40 = tail call i16 @llvm.bswap.i16(i16 %39) #7
+  %41 = getelementptr inbounds [3 x i8], [3 x i8]* %7, i64 0, i64 1
+  %42 = bitcast i8* %41 to i16*
+  store i16 %40, i16* %42, align 1
+  %43 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 1
+  %44 = load i32 (i8*, i8*, i64)*, i32 (i8*, i8*, i64)** %43, align 8
+  %45 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 0
+  %46 = load i8*, i8** %45, align 8
+  %47 = call i32 %44(i8* %46, i8* nonnull %38, i64 3) #7
+  call void @llvm.lifetime.end.p0i8(i64 3, i8* nonnull %38) #7
+  br label %58
+
+; <label>:48:                                     ; preds = %35
+  %49 = getelementptr inbounds [5 x i8], [5 x i8]* %8, i64 0, i64 0
+  call void @llvm.lifetime.start.p0i8(i64 5, i8* nonnull %49) #7
+  store i8 -37, i8* %49, align 1
+  %50 = tail call i32 @llvm.bswap.i32(i32 %14) #7
+  %51 = getelementptr inbounds [5 x i8], [5 x i8]* %8, i64 0, i64 1
+  %52 = bitcast i8* %51 to i32*
+  store i32 %50, i32* %52, align 1
+  %53 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 1
+  %54 = load i32 (i8*, i8*, i64)*, i32 (i8*, i8*, i64)** %53, align 8
+  %55 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 0
+  %56 = load i8*, i8** %55, align 8
+  %57 = call i32 %54(i8* %56, i8* nonnull %49, i64 5) #7
+  call void @llvm.lifetime.end.p0i8(i64 5, i8* nonnull %49) #7
+  br label %58
+
+; <label>:58:                                     ; preds = %16, %26, %37, %48
+  %59 = phi i32 [ %23, %16 ], [ %34, %26 ], [ %47, %37 ], [ %57, %48 ]
+  %60 = icmp eq i32 %59, 0
+  br i1 %60, label %61, label %116
+
+; <label>:61:                                     ; preds = %58
+  %62 = getelementptr inbounds %struct.prio_config, %struct.prio_config* %2, i64 0, i32 1
+  %63 = load i8*, i8** %62, align 8
+  %64 = load i32, i32* %13, align 8
+  %65 = zext i32 %64 to i64
+  %66 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 1
+  %67 = load i32 (i8*, i8*, i64)*, i32 (i8*, i8*, i64)** %66, align 8
+  %68 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 0
+  %69 = load i8*, i8** %68, align 8
+  %70 = call i32 %67(i8* %69, i8* %63, i64 %65) #7
+  %71 = icmp eq i32 %70, 0
+  br i1 %71, label %72, label %116
+
+; <label>:72:                                     ; preds = %61
+  %73 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %1, i64 0, i32 0
+  %74 = load %struct.beaver_triple*, %struct.beaver_triple** %73, align 8
+  %75 = icmp eq %struct.beaver_triple* %74, null
+  br i1 %75, label %116, label %76
+
+; <label>:76:                                     ; preds = %72
+  %77 = getelementptr inbounds %struct.beaver_triple, %struct.beaver_triple* %74, i64 0, i32 0
+  %78 = call fastcc i32 @serial_write_mp_int(%struct.msgpack_packer* nonnull %0, %struct.mp_int* nonnull %77) #7
+  %79 = icmp eq i32 %78, 0
+  br i1 %79, label %80, label %116
+
+; <label>:80:                                     ; preds = %76
+  %81 = getelementptr inbounds %struct.beaver_triple, %struct.beaver_triple* %74, i64 0, i32 1
+  %82 = call fastcc i32 @serial_write_mp_int(%struct.msgpack_packer* nonnull %0, %struct.mp_int* nonnull %81) #7
+  %83 = icmp eq i32 %82, 0
+  br i1 %83, label %84, label %116
+
+; <label>:84:                                     ; preds = %80
+  %85 = getelementptr inbounds %struct.beaver_triple, %struct.beaver_triple* %74, i64 0, i32 2
+  %86 = call fastcc i32 @serial_write_mp_int(%struct.msgpack_packer* nonnull %0, %struct.mp_int* nonnull %85) #7
+  %87 = icmp eq i32 %86, 0
+  br i1 %87, label %88, label %116
+
+; <label>:88:                                     ; preds = %84
+  %89 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %1, i64 0, i32 1
+  %90 = call fastcc i32 @serial_write_mp_int(%struct.msgpack_packer* nonnull %0, %struct.mp_int* nonnull %89)
+  %91 = icmp eq i32 %90, 0
+  br i1 %91, label %92, label %116
+
+; <label>:92:                                     ; preds = %88
+  %93 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %1, i64 0, i32 2
+  %94 = call fastcc i32 @serial_write_mp_int(%struct.msgpack_packer* nonnull %0, %struct.mp_int* nonnull %93)
+  %95 = icmp eq i32 %94, 0
+  br i1 %95, label %96, label %116
+
+; <label>:96:                                     ; preds = %92
+  %97 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %1, i64 0, i32 3
+  %98 = call fastcc i32 @serial_write_mp_int(%struct.msgpack_packer* nonnull %0, %struct.mp_int* nonnull %97)
+  %99 = icmp eq i32 %98, 0
+  br i1 %99, label %100, label %116
+
+; <label>:100:                                    ; preds = %96
+  %101 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %1, i64 0, i32 4
+  %102 = load i32, i32* %101, align 8
+  %103 = call fastcc i32 @msgpack_pack_int(%struct.msgpack_packer* nonnull %0, i32 %102)
+  %104 = icmp eq i32 %103, 0
+  br i1 %104, label %105, label %116
+
+; <label>:105:                                    ; preds = %100
+  %106 = load i32, i32* %101, align 8
+  switch i32 %106, label %116 [
+    i32 0, label %107
+    i32 1, label %118
+  ]
+
+; <label>:107:                                    ; preds = %105
+  %108 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %1, i64 0, i32 5, i32 0, i32 0
+  %109 = load %struct.mparray*, %struct.mparray** %108, align 8
+  %110 = call fastcc i32 @serial_write_mp_array(%struct.msgpack_packer* nonnull %0, %struct.mparray* %109) #7
+  %111 = icmp eq i32 %110, 0
+  br i1 %111, label %112, label %116
+
+; <label>:112:                                    ; preds = %107
+  %113 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %1, i64 0, i32 5, i32 0, i32 1
+  %114 = load %struct.mparray*, %struct.mparray** %113, align 8
+  %115 = call fastcc i32 @serial_write_mp_array(%struct.msgpack_packer* nonnull %0, %struct.mparray* %114) #7
+  br label %116
+
+; <label>:116:                                    ; preds = %58, %61, %84, %88, %92, %96, %100, %105, %3, %118, %123, %76, %80, %72, %107, %112
+  %117 = phi i32 [ %115, %112 ], [ %110, %107 ], [ %59, %58 ], [ %70, %61 ], [ %86, %84 ], [ %90, %88 ], [ %94, %92 ], [ %98, %96 ], [ %103, %100 ], [ -1, %105 ], [ -1, %3 ], [ %128, %123 ], [ %121, %118 ], [ -1, %72 ], [ %82, %80 ], [ %78, %76 ]
+  ret i32 %117
+
+; <label>:118:                                    ; preds = %105
+  call void @llvm.lifetime.start.p0i8(i64 1, i8* nonnull %4) #7
+  store i8 -80, i8* %4, align 1
+  %119 = load i32 (i8*, i8*, i64)*, i32 (i8*, i8*, i64)** %66, align 8
+  %120 = load i8*, i8** %68, align 8
+  %121 = call i32 %119(i8* %120, i8* nonnull %4, i64 1) #7
+  call void @llvm.lifetime.end.p0i8(i64 1, i8* nonnull %4) #7
+  %122 = icmp eq i32 %121, 0
+  br i1 %122, label %123, label %116
+
+; <label>:123:                                    ; preds = %118
+  %124 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %1, i64 0, i32 5
+  %125 = bitcast %union.anon* %124 to i8*
+  %126 = load i32 (i8*, i8*, i64)*, i32 (i8*, i8*, i64)** %66, align 8
+  %127 = load i8*, i8** %68, align 8
+  %128 = call i32 %126(i8* %127, i8* nonnull %125, i64 16) #7
+  br label %116
+}
+
+; Function Attrs: argmemonly nounwind
+declare void @llvm.lifetime.start.p0i8(i64, i8* nocapture) #1
+
+; Function Attrs: nounwind sspstrong uwtable
+define internal fastcc i32 @serial_write_mp_int(%struct.msgpack_packer* nocapture readonly, %struct.mp_int*) unnamed_addr #0 {
+  %3 = alloca i8, align 1
+  %4 = alloca [2 x i8], align 1
+  %5 = alloca [3 x i8], align 1
+  %6 = alloca [5 x i8], align 1
+  %7 = tail call i32 @mp_unsigned_octet_size(%struct.mp_int* %1) #7
+  %8 = zext i32 %7 to i64
+  %9 = tail call noalias i8* @calloc(i64 %8, i64 1) #7
+  %10 = icmp eq i8* %9, null
+  br i1 %10, label %69, label %11
+
+; <label>:11:                                     ; preds = %2
+  %12 = tail call i32 @mp_to_fixlen_octets(%struct.mp_int* %1, i8* nonnull %9, i32 %7) #7
+  %13 = icmp eq i32 %12, 0
+  br i1 %13, label %14, label %67
+
+; <label>:14:                                     ; preds = %11
+  %15 = icmp ult i32 %7, 32
+  br i1 %15, label %16, label %24
+
+; <label>:16:                                     ; preds = %14
+  call void @llvm.lifetime.start.p0i8(i64 1, i8* nonnull %3) #7
+  %17 = trunc i32 %7 to i8
+  %18 = or i8 %17, -96
+  store i8 %18, i8* %3, align 1
+  %19 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 1
+  %20 = load i32 (i8*, i8*, i64)*, i32 (i8*, i8*, i64)** %19, align 8
+  %21 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 0
+  %22 = load i8*, i8** %21, align 8
+  %23 = call i32 %20(i8* %22, i8* nonnull %3, i64 1) #7
+  call void @llvm.lifetime.end.p0i8(i64 1, i8* nonnull %3) #7
+  br label %58
+
+; <label>:24:                                     ; preds = %14
+  %25 = icmp ult i32 %7, 256
+  br i1 %25, label %26, label %35
+
+; <label>:26:                                     ; preds = %24
+  %27 = getelementptr inbounds [2 x i8], [2 x i8]* %4, i64 0, i64 0
+  call void @llvm.lifetime.start.p0i8(i64 2, i8* nonnull %27) #7
+  store i8 -39, i8* %27, align 1
+  %28 = trunc i32 %7 to i8
+  %29 = getelementptr inbounds [2 x i8], [2 x i8]* %4, i64 0, i64 1
+  store i8 %28, i8* %29, align 1
+  %30 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 1
+  %31 = load i32 (i8*, i8*, i64)*, i32 (i8*, i8*, i64)** %30, align 8
+  %32 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 0
+  %33 = load i8*, i8** %32, align 8
+  %34 = call i32 %31(i8* %33, i8* nonnull %27, i64 2) #7
+  call void @llvm.lifetime.end.p0i8(i64 2, i8* nonnull %27) #7
+  br label %58
+
+; <label>:35:                                     ; preds = %24
+  %36 = icmp ult i32 %7, 65536
+  br i1 %36, label %37, label %48
+
+; <label>:37:                                     ; preds = %35
+  %38 = getelementptr inbounds [3 x i8], [3 x i8]* %5, i64 0, i64 0
+  call void @llvm.lifetime.start.p0i8(i64 3, i8* nonnull %38) #7
+  store i8 -38, i8* %38, align 1
+  %39 = trunc i32 %7 to i16
+  %40 = tail call i16 @llvm.bswap.i16(i16 %39) #7
+  %41 = getelementptr inbounds [3 x i8], [3 x i8]* %5, i64 0, i64 1
+  %42 = bitcast i8* %41 to i16*
+  store i16 %40, i16* %42, align 1
+  %43 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 1
+  %44 = load i32 (i8*, i8*, i64)*, i32 (i8*, i8*, i64)** %43, align 8
+  %45 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 0
+  %46 = load i8*, i8** %45, align 8
+  %47 = call i32 %44(i8* %46, i8* nonnull %38, i64 3) #7
+  call void @llvm.lifetime.end.p0i8(i64 3, i8* nonnull %38) #7
+  br label %58
+
+; <label>:48:                                     ; preds = %35
+  %49 = getelementptr inbounds [5 x i8], [5 x i8]* %6, i64 0, i64 0
+  call void @llvm.lifetime.start.p0i8(i64 5, i8* nonnull %49) #7
+  store i8 -37, i8* %49, align 1
+  %50 = tail call i32 @llvm.bswap.i32(i32 %7) #7
+  %51 = getelementptr inbounds [5 x i8], [5 x i8]* %6, i64 0, i64 1
+  %52 = bitcast i8* %51 to i32*
+  store i32 %50, i32* %52, align 1
+  %53 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 1
+  %54 = load i32 (i8*, i8*, i64)*, i32 (i8*, i8*, i64)** %53, align 8
+  %55 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 0
+  %56 = load i8*, i8** %55, align 8
+  %57 = call i32 %54(i8* %56, i8* nonnull %49, i64 5) #7
+  call void @llvm.lifetime.end.p0i8(i64 5, i8* nonnull %49) #7
+  br label %58
+
+; <label>:58:                                     ; preds = %16, %26, %37, %48
+  %59 = phi i32 [ %23, %16 ], [ %34, %26 ], [ %47, %37 ], [ %57, %48 ]
+  %60 = icmp eq i32 %59, 0
+  br i1 %60, label %61, label %67
+
+; <label>:61:                                     ; preds = %58
+  %62 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 1
+  %63 = load i32 (i8*, i8*, i64)*, i32 (i8*, i8*, i64)** %62, align 8
+  %64 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 0
+  %65 = load i8*, i8** %64, align 8
+  %66 = call i32 %63(i8* %65, i8* nonnull %9, i64 %8) #7
+  br label %67
+
+; <label>:67:                                     ; preds = %11, %58, %61
+  %68 = phi i32 [ -1, %11 ], [ %66, %61 ], [ %59, %58 ]
+  call void @free(i8* nonnull %9) #7
+  br label %69
+
+; <label>:69:                                     ; preds = %2, %67
+  %70 = phi i32 [ %68, %67 ], [ -1, %2 ]
+  ret i32 %70
+}
+
+; Function Attrs: inlinehint nounwind sspstrong uwtable
+define internal fastcc i32 @msgpack_pack_int(%struct.msgpack_packer* nocapture readonly, i32) unnamed_addr #2 {
+  %3 = alloca i32, align 4
+  %4 = alloca [5 x i8], align 1
+  %5 = alloca [3 x i8], align 1
+  %6 = alloca [2 x i8], align 1
+  %7 = alloca [2 x i8], align 1
+  %8 = alloca [3 x i8], align 1
+  %9 = alloca [5 x i8], align 1
+  store i32 %1, i32* %3, align 4
+  %10 = icmp slt i32 %1, -32
+  %11 = trunc i32 %1 to i8
+  br i1 %10, label %12, label %45
+
+; <label>:12:                                     ; preds = %2
+  %13 = icmp slt i32 %1, -32768
+  br i1 %13, label %14, label %24
+
+; <label>:14:                                     ; preds = %12
+  %15 = getelementptr inbounds [5 x i8], [5 x i8]* %4, i64 0, i64 0
+  call void @llvm.lifetime.start.p0i8(i64 5, i8* nonnull %15) #7
+  store i8 -46, i8* %15, align 1
+  %16 = tail call i32 @llvm.bswap.i32(i32 %1) #7
+  %17 = getelementptr inbounds [5 x i8], [5 x i8]* %4, i64 0, i64 1
+  %18 = bitcast i8* %17 to i32*
+  store i32 %16, i32* %18, align 1
+  %19 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 1
+  %20 = load i32 (i8*, i8*, i64)*, i32 (i8*, i8*, i64)** %19, align 8
+  %21 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 0
+  %22 = load i8*, i8** %21, align 8
+  %23 = call i32 %20(i8* %22, i8* nonnull %15, i64 5) #7
+  call void @llvm.lifetime.end.p0i8(i64 5, i8* nonnull %15) #7
+  br label %87
+
+; <label>:24:                                     ; preds = %12
+  %25 = icmp slt i32 %1, -128
+  br i1 %25, label %26, label %37
+
+; <label>:26:                                     ; preds = %24
+  %27 = getelementptr inbounds [3 x i8], [3 x i8]* %5, i64 0, i64 0
+  call void @llvm.lifetime.start.p0i8(i64 3, i8* nonnull %27) #7
+  store i8 -47, i8* %27, align 1
+  %28 = trunc i32 %1 to i16
+  %29 = tail call i16 @llvm.bswap.i16(i16 %28) #7
+  %30 = getelementptr inbounds [3 x i8], [3 x i8]* %5, i64 0, i64 1
+  %31 = bitcast i8* %30 to i16*
+  store i16 %29, i16* %31, align 1
+  %32 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 1
+  %33 = load i32 (i8*, i8*, i64)*, i32 (i8*, i8*, i64)** %32, align 8
+  %34 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 0
+  %35 = load i8*, i8** %34, align 8
+  %36 = call i32 %33(i8* %35, i8* nonnull %27, i64 3) #7
+  call void @llvm.lifetime.end.p0i8(i64 3, i8* nonnull %27) #7
+  br label %87
+
+; <label>:37:                                     ; preds = %24
+  %38 = getelementptr inbounds [2 x i8], [2 x i8]* %6, i64 0, i64 0
+  call void @llvm.lifetime.start.p0i8(i64 2, i8* nonnull %38) #7
+  store i8 -48, i8* %38, align 1
+  %39 = getelementptr inbounds [2 x i8], [2 x i8]* %6, i64 0, i64 1
+  store i8 %11, i8* %39, align 1
+  %40 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 1
+  %41 = load i32 (i8*, i8*, i64)*, i32 (i8*, i8*, i64)** %40, align 8
+  %42 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 0
+  %43 = load i8*, i8** %42, align 8
+  %44 = call i32 %41(i8* %43, i8* nonnull %38, i64 2) #7
+  call void @llvm.lifetime.end.p0i8(i64 2, i8* nonnull %38) #7
+  br label %87
+
+; <label>:45:                                     ; preds = %2
+  %46 = icmp slt i32 %1, 128
+  br i1 %46, label %47, label %54
+
+; <label>:47:                                     ; preds = %45
+  %48 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 1
+  %49 = load i32 (i8*, i8*, i64)*, i32 (i8*, i8*, i64)** %48, align 8
+  %50 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 0
+  %51 = load i8*, i8** %50, align 8
+  %52 = bitcast i32* %3 to i8*
+  %53 = call i32 %49(i8* %51, i8* nonnull %52, i64 1) #7
+  br label %87
+
+; <label>:54:                                     ; preds = %45
+  %55 = icmp slt i32 %1, 256
+  br i1 %55, label %56, label %64
+
+; <label>:56:                                     ; preds = %54
+  %57 = getelementptr inbounds [2 x i8], [2 x i8]* %7, i64 0, i64 0
+  call void @llvm.lifetime.start.p0i8(i64 2, i8* nonnull %57) #7
+  store i8 -52, i8* %57, align 1
+  %58 = getelementptr inbounds [2 x i8], [2 x i8]* %7, i64 0, i64 1
+  store i8 %11, i8* %58, align 1
+  %59 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 1
+  %60 = load i32 (i8*, i8*, i64)*, i32 (i8*, i8*, i64)** %59, align 8
+  %61 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 0
+  %62 = load i8*, i8** %61, align 8
+  %63 = call i32 %60(i8* %62, i8* nonnull %57, i64 2) #7
+  call void @llvm.lifetime.end.p0i8(i64 2, i8* nonnull %57) #7
+  br label %87
+
+; <label>:64:                                     ; preds = %54
+  %65 = icmp slt i32 %1, 65536
+  br i1 %65, label %66, label %77
+
+; <label>:66:                                     ; preds = %64
+  %67 = getelementptr inbounds [3 x i8], [3 x i8]* %8, i64 0, i64 0
+  call void @llvm.lifetime.start.p0i8(i64 3, i8* nonnull %67) #7
+  store i8 -51, i8* %67, align 1
+  %68 = trunc i32 %1 to i16
+  %69 = tail call i16 @llvm.bswap.i16(i16 %68) #7
+  %70 = getelementptr inbounds [3 x i8], [3 x i8]* %8, i64 0, i64 1
+  %71 = bitcast i8* %70 to i16*
+  store i16 %69, i16* %71, align 1
+  %72 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 1
+  %73 = load i32 (i8*, i8*, i64)*, i32 (i8*, i8*, i64)** %72, align 8
+  %74 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 0
+  %75 = load i8*, i8** %74, align 8
+  %76 = call i32 %73(i8* %75, i8* nonnull %67, i64 3) #7
+  call void @llvm.lifetime.end.p0i8(i64 3, i8* nonnull %67) #7
+  br label %87
+
+; <label>:77:                                     ; preds = %64
+  %78 = getelementptr inbounds [5 x i8], [5 x i8]* %9, i64 0, i64 0
+  call void @llvm.lifetime.start.p0i8(i64 5, i8* nonnull %78) #7
+  store i8 -50, i8* %78, align 1
+  %79 = tail call i32 @llvm.bswap.i32(i32 %1) #7
+  %80 = getelementptr inbounds [5 x i8], [5 x i8]* %9, i64 0, i64 1
+  %81 = bitcast i8* %80 to i32*
+  store i32 %79, i32* %81, align 1
+  %82 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 1
+  %83 = load i32 (i8*, i8*, i64)*, i32 (i8*, i8*, i64)** %82, align 8
+  %84 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 0
+  %85 = load i8*, i8** %84, align 8
+  %86 = call i32 %83(i8* %85, i8* nonnull %78, i64 5) #7
+  call void @llvm.lifetime.end.p0i8(i64 5, i8* nonnull %78) #7
+  br label %87
+
+; <label>:87:                                     ; preds = %14, %26, %37, %47, %56, %66, %77
+  %88 = phi i32 [ %23, %14 ], [ %36, %26 ], [ %44, %37 ], [ %53, %47 ], [ %63, %56 ], [ %76, %66 ], [ %86, %77 ]
+  ret i32 %88
+}
+
+; Function Attrs: argmemonly nounwind
+declare void @llvm.lifetime.end.p0i8(i64, i8* nocapture) #1
+
+; Function Attrs: nounwind sspstrong uwtable
+define i32 @serial_read_server_id(%struct.msgpack_unpacker*, i32*) local_unnamed_addr #0 {
+  %3 = alloca %struct.msgpack_unpacked, align 8
+  %4 = icmp eq %struct.msgpack_unpacker* %0, null
+  %5 = icmp eq i32* %1, null
+  %6 = or i1 %4, %5
+  br i1 %6, label %29, label %7
+
+; <label>:7:                                      ; preds = %2
+  %8 = bitcast %struct.msgpack_unpacked* %3 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 32, i8* nonnull %8)
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %8, i8 0, i64 32, i1 false) #7
+  %9 = call i32 @msgpack_unpacker_next(%struct.msgpack_unpacker* nonnull %0, %struct.msgpack_unpacked* nonnull %3) #7
+  %10 = add i32 %9, -1
+  %11 = icmp ult i32 %10, 2
+  br i1 %11, label %13, label %12
+
+; <label>:12:                                     ; preds = %7
+  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %8)
+  br label %29
+
+; <label>:13:                                     ; preds = %7
+  %14 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %3, i64 0, i32 1, i32 0
+  %15 = load i32, i32* %14, align 8
+  %16 = icmp eq i32 %15, 2
+  %17 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %3, i64 0, i32 1, i32 1
+  %18 = bitcast %union.msgpack_object_union* %17 to i64*
+  %19 = load i64, i64* %18, align 8
+  %20 = trunc i64 %19 to i32
+  %21 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %3, i64 0, i32 0
+  %22 = load %struct.msgpack_zone*, %struct.msgpack_zone** %21, align 8
+  %23 = icmp eq %struct.msgpack_zone* %22, null
+  br i1 %23, label %25, label %24
+
+; <label>:24:                                     ; preds = %13
+  call void @msgpack_zone_free(%struct.msgpack_zone* nonnull %22) #7
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %8, i8 0, i64 32, i1 false) #7
+  br label %25
+
+; <label>:25:                                     ; preds = %13, %24
+  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %8)
+  %26 = icmp ult i32 %20, 2
+  %27 = and i1 %16, %26
+  br i1 %27, label %28, label %29
+
+; <label>:28:                                     ; preds = %25
+  store i32 %20, i32* %1, align 4
+  br label %29
+
+; <label>:29:                                     ; preds = %12, %28, %2, %25
+  %30 = phi i32 [ -1, %25 ], [ 0, %28 ], [ -1, %2 ], [ -1, %12 ]
+  ret i32 %30
+}
+
+; Function Attrs: nounwind sspstrong uwtable
+define i32 @serial_read_packet_client(%struct.msgpack_unpacker*, %struct.prio_packet_client*, %struct.prio_config*) local_unnamed_addr #0 {
+  %4 = alloca %struct.msgpack_unpacked, align 8
+  %5 = alloca %struct.msgpack_unpacked, align 8
+  %6 = alloca %struct.msgpack_unpacked, align 8
+  %7 = alloca %struct.msgpack_unpacked, align 8
+  %8 = alloca %struct.msgpack_unpacked, align 8
+  %9 = alloca %struct.msgpack_unpacked, align 8
+  %10 = alloca %struct.msgpack_unpacked, align 8
+  %11 = alloca %struct.msgpack_unpacked, align 8
+  %12 = alloca %struct.msgpack_unpacked, align 8
+  %13 = icmp eq %struct.msgpack_unpacker* %0, null
+  %14 = icmp eq %struct.prio_packet_client* %1, null
+  %15 = or i1 %13, %14
+  br i1 %15, label %327, label %16
+
+; <label>:16:                                     ; preds = %3
+  %17 = bitcast %struct.msgpack_unpacked* %12 to i8*
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %17, i8 0, i64 32, i1 false) #7
+  %18 = call i32 @msgpack_unpacker_next(%struct.msgpack_unpacker* nonnull %0, %struct.msgpack_unpacked* nonnull %12) #7
+  %19 = add i32 %18, -1
+  %20 = icmp ult i32 %19, 2
+  br i1 %20, label %21, label %334
+
+; <label>:21:                                     ; preds = %16
+  %22 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %12, i64 0, i32 1, i32 0
+  %23 = load i32, i32* %22, align 8
+  %24 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %12, i64 0, i32 1, i32 1, i32 0, i32 1
+  %25 = bitcast %struct.msgpack_object** %24 to i8**
+  %26 = load i8*, i8** %25, align 8
+  %27 = icmp eq i32 %23, 5
+  br i1 %27, label %28, label %327
+
+; <label>:28:                                     ; preds = %21
+  %29 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %12, i64 0, i32 1, i32 1, i32 0, i32 0
+  %30 = load i32, i32* %29, align 8
+  %31 = getelementptr inbounds %struct.prio_config, %struct.prio_config* %2, i64 0, i32 2
+  %32 = load i32, i32* %31, align 8
+  %33 = icmp eq i32 %30, %32
+  br i1 %33, label %34, label %327
+
+; <label>:34:                                     ; preds = %28
+  %35 = getelementptr inbounds %struct.prio_config, %struct.prio_config* %2, i64 0, i32 1
+  %36 = load i8*, i8** %35, align 8
+  %37 = zext i32 %30 to i64
+  %38 = call i32 @memcmp(i8* %26, i8* %36, i64 %37) #8
+  %39 = icmp eq i32 %38, 0
+  br i1 %39, label %40, label %327
+
+; <label>:40:                                     ; preds = %34
+  %41 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %1, i64 0, i32 0
+  %42 = load %struct.beaver_triple*, %struct.beaver_triple** %41, align 8
+  %43 = getelementptr inbounds %struct.prio_config, %struct.prio_config* %2, i64 0, i32 5
+  %44 = icmp eq %struct.beaver_triple* %42, null
+  br i1 %44, label %334, label %45
+
+; <label>:45:                                     ; preds = %40
+  %46 = getelementptr inbounds %struct.beaver_triple, %struct.beaver_triple* %42, i64 0, i32 0
+  %47 = bitcast %struct.msgpack_unpacked* %11 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 32, i8* nonnull %47) #7
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %47, i8 0, i64 32, i1 false) #7
+  %48 = call i32 @msgpack_unpacker_next(%struct.msgpack_unpacker* nonnull %0, %struct.msgpack_unpacked* nonnull %11) #7
+  %49 = add i32 %48, -1
+  %50 = icmp ult i32 %49, 2
+  br i1 %50, label %52, label %51
+
+; <label>:51:                                     ; preds = %45
+  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %47) #7
+  br label %334
+
+; <label>:52:                                     ; preds = %45
+  %53 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %11, i64 0, i32 1, i32 0
+  %54 = load i32, i32* %53, align 8
+  %55 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %11, i64 0, i32 1, i32 1, i32 0, i32 1
+  %56 = bitcast %struct.msgpack_object** %55 to i8**
+  %57 = load i8*, i8** %56, align 8
+  %58 = icmp ne i32 %54, 5
+  %59 = icmp eq i8* %57, null
+  %60 = or i1 %58, %59
+  br i1 %60, label %73, label %61
+
+; <label>:61:                                     ; preds = %52
+  %62 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %11, i64 0, i32 1, i32 1, i32 0, i32 0
+  %63 = load i32, i32* %62, align 8
+  %64 = call i32 @mp_read_unsigned_octets(%struct.mp_int* nonnull %46, i8* nonnull %57, i32 %63) #7
+  %65 = icmp eq i32 %64, 0
+  br i1 %65, label %66, label %73
+
+; <label>:66:                                     ; preds = %61
+  %67 = call i32 @mp_cmp_z(%struct.mp_int* nonnull %46) #7
+  %68 = icmp sgt i32 %67, -1
+  br i1 %68, label %69, label %73
+
+; <label>:69:                                     ; preds = %66
+  %70 = call i32 @mp_cmp(%struct.mp_int* nonnull %46, %struct.mp_int* nonnull %43) #7
+  %71 = ashr i32 %70, 31
+  %72 = xor i32 %71, -1
+  br label %73
+
+; <label>:73:                                     ; preds = %69, %66, %61, %52
+  %74 = phi i32 [ %72, %69 ], [ -1, %66 ], [ -1, %61 ], [ -1, %52 ]
+  %75 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %11, i64 0, i32 0
+  %76 = load %struct.msgpack_zone*, %struct.msgpack_zone** %75, align 8
+  %77 = icmp eq %struct.msgpack_zone* %76, null
+  br i1 %77, label %79, label %78
+
+; <label>:78:                                     ; preds = %73
+  call void @msgpack_zone_free(%struct.msgpack_zone* nonnull %76) #7
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %47, i8 0, i64 32, i1 false) #7
+  br label %79
+
+; <label>:79:                                     ; preds = %78, %73
+  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %47) #7
+  %80 = icmp eq i32 %74, 0
+  br i1 %80, label %81, label %334
+
+; <label>:81:                                     ; preds = %79
+  %82 = getelementptr inbounds %struct.beaver_triple, %struct.beaver_triple* %42, i64 0, i32 1
+  %83 = bitcast %struct.msgpack_unpacked* %10 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 32, i8* nonnull %83) #7
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %83, i8 0, i64 32, i1 false) #7
+  %84 = call i32 @msgpack_unpacker_next(%struct.msgpack_unpacker* nonnull %0, %struct.msgpack_unpacked* nonnull %10) #7
+  %85 = add i32 %84, -1
+  %86 = icmp ult i32 %85, 2
+  br i1 %86, label %88, label %87
+
+; <label>:87:                                     ; preds = %81
+  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %83) #7
+  br label %334
+
+; <label>:88:                                     ; preds = %81
+  %89 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %10, i64 0, i32 1, i32 0
+  %90 = load i32, i32* %89, align 8
+  %91 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %10, i64 0, i32 1, i32 1, i32 0, i32 1
+  %92 = bitcast %struct.msgpack_object** %91 to i8**
+  %93 = load i8*, i8** %92, align 8
+  %94 = icmp ne i32 %90, 5
+  %95 = icmp eq i8* %93, null
+  %96 = or i1 %94, %95
+  br i1 %96, label %109, label %97
+
+; <label>:97:                                     ; preds = %88
+  %98 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %10, i64 0, i32 1, i32 1, i32 0, i32 0
+  %99 = load i32, i32* %98, align 8
+  %100 = call i32 @mp_read_unsigned_octets(%struct.mp_int* nonnull %82, i8* nonnull %93, i32 %99) #7
+  %101 = icmp eq i32 %100, 0
+  br i1 %101, label %102, label %109
+
+; <label>:102:                                    ; preds = %97
+  %103 = call i32 @mp_cmp_z(%struct.mp_int* nonnull %82) #7
+  %104 = icmp sgt i32 %103, -1
+  br i1 %104, label %105, label %109
+
+; <label>:105:                                    ; preds = %102
+  %106 = call i32 @mp_cmp(%struct.mp_int* nonnull %82, %struct.mp_int* nonnull %43) #7
+  %107 = ashr i32 %106, 31
+  %108 = xor i32 %107, -1
+  br label %109
+
+; <label>:109:                                    ; preds = %105, %102, %97, %88
+  %110 = phi i32 [ %108, %105 ], [ -1, %102 ], [ -1, %97 ], [ -1, %88 ]
+  %111 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %10, i64 0, i32 0
+  %112 = load %struct.msgpack_zone*, %struct.msgpack_zone** %111, align 8
+  %113 = icmp eq %struct.msgpack_zone* %112, null
+  br i1 %113, label %115, label %114
+
+; <label>:114:                                    ; preds = %109
+  call void @msgpack_zone_free(%struct.msgpack_zone* nonnull %112) #7
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %83, i8 0, i64 32, i1 false) #7
+  br label %115
+
+; <label>:115:                                    ; preds = %114, %109
+  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %83) #7
+  %116 = icmp eq i32 %110, 0
+  br i1 %116, label %117, label %334
+
+; <label>:117:                                    ; preds = %115
+  %118 = getelementptr inbounds %struct.beaver_triple, %struct.beaver_triple* %42, i64 0, i32 2
+  %119 = bitcast %struct.msgpack_unpacked* %9 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 32, i8* nonnull %119) #7
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %119, i8 0, i64 32, i1 false) #7
+  %120 = call i32 @msgpack_unpacker_next(%struct.msgpack_unpacker* nonnull %0, %struct.msgpack_unpacked* nonnull %9) #7
+  %121 = add i32 %120, -1
+  %122 = icmp ult i32 %121, 2
+  br i1 %122, label %124, label %123
+
+; <label>:123:                                    ; preds = %117
+  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %119) #7
+  br label %334
+
+; <label>:124:                                    ; preds = %117
+  %125 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %9, i64 0, i32 1, i32 0
+  %126 = load i32, i32* %125, align 8
+  %127 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %9, i64 0, i32 1, i32 1, i32 0, i32 1
+  %128 = bitcast %struct.msgpack_object** %127 to i8**
+  %129 = load i8*, i8** %128, align 8
+  %130 = icmp ne i32 %126, 5
+  %131 = icmp eq i8* %129, null
+  %132 = or i1 %130, %131
+  br i1 %132, label %145, label %133
+
+; <label>:133:                                    ; preds = %124
+  %134 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %9, i64 0, i32 1, i32 1, i32 0, i32 0
+  %135 = load i32, i32* %134, align 8
+  %136 = call i32 @mp_read_unsigned_octets(%struct.mp_int* nonnull %118, i8* nonnull %129, i32 %135) #7
+  %137 = icmp eq i32 %136, 0
+  br i1 %137, label %138, label %145
+
+; <label>:138:                                    ; preds = %133
+  %139 = call i32 @mp_cmp_z(%struct.mp_int* nonnull %118) #7
+  %140 = icmp sgt i32 %139, -1
+  br i1 %140, label %141, label %145
+
+; <label>:141:                                    ; preds = %138
+  %142 = call i32 @mp_cmp(%struct.mp_int* nonnull %118, %struct.mp_int* nonnull %43) #7
+  %143 = ashr i32 %142, 31
+  %144 = xor i32 %143, -1
+  br label %145
+
+; <label>:145:                                    ; preds = %141, %138, %133, %124
+  %146 = phi i32 [ %144, %141 ], [ -1, %138 ], [ -1, %133 ], [ -1, %124 ]
+  %147 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %9, i64 0, i32 0
+  %148 = load %struct.msgpack_zone*, %struct.msgpack_zone** %147, align 8
+  %149 = icmp eq %struct.msgpack_zone* %148, null
+  br i1 %149, label %151, label %150
+
+; <label>:150:                                    ; preds = %145
+  call void @msgpack_zone_free(%struct.msgpack_zone* nonnull %148) #7
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %119, i8 0, i64 32, i1 false) #7
+  br label %151
+
+; <label>:151:                                    ; preds = %145, %150
+  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %119) #7
+  %152 = icmp eq i32 %146, 0
+  br i1 %152, label %153, label %334
+
+; <label>:153:                                    ; preds = %151
+  %154 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %1, i64 0, i32 1
+  %155 = bitcast %struct.msgpack_unpacked* %8 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 32, i8* nonnull %155)
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %155, i8 0, i64 32, i1 false) #7
+  %156 = call i32 @msgpack_unpacker_next(%struct.msgpack_unpacker* nonnull %0, %struct.msgpack_unpacked* nonnull %8) #7
+  %157 = add i32 %156, -1
+  %158 = icmp ult i32 %157, 2
+  br i1 %158, label %160, label %159
+
+; <label>:159:                                    ; preds = %153
+  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %155)
+  br label %334
+
+; <label>:160:                                    ; preds = %153
+  %161 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %8, i64 0, i32 1, i32 0
+  %162 = load i32, i32* %161, align 8
+  %163 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %8, i64 0, i32 1, i32 1, i32 0, i32 1
+  %164 = bitcast %struct.msgpack_object** %163 to i8**
+  %165 = load i8*, i8** %164, align 8
+  %166 = icmp ne i32 %162, 5
+  %167 = icmp eq i8* %165, null
+  %168 = or i1 %166, %167
+  br i1 %168, label %181, label %169
+
+; <label>:169:                                    ; preds = %160
+  %170 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %8, i64 0, i32 1, i32 1, i32 0, i32 0
+  %171 = load i32, i32* %170, align 8
+  %172 = call i32 @mp_read_unsigned_octets(%struct.mp_int* nonnull %154, i8* nonnull %165, i32 %171) #7
+  %173 = icmp eq i32 %172, 0
+  br i1 %173, label %174, label %181
+
+; <label>:174:                                    ; preds = %169
+  %175 = call i32 @mp_cmp_z(%struct.mp_int* nonnull %154) #7
+  %176 = icmp sgt i32 %175, -1
+  br i1 %176, label %177, label %181
+
+; <label>:177:                                    ; preds = %174
+  %178 = call i32 @mp_cmp(%struct.mp_int* nonnull %154, %struct.mp_int* nonnull %43) #7
+  %179 = ashr i32 %178, 31
+  %180 = xor i32 %179, -1
+  br label %181
+
+; <label>:181:                                    ; preds = %160, %169, %174, %177
+  %182 = phi i32 [ %180, %177 ], [ -1, %174 ], [ -1, %169 ], [ -1, %160 ]
+  %183 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %8, i64 0, i32 0
+  %184 = load %struct.msgpack_zone*, %struct.msgpack_zone** %183, align 8
+  %185 = icmp eq %struct.msgpack_zone* %184, null
+  br i1 %185, label %187, label %186
+
+; <label>:186:                                    ; preds = %181
+  call void @msgpack_zone_free(%struct.msgpack_zone* nonnull %184) #7
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %155, i8 0, i64 32, i1 false) #7
+  br label %187
+
+; <label>:187:                                    ; preds = %181, %186
+  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %155)
+  %188 = icmp eq i32 %182, 0
+  br i1 %188, label %189, label %334
+
+; <label>:189:                                    ; preds = %187
+  %190 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %1, i64 0, i32 2
+  %191 = bitcast %struct.msgpack_unpacked* %7 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 32, i8* nonnull %191)
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %191, i8 0, i64 32, i1 false) #7
+  %192 = call i32 @msgpack_unpacker_next(%struct.msgpack_unpacker* nonnull %0, %struct.msgpack_unpacked* nonnull %7) #7
+  %193 = add i32 %192, -1
+  %194 = icmp ult i32 %193, 2
+  br i1 %194, label %196, label %195
+
+; <label>:195:                                    ; preds = %189
+  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %191)
+  br label %334
+
+; <label>:196:                                    ; preds = %189
+  %197 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %7, i64 0, i32 1, i32 0
+  %198 = load i32, i32* %197, align 8
+  %199 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %7, i64 0, i32 1, i32 1, i32 0, i32 1
+  %200 = bitcast %struct.msgpack_object** %199 to i8**
+  %201 = load i8*, i8** %200, align 8
+  %202 = icmp ne i32 %198, 5
+  %203 = icmp eq i8* %201, null
+  %204 = or i1 %202, %203
+  br i1 %204, label %217, label %205
+
+; <label>:205:                                    ; preds = %196
+  %206 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %7, i64 0, i32 1, i32 1, i32 0, i32 0
+  %207 = load i32, i32* %206, align 8
+  %208 = call i32 @mp_read_unsigned_octets(%struct.mp_int* nonnull %190, i8* nonnull %201, i32 %207) #7
+  %209 = icmp eq i32 %208, 0
+  br i1 %209, label %210, label %217
+
+; <label>:210:                                    ; preds = %205
+  %211 = call i32 @mp_cmp_z(%struct.mp_int* nonnull %190) #7
+  %212 = icmp sgt i32 %211, -1
+  br i1 %212, label %213, label %217
+
+; <label>:213:                                    ; preds = %210
+  %214 = call i32 @mp_cmp(%struct.mp_int* nonnull %190, %struct.mp_int* nonnull %43) #7
+  %215 = ashr i32 %214, 31
+  %216 = xor i32 %215, -1
+  br label %217
+
+; <label>:217:                                    ; preds = %196, %205, %210, %213
+  %218 = phi i32 [ %216, %213 ], [ -1, %210 ], [ -1, %205 ], [ -1, %196 ]
+  %219 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %7, i64 0, i32 0
+  %220 = load %struct.msgpack_zone*, %struct.msgpack_zone** %219, align 8
+  %221 = icmp eq %struct.msgpack_zone* %220, null
+  br i1 %221, label %223, label %222
+
+; <label>:222:                                    ; preds = %217
+  call void @msgpack_zone_free(%struct.msgpack_zone* nonnull %220) #7
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %191, i8 0, i64 32, i1 false) #7
+  br label %223
+
+; <label>:223:                                    ; preds = %217, %222
+  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %191)
+  %224 = icmp eq i32 %218, 0
+  br i1 %224, label %225, label %334
+
+; <label>:225:                                    ; preds = %223
+  %226 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %1, i64 0, i32 3
+  %227 = bitcast %struct.msgpack_unpacked* %6 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 32, i8* nonnull %227)
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %227, i8 0, i64 32, i1 false) #7
+  %228 = call i32 @msgpack_unpacker_next(%struct.msgpack_unpacker* nonnull %0, %struct.msgpack_unpacked* nonnull %6) #7
+  %229 = add i32 %228, -1
+  %230 = icmp ult i32 %229, 2
+  br i1 %230, label %232, label %231
+
+; <label>:231:                                    ; preds = %225
+  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %227)
+  br label %334
+
+; <label>:232:                                    ; preds = %225
+  %233 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %6, i64 0, i32 1, i32 0
+  %234 = load i32, i32* %233, align 8
+  %235 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %6, i64 0, i32 1, i32 1, i32 0, i32 1
+  %236 = bitcast %struct.msgpack_object** %235 to i8**
+  %237 = load i8*, i8** %236, align 8
+  %238 = icmp ne i32 %234, 5
+  %239 = icmp eq i8* %237, null
+  %240 = or i1 %238, %239
+  br i1 %240, label %253, label %241
+
+; <label>:241:                                    ; preds = %232
+  %242 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %6, i64 0, i32 1, i32 1, i32 0, i32 0
+  %243 = load i32, i32* %242, align 8
+  %244 = call i32 @mp_read_unsigned_octets(%struct.mp_int* nonnull %226, i8* nonnull %237, i32 %243) #7
+  %245 = icmp eq i32 %244, 0
+  br i1 %245, label %246, label %253
+
+; <label>:246:                                    ; preds = %241
+  %247 = call i32 @mp_cmp_z(%struct.mp_int* nonnull %226) #7
+  %248 = icmp sgt i32 %247, -1
+  br i1 %248, label %249, label %253
+
+; <label>:249:                                    ; preds = %246
+  %250 = call i32 @mp_cmp(%struct.mp_int* nonnull %226, %struct.mp_int* nonnull %43) #7
+  %251 = ashr i32 %250, 31
+  %252 = xor i32 %251, -1
+  br label %253
+
+; <label>:253:                                    ; preds = %232, %241, %246, %249
+  %254 = phi i32 [ %252, %249 ], [ -1, %246 ], [ -1, %241 ], [ -1, %232 ]
+  %255 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %6, i64 0, i32 0
+  %256 = load %struct.msgpack_zone*, %struct.msgpack_zone** %255, align 8
+  %257 = icmp eq %struct.msgpack_zone* %256, null
+  br i1 %257, label %259, label %258
+
+; <label>:258:                                    ; preds = %253
+  call void @msgpack_zone_free(%struct.msgpack_zone* nonnull %256) #7
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %227, i8 0, i64 32, i1 false) #7
+  br label %259
+
+; <label>:259:                                    ; preds = %253, %258
+  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %227)
+  %260 = icmp eq i32 %254, 0
+  br i1 %260, label %261, label %334
+
+; <label>:261:                                    ; preds = %259
+  %262 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %1, i64 0, i32 4
+  %263 = bitcast %struct.msgpack_unpacked* %5 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 32, i8* nonnull %263) #7
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %263, i8 0, i64 32, i1 false) #7
+  %264 = call i32 @msgpack_unpacker_next(%struct.msgpack_unpacker* nonnull %0, %struct.msgpack_unpacked* nonnull %5) #7
+  %265 = add i32 %264, -1
+  %266 = icmp ult i32 %265, 2
+  br i1 %266, label %268, label %267
+
+; <label>:267:                                    ; preds = %261
+  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %263) #7
+  br label %334
+
+; <label>:268:                                    ; preds = %261
+  %269 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %5, i64 0, i32 1, i32 0
+  %270 = load i32, i32* %269, align 8
+  %271 = icmp eq i32 %270, 2
+  %272 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %5, i64 0, i32 1, i32 1
+  %273 = bitcast %union.msgpack_object_union* %272 to i64*
+  %274 = load i64, i64* %273, align 8
+  %275 = trunc i64 %274 to i32
+  %276 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %5, i64 0, i32 0
+  %277 = load %struct.msgpack_zone*, %struct.msgpack_zone** %276, align 8
+  %278 = icmp eq %struct.msgpack_zone* %277, null
+  br i1 %278, label %280, label %279
+
+; <label>:279:                                    ; preds = %268
+  call void @msgpack_zone_free(%struct.msgpack_zone* nonnull %277) #7
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %263, i8 0, i64 32, i1 false) #7
+  br label %280
+
+; <label>:280:                                    ; preds = %279, %268
+  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %263) #7
+  %281 = icmp ult i32 %275, 2
+  %282 = and i1 %271, %281
+  br i1 %282, label %283, label %334
+
+; <label>:283:                                    ; preds = %280
+  store i32 %275, i32* %262, align 4
+  switch i32 %275, label %334 [
+    i32 0, label %284
+    i32 1, label %299
+  ]
+
+; <label>:284:                                    ; preds = %283
+  %285 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %1, i64 0, i32 5, i32 0, i32 0
+  %286 = load %struct.mparray*, %struct.mparray** %285, align 8
+  %287 = getelementptr inbounds %struct.prio_config, %struct.prio_config* %2, i64 0, i32 0
+  %288 = load i32, i32* %287, align 8
+  %289 = sext i32 %288 to i64
+  %290 = call fastcc i32 @serial_read_mp_array(%struct.msgpack_unpacker* nonnull %0, %struct.mparray* %286, i64 %289, %struct.mp_int* nonnull %43) #7
+  %291 = icmp eq i32 %290, 0
+  br i1 %291, label %292, label %334
+
+; <label>:292:                                    ; preds = %284
+  %293 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %1, i64 0, i32 5, i32 0, i32 1
+  %294 = load %struct.mparray*, %struct.mparray** %293, align 8
+  %295 = call i32 @PrioConfig_hPoints(%struct.prio_config* nonnull %2) #7
+  %296 = sext i32 %295 to i64
+  %297 = call fastcc i32 @serial_read_mp_array(%struct.msgpack_unpacker* nonnull %0, %struct.mparray* %294, i64 %296, %struct.mp_int* nonnull %43) #7
+  %298 = icmp eq i32 %297, 0
+  br i1 %298, label %327, label %334
+
+; <label>:299:                                    ; preds = %283
+  %300 = getelementptr inbounds %struct.prio_packet_client, %struct.prio_packet_client* %1, i64 0, i32 5
+  %301 = bitcast %struct.msgpack_unpacked* %4 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 32, i8* nonnull %301) #7
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %301, i8 0, i64 32, i1 false) #7
+  %302 = call i32 @msgpack_unpacker_next(%struct.msgpack_unpacker* nonnull %0, %struct.msgpack_unpacked* nonnull %4) #7
+  %303 = add i32 %302, -1
+  %304 = icmp ult i32 %303, 2
+  br i1 %304, label %306, label %305
+
+; <label>:305:                                    ; preds = %299
+  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %301) #7
+  br label %334
+
+; <label>:306:                                    ; preds = %299
+  %307 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %4, i64 0, i32 1, i32 0
+  %308 = load i32, i32* %307, align 8
+  %309 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %4, i64 0, i32 1, i32 1, i32 0, i32 1
+  %310 = bitcast %struct.msgpack_object** %309 to i8**
+  %311 = load i8*, i8** %310, align 8
+  %312 = icmp eq i32 %308, 5
+  br i1 %312, label %313, label %319
+
+; <label>:313:                                    ; preds = %306
+  %314 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %4, i64 0, i32 1, i32 1, i32 0, i32 0
+  %315 = load i32, i32* %314, align 8
+  %316 = icmp eq i32 %315, 16
+  br i1 %316, label %317, label %319
+
+; <label>:317:                                    ; preds = %313
+  %318 = bitcast %union.anon* %300 to i8*
+  call void @llvm.memcpy.p0i8.p0i8.i64(i8* nonnull align 1 %318, i8* align 1 %311, i64 16, i1 false) #7
+  br label %319
+
+; <label>:319:                                    ; preds = %317, %313, %306
+  %320 = phi i32 [ 0, %317 ], [ -1, %306 ], [ -1, %313 ]
+  %321 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %4, i64 0, i32 0
+  %322 = load %struct.msgpack_zone*, %struct.msgpack_zone** %321, align 8
+  %323 = icmp eq %struct.msgpack_zone* %322, null
+  br i1 %323, label %325, label %324
+
+; <label>:324:                                    ; preds = %319
+  call void @msgpack_zone_free(%struct.msgpack_zone* nonnull %322) #7
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %301, i8 0, i64 32, i1 false) #7
+  br label %325
+
+; <label>:325:                                    ; preds = %319, %324
+  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %301) #7
+  %326 = icmp eq i32 %320, 0
+  br i1 %326, label %327, label %334
+
+; <label>:327:                                    ; preds = %34, %28, %21, %3, %292, %325
+  %328 = phi i32 [ 0, %325 ], [ 0, %292 ], [ -1, %3 ], [ -1, %21 ], [ -1, %28 ], [ -1, %34 ]
+  %329 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %12, i64 0, i32 0
+  %330 = load %struct.msgpack_zone*, %struct.msgpack_zone** %329, align 8
+  %331 = icmp eq %struct.msgpack_zone* %330, null
+  br i1 %331, label %334, label %332
+
+; <label>:332:                                    ; preds = %327
+  call void @msgpack_zone_free(%struct.msgpack_zone* nonnull %330) #7
+  %333 = bitcast %struct.msgpack_unpacked* %12 to i8*
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %333, i8 0, i64 32, i1 false) #7
+  br label %334
+
+; <label>:334:                                    ; preds = %284, %267, %280, %87, %51, %40, %115, %79, %332, %327, %305, %231, %195, %159, %123, %283, %325, %292, %259, %223, %187, %151, %16
+  %335 = phi i32 [ -1, %16 ], [ %146, %151 ], [ %182, %187 ], [ %218, %223 ], [ %254, %259 ], [ %297, %292 ], [ -1, %325 ], [ -1, %283 ], [ -1, %123 ], [ -1, %159 ], [ -1, %195 ], [ -1, %231 ], [ -1, %305 ], [ %328, %327 ], [ %328, %332 ], [ -1, %87 ], [ -1, %51 ], [ -1, %40 ], [ %110, %115 ], [ %74, %79 ], [ -1, %280 ], [ -1, %267 ], [ %290, %284 ]
+  ret i32 %335
+}
+
+declare i32 @msgpack_unpacker_next(%struct.msgpack_unpacker*, %struct.msgpack_unpacked*) local_unnamed_addr #3
+
+; Function Attrs: argmemonly nounwind
+declare void @llvm.memcpy.p0i8.p0i8.i64(i8* nocapture writeonly, i8* nocapture readonly, i64, i1) #1
+
+; Function Attrs: nounwind readonly
+declare i32 @memcmp(i8* nocapture, i8* nocapture, i64) local_unnamed_addr #4
+
+; Function Attrs: nounwind sspstrong uwtable
+define i32 @PrioPacketVerify1_write(%struct.prio_packet_verify1*, %struct.msgpack_packer* readonly) local_unnamed_addr #0 {
+  %3 = icmp eq %struct.msgpack_packer* %1, null
+  %4 = icmp eq %struct.prio_packet_verify1* %0, null
+  %5 = or i1 %4, %3
+  br i1 %5, label %13, label %6
+
+; <label>:6:                                      ; preds = %2
+  %7 = getelementptr inbounds %struct.prio_packet_verify1, %struct.prio_packet_verify1* %0, i64 0, i32 0
+  %8 = tail call fastcc i32 @serial_write_mp_int(%struct.msgpack_packer* nonnull %1, %struct.mp_int* nonnull %7)
+  %9 = icmp eq i32 %8, 0
+  br i1 %9, label %10, label %13
+
+; <label>:10:                                     ; preds = %6
+  %11 = getelementptr inbounds %struct.prio_packet_verify1, %struct.prio_packet_verify1* %0, i64 0, i32 1
+  %12 = tail call fastcc i32 @serial_write_mp_int(%struct.msgpack_packer* nonnull %1, %struct.mp_int* nonnull %11)
+  ret i32 %12
+
+; <label>:13:                                     ; preds = %2, %6
+  %14 = phi i32 [ %8, %6 ], [ -1, %2 ]
+  ret i32 %14
+}
+
+; Function Attrs: nounwind sspstrong uwtable
+define i32 @PrioPacketVerify1_read(%struct.prio_packet_verify1*, %struct.msgpack_unpacker*, %struct.prio_config*) local_unnamed_addr #0 {
+  %4 = alloca %struct.msgpack_unpacked, align 8
+  %5 = alloca %struct.msgpack_unpacked, align 8
+  %6 = icmp eq %struct.msgpack_unpacker* %1, null
+  %7 = icmp eq %struct.prio_packet_verify1* %0, null
+  %8 = or i1 %7, %6
+  br i1 %8, label %81, label %9
+
+; <label>:9:                                      ; preds = %3
+  %10 = getelementptr inbounds %struct.prio_packet_verify1, %struct.prio_packet_verify1* %0, i64 0, i32 0
+  %11 = getelementptr inbounds %struct.prio_config, %struct.prio_config* %2, i64 0, i32 5
+  %12 = bitcast %struct.msgpack_unpacked* %5 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 32, i8* nonnull %12)
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %12, i8 0, i64 32, i1 false) #7
+  %13 = call i32 @msgpack_unpacker_next(%struct.msgpack_unpacker* nonnull %1, %struct.msgpack_unpacked* nonnull %5) #7
+  %14 = add i32 %13, -1
+  %15 = icmp ult i32 %14, 2
+  br i1 %15, label %17, label %16
+
+; <label>:16:                                     ; preds = %9
+  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %12)
+  br label %81
+
+; <label>:17:                                     ; preds = %9
+  %18 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %5, i64 0, i32 1, i32 0
+  %19 = load i32, i32* %18, align 8
+  %20 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %5, i64 0, i32 1, i32 1, i32 0, i32 1
+  %21 = bitcast %struct.msgpack_object** %20 to i8**
+  %22 = load i8*, i8** %21, align 8
+  %23 = icmp ne i32 %19, 5
+  %24 = icmp eq i8* %22, null
+  %25 = or i1 %23, %24
+  br i1 %25, label %38, label %26
+
+; <label>:26:                                     ; preds = %17
+  %27 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %5, i64 0, i32 1, i32 1, i32 0, i32 0
+  %28 = load i32, i32* %27, align 8
+  %29 = call i32 @mp_read_unsigned_octets(%struct.mp_int* nonnull %10, i8* nonnull %22, i32 %28) #7
+  %30 = icmp eq i32 %29, 0
+  br i1 %30, label %31, label %38
+
+; <label>:31:                                     ; preds = %26
+  %32 = call i32 @mp_cmp_z(%struct.mp_int* nonnull %10) #7
+  %33 = icmp sgt i32 %32, -1
+  br i1 %33, label %34, label %38
+
+; <label>:34:                                     ; preds = %31
+  %35 = call i32 @mp_cmp(%struct.mp_int* nonnull %10, %struct.mp_int* nonnull %11) #7
+  %36 = ashr i32 %35, 31
+  %37 = xor i32 %36, -1
+  br label %38
+
+; <label>:38:                                     ; preds = %17, %26, %31, %34
+  %39 = phi i32 [ %37, %34 ], [ -1, %31 ], [ -1, %26 ], [ -1, %17 ]
+  %40 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %5, i64 0, i32 0
+  %41 = load %struct.msgpack_zone*, %struct.msgpack_zone** %40, align 8
+  %42 = icmp eq %struct.msgpack_zone* %41, null
+  br i1 %42, label %44, label %43
+
+; <label>:43:                                     ; preds = %38
+  call void @msgpack_zone_free(%struct.msgpack_zone* nonnull %41) #7
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %12, i8 0, i64 32, i1 false) #7
+  br label %44
+
+; <label>:44:                                     ; preds = %38, %43
+  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %12)
+  %45 = icmp eq i32 %39, 0
+  br i1 %45, label %46, label %81
+
+; <label>:46:                                     ; preds = %44
+  %47 = getelementptr inbounds %struct.prio_packet_verify1, %struct.prio_packet_verify1* %0, i64 0, i32 1
+  %48 = bitcast %struct.msgpack_unpacked* %4 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 32, i8* nonnull %48)
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %48, i8 0, i64 32, i1 false) #7
+  %49 = call i32 @msgpack_unpacker_next(%struct.msgpack_unpacker* nonnull %1, %struct.msgpack_unpacked* nonnull %4) #7
+  %50 = add i32 %49, -1
+  %51 = icmp ult i32 %50, 2
+  br i1 %51, label %52, label %79
+
+; <label>:52:                                     ; preds = %46
+  %53 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %4, i64 0, i32 1, i32 0
+  %54 = load i32, i32* %53, align 8
+  %55 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %4, i64 0, i32 1, i32 1, i32 0, i32 1
+  %56 = bitcast %struct.msgpack_object** %55 to i8**
+  %57 = load i8*, i8** %56, align 8
+  %58 = icmp ne i32 %54, 5
+  %59 = icmp eq i8* %57, null
+  %60 = or i1 %58, %59
+  br i1 %60, label %73, label %61
+
+; <label>:61:                                     ; preds = %52
+  %62 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %4, i64 0, i32 1, i32 1, i32 0, i32 0
+  %63 = load i32, i32* %62, align 8
+  %64 = call i32 @mp_read_unsigned_octets(%struct.mp_int* nonnull %47, i8* nonnull %57, i32 %63) #7
+  %65 = icmp eq i32 %64, 0
+  br i1 %65, label %66, label %73
+
+; <label>:66:                                     ; preds = %61
+  %67 = call i32 @mp_cmp_z(%struct.mp_int* nonnull %47) #7
+  %68 = icmp sgt i32 %67, -1
+  br i1 %68, label %69, label %73
+
+; <label>:69:                                     ; preds = %66
+  %70 = call i32 @mp_cmp(%struct.mp_int* nonnull %47, %struct.mp_int* nonnull %11) #7
+  %71 = ashr i32 %70, 31
+  %72 = xor i32 %71, -1
+  br label %73
+
+; <label>:73:                                     ; preds = %52, %61, %66, %69
+  %74 = phi i32 [ %72, %69 ], [ -1, %66 ], [ -1, %61 ], [ -1, %52 ]
+  %75 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %4, i64 0, i32 0
+  %76 = load %struct.msgpack_zone*, %struct.msgpack_zone** %75, align 8
+  %77 = icmp eq %struct.msgpack_zone* %76, null
+  br i1 %77, label %79, label %78
+
+; <label>:78:                                     ; preds = %73
+  call void @msgpack_zone_free(%struct.msgpack_zone* nonnull %76) #7
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %48, i8 0, i64 32, i1 false) #7
+  br label %79
+
+; <label>:79:                                     ; preds = %46, %73, %78
+  %80 = phi i32 [ -1, %46 ], [ %74, %73 ], [ %74, %78 ]
+  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %48)
+  ret i32 %80
+
+; <label>:81:                                     ; preds = %16, %3, %44
+  %82 = phi i32 [ %39, %44 ], [ -1, %3 ], [ -1, %16 ]
+  ret i32 %82
+}
+
+; Function Attrs: nounwind sspstrong uwtable
+define i32 @PrioPacketVerify2_write(%struct.prio_packet_verify2*, %struct.msgpack_packer* readonly) local_unnamed_addr #0 {
+  %3 = icmp eq %struct.msgpack_packer* %1, null
+  %4 = icmp eq %struct.prio_packet_verify2* %0, null
+  %5 = or i1 %4, %3
+  br i1 %5, label %9, label %6
+
+; <label>:6:                                      ; preds = %2
+  %7 = getelementptr inbounds %struct.prio_packet_verify2, %struct.prio_packet_verify2* %0, i64 0, i32 0
+  %8 = tail call fastcc i32 @serial_write_mp_int(%struct.msgpack_packer* nonnull %1, %struct.mp_int* nonnull %7)
+  ret i32 %8
+
+; <label>:9:                                      ; preds = %2
+  ret i32 -1
+}
+
+; Function Attrs: nounwind sspstrong uwtable
+define i32 @PrioPacketVerify2_read(%struct.prio_packet_verify2*, %struct.msgpack_unpacker*, %struct.prio_config*) local_unnamed_addr #0 {
+  %4 = alloca %struct.msgpack_unpacked, align 8
+  %5 = icmp eq %struct.msgpack_unpacker* %1, null
+  %6 = icmp eq %struct.prio_packet_verify2* %0, null
+  %7 = or i1 %6, %5
+  br i1 %7, label %44, label %8
+
+; <label>:8:                                      ; preds = %3
+  %9 = getelementptr inbounds %struct.prio_packet_verify2, %struct.prio_packet_verify2* %0, i64 0, i32 0
+  %10 = getelementptr inbounds %struct.prio_config, %struct.prio_config* %2, i64 0, i32 5
+  %11 = bitcast %struct.msgpack_unpacked* %4 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 32, i8* nonnull %11)
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %11, i8 0, i64 32, i1 false) #7
+  %12 = call i32 @msgpack_unpacker_next(%struct.msgpack_unpacker* nonnull %1, %struct.msgpack_unpacked* nonnull %4) #7
+  %13 = add i32 %12, -1
+  %14 = icmp ult i32 %13, 2
+  br i1 %14, label %15, label %42
+
+; <label>:15:                                     ; preds = %8
+  %16 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %4, i64 0, i32 1, i32 0
+  %17 = load i32, i32* %16, align 8
+  %18 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %4, i64 0, i32 1, i32 1, i32 0, i32 1
+  %19 = bitcast %struct.msgpack_object** %18 to i8**
+  %20 = load i8*, i8** %19, align 8
+  %21 = icmp ne i32 %17, 5
+  %22 = icmp eq i8* %20, null
+  %23 = or i1 %21, %22
+  br i1 %23, label %36, label %24
+
+; <label>:24:                                     ; preds = %15
+  %25 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %4, i64 0, i32 1, i32 1, i32 0, i32 0
+  %26 = load i32, i32* %25, align 8
+  %27 = call i32 @mp_read_unsigned_octets(%struct.mp_int* nonnull %9, i8* nonnull %20, i32 %26) #7
+  %28 = icmp eq i32 %27, 0
+  br i1 %28, label %29, label %36
+
+; <label>:29:                                     ; preds = %24
+  %30 = call i32 @mp_cmp_z(%struct.mp_int* nonnull %9) #7
+  %31 = icmp sgt i32 %30, -1
+  br i1 %31, label %32, label %36
+
+; <label>:32:                                     ; preds = %29
+  %33 = call i32 @mp_cmp(%struct.mp_int* nonnull %9, %struct.mp_int* nonnull %10) #7
+  %34 = ashr i32 %33, 31
+  %35 = xor i32 %34, -1
+  br label %36
+
+; <label>:36:                                     ; preds = %15, %24, %29, %32
+  %37 = phi i32 [ %35, %32 ], [ -1, %29 ], [ -1, %24 ], [ -1, %15 ]
+  %38 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %4, i64 0, i32 0
+  %39 = load %struct.msgpack_zone*, %struct.msgpack_zone** %38, align 8
+  %40 = icmp eq %struct.msgpack_zone* %39, null
+  br i1 %40, label %42, label %41
+
+; <label>:41:                                     ; preds = %36
+  call void @msgpack_zone_free(%struct.msgpack_zone* nonnull %39) #7
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %11, i8 0, i64 32, i1 false) #7
+  br label %42
+
+; <label>:42:                                     ; preds = %8, %36, %41
+  %43 = phi i32 [ -1, %8 ], [ %37, %36 ], [ %37, %41 ]
+  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %11)
+  ret i32 %43
+
+; <label>:44:                                     ; preds = %3
+  ret i32 -1
+}
+
+; Function Attrs: nounwind sspstrong uwtable
+define i32 @PrioTotalShare_write(%struct.prio_total_share* readonly, %struct.msgpack_packer* readonly) local_unnamed_addr #0 {
+  %3 = icmp eq %struct.prio_total_share* %0, null
+  %4 = icmp eq %struct.msgpack_packer* %1, null
+  %5 = or i1 %3, %4
+  br i1 %5, label %15, label %6
+
+; <label>:6:                                      ; preds = %2
+  %7 = getelementptr inbounds %struct.prio_total_share, %struct.prio_total_share* %0, i64 0, i32 0
+  %8 = load i32, i32* %7, align 8
+  %9 = tail call fastcc i32 @msgpack_pack_int(%struct.msgpack_packer* nonnull %1, i32 %8)
+  %10 = icmp eq i32 %9, 0
+  br i1 %10, label %11, label %15
+
+; <label>:11:                                     ; preds = %6
+  %12 = getelementptr inbounds %struct.prio_total_share, %struct.prio_total_share* %0, i64 0, i32 1
+  %13 = load %struct.mparray*, %struct.mparray** %12, align 8
+  %14 = tail call fastcc i32 @serial_write_mp_array(%struct.msgpack_packer* nonnull %1, %struct.mparray* %13)
+  ret i32 %14
+
+; <label>:15:                                     ; preds = %2, %6
+  %16 = phi i32 [ %9, %6 ], [ -1, %2 ]
+  ret i32 %16
+}
+
+; Function Attrs: nounwind sspstrong uwtable
+define internal fastcc i32 @serial_write_mp_array(%struct.msgpack_packer* readonly, %struct.mparray* readonly) unnamed_addr #0 {
+  %3 = alloca i8, align 1
+  %4 = alloca [3 x i8], align 1
+  %5 = alloca [5 x i8], align 1
+  %6 = icmp eq %struct.msgpack_packer* %0, null
+  %7 = icmp eq %struct.mparray* %1, null
+  %8 = or i1 %6, %7
+  br i1 %8, label %62, label %9
+
+; <label>:9:                                      ; preds = %2
+  %10 = getelementptr inbounds %struct.mparray, %struct.mparray* %1, i64 0, i32 0
+  %11 = load i32, i32* %10, align 8
+  %12 = icmp ult i32 %11, 16
+  br i1 %12, label %13, label %21
+
+; <label>:13:                                     ; preds = %9
+  call void @llvm.lifetime.start.p0i8(i64 1, i8* nonnull %3) #7
+  %14 = trunc i32 %11 to i8
+  %15 = or i8 %14, -112
+  store i8 %15, i8* %3, align 1
+  %16 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 1
+  %17 = load i32 (i8*, i8*, i64)*, i32 (i8*, i8*, i64)** %16, align 8
+  %18 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 0
+  %19 = load i8*, i8** %18, align 8
+  %20 = call i32 %17(i8* %19, i8* nonnull %3, i64 1) #7
+  call void @llvm.lifetime.end.p0i8(i64 1, i8* nonnull %3) #7
+  br label %44
+
+; <label>:21:                                     ; preds = %9
+  %22 = icmp ult i32 %11, 65536
+  br i1 %22, label %23, label %34
+
+; <label>:23:                                     ; preds = %21
+  %24 = getelementptr inbounds [3 x i8], [3 x i8]* %4, i64 0, i64 0
+  call void @llvm.lifetime.start.p0i8(i64 3, i8* nonnull %24) #7
+  store i8 -36, i8* %24, align 1
+  %25 = trunc i32 %11 to i16
+  %26 = tail call i16 @llvm.bswap.i16(i16 %25) #7
+  %27 = getelementptr inbounds [3 x i8], [3 x i8]* %4, i64 0, i64 1
+  %28 = bitcast i8* %27 to i16*
+  store i16 %26, i16* %28, align 1
+  %29 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 1
+  %30 = load i32 (i8*, i8*, i64)*, i32 (i8*, i8*, i64)** %29, align 8
+  %31 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 0
+  %32 = load i8*, i8** %31, align 8
+  %33 = call i32 %30(i8* %32, i8* nonnull %24, i64 3) #7
+  call void @llvm.lifetime.end.p0i8(i64 3, i8* nonnull %24) #7
+  br label %44
+
+; <label>:34:                                     ; preds = %21
+  %35 = getelementptr inbounds [5 x i8], [5 x i8]* %5, i64 0, i64 0
+  call void @llvm.lifetime.start.p0i8(i64 5, i8* nonnull %35) #7
+  store i8 -35, i8* %35, align 1
+  %36 = tail call i32 @llvm.bswap.i32(i32 %11) #7
+  %37 = getelementptr inbounds [5 x i8], [5 x i8]* %5, i64 0, i64 1
+  %38 = bitcast i8* %37 to i32*
+  store i32 %36, i32* %38, align 1
+  %39 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 1
+  %40 = load i32 (i8*, i8*, i64)*, i32 (i8*, i8*, i64)** %39, align 8
+  %41 = getelementptr inbounds %struct.msgpack_packer, %struct.msgpack_packer* %0, i64 0, i32 0
+  %42 = load i8*, i8** %41, align 8
+  %43 = call i32 %40(i8* %42, i8* nonnull %35, i64 5) #7
+  call void @llvm.lifetime.end.p0i8(i64 5, i8* nonnull %35) #7
+  br label %44
+
+; <label>:44:                                     ; preds = %13, %23, %34
+  %45 = phi i32 [ %20, %13 ], [ %33, %23 ], [ %43, %34 ]
+  %46 = icmp eq i32 %45, 0
+  br i1 %46, label %47, label %62
+
+; <label>:47:                                     ; preds = %44
+  %48 = getelementptr inbounds %struct.mparray, %struct.mparray* %1, i64 0, i32 1
+  %49 = load i32, i32* %10, align 8
+  %50 = icmp sgt i32 %49, 0
+  br i1 %50, label %55, label %62
+
+; <label>:51:                                     ; preds = %55
+  %52 = load i32, i32* %10, align 8
+  %53 = sext i32 %52 to i64
+  %54 = icmp slt i64 %61, %53
+  br i1 %54, label %55, label %62
+
+; <label>:55:                                     ; preds = %47, %51
+  %56 = phi i64 [ %61, %51 ], [ 0, %47 ]
+  %57 = load %struct.mp_int*, %struct.mp_int** %48, align 8
+  %58 = getelementptr inbounds %struct.mp_int, %struct.mp_int* %57, i64 %56
+  %59 = call fastcc i32 @serial_write_mp_int(%struct.msgpack_packer* nonnull %0, %struct.mp_int* %58)
+  %60 = icmp eq i32 %59, 0
+  %61 = add nuw nsw i64 %56, 1
+  br i1 %60, label %51, label %62
+
+; <label>:62:                                     ; preds = %55, %51, %47, %2, %44
+  %63 = phi i32 [ %45, %44 ], [ -1, %2 ], [ 0, %47 ], [ %59, %55 ], [ 0, %51 ]
+  ret i32 %63
+}
+
+; Function Attrs: nounwind sspstrong uwtable
+define i32 @PrioTotalShare_read(%struct.prio_total_share*, %struct.msgpack_unpacker*, %struct.prio_config*) local_unnamed_addr #0 {
+  %4 = alloca %struct.msgpack_unpacked, align 8
+  %5 = icmp eq %struct.prio_total_share* %0, null
+  %6 = icmp eq %struct.msgpack_unpacker* %1, null
+  %7 = or i1 %5, %6
+  br i1 %7, label %38, label %8
+
+; <label>:8:                                      ; preds = %3
+  %9 = getelementptr inbounds %struct.prio_total_share, %struct.prio_total_share* %0, i64 0, i32 0
+  %10 = bitcast %struct.msgpack_unpacked* %4 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 32, i8* nonnull %10) #7
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %10, i8 0, i64 32, i1 false) #7
+  %11 = call i32 @msgpack_unpacker_next(%struct.msgpack_unpacker* nonnull %1, %struct.msgpack_unpacked* nonnull %4) #7
+  %12 = add i32 %11, -1
+  %13 = icmp ult i32 %12, 2
+  br i1 %13, label %15, label %14
+
+; <label>:14:                                     ; preds = %8
+  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %10) #7
+  br label %38
+
+; <label>:15:                                     ; preds = %8
+  %16 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %4, i64 0, i32 1, i32 0
+  %17 = load i32, i32* %16, align 8
+  %18 = icmp eq i32 %17, 2
+  %19 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %4, i64 0, i32 1, i32 1
+  %20 = bitcast %union.msgpack_object_union* %19 to i64*
+  %21 = load i64, i64* %20, align 8
+  %22 = trunc i64 %21 to i32
+  %23 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %4, i64 0, i32 0
+  %24 = load %struct.msgpack_zone*, %struct.msgpack_zone** %23, align 8
+  %25 = icmp eq %struct.msgpack_zone* %24, null
+  br i1 %25, label %27, label %26
+
+; <label>:26:                                     ; preds = %15
+  call void @msgpack_zone_free(%struct.msgpack_zone* nonnull %24) #7
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %10, i8 0, i64 32, i1 false) #7
+  br label %27
+
+; <label>:27:                                     ; preds = %26, %15
+  call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %10) #7
+  %28 = icmp ult i32 %22, 2
+  %29 = and i1 %18, %28
+  br i1 %29, label %30, label %38
+
+; <label>:30:                                     ; preds = %27
+  store i32 %22, i32* %9, align 4
+  %31 = getelementptr inbounds %struct.prio_total_share, %struct.prio_total_share* %0, i64 0, i32 1
+  %32 = load %struct.mparray*, %struct.mparray** %31, align 8
+  %33 = getelementptr inbounds %struct.prio_config, %struct.prio_config* %2, i64 0, i32 0
+  %34 = load i32, i32* %33, align 8
+  %35 = sext i32 %34 to i64
+  %36 = getelementptr inbounds %struct.prio_config, %struct.prio_config* %2, i64 0, i32 5
+  %37 = call fastcc i32 @serial_read_mp_array(%struct.msgpack_unpacker* nonnull %1, %struct.mparray* %32, i64 %35, %struct.mp_int* nonnull %36)
+  ret i32 %37
+
+; <label>:38:                                     ; preds = %14, %27, %3
+  ret i32 -1
+}
+
+; Function Attrs: nounwind sspstrong uwtable
+define internal fastcc i32 @serial_read_mp_array(%struct.msgpack_unpacker*, %struct.mparray*, i64, %struct.mp_int*) unnamed_addr #0 {
+  %5 = alloca %struct.msgpack_unpacked, align 8
+  %6 = icmp eq %struct.msgpack_unpacker* %0, null
+  %7 = icmp eq %struct.mparray* %1, null
+  %8 = or i1 %6, %7
+  %9 = icmp eq %struct.mp_int* %3, null
+  %10 = or i1 %8, %9
+  br i1 %10, label %71, label %11
+
+; <label>:11:                                     ; preds = %4
+  %12 = bitcast %struct.msgpack_unpacked* %5 to i8*
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %12, i8 0, i64 32, i1 false) #7
+  %13 = call i32 @msgpack_unpacker_next(%struct.msgpack_unpacker* nonnull %0, %struct.msgpack_unpacked* nonnull %5) #7
+  %14 = add i32 %13, -1
+  %15 = icmp ult i32 %14, 2
+  br i1 %15, label %16, label %78
+
+; <label>:16:                                     ; preds = %11
+  %17 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %5, i64 0, i32 1, i32 0
+  %18 = load i32, i32* %17, align 8
+  %19 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %5, i64 0, i32 1, i32 1, i32 0, i32 1
+  %20 = load %struct.msgpack_object*, %struct.msgpack_object** %19, align 8
+  %21 = icmp eq i32 %18, 6
+  br i1 %21, label %22, label %71
+
+; <label>:22:                                     ; preds = %16
+  %23 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %5, i64 0, i32 1, i32 1, i32 0, i32 0
+  %24 = load i32, i32* %23, align 8
+  %25 = zext i32 %24 to i64
+  %26 = icmp eq i64 %25, %2
+  br i1 %26, label %27, label %71
+
+; <label>:27:                                     ; preds = %22
+  %28 = trunc i64 %2 to i32
+  %29 = call i32 @MPArray_resize(%struct.mparray* nonnull %1, i32 %28) #7
+  %30 = icmp eq i32 %29, 0
+  br i1 %30, label %31, label %71
+
+; <label>:31:                                     ; preds = %27
+  %32 = icmp eq i64 %2, 0
+  br i1 %32, label %71, label %33
+
+; <label>:33:                                     ; preds = %31
+  %34 = getelementptr inbounds %struct.mparray, %struct.mparray* %1, i64 0, i32 1
+  br label %38
+
+; <label>:35:                                     ; preds = %64
+  %36 = zext i32 %68 to i64
+  %37 = icmp ult i64 %36, %2
+  br i1 %37, label %38, label %71
+
+; <label>:38:                                     ; preds = %33, %35
+  %39 = phi i64 [ 0, %33 ], [ %36, %35 ]
+  %40 = phi i32 [ 0, %33 ], [ %68, %35 ]
+  %41 = getelementptr inbounds %struct.msgpack_object, %struct.msgpack_object* %20, i64 %39
+  %42 = load %struct.mp_int*, %struct.mp_int** %34, align 8
+  %43 = getelementptr inbounds %struct.mp_int, %struct.mp_int* %42, i64 %39
+  %44 = icmp eq %struct.msgpack_object* %41, null
+  br i1 %44, label %71, label %45
+
+; <label>:45:                                     ; preds = %38
+  %46 = getelementptr inbounds %struct.msgpack_object, %struct.msgpack_object* %41, i64 0, i32 0
+  %47 = load i32, i32* %46, align 8
+  %48 = icmp ne i32 %47, 5
+  %49 = icmp eq %struct.mp_int* %43, null
+  %50 = or i1 %49, %48
+  br i1 %50, label %71, label %51
+
+; <label>:51:                                     ; preds = %45
+  %52 = getelementptr inbounds %struct.msgpack_object, %struct.msgpack_object* %20, i64 %39, i32 1, i32 0, i32 1
+  %53 = bitcast %struct.msgpack_object** %52 to i8**
+  %54 = load i8*, i8** %53, align 8
+  %55 = icmp eq i8* %54, null
+  br i1 %55, label %71, label %56
+
+; <label>:56:                                     ; preds = %51
+  %57 = getelementptr inbounds %struct.msgpack_object, %struct.msgpack_object* %20, i64 %39, i32 1, i32 0, i32 0
+  %58 = load i32, i32* %57, align 8
+  %59 = call i32 @mp_read_unsigned_octets(%struct.mp_int* nonnull %43, i8* nonnull %54, i32 %58) #7
+  %60 = icmp eq i32 %59, 0
+  br i1 %60, label %61, label %71
+
+; <label>:61:                                     ; preds = %56
+  %62 = call i32 @mp_cmp_z(%struct.mp_int* nonnull %43) #7
+  %63 = icmp sgt i32 %62, -1
+  br i1 %63, label %64, label %71
+
+; <label>:64:                                     ; preds = %61
+  %65 = call i32 @mp_cmp(%struct.mp_int* nonnull %43, %struct.mp_int* %3) #7
+  %66 = ashr i32 %65, 31
+  %67 = icmp eq i32 %66, -1
+  %68 = add i32 %40, 1
+  br i1 %67, label %35, label %69
+
+; <label>:69:                                     ; preds = %64
+  %70 = xor i32 %66, -1
+  br label %71
+
+; <label>:71:                                     ; preds = %35, %61, %56, %51, %45, %38, %31, %69, %22, %16, %4, %27
+  %72 = phi i32 [ %29, %27 ], [ -1, %4 ], [ -1, %16 ], [ -1, %22 ], [ %70, %69 ], [ 0, %31 ], [ 0, %35 ], [ -1, %61 ], [ -1, %56 ], [ -1, %51 ], [ -1, %45 ], [ -1, %38 ]
+  %73 = getelementptr inbounds %struct.msgpack_unpacked, %struct.msgpack_unpacked* %5, i64 0, i32 0
+  %74 = load %struct.msgpack_zone*, %struct.msgpack_zone** %73, align 8
+  %75 = icmp eq %struct.msgpack_zone* %74, null
+  br i1 %75, label %78, label %76
+
+; <label>:76:                                     ; preds = %71
+  call void @msgpack_zone_free(%struct.msgpack_zone* nonnull %74) #7
+  %77 = bitcast %struct.msgpack_unpacked* %5 to i8*
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 %77, i8 0, i64 32, i1 false) #7
+  br label %78
+
+; <label>:78:                                     ; preds = %76, %71, %11
+  %79 = phi i32 [ -1, %11 ], [ %72, %71 ], [ %72, %76 ]
+  ret i32 %79
+}
+
+declare i32 @mp_unsigned_octet_size(%struct.mp_int*) local_unnamed_addr #3
+
+; Function Attrs: nounwind
+declare noalias i8* @calloc(i64, i64) local_unnamed_addr #5
+
+declare i32 @mp_to_fixlen_octets(%struct.mp_int*, i8*, i32) local_unnamed_addr #3
+
+; Function Attrs: nounwind
+declare void @free(i8* nocapture) local_unnamed_addr #5
+
+; Function Attrs: argmemonly nounwind
+declare void @llvm.memset.p0i8.i64(i8* nocapture writeonly, i8, i64, i1) #1
+
+declare i32 @mp_read_unsigned_octets(%struct.mp_int*, i8*, i32) local_unnamed_addr #3
+
+declare i32 @mp_cmp_z(%struct.mp_int*) local_unnamed_addr #3
+
+declare i32 @mp_cmp(%struct.mp_int*, %struct.mp_int*) local_unnamed_addr #3
+
+declare i32 @PrioConfig_hPoints(%struct.prio_config*) local_unnamed_addr #3
+
+declare void @msgpack_zone_free(%struct.msgpack_zone*) local_unnamed_addr #3
+
+declare i32 @MPArray_resize(%struct.mparray*, i32) local_unnamed_addr #3
+
+; Function Attrs: nounwind readnone speculatable
+declare i16 @llvm.bswap.i16(i16) #6
+
+; Function Attrs: nounwind readnone speculatable
+declare i32 @llvm.bswap.i32(i32) #6
+
+attributes #0 = { nounwind sspstrong uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { argmemonly nounwind }
+attributes #2 = { inlinehint nounwind sspstrong uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #4 = { nounwind readonly "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #5 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "less-precise-fpmad"="false" "no-frame-pointer-elim"="false" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2,+x87" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #6 = { nounwind readnone speculatable }
+attributes #7 = { nounwind }
+attributes #8 = { nounwind readonly }
+
+!llvm.module.flags = !{!0, !1}
+!llvm.ident = !{!2}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{i32 7, !"PIC Level", i32 2}
+!2 = !{!"clang version 7.0.1 (tags/RELEASE_701/final)"}

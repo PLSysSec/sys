@@ -1,0 +1,1 @@
+path-eq %foo_0 = bitcast i32 4 to i32 

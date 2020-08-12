@@ -1,0 +1,17 @@
+%moreBlocks_2 = alloca i32, align 4 
+%moreBlocks_3 = alloca i32, align 4 
+%moreBlocks_4 = alloca i32, align 4 
+%moreBlocks_5 = alloca i32, align 4 
+%moreBlocks_6 = alloca i32, align 4 
+store  i32 %moreBlocks_0, i32* %moreBlocks_3, align 4 
+%moreBlocks_7 = load  i32, i32* %moreBlocks_3, align 4 
+%moreBlocks_8 = add  nsw i32 %moreBlocks_7, 2 
+store  i32 %moreBlocks_8, i32* %moreBlocks_4, align 4 
+%moreBlocks_9 = load  i32, i32* %moreBlocks_4, align 4 
+%moreBlocks_10 = srem i32 %moreBlocks_9, 3 
+%moreBlocks_11 = icmp eq i32 %moreBlocks_10, 0 
+path-eq %moreBlocks_11 = bitcast i1 0 to i1 
+%moreBlocks_14 = load  i32, i32* %moreBlocks_4, align 4 
+%moreBlocks_15 = srem i32 %moreBlocks_14, 3 
+%moreBlocks_16 = icmp eq i32 %moreBlocks_15, 1 
+track-ops LocalReference (IntegerType {typeBits = 1}) (Name "moreBlocks_16")

@@ -1,0 +1,128 @@
+checker: https://help.semmle.com/wiki/display/CCPPOBJ/Potentially+uninitialized+local+variable
+running on gecko-dev (cbd75df)
+alerts: 465
+
+1. FALSE: https://searchfox.org/mozilla-central/source/docshell/base/nsDocShell.cpp#3787 (bucketId). If you look at outer if, one if the if-then-else that inits bucketId will definitly match.
+
+2. FALSE: https://searchfox.org/mozilla-central/source/dom/base/Document.cpp#1776 (notAfter). Very clearly init on line 1752 and before on 1745.
+
+3. FALSE: https://searchfox.org/mozilla-central/source/dom/base/Document.cpp#1776 (notBefore). Same as above.
+
+4. FALSE: https://searchfox.org/mozilla-central/source/dom/base/Element.cpp#2304 (oldValueSet). Initialized in if-block above. The if-above has to run otherwise the NS_ENSURE_SUCESS on 2297 would fail the assertion.
+
+5. FALSE: https://searchfox.org/mozilla-central/source/dom/base/nsContentSink.cpp#786 (policyType). policyType very clearly initialized in the if above (same condition).
+
+6. FALSE: https://searchfox.org/mozilla-central/source/dom/base/nsGlobalWindowInner.cpp#4878 (lineno). Clearly initialized via pointer on 4725. NICE EXAMPLE OF DIFF.
+
+7. FALSE: https://searchfox.org/mozilla-central/source/dom/base/nsGlobalWindowInner.cpp#5938 (nestingLevel). Clearly init on line 5884.
+
+8. FALSE: https://searchfox.org/mozilla-central/source/dom/canvas/CanvasRenderingContext2D.cpp#5230 (dstStride). Initialized in both virtual functions when they return true.
+
+9. FALSE: https://searchfox.org/mozilla-central/source/dom/canvas/WebGLContextVertices.cpp#259 (typeAlignment). Initialized in above switch block whenever isTypeValid is true; function bails otherwise.
+
+10. FALSE: https://searchfox.org/mozilla-central/source/dom/console/Console.cpp#1497 (monotonicTimer). Initialized on line 1491 (aData otherwise is empty).
+
+11. FALSE: https://searchfox.org/mozilla-central/source/dom/console/Console.cpp#1503 (monotonicTimer). Same as above.
+
+12. FALSE: https://searchfox.org/mozilla-central/source/dom/console/Console.cpp#1509 (monotonicTimer). Same as above.
+
+13. FALSE: https://searchfox.org/mozilla-central/source/dom/console/Console.cpp#1534 (monotonicTimer). Same as above.
+
+14. FALSE: https://searchfox.org/mozilla-central/source/dom/events/ShortcutKeys.cpp#99 (cache). Clearly init above or assert.
+
+15. FALSE: https://searchfox.org/mozilla-central/source/dom/events/ShortcutKeys.cpp#104 (keyData). Clearly init above or assert.
+
+16. FALSE: https://searchfox.org/mozilla-central/source/dom/geolocation/nsGeoPositionIPCSerialiser.h#80 (longitude). Initialized by ReadParam right above.
+
+17. FALSE: https://searchfox.org/mozilla-central/source/dom/geolocation/nsGeoPositionIPCSerialiser.h#81 (altitude). Same as above.
+
+18. FALSE: https://searchfox.org/mozilla-central/source/dom/geolocation/nsGeoPositionIPCSerialiser.h#82 (accuracy). Same as above.
+
+19. FALSE: https://searchfox.org/mozilla-central/source/dom/geolocation/nsGeoPositionIPCSerialiser.h#83 (altitudeAccuracy). Same as above.
+
+20. FALSE: https://searchfox.org/mozilla-central/source/dom/geolocation/nsGeoPositionIPCSerialiser.h#84 (heading). Same as above.
+
+21. FALSE: https://searchfox.org/mozilla-central/source/dom/geolocation/nsGeoPositionIPCSerialiser.h#85 (speed). Same as above.
+
+22. FALSE: https://searchfox.org/mozilla-central/source/dom/html/HTMLHRElement.cpp#157 (color). Initialized on line 60 where colorIsSet is set. NICE EXAMPLE.
+
+23. FALSE: https://searchfox.org/mozilla-central/source/dom/indexedDB/ActorsParent.cpp#3601 (indexId). Initialized in the loop (which is true at least the first time around where the inner if is true too). VERY NICE EXAMPLE.
+
+24. FALSE: https://searchfox.org/mozilla-central/source/dom/indexedDB/ActorsParent.cpp#3601 (unique). Same as above.
+
+25. FALSE: https://searchfox.org/mozilla-central/source/dom/indexedDB/ActorsParent.cpp#9258 (fileSize). The if on 9234 is true if the short circuit for fileSize is evaled and fileSize is init there.
+
+26. FALSE: https://searchfox.org/mozilla-central/source/dom/indexedDB/ActorsParent.cpp#9452 (usage). Init in if above guarded by aQuotaManager.
+
+27. FALSE: https://searchfox.org/mozilla-central/source/dom/indexedDB/ActorsParent.cpp#9457 (usage). Same as above.
+
+28. FALSE: https://searchfox.org/mozilla-central/source/dom/indexedDB/ActorsParent.cpp#11140 (fileSize). Initialized on 11123 guarded by same thing.
+
+29. FALSE: https://searchfox.org/mozilla-central/source/dom/indexedDB/ActorsParent.cpp#17502 (fileSize). Init on 17489 guarded by same thing.
+
+30. FALSE: https://searchfox.org/mozilla-central/source/dom/indexedDB/ActorsParent.cpp#27530 (fileSize). Init on 27513 guarded by same thing.
+
+31. FALSE: https://searchfox.org/mozilla-central/source/dom/ipc/ClonedErrorHolder.cpp#202  (type). Init above.
+
+32. FALSE: https://searchfox.org/mozilla-central/source/dom/ipc/ClonedErrorHolder.cpp#203  (exnType). Init above.
+
+33. FALSE: https://searchfox.org/mozilla-central/source/dom/ipc/ClonedErrorHolder.cpp#209  (result). Init above.
+
+34. FALSE: https://searchfox.org/mozilla-central/source/dom/ipc/ClonedErrorHolder.cpp#210  (code). Init above.
+
+35. FALSE: https://searchfox.org/mozilla-central/source/dom/media/mediasource/TrackBuffersManager.cpp#869 (start). Init on 831 by ref. NICE EXAMPLE.
+
+36. FALSE: https://searchfox.org/mozilla-central/source/dom/media/platforms/agnostic/bytestreams/AnnexB.cpp#331 (nalLen). Init on line 307.
+
+37. TRUE: https://searchfox.org/mozilla-central/source/dom/media/webaudio/WebAudioUtils.cpp#137 (aLineNumber)
+
+38. TRUE: https://searchfox.org/mozilla-central/source/dom/media/webaudio/WebAudioUtils.cpp#138 (aColumnNumber)
+
+39. FALSE: https://searchfox.org/mozilla-central/source/dom/media/webaudio/blink/HRTFPanner.cpp#281 (convolutionDestinationL1). Init on 263 (same guard).
+
+40. FALSE: https://searchfox.org/mozilla-central/source/dom/media/webaudio/blink/HRTFPanner.cpp#282 (convolutionDestinationL2). Same as above.
+
+41. FALSE: https://searchfox.org/mozilla-central/source/dom/media/webaudio/blink/HRTFPanner.cpp#283 (convolutionDestinationR1). Same as above.
+
+42. FALSE: https://searchfox.org/mozilla-central/source/dom/media/webaudio/blink/HRTFPanner.cpp#284 (convolutionDestinationR2). Same as above.
+
+43. FALSE: https://searchfox.org/mozilla-central/source/dom/media/webaudio/blink/HRTFPanner.cpp#305 (convolutionDestinationL1). Same as above.
+
+44. FALSE: https://searchfox.org/mozilla-central/source/dom/media/webaudio/blink/HRTFPanner.cpp#306 (convolutionDestinationR1). Same as above.
+
+45. FALSE: https://searchfox.org/mozilla-central/source/dom/media/webaudio/blink/HRTFPanner.cpp#308 (convolutionDestinationL2). Same as above.
+
+46. FALSE: https://searchfox.org/mozilla-central/source/dom/media/webaudio/blink/HRTFPanner.cpp#309 (convolutionDestinationR2). Same as above.
+
+47. FALSE: https://searchfox.org/mozilla-central/source/dom/media/webspeech/recognition/OnlineSpeechRecognitionService.cpp#141 (errorCode). For all cases where success is false, 104-137 inits errorCode.
+
+48. FALSE: https://searchfox.org/mozilla-central/source/dom/plugins/base/nsPluginHost.cpp#2641 (p). Init in both if and else branch above (2586-2635).
+
+49. FALSE: https://searchfox.org/mozilla-central/source/dom/plugins/ipc/PluginMessageUtils.h#362 (x). Init on 342.
+
+50. FALSE: https://searchfox.org/mozilla-central/source/dom/plugins/ipc/PluginMessageUtils.h#363 (y). Same as above.
+ 
+51. FALSE: https://searchfox.org/mozilla-central/source/dom/plugins/ipc/PluginMessageUtils.h#364 (width). Same as above.
+
+52. FALSE: https://searchfox.org/mozilla-central/source/dom/plugins/ipc/PluginMessageUtils.h#365 (height). Same as above.
+
+53. FALSE: https://searchfox.org/mozilla-central/source/dom/plugins/ipc/PluginMessageUtils.h#367 (type). Same as above.
+
+54. FALSE: https://searchfox.org/mozilla-central/source/dom/plugins/ipc/PluginMessageUtils.h#370 (colormap). Init on 351.
+
+55. FALSE: https://searchfox.org/mozilla-central/source/dom/quota/ActorsParent.cpp#4967 (persisted). Init on 4957 under same guard.
+
+56. FALSE:
+https://searchfox.org/mozilla-central/source/dom/svg/SVGAnimatedOrient.cpp#283
+(value). Init on 270, only way guard is true.
+
+57. FALSE:
+https://searchfox.org/mozilla-central/source/dom/svg/SVGAnimatedOrient.cpp#284
+(unitType). Same as above.
+
+58. FALSE: https://searchfox.org/mozilla-central/source/dom/svg/SVGAnimatedOrient.cpp#289 (type). If valueChanged = false then branch on 259-268 ran, which set type.
+
+59. FALSE: https://searchfox.org/mozilla-central/source/dom/svg/SVGContentUtils.cpp#126 (expSign). Only way for gotE to be ture is by execution 103, init expSign.
+
+60. FALSE: https://searchfox.org/mozilla-central/source/dom/workers/WorkerError.cpp#126
+(innerWindowId). Init on 114, otherwise return early on 121 (or before 107).

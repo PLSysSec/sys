@@ -1,0 +1,2 @@
+%foo_3 = icmp slt i64 %foo_0, 3 
+path-eq %foo_3 = bitcast i1 1 to i1 

@@ -1,0 +1,86 @@
+%moreBlocks_2 = alloca i32, align 4 
+%moreBlocks_3 = alloca i32, align 4 
+%moreBlocks_4 = alloca i32, align 4 
+%moreBlocks_5 = alloca i32, align 4 
+%moreBlocks_6 = alloca i32, align 4 
+store  i32 %moreBlocks_0, i32* %moreBlocks_3, align 4 
+%moreBlocks_7 = load  i32, i32* %moreBlocks_3, align 4 
+%moreBlocks_8 = add  nsw i32 %moreBlocks_7, 2 
+store  i32 %moreBlocks_8, i32* %moreBlocks_4, align 4 
+%moreBlocks_9 = load  i32, i32* %moreBlocks_4, align 4 
+%moreBlocks_10 = srem i32 %moreBlocks_9, 3 
+%moreBlocks_11 = icmp eq i32 %moreBlocks_10, 0 
+path-eq %moreBlocks_11 = bitcast i1 0 to i1 
+%moreBlocks_14 = load  i32, i32* %moreBlocks_4, align 4 
+%moreBlocks_15 = srem i32 %moreBlocks_14, 3 
+%moreBlocks_16 = icmp eq i32 %moreBlocks_15, 1 
+path-eq %moreBlocks_16 = bitcast i1 1 to i1 
+store  i32 5, i32* %moreBlocks_5, align 4 
+store  i32 0, i32* %moreBlocks_6, align 4 
+%moreBlocks_22 = load  i32, i32* %moreBlocks_6, align 4 
+%moreBlocks_23 = icmp slt i32 %moreBlocks_22, 2 
+path-eq %moreBlocks_23 = bitcast i1 1 to i1 
+%moreBlocks_25 = load  i32, i32* %moreBlocks_4, align 4 
+%moreBlocks_26 = add  nsw i32 %moreBlocks_25, 1 
+store  i32 %moreBlocks_26, i32* %moreBlocks_4, align 4 
+%moreBlocks_28 = load  i32, i32* %moreBlocks_6, align 4 
+%moreBlocks_29 = add  nsw i32 %moreBlocks_28, 1 
+store  i32 %moreBlocks_29, i32* %moreBlocks_6, align 4 
+%moreBlocks_22_1 = load  i32, i32* %moreBlocks_6, align 4 
+%moreBlocks_23_1 = icmp slt i32 %moreBlocks_22_1, 2 
+path-eq %moreBlocks_23_1 = bitcast i1 0 to i1 
+%moreBlocks_31 = load  i32, i32* %moreBlocks_4, align 4 
+%moreBlocks_32 = load  i32, i32* %moreBlocks_5, align 4 
+%moreBlocks_33 = mul  nsw i32 %moreBlocks_31, %moreBlocks_32 
+%moreBlocks_34 = icmp sgt i32 %moreBlocks_33, 242 
+path-eq %moreBlocks_34 = bitcast i1 0 to i1 
+%moreBlocks_40 = load  i32, i32* %moreBlocks_4, align 4 
+enter-call moreBlocks
+%moreBlocks_0_1 = bitcast i32 %moreBlocks_40 to i32 
+%moreBlocks_2_1 = alloca i32, align 4 
+%moreBlocks_3_1 = alloca i32, align 4 
+%moreBlocks_4_1 = alloca i32, align 4 
+%moreBlocks_5_1 = alloca i32, align 4 
+%moreBlocks_6_1 = alloca i32, align 4 
+store  i32 %moreBlocks_0_1, i32* %moreBlocks_3_1, align 4 
+%moreBlocks_7_1 = load  i32, i32* %moreBlocks_3_1, align 4 
+%moreBlocks_8_1 = add  nsw i32 %moreBlocks_7_1, 2 
+store  i32 %moreBlocks_8_1, i32* %moreBlocks_4_1, align 4 
+%moreBlocks_9_1 = load  i32, i32* %moreBlocks_4_1, align 4 
+%moreBlocks_10_1 = srem i32 %moreBlocks_9_1, 3 
+%moreBlocks_11_1 = icmp eq i32 %moreBlocks_10_1, 0 
+path-eq %moreBlocks_11_1 = bitcast i1 0 to i1 
+%moreBlocks_14_1 = load  i32, i32* %moreBlocks_4_1, align 4 
+%moreBlocks_15_1 = srem i32 %moreBlocks_14_1, 3 
+%moreBlocks_16_1 = icmp eq i32 %moreBlocks_15_1, 1 
+path-eq %moreBlocks_16_1 = bitcast i1 1 to i1 
+store  i32 5, i32* %moreBlocks_5_1, align 4 
+store  i32 0, i32* %moreBlocks_6_1, align 4 
+%moreBlocks_22_2 = load  i32, i32* %moreBlocks_6_1, align 4 
+%moreBlocks_23_2 = icmp slt i32 %moreBlocks_22_2, 2 
+path-eq %moreBlocks_23_2 = bitcast i1 1 to i1 
+%moreBlocks_25_1 = load  i32, i32* %moreBlocks_4_1, align 4 
+%moreBlocks_26_1 = add  nsw i32 %moreBlocks_25_1, 1 
+store  i32 %moreBlocks_26_1, i32* %moreBlocks_4_1, align 4 
+%moreBlocks_28_1 = load  i32, i32* %moreBlocks_6_1, align 4 
+%moreBlocks_29_1 = add  nsw i32 %moreBlocks_28_1, 1 
+store  i32 %moreBlocks_29_1, i32* %moreBlocks_6_1, align 4 
+%moreBlocks_22_3 = load  i32, i32* %moreBlocks_6_1, align 4 
+%moreBlocks_23_3 = icmp slt i32 %moreBlocks_22_3, 2 
+path-eq %moreBlocks_23_3 = bitcast i1 0 to i1 
+%moreBlocks_31_1 = load  i32, i32* %moreBlocks_4_1, align 4 
+%moreBlocks_32_1 = load  i32, i32* %moreBlocks_5_1, align 4 
+%moreBlocks_33_1 = mul  nsw i32 %moreBlocks_31_1, %moreBlocks_32_1 
+%moreBlocks_34_1 = icmp sgt i32 %moreBlocks_33_1, 242 
+path-eq %moreBlocks_34_1 = bitcast i1 1 to i1 
+%moreBlocks_36 = load  i32, i32* %moreBlocks_4_1, align 4 
+%moreBlocks_37 = load  i32, i32* %moreBlocks_5_1, align 4 
+%moreBlocks_38 = sdiv  i32 %moreBlocks_36, %moreBlocks_37 
+store  i32 %moreBlocks_38, i32* %moreBlocks_2_1, align 4 
+%moreBlocks_43 = load  i32, i32* %moreBlocks_2_1, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "moreBlocks_43")
+%moreBlocks_41 = bitcast i32 %moreBlocks_43 to i32 
+exit-call moreBlocks_41
+store  i32 %moreBlocks_41, i32* %moreBlocks_2, align 4 
+%moreBlocks_43_1 = load  i32, i32* %moreBlocks_2, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "moreBlocks_43_1")

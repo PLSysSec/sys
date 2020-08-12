@@ -1,0 +1,6 @@
+%moreBlocks_25 = load  i32, i32* %moreBlocks_4, align 4 
+%moreBlocks_26 = add  nsw i32 %moreBlocks_25, 1 
+store  i32 %moreBlocks_26, i32* %moreBlocks_4, align 4 
+%moreBlocks_28 = load  i32, i32* %moreBlocks_6, align 4 
+%moreBlocks_29 = add  nsw i32 %moreBlocks_28, 1 
+store  i32 %moreBlocks_29, i32* %moreBlocks_6, align 4 

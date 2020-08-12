@@ -1,0 +1,30 @@
+%sameCalls_3 = alloca i32, align 4 
+%sameCalls_4 = alloca i32, align 4 
+%sameCalls_5 = alloca i32, align 4 
+store  i32 %sameCalls_0, i32* %sameCalls_4, align 4 
+store  i32 %sameCalls_1, i32* %sameCalls_5, align 4 
+%sameCalls_6 = load  i32, i32* %sameCalls_4, align 4 
+%sameCalls_7 = load  i32, i32* %sameCalls_5, align 4 
+%sameCalls_8 = icmp sgt i32 %sameCalls_6, %sameCalls_7 
+path-eq %sameCalls_8 = bitcast i1 1 to i1 
+%sameCalls_10 = load  i32, i32* %sameCalls_4, align 4 
+%sameCalls_11 =  call ccc  i32  @callee1(i32  %sameCalls_10)  
+%sameCalls_12 = load  i32, i32* %sameCalls_5, align 4 
+%sameCalls_13 =  call ccc  i32  @callee1(i32  %sameCalls_12)  
+%sameCalls_14 = add  nsw i32 %sameCalls_11, %sameCalls_13 
+%sameCalls_15 = load  i32, i32* %sameCalls_4, align 4 
+%sameCalls_16 =  call ccc  i32  @callee2(i32  %sameCalls_15)  
+%sameCalls_17 = add  nsw i32 %sameCalls_14, %sameCalls_16 
+%sameCalls_18 = load  i32, i32* %sameCalls_4, align 4 
+%sameCalls_19 = load  i32, i32* %sameCalls_5, align 4 
+%sameCalls_20 = add  nsw i32 %sameCalls_18, %sameCalls_19 
+%sameCalls_21 =  call ccc  i32  @callee1(i32  %sameCalls_20)  
+%sameCalls_22 = add  nsw i32 %sameCalls_17, %sameCalls_21 
+%sameCalls_23 = load  i32, i32* %sameCalls_4, align 4 
+%sameCalls_24 = load  i32, i32* %sameCalls_5, align 4 
+%sameCalls_25 = mul  nsw i32 %sameCalls_23, %sameCalls_24 
+%sameCalls_26 =  call ccc  i32  @callee1(i32  %sameCalls_25)  
+%sameCalls_27 = add  nsw i32 %sameCalls_22, %sameCalls_26 
+store  i32 %sameCalls_27, i32* %sameCalls_3, align 4 
+%sameCalls_34 = load  i32, i32* %sameCalls_3, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "sameCalls_34")

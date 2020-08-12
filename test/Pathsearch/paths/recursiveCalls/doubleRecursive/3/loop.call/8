@@ -1,0 +1,11 @@
+%doubleRecursive_30 = load  i32, i32* %doubleRecursive_3, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "doubleRecursive_30")
+%doubleRecursive_24 = bitcast i32 %doubleRecursive_30 to i32 
+%doubleRecursive_25 = add  nsw i32 3, %doubleRecursive_24 
+store  i32 %doubleRecursive_25, i32* %doubleRecursive_7, align 4 
+%doubleRecursive_26 = load  i32, i32* %doubleRecursive_6, align 4 
+%doubleRecursive_27 = load  i32, i32* %doubleRecursive_7, align 4 
+%doubleRecursive_28 = sub  nsw i32 %doubleRecursive_26, %doubleRecursive_27 
+store  i32 %doubleRecursive_28, i32* %doubleRecursive_3, align 4 
+%doubleRecursive_30_1 = load  i32, i32* %doubleRecursive_3, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "doubleRecursive_30_1")

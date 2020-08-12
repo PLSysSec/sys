@@ -1,0 +1,2 @@
+%foo_10 = add  nsw i32 %foo_2, 53 
+%foo_11 = mul  nsw i32 %foo_10, %foo_0 

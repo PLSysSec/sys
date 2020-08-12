@@ -1,0 +1,12 @@
+%mutRecursiveA_9 = load  i32, i32* %mutRecursiveA_3, align 4 
+%mutRecursiveA_10 = add  nsw i32 %mutRecursiveA_9, 11 
+enter-call mutRecursiveB
+%mutRecursiveB_0 = bitcast i32 %mutRecursiveA_10 to i32 
+%mutRecursiveB_2 = alloca i32, align 4 
+%mutRecursiveB_3 = alloca i32, align 4 
+store  i32 %mutRecursiveB_0, i32* %mutRecursiveB_3, align 4 
+%mutRecursiveB_4 = load  i32, i32* %mutRecursiveB_3, align 4 
+%mutRecursiveB_5 = icmp slt i32 %mutRecursiveB_4, 66 
+path-eq %mutRecursiveB_5 = bitcast i1 0 to i1 
+%mutRecursiveB_9 = load  i32, i32* %mutRecursiveB_3, align 4 
+%mutRecursiveB_10 = sdiv  i32 %mutRecursiveB_9, 2 

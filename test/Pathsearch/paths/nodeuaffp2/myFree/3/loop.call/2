@@ -1,0 +1,5 @@
+tail call ccc void @free(i8* %myFree_nextpointer)
+%myFree_result = load i8, i8* %myFree_nextpointer
+%myFree_dep = add i8 %myFree_result, %myFree_result
+%myFree_pointer = bitcast i8* %myFree_nextpointer to i8*
+%myFree_nextpointer_1 = getelementptr i8, i8* %myFree_pointer, i32 1

@@ -1,0 +1,9 @@
+%notTailRec_2 = alloca i32, align 4 
+%notTailRec_3 = alloca i32, align 4 
+%notTailRec_4 = alloca i32, align 4 
+store  i32 %notTailRec_0, i32* %notTailRec_3, align 4 
+%notTailRec_5 = load  i32, i32* %notTailRec_3, align 4 
+%notTailRec_6 = icmp sgt i32 %notTailRec_5, 7 
+path-eq %notTailRec_6 = bitcast i1 0 to i1 
+%notTailRec_11 = load  i32, i32* %notTailRec_3, align 4 
+%notTailRec_12 = sub  nsw i32 %notTailRec_11, 2 

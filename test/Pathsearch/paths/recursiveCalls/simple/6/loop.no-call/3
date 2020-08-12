@@ -1,0 +1,12 @@
+%simple_10 = load  i32, i32* %simple_4, align 4 
+store  i32 %simple_10, i32* %simple_2, align 4 
+%simple_15 = load  i32, i32* %simple_2, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "simple_15")
+%simple_13 = bitcast i32 %simple_15 to i32 
+store  i32 %simple_13, i32* %simple_2, align 4 
+%simple_15_1 = load  i32, i32* %simple_2, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "simple_15_1")
+%simple_13_1 = bitcast i32 %simple_15_1 to i32 
+store  i32 %simple_13_1, i32* %simple_2, align 4 
+%simple_15_2 = load  i32, i32* %simple_2, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "simple_15_2")

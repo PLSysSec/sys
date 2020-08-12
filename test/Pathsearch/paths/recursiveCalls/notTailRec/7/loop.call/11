@@ -1,0 +1,27 @@
+%notTailRec_11 = load  i32, i32* %notTailRec_3, align 4 
+%notTailRec_12 = sub  nsw i32 %notTailRec_11, 2 
+enter-call notTailRec
+%notTailRec_0 = bitcast i32 %notTailRec_12 to i32 
+%notTailRec_2 = alloca i32, align 4 
+%notTailRec_3_1 = alloca i32, align 4 
+%notTailRec_4 = alloca i32, align 4 
+store  i32 %notTailRec_0, i32* %notTailRec_3_1, align 4 
+%notTailRec_5 = load  i32, i32* %notTailRec_3_1, align 4 
+%notTailRec_6 = icmp sgt i32 %notTailRec_5, 7 
+path-eq %notTailRec_6 = bitcast i1 1 to i1 
+%notTailRec_8 = load  i32, i32* %notTailRec_3_1, align 4 
+%notTailRec_9 = add  nsw i32 %notTailRec_8, 10 
+store  i32 %notTailRec_9, i32* %notTailRec_2, align 4 
+%notTailRec_23 = load  i32, i32* %notTailRec_2, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "notTailRec_23")
+%notTailRec_13 = bitcast i32 %notTailRec_23 to i32 
+exit-call notTailRec_13
+store  i32 %notTailRec_13, i32* %notTailRec_4, align 4 
+%notTailRec_14 = load  i32, i32* %notTailRec_4, align 4 
+%notTailRec_15 = icmp sgt i32 %notTailRec_14, 0 
+path-eq %notTailRec_15 = bitcast i1 1 to i1 
+%notTailRec_17 = load  i32, i32* %notTailRec_4, align 4 
+%notTailRec_18 = mul  nsw i32 %notTailRec_17, 2 
+store  i32 %notTailRec_18, i32* %notTailRec_2, align 4 
+%notTailRec_23_1 = load  i32, i32* %notTailRec_2, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "notTailRec_23_1")

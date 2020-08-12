@@ -1,0 +1,26 @@
+store  i32 0, i32* %moreBlocks_6, align 4 
+%moreBlocks_22 = load  i32, i32* %moreBlocks_6, align 4 
+%moreBlocks_23 = icmp slt i32 %moreBlocks_22, 2 
+path-eq %moreBlocks_23 = bitcast i1 0 to i1 
+%moreBlocks_31 = load  i32, i32* %moreBlocks_4, align 4 
+%moreBlocks_32 = load  i32, i32* %moreBlocks_5, align 4 
+%moreBlocks_33 = mul  nsw i32 %moreBlocks_31, %moreBlocks_32 
+%moreBlocks_34 = icmp sgt i32 %moreBlocks_33, 242 
+path-eq %moreBlocks_34 = bitcast i1 0 to i1 
+%moreBlocks_40 = load  i32, i32* %moreBlocks_4, align 4 
+enter-call moreBlocks
+%moreBlocks_0 = bitcast i32 %moreBlocks_40 to i32 
+%moreBlocks_2 = alloca i32, align 4 
+%moreBlocks_3 = alloca i32, align 4 
+%moreBlocks_4_1 = alloca i32, align 4 
+%moreBlocks_5_1 = alloca i32, align 4 
+%moreBlocks_6_1 = alloca i32, align 4 
+store  i32 %moreBlocks_0, i32* %moreBlocks_3, align 4 
+%moreBlocks_7 = load  i32, i32* %moreBlocks_3, align 4 
+%moreBlocks_8 = add  nsw i32 %moreBlocks_7, 2 
+store  i32 %moreBlocks_8, i32* %moreBlocks_4_1, align 4 
+%moreBlocks_9 = load  i32, i32* %moreBlocks_4_1, align 4 
+%moreBlocks_10 = srem i32 %moreBlocks_9, 3 
+%moreBlocks_11 = icmp eq i32 %moreBlocks_10, 0 
+path-eq %moreBlocks_11 = bitcast i1 1 to i1 
+store  i32 1, i32* %moreBlocks_5_1, align 4 

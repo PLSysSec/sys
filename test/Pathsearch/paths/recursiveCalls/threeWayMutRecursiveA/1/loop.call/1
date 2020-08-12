@@ -1,0 +1,7 @@
+%threeWayMutRecursiveA_2 = alloca i32, align 4 
+%threeWayMutRecursiveA_3 = alloca i32, align 4 
+store  i32 %threeWayMutRecursiveA_0, i32* %threeWayMutRecursiveA_3, align 4 
+%threeWayMutRecursiveA_4 = load  i32, i32* %threeWayMutRecursiveA_3, align 4 
+%threeWayMutRecursiveA_5 = srem i32 %threeWayMutRecursiveA_4, 5 
+%threeWayMutRecursiveA_6 = icmp eq i32 %threeWayMutRecursiveA_5, 0 
+track-ops LocalReference (IntegerType {typeBits = 1}) (Name "threeWayMutRecursiveA_6")

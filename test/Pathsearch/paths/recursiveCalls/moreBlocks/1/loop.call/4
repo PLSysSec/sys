@@ -1,0 +1,1 @@
+store  i32 5, i32* %moreBlocks_5, align 4 

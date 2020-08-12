@@ -1,0 +1,1 @@
+par-eqs [[%foo_6 = bitcast i64 22 to i64], [%foo_6 = bitcast i64 33 to i64]]

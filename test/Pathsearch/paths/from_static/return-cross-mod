@@ -1,0 +1,12 @@
+%foo_4 = icmp sgt i32 %foo_0, %foo_1 
+path-eq %foo_4 = bitcast i1 0 to i1 
+%foo_6 = icmp sgt i32 %foo_0, 55 
+path-eq %foo_6 = bitcast i1 1 to i1 
+%foo_8 = mul  nsw i32 %foo_1, 3 
+%foo_13 = bitcast i32 %foo_8 to i32 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "foo_13")
+%simpleCrossModuleCaller_11 = bitcast i32 %foo_13 to i32 
+store  i32 %simpleCrossModuleCaller_11, i32* %simpleCrossModuleCaller_5, align 4 
+%simpleCrossModuleCaller_12 = load  i32, i32* %simpleCrossModuleCaller_5, align 4 
+%simpleCrossModuleCaller_13 = add  nsw i32 %simpleCrossModuleCaller_12, 3 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "simpleCrossModuleCaller_13")

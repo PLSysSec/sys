@@ -1,0 +1,2 @@
+%nestedRecursive_15 = load  i32, i32* %nestedRecursive_2, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "nestedRecursive_15")

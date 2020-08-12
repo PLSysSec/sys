@@ -1,0 +1,9 @@
+%foo_20 = load  i32, i32* %foo_4, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "foo_20")
+%caller1_10 = bitcast i32 %foo_20 to i32 
+store  i32 %caller1_10, i32* %caller1_2, align 4 
+%caller1_17 = load  i32, i32* %caller1_2, align 4 
+track-ops LocalReference (IntegerType {typeBits = 32}) (Name "caller1_17")
+%callercaller_7 = bitcast i32 %caller1_17 to i32 
+%callercaller_8 = icmp sgt i32 %callercaller_7, 5 
+track-ops LocalReference (IntegerType {typeBits = 1}) (Name "callercaller_8")

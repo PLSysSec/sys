@@ -1,0 +1,26 @@
+%myFree_3 = bitcast i64 0 to i64 
+%myFree_4 = getelementptr inbounds i32*, i32** %myFree_0, i64 %myFree_3 
+%myFree_5 = bitcast i32** %myFree_4 to i8** 
+%myFree_6 = load  i8*, i8** %myFree_5, align 8 
+tail call ccc  void  @free(i8*  %myFree_6)  
+%myFree_7 = add nuw nsw i64 %myFree_3, 1 
+%myFree_8 = icmp eq i64 %myFree_7, 2 
+path-eq %myFree_8 = bitcast i1 0 to i1 
+%myFree_3_1 = bitcast i64 %myFree_7 to i64 
+%myFree_4_1 = getelementptr inbounds i32*, i32** %myFree_0, i64 %myFree_3_1 
+%myFree_5_1 = bitcast i32** %myFree_4_1 to i8** 
+%myFree_6_1 = load  i8*, i8** %myFree_5_1, align 8 
+tail call ccc  void  @free(i8*  %myFree_6_1)  
+%myFree_7_1 = add nuw nsw i64 %myFree_3_1, 1 
+%myFree_8_1 = icmp eq i64 %myFree_7_1, 2 
+path-eq %myFree_8_1 = bitcast i1 0 to i1 
+%myFree_3_2 = bitcast i64 %myFree_7_1 to i64 
+%myFree_4_2 = getelementptr inbounds i32*, i32** %myFree_0, i64 %myFree_3_2 
+%myFree_5_2 = bitcast i32** %myFree_4_2 to i8** 
+%myFree_6_2 = load  i8*, i8** %myFree_5_2, align 8 
+tail call ccc  void  @free(i8*  %myFree_6_2)  
+%myFree_7_2 = add nuw nsw i64 %myFree_3_2, 1 
+%myFree_8_2 = icmp eq i64 %myFree_7_2, 2 
+path-eq %myFree_8_2 = bitcast i1 1 to i1 
+%myFree_10 = load  i32*, i32** %myFree_0, align 8 
+%myFree_11 = load  i32, i32* %myFree_10, align 4 
