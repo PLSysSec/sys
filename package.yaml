@@ -1,7 +1,7 @@
 name:                adverse
 version:             0.0.0.1
 github:              "plsyssec/adverse"
-license:             BSD3
+license:             GPL
 author:              "Adverse team"
 maintainer:          "team@adverse.systems"
 copyright:           "2018 Adverse team"
