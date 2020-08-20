@@ -16,7 +16,6 @@
 Once you have all the dependencies installed you should be able to just build the tool:
 
 ```
-git checkout cleanup
 stack build
 ```
 
