@@ -4,7 +4,7 @@
 
 ## Install dependencies
 
-- llvm-8
+- llvm-9
 - [boolector](https://github.com/Boolector/boolector) configured with
   `--shared` option. See the `build()` and `package()` functions in [this
   file](https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=boolector-git)
@@ -16,7 +16,6 @@
 Once you have all the dependencies installed you should be able to just build the tool:
 
 ```
-git checkout cleanup
 stack build
 ```
 
