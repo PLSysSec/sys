@@ -5,6 +5,7 @@
 ## Install dependencies
 
 - llvm-9
+- llvm-9-tools
 - [boolector](https://github.com/Boolector/boolector) configured with
   `--shared` option. See the `build()` and `package()` functions in [this
   file](https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=boolector-git)
