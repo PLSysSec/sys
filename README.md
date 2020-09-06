@@ -4,13 +4,17 @@
 
 ## Install dependencies
 
-- llvm-9
-- llvm-9-tools
+If you want to install Sys locally:
+
+- llvm-9, llvm-9-tools
 - [boolector](https://github.com/Boolector/boolector) configured with
   `--shared` option. See the `build()` and `package()` functions in [this
   file](https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=boolector-git)
   as an example of how to install boolector after you clone it.
+  On Arch Linux, you can just install `boolector-git` from AUR.
 - The Haskell tool [Stack](https://docs.haskellstack.org/en/stable/README/)
+
+Alternatively, you can use the [Dockerfile](community/Dockerfile) from Ralf-Philipp Weinmann.
 
 ## Build project
 
@@ -93,6 +97,12 @@ path-to-file
 
 If you inspect the [serial_read_mp_array()](./test/Bugs/Uninit/Firefox/serial.ll-O2_p#L1528) function, the buggy block path is `%4` (the first block) to `%71`,where we use [`%73`].
 
+# Help
+
+We haven't tested (and likely won't test) Sys on anything but Arch Linux. We're
+happy to integrate patches that add support for other OSes and build systems
+though!
+
 # Directory structure
 
 ```
@@ -104,5 +114,6 @@ If you inspect the [serial_read_mp_array()](./test/Bugs/Uninit/Firefox/serial.ll
 │   ├── InternalIR -- Internal IR used to represent paths for both static and symex
 │   ├── Static     -- Static checker DSL
 │   └── Symex      -- Symbolic DSL and execution engine
+├── community      -- Community files
 └── test           -- Tests
 ```
