@@ -41,11 +41,8 @@ RUN stack build
 RUN sudo apt-get update
 RUN sudo apt-get install -y clang-9
 RUN sudo apt-get install -y libsfml-dev
-RUN sudo ln /usr/bin/clang-9 /usr/bin/clang
-RUN sudo ln /usr/bin/clang++-9 /usr/bin/clang++
-RUN sudo ln /usr/bin/llvm-link-9 /usr/bin/llvm-link
 
 RUN sudo apt-get install -y pip vim file
 RUN sudo pip install wllvm
-ENV PATH=$PATH:/home/user/.local/bin
+ENV PATH=$PATH:/home/user/.local/bin:/usr/lib/llvm-9/bin
 ENV LLVM_COMPILER=clang
