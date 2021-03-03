@@ -23,7 +23,7 @@ RUN mkdir src
 WORKDIR src
 RUN git clone https://github.com/Boolector/btor2tools.git
 RUN git clone https://github.com/Boolector/boolector.git
-RUN git clone https://github.com/PLSysSec/sys.git
+RUN git clone https://github.com/Gavazzi1/sys
 RUN git clone https://github.com/llvm-hs/llvm-hs
 
 WORKDIR btor2tools
