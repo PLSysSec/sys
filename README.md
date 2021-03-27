@@ -74,7 +74,13 @@ The tool takes several options:
    - `heapoob`: Malloc OOB checker
    - `concroob`: Negative index OOB checker
    - `userinput`: User input checker
+   - `uaf` : Use After Free checker
 
+# Threading
+
+It seems Sys runs as many threads as cores you have. You can limit it here
+
+src/Static/Check.hs via setNumCapabilities N.
 
 ## Example
 

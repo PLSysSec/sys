@@ -11,6 +11,7 @@ checkPaths automatically applies the user's static checker to each path in the f
 -}
 module Static.Check (staticCheckFunctionAsync) where
 
+import           Control.Concurrent(setNumCapabilities)
 import           Control.Concurrent.STM.TQueue
 import           Control.Concurrent.Thread.Group
 import           Control.Monad.State.Strict      (forM_, unless, void)
@@ -74,7 +75,9 @@ checkPaths config = do
 fork :: Checker a b () -> Checker a b ()
 fork act = do
   s0 <- get
-  void $ liftIO $ forkIO (curTGroup s0) $ evalChecker act s0
+  void $ liftIO $ do
+    setNumCapabilities 1 -- number of Threads
+    forkIO (curTGroup s0) $ evalChecker act s0
 
 occurs :: Eq a => a -> [a] -> Int
 occurs x = length . filter (x==)
