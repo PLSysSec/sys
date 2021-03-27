@@ -82,6 +82,10 @@ It seems Sys runs as many threads as cores you have. You can limit it here
 
 src/Static/Check.hs via setNumCapabilities N.
 
+# Getting Bitcode (LLVM)
+
+You can use wllvm or gllvm to get Bitcode and Assembly Language Format Files (*.ll)
+
 ## Example
 
 To find the uninitialized memory access bug that our tool found in Firefox's Prio library:
