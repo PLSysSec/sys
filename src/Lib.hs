@@ -22,6 +22,7 @@ module Lib ( -- * All final paper checkers, plus new checker heap oob
            , symexPath
            )
 where
+import           Data.List.Split
 import           Checkers.ConcreteOOBStatic
 import           Checkers.HeapOOBStatic
 import           Checkers.StaticConfigs.CheckerConfigs
@@ -92,6 +93,8 @@ heapOOB fpath extns = do
 
   forM_ candidates $ \bug ->
    void $ forkIO candidateGroup $ E.handle printHandler $ do
+      let word = "func"
+      L.log L.INFO $ unwords $ ["Forking a thread for funciton Basic Block", word]
       result <- doHeapOOBCheck bug
       showMallocResult bug result
   wait candidateGroup
@@ -231,13 +234,20 @@ makeSingleStaticPath modInfo funName path mTerminalIdx = do
                               in entries ++ [entry $ SPETerm nextBlock]
               ) $ zip path [0..]
 
+
+process :: String -> [String]
+process file = do
+  let a = [ b | b <- file]
+  return a
+
+--
 --
 -- Static/symbolic execution:
 -- These three functions (checkFile, checkFile, and symexPath) allow
 -- you to (1) statically check some files for suspicious elements and
 -- then (2) symbolically execute any suspicious paths.
 --
-
+--
 -- | Statically check all files in a directory
 checkFiles :: (Show a, Show b, Ord b)
             => CheckerConfig a b
@@ -247,10 +257,18 @@ checkFiles :: (Show a, Show b, Ord b)
 checkFiles ckConfig dirPath extns = do
   fileGroup  <- new
   resultQueue <- newTQueueIO
-  sourceFiles <- getSourceFiles dirPath extns
-  forM_ sourceFiles $ \file -> void $ forkIO fileGroup $
-                               checkFile resultQueue fileGroup ckConfig file
-  wait fileGroup
+  sourceFiles <- getSourceFiles dirPath extns 
+  --print sourceFiles
+  let processedSF = map (process) sourceFiles
+  let a = concat processedSF
+  let b = chunksOf 2 a
+
+  forM_ b $ \item -> do
+    print item
+    forM_ item $  \file -> void $ forkIO fileGroup $
+                              checkFile resultQueue fileGroup ckConfig file
+    wait fileGroup
+
   S.fromList <$> (atomically $ flushTQueue resultQueue)
 
 -- | Statically check a single file
