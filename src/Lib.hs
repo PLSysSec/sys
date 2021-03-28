@@ -22,6 +22,7 @@ module Lib ( -- * All final paper checkers, plus new checker heap oob
            , symexPath
            )
 where
+import           System.Directory(renameFile)
 import           Data.List.Split
 import           Checkers.ConcreteOOBStatic
 import           Checkers.HeapOOBStatic
@@ -240,6 +241,8 @@ process file = do
   let a = [ b | b <- file]
   return a
 
+
+
 --
 --
 -- Static/symbolic execution:
@@ -264,9 +267,13 @@ checkFiles ckConfig dirPath extns = do
   let b = chunksOf 2 a
 
   forM_ b $ \item -> do
-    print item
     forM_ item $  \file -> void $ forkIO fileGroup $
                               checkFile resultQueue fileGroup ckConfig file
+    forM_ item $ \file -> do 
+      let filenew = file ++ ".done"
+      renameFile file filenew
+
+   
     wait fileGroup
 
   S.fromList <$> (atomically $ flushTQueue resultQueue)
