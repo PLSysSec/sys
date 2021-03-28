@@ -94,8 +94,6 @@ heapOOB fpath extns = do
 
   forM_ candidates $ \bug ->
    void $ forkIO candidateGroup $ E.handle printHandler $ do
-      let word = "func"
-      L.log L.INFO $ unwords $ ["Forking a thread for funciton Basic Block", word]
       result <- doHeapOOBCheck bug
       showMallocResult bug result
   wait candidateGroup
