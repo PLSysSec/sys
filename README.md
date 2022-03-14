@@ -1,5 +1,7 @@
 # Sys: A Static/Symbolic Tool for Finding Good Bugs in Good (Browser) Code
 
+If you're interested, check out the (very very very) new reimplementation over [here](https://github.com/mlfbrown/sys2)! 
+
 # Install
 
 ## Install dependencies
