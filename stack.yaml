@@ -5,8 +5,11 @@ packages:
 extra-deps:
  - set-extra-1.4.1
  - boolector-0.0.0.11
- - llvm-hs-9.0.1
- - llvm-hs-pure-9.0.0
  - llvm-hs-pretty-0.9.0.0
+ - git: https://github.com/llvm-hs/llvm-hs.git
+   commit: fb9b5006704404cb5768873f828ffa883873ef07
+   subdirs:
+     - llvm-hs
+     - llvm-hs-pure
 # Extra directories used by stack for building
 extra-include-dirs: [/usr/include/boolector]
